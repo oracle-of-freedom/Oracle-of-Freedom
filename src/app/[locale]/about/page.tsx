@@ -116,14 +116,14 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           <TokenText text={copy.about.facts} />
         </p>
         <h2 className="mt-12 font-serif text-4xl">{copy.about.bts}</h2>
-        <div className="mt-8 grid items-start gap-4 lg:grid-cols-3">
-          <AtWorkFigure image={atWork} locale={loc} sizes="(max-width: 1024px) 100vw, 33vw" className="lg:col-start-1 lg:row-start-1" />
-          <div className="grid gap-4 lg:col-span-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        <div className="mt-8 grid items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <AtWorkFigure image={atWork} locale={loc} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+          <AtWorkFigure image={rewild} locale={loc} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+          <div className="grid gap-4 md:col-span-2 md:grid-cols-2 lg:col-span-1 lg:grid-cols-1">
             {donkeyPhotos.map((image) => (
-              <AtWorkFigure key={image.id} image={image} locale={loc} sizes="(max-width: 1024px) 100vw, 66vw" />
+              <AtWorkFigure key={image.id} image={image} locale={loc} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
             ))}
           </div>
-          <AtWorkFigure image={rewild} locale={loc} sizes="(max-width: 1024px) 100vw, 33vw" className="lg:col-start-1 lg:row-start-2" />
         </div>
       </section>
 
