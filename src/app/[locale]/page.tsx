@@ -35,8 +35,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const about = imageById(settings.aboutImageId);
   const aboutTeaser = {
     src: "/images/portfolio/home-about-dog.jpg",
-    width: 1600,
-    height: 2000,
+    width: 1300,
+    height: 2006,
     alt: {
       en: "Agota standing with her dog in the hills",
       es: "Agota de pie con su perro en las colinas",
@@ -203,7 +203,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           alt={aboutTeaser.alt[loc]}
           width={aboutTeaser.width}
           height={aboutTeaser.height}
-          className="aspect-[4/5] rounded-[2rem] object-cover"
+          className="h-auto w-full rounded-[2rem]"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
         <div>
