@@ -2,15 +2,24 @@ import { timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/admin-auth";
+import { readBookings, writeBookings } from "@/lib/booking-store";
 import {
   exchangeGoogleCode,
   googleAppFromConfig,
   initialGoogleConnection,
+  reconcileGoogleBookings,
 } from "@/lib/google-calendar";
 import {
   readCalendarConfig,
   writeCalendarConfig,
 } from "@/lib/calendar-config-store";
+import { lisbonToday } from "@/lib/pricing";
+
+function addDays(date: string, days: number) {
+  const value = new Date(`${date}T00:00:00Z`);
+  value.setUTCDate(value.getUTCDate() + days);
+  return value.toISOString().slice(0, 10);
+}
 
 function sameState(left: string, right: string) {
   const a = Buffer.from(left);
@@ -34,7 +43,7 @@ export async function GET(request: Request) {
 
   try {
     const config = await readCalendarConfig();
-    const app = googleAppFromConfig(config);
+    const app = googleAppFromConfig(config, currentUrl.origin);
     if (!app) throw new Error("Google Calendar credentials are not configured.");
     const tokens = await exchangeGoogleCode(code, app);
     if (!tokens.refresh_token || !tokens.access_token) {
@@ -44,7 +53,18 @@ export async function GET(request: Request) {
       tokens.refresh_token,
       tokens.access_token,
     );
-    await writeCalendarConfig({ ...config, google: connection });
+    const connected = { ...config, google: connection };
+    await writeCalendarConfig(connected);
+    const today = lisbonToday();
+    const from = addDays(today, -14);
+    const to = addDays(today, Math.min(config.daysAhead || 60, 90));
+    try {
+      const bookings = await readBookings();
+      const synced = await reconcileGoogleBookings(connected, bookings, from, to);
+      if (synced.changed) await writeBookings(synced.bookings);
+    } catch (error) {
+      console.error("[calendar] first Google sync failed", error);
+    }
     returnUrl.searchParams.set("google", "connected");
   } catch (error) {
     console.error("[calendar] Google OAuth callback failed", error);

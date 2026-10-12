@@ -430,7 +430,7 @@ export function CalendarSettings({
               <ol className="grid list-decimal gap-4 pl-5 text-sm text-ink/80">
                 <li>
                   {t.settings.projectOpen}{" "}
-                  <a className="underline underline-offset-4" href="https://console.cloud.google.com/" target="_blank" rel="noreferrer">
+                  <a className="underline underline-offset-4" href="https://console.cloud.google.com/">
                     Google Cloud Console
                   </a>{" "}
                   {t.settings.projectAfter}

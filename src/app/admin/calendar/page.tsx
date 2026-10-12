@@ -5,7 +5,7 @@ import { isAdmin } from "@/lib/admin-auth";
 import { parseMonth } from "@/lib/bookings";
 import { readBookings, writeBookings } from "@/lib/booking-store";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
-import { syncLinkedGoogleBookings } from "@/lib/google-calendar";
+import { reconcileGoogleBookings } from "@/lib/google-calendar";
 import { lisbonToday } from "@/lib/pricing";
 import { storageMode } from "@/lib/store";
 import { studioCopy } from "@/lib/studio-copy";
@@ -28,7 +28,7 @@ export default async function CalendarPage({
   const [year, monthNumber] = month.split("-").map(Number);
   const lastDay = new Date(Date.UTC(year, monthNumber, 0)).getUTCDate();
   try {
-    const synced = await syncLinkedGoogleBookings(
+    const synced = await reconcileGoogleBookings(
       config,
       bookings,
       `${month}-01`,

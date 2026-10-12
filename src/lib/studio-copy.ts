@@ -18,6 +18,38 @@ export function studioCopy(lang: StudioLang) {
     installHint: en
       ? "Chrome did not open the installer. Open the ⋮ menu and tap Install app."
       : "Chrome no abrió el instalador. Abre el menú ⋮ y pulsa Instalar app.",
+    notify: {
+      kicker: en ? "Notifications" : "Notificaciones",
+      titleAndroid: en ? "Turn them on for this Android" : "Actívalas en este Android",
+      titleDevice: en ? "Turn them on for this device" : "Actívalas en este dispositivo",
+      askAndroid: en
+        ? "Allow notifications on this Android so requests, consultations and appointments reach you."
+        : "Activa las notificaciones en este Android para que te lleguen las solicitudes, las consultas y las citas.",
+      askDevice: en
+        ? "Allow notifications on this device so requests, consultations and appointments reach you."
+        : "Activa las notificaciones en este dispositivo para que te lleguen las solicitudes, las consultas y las citas.",
+      enable: en ? "Turn on notifications" : "Activar notificaciones",
+      enabling: en ? "Asking…" : "Pidiendo permiso…",
+      later: en ? "Not now" : "Ahora no",
+      deniedAndroid: en
+        ? "Android is blocking notifications. Press and hold the Studio icon, open App info, and allow Notifications. In Chrome, tap the lock beside the address, then Notifications, then Allow."
+        : "Android está bloqueando las notificaciones. Mantén pulsado el icono de Estudio, abre Información de la aplicación y permite Notificaciones. En Chrome, pulsa el candado junto a la dirección, luego Notificaciones y Permitir.",
+      deniedDevice: en
+        ? "Notifications are blocked. Allow them for this site in the browser settings, then open the studio again."
+        : "Las notificaciones están bloqueadas. Permítelas para este sitio en los ajustes del navegador y vuelve a abrir el estudio.",
+      ready: en
+        ? "Notifications are on. Requests, consultations and appointments will arrive here."
+        : "Notificaciones activadas. Las solicitudes, consultas y citas llegarán aquí.",
+      failed: en
+        ? "Notifications did not finish turning on. Try again."
+        : "No se terminaron de activar las notificaciones. Inténtalo otra vez.",
+      unconfiguredAndroid: en
+        ? "This Android allowed notifications, but the studio cannot send them until the server keys are set."
+        : "Este Android ya permitió las notificaciones, pero el estudio aún no puede enviarlas hasta configurar las claves del servidor.",
+      unconfiguredDevice: en
+        ? "This device allowed notifications, but the studio cannot send them until the server keys are set."
+        : "Este dispositivo ya permitió las notificaciones, pero el estudio aún no puede enviarlas hasta configurar las claves del servidor.",
+    },
     offline: en
       ? "Offline. The studio cannot refresh."
       : "Sin conexión. No se puede actualizar el estudio.",
@@ -368,8 +400,8 @@ export function studioCopy(lang: StudioLang) {
         : "No se pudo conectar Google Calendar. Revisa los datos y vuelve a intentarlo.",
       connected: (account: string, summary: string) =>
         en
-          ? `Connected${account ? ` as ${account}` : ""}. New bookings are written to ${summary}.`
-          : `Conectado${account ? ` como ${account}` : ""}. Las citas nuevas se escriben en ${summary}.`,
+          ? `Connected${account ? ` as ${account}` : ""}. Bookings move both ways with ${summary}.`
+          : `Conectado${account ? ` como ${account}` : ""}. Las citas van y vienen con ${summary}.`,
       googleIntro: en
         ? "Tap Start. The names and the return address are ready to edit."
         : "Pulsa Iniciar. Los nombres y la dirección de vuelta ya se pueden cambiar.",

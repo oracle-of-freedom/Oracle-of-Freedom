@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { AdminHeader } from "@/components/admin-header";
 import { CalendarSettings } from "@/components/calendar-settings";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/content";
 import {
   googleAppFromConfig,
   listGoogleCalendars,
-  suggestedGoogleRedirectUri,
+  oauthRedirectUri,
   type GoogleCalendarOption,
 } from "@/lib/google-calendar";
 import { storageMode } from "@/lib/store";
@@ -26,6 +27,11 @@ export default async function CalendarSettingsPage({
   const t = studioCopy(await studioLang());
   const { google: googleResult } = await searchParams;
   const config = await readCalendarConfig();
+  const headerList = await headers();
+  const host = (headerList.get("x-forwarded-host") || headerList.get("host") || "").split(",")[0].trim();
+  const forwardedProto = (headerList.get("x-forwarded-proto") || "").split(",")[0].trim();
+  const proto = forwardedProto || (host.startsWith("localhost") ? "http" : "https");
+  const origin = host ? `${proto}://${host}` : siteUrl();
   let googleCalendars: GoogleCalendarOption[] = [];
   const googleApp = googleAppFromConfig(config);
   if (config.google && googleApp) {
@@ -66,7 +72,7 @@ export default async function CalendarSettingsPage({
         }}
         mode={storageMode()}
         feedUrl={`${siteUrl()}/api/calendar/feed?token=${config.icalToken}`}
-        redirectUri={config.googleApp?.redirectUri || suggestedGoogleRedirectUri()}
+        redirectUri={oauthRedirectUri(config.googleApp?.redirectUri, origin)}
         savedClientId={config.googleApp?.clientId || ""}
         secretSaved={Boolean(config.googleApp?.encryptedClientSecret)}
         googleConfigured={Boolean(googleApp)}

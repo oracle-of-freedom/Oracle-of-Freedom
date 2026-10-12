@@ -6,10 +6,7 @@ import {
 import { readBookings, writeBookings } from "@/lib/booking-store";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { activeBookingType } from "@/lib/availability";
-import {
-  googleBusy,
-  syncLinkedGoogleBookings,
-} from "@/lib/google-calendar";
+import { googleBusy, reconcileGoogleBookings } from "@/lib/google-calendar";
 import { lisbonToday } from "@/lib/pricing";
 
 function addDays(date: string, days: number) {
@@ -27,7 +24,7 @@ export async function publicAvailability(typeId: string) {
   let bookings = await readBookings();
 
   try {
-    const synced = await syncLinkedGoogleBookings(config, bookings, today, to);
+    const synced = await reconcileGoogleBookings(config, bookings, today, to);
     bookings = synced.bookings;
     if (synced.changed) await writeBookings(bookings);
   } catch (error) {

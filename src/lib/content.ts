@@ -159,7 +159,15 @@ export function whatsappHref(text: string) {
 }
 
 export function siteUrl() {
-  return (process.env.NEXT_PUBLIC_SITE_URL || settings.siteUrl).replace(/\/$/, "");
+  const configured = (process.env.NEXT_PUBLIC_SITE_URL || settings.siteUrl).replace(/\/$/, "");
+  try {
+    if (new URL(configured).hostname === "oracle-of-freedom.vercel.app") {
+      return settings.siteUrl.replace(/\/$/, "");
+    }
+  } catch {
+    return settings.siteUrl.replace(/\/$/, "");
+  }
+  return configured;
 }
 
 export function htmlLang(locale: string) {

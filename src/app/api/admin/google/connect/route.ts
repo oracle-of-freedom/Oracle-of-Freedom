@@ -5,14 +5,20 @@ import { readCalendarConfig } from "@/lib/calendar-config-store";
 import {
   googleAppFromConfig,
   googleAuthorizationUrl,
+  suggestedGoogleRedirectUri,
 } from "@/lib/google-calendar";
 
 export async function GET(request: Request) {
-  const origin = new URL(request.url).origin;
+  const requestUrl = new URL(request.url);
+  const callback = new URL(suggestedGoogleRedirectUri(requestUrl.origin));
+  if (requestUrl.host !== callback.host) {
+    return NextResponse.redirect(`${callback.origin}/api/admin/google/connect`);
+  }
+  const origin = requestUrl.origin;
   if (!(await isAdmin())) {
     return NextResponse.redirect(new URL("/admin/login", origin));
   }
-  const app = googleAppFromConfig(await readCalendarConfig());
+  const app = googleAppFromConfig(await readCalendarConfig(), origin);
   if (!app) {
     return NextResponse.redirect(new URL("/admin/calendar/settings?google=missing", origin));
   }
