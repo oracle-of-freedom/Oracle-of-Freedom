@@ -8,6 +8,7 @@ import {
   regenerateIcalToken,
   saveCalendarSettings,
   saveGoogleAppSettings,
+  saveInboundIcal,
   selectGoogleCalendar,
 } from "@/app/admin/calendar/settings-actions";
 import type { ActionState } from "@/app/admin/actions";
@@ -48,8 +49,12 @@ function CopyButton({ value }: { value: string }) {
       variant="outline"
       className="shrink-0"
       onClick={async () => {
-        await navigator.clipboard.writeText(value);
-        setCopied(true);
+        try {
+          await navigator.clipboard.writeText(value);
+          setCopied(true);
+        } catch {
+          setCopied(false);
+        }
       }}
     >
       {copied ? t.settings.copied : t.settings.copy}
@@ -61,6 +66,7 @@ export function CalendarSettings({
   initial,
   mode,
   feedUrl,
+  inboundIcalUrl,
   redirectUri,
   savedClientId,
   secretSaved,
@@ -75,6 +81,7 @@ export function CalendarSettings({
   initial: PublicSettings;
   mode: StorageMode;
   feedUrl: string;
+  inboundIcalUrl: string;
   redirectUri: string;
   savedClientId: string;
   secretSaved: boolean;
@@ -98,11 +105,11 @@ export function CalendarSettings({
   const [state, action, pending] = useActionState(saveCalendarSettings, null);
   const [googleState, googleAction, googlePending] = useActionState(saveGoogleAppSettings, null);
   const [googleOpen, setGoogleOpen] = useState(Boolean(googleNotice));
-  const [icalOpen, setIcalOpen] = useState(false);
-  const [phonePane, setPhonePane] = useState<"hours" | "google" | "ical" | null>(googleNotice ? "google" : null);
+  const [phonePane, setPhonePane] = useState<"hours" | "google" | null>(googleNotice ? "google" : null);
   const [projectName, setProjectName] = useState("Oracle of Freedom");
   const [clientName, setClientName] = useState("Oracle of Freedom Studio");
-  const [calendarName, setCalendarName] = useState("Oracle of Freedom");
+  const [inboundUrl, setInboundUrl] = useState(inboundIcalUrl);
+  const [inboundState, inboundAction, inboundPending] = useActionState(saveInboundIcal, null);
   const [redirectValue, setRedirectValue] = useState(redirectUri);
 
   function updateType(id: string, patch: Partial<PublicBookingType>) {
@@ -139,6 +146,55 @@ export function CalendarSettings({
 
   return (
     <section className="mt-4 grid gap-4 md:mt-8 md:gap-8">
+      <section className="rounded-3xl bg-white/70 p-4 md:p-6">
+        <h2 className="font-serif text-2xl md:text-3xl">{t.settings.ical}</h2>
+        <p className="mt-3 text-sm text-ink/70">{t.settings.icalIntro}</p>
+        <div className="mt-5 grid gap-6">
+          <div className="grid gap-2">
+            <Label htmlFor="ical-out">{t.settings.outbound}</Label>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Input
+                id="ical-out"
+                readOnly
+                value={feedUrl}
+                className="font-mono text-xs"
+                onFocus={(event) => event.currentTarget.select()}
+              />
+              <CopyButton value={feedUrl} />
+            </div>
+            <p className="text-sm text-ink/60">{t.settings.outboundHelp}</p>
+            <form action={regenerateIcalToken}>
+              <Button type="submit" variant="outline" className="w-full sm:w-auto">
+                {t.settings.newLink}
+              </Button>
+            </form>
+          </div>
+          <form action={inboundAction} className="grid gap-2">
+            <Label htmlFor="ical-in">{t.settings.inbound}</Label>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Input
+                id="ical-in"
+                name="url"
+                value={inboundUrl}
+                placeholder="https://"
+                maxLength={2000}
+                className="font-mono text-xs"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
+                onChange={(event) => setInboundUrl(event.target.value)}
+                onFocus={(event) => event.currentTarget.select()}
+              />
+              <CopyButton value={inboundUrl} />
+            </div>
+            <p className="text-sm text-ink/60">{t.settings.inboundHelp}</p>
+            <Notice state={inboundState} saved={t.settings.inboundSaved} />
+            <Button type="submit" disabled={inboundPending || mode === "readonly"} className="w-full sm:w-auto">
+              {inboundPending ? t.settings.saving : t.settings.saveInbound}
+            </Button>
+          </form>
+        </div>
+      </section>
       <div className="rounded-3xl bg-white/70 p-4 md:p-6">
         <h2 className="font-serif text-2xl md:text-3xl">
           <span className="md:hidden">{t.settings.hours}</span>
