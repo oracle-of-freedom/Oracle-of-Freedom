@@ -158,7 +158,7 @@ export const pt: Copy = {
     readGuides: "Ler os guias",
     meet: "Conhecer a Agota",
     from: "Desde",
-    priceNote: "Preços desde, em EUR e sem IVA. Casamentos, alojamentos e festivais confirmam-se com um orçamento.",
+    priceNote: "Preços desde, em EUR. Casamentos, alojamentos e festivais confirmam-se com um orçamento.",
     offer: "Oferta",
     saveSeparately: "Poupam {amount} em relação a reservar em separado",
     placeholderTitle: "Pendente — não é um testemunho publicado",

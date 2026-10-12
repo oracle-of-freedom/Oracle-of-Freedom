@@ -165,7 +165,7 @@ export const en: Copy = {
     readGuides: "Read the guides",
     meet: "Meet Agota",
     from: "From",
-    priceNote: "From prices in EUR, excluding VAT. Weddings, stays and festivals are confirmed with a quote.",
+    priceNote: "From prices in EUR. Weddings, stays and festivals are confirmed with a quote.",
     offer: "Offer",
     saveSeparately: "Save {amount} compared with booking them separately",
     placeholderTitle: "Placeholder — not a published testimonial",

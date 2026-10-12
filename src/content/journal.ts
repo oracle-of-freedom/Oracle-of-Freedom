@@ -64,7 +64,7 @@ Many couples marry legally at home and celebrate here. A friend, a celebrant or 
 
 ## What a simple day costs
 
-A straightforward elopement — place, a few people, food, flowers from the field, and photography — often lands around €1,500–2,500 all in, before travel. Photography starts at €690 for 3–4 hours and €1,100 when the night, the fire and the dancing are part of it (a small wedding, up to about 30 guests). An elopement film starts at €650 and a small-wedding highlight at €875. These figures exclude VAT and are starting prices, confirmed in the quote. {availability}
+A straightforward elopement — place, a few people, food, flowers from the field, and photography — often lands around €1,500–2,500 all in, before travel. Photography starts at €690 for 3–4 hours and €1,100 when the night, the fire and the dancing are part of it (a small wedding, up to about 30 guests). An elopement film starts at €650 and a small-wedding highlight at €875. These figures are starting prices, confirmed in the quote. {availability}
 
 If you do not know the place yet, that is a good place to start. Tell me ocean, forest, plains or mountain and I will answer with somewhere real.`,
       es: `Portugal trata bien a una boda pequeña. La luz se queda baja y dorada durante una hora larga, la costa es salvaje sin quedar lejos, y una ceremonia simbólica puede ocurrir en un acantilado con la gente que de verdad quieres en el círculo.
@@ -93,7 +93,7 @@ Muchas parejas se casan legalmente en su país y lo celebran aquí. Un amigo, un
 
 ## Lo que cuesta un día sencillo
 
-Un elopement sencillo — lugar, pocas personas, comida, flores del campo y fotografía — suele quedar alrededor de 1.500–2.500 € en total, sin viajes. La fotografía empieza en 690 € por 3–4 horas y en 1.100 € cuando la noche, el fuego y el baile forman parte (una boda íntima, hasta unas 30 personas). Una película de elopement empieza en 650 € y un highlight de boda íntima en 875 €. Estas cifras no incluyen IVA y son precios de partida, que se confirman en el presupuesto. {availability}
+Un elopement sencillo — lugar, pocas personas, comida, flores del campo y fotografía — suele quedar alrededor de 1.500–2.500 € en total, sin viajes. La fotografía empieza en 690 € por 3–4 horas y en 1.100 € cuando la noche, el fuego y el baile forman parte (una boda íntima, hasta unas 30 personas). Una película de elopement empieza en 650 € y un highlight de boda íntima en 875 €. Estas cifras son precios de partida, que se confirman en el presupuesto. {availability}
 
 Si aún no sabéis el lugar, ese es un buen comienzo. Decidme océano, bosque, llanura o montaña y os respondo con un sitio real.`,
       pt: `Portugal trata bem um casamento pequeno. A luz fica baixa e dourada durante uma hora longa, a costa é selvagem sem ficar longe, e uma cerimónia simbólica pode acontecer numa falésia com as pessoas que realmente queres no círculo.
@@ -122,7 +122,7 @@ Muitos casais casam legalmente no seu país e celebram aqui. Um amigo, um celebr
 
 ## O que custa um dia simples
 
-Um elopement simples — local, poucas pessoas, comida, flores do campo e fotografia — costuma ficar à volta de 1.500–2.500 € no total, sem deslocações. A fotografia começa em 690 € por 3–4 horas e em 1.100 € quando a noite, o fogo e a dança fazem parte (um casamento íntimo, até cerca de 30 pessoas). Um filme de elopement começa em 650 € e um highlight de casamento íntimo em 875 €. Estes valores não incluem IVA e são preços de partida, confirmados no orçamento. {availability}
+Um elopement simples — local, poucas pessoas, comida, flores do campo e fotografia — costuma ficar à volta de 1.500–2.500 € no total, sem deslocações. A fotografia começa em 690 € por 3–4 horas e em 1.100 € quando a noite, o fogo e a dança fazem parte (um casamento íntimo, até cerca de 30 pessoas). Um filme de elopement começa em 650 € e um highlight de casamento íntimo em 875 €. Estes valores são preços de partida, confirmados no orçamento. {availability}
 
 Se ainda não sabem o local, é um bom começo. Digam-me oceano, floresta, planície ou montanha e eu respondo com um sítio real.`,
     },
@@ -178,7 +178,7 @@ I join the opening circle and say who I am. We name the no-camera moments before
 4. The practice from the back of the room, so faces stay optional.
 5. The last morning: bags, hugs, the empty circle.
 
-A retreat day starts at €400 and is edited on site. A three-day retreat starts at €1,000 and includes five vertical reels plus facilitator portraits, with a commercial licence for your own marketing. Prices exclude VAT and are starting points, confirmed in the quote.`,
+A retreat day starts at €400 and is edited on site. A three-day retreat starts at €1,000 and includes five vertical reels plus facilitator portraits, with a commercial licence for your own marketing. Prices are starting points, confirmed in the quote.`,
       es: `La gente reserva un retiro por lo que siente. El círculo, el silencio, la sopa, el camino de vuelta del mar. Si las fotos del año pasado eran solo la postura de yoga y la habitación, el próximo lanzamiento tiene que esforzarse mucho más.
 
 ## Una lista de tomas que llena fechas
@@ -205,7 +205,7 @@ Me presento en el círculo de apertura. Nombramos los momentos sin cámara antes
 4. La práctica desde el fondo de la sala, para que las caras sigan siendo opcionales.
 5. La última mañana: bolsas, abrazos, el círculo vacío.
 
-Un día de retiro empieza en 400 € y se edita en el lugar. Un retiro de tres días empieza en 1.000 € e incluye cinco reels verticales y retratos de facilitadores, con licencia comercial para tu propio marketing. Los precios no incluyen IVA y son de partida, confirmados en el presupuesto.`,
+Un día de retiro empieza en 400 € y se edita en el lugar. Un retiro de tres días empieza en 1.000 € e incluye cinco reels verticales y retratos de facilitadores, con licencia comercial para tu propio marketing. Los precios son de partida, confirmados en el presupuesto.`,
       pt: `As pessoas reservam um retiro pelo que sentem. O círculo, o silêncio, a sopa, o caminho de volta do mar. Se as fotografias do ano passado eram só a postura de yoga e o quarto, o próximo lançamento tem de trabalhar muito mais.
 
 ## Uma lista de planos que enche datas
@@ -232,7 +232,7 @@ Apresento-me no círculo de abertura. Nomeamos os momentos sem câmara antes de 
 4. A prática a partir do fundo da sala, para as caras continuarem opcionais.
 5. A última manhã: malas, abraços, o círculo vazio.
 
-Um dia de retiro começa em 400 € e é editado no local. Um retiro de três dias começa em 1.000 € e inclui cinco reels verticais e retratos dos facilitadores, com licença comercial para o teu próprio marketing. Os preços não incluem IVA e são de partida, confirmados no orçamento.`,
+Um dia de retiro começa em 400 € e é editado no local. Um retiro de três dias começa em 1.000 € e inclui cinco reels verticais e retratos dos facilitadores, com licença comercial para o teu próprio marketing. Os preços são de partida, confirmados no orçamento.`,
     },
   },
   {

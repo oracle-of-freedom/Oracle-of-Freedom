@@ -158,7 +158,7 @@ export const es: Copy = {
     readGuides: "Leer las guías",
     meet: "Conóceme",
     from: "Desde",
-    priceNote: "Precios desde, en EUR y sin IVA. Bodas, alojamientos y festivales se confirman con un presupuesto.",
+    priceNote: "Precios desde, en EUR. Bodas, alojamientos y festivales se confirman con un presupuesto.",
     offer: "Oferta",
     saveSeparately: "Ahorras {amount} frente a reservarlos por separado",
     placeholderTitle: "Pendiente — no es un testimonio publicado",
