@@ -232,7 +232,7 @@ export const es: Copy = {
       { title: "Comunidad", body: "Formo parte de los círculos que fotografío y los trato con cuidado." },
     ],
     facts: "Más de 10 años en foto y vídeo · Foto y vídeo · Idiomas: inglés y lituano con fluidez, y español de conversación",
-    bts: "PENDIENTE — fotos de Agota trabajando, aún por hacer. Este bloque se queda vacío hasta que existan.",
+    bts: "En el trabajo",
     closingTitle: "Creemos algo real juntos.",
   },
   people: {
