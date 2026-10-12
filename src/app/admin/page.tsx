@@ -8,7 +8,7 @@ import { dayLabel, type Booking } from "@/lib/bookings";
 import { readBookings } from "@/lib/booking-store";
 import { readInquiries } from "@/lib/inquiry-store";
 import { lisbonToday } from "@/lib/pricing";
-import { stayLine, visibleStays } from "@/lib/presence";
+import { staySummary, visibleStays } from "@/lib/presence";
 import { inquiryWhen, studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
 import { readStored } from "@/lib/store";
@@ -57,7 +57,7 @@ export default async function AdminPage() {
       <Link href="/admin/presence" className="mt-4 block rounded-3xl bg-white px-5 py-5 shadow-sm">
         <span className="text-xs tracking-[0.16em] text-ember uppercase">{t.presence.card}</span>
         <span className="mt-2 block font-serif text-2xl leading-snug">
-          {nextStay ? stayLine(lang, nextStay) : t.presence.cardEmpty}
+          {nextStay ? staySummary(lang, nextStay) : t.presence.cardEmpty}
         </span>
         <span className="mt-4 inline-flex min-h-12 items-center rounded-full bg-terracotta px-5 text-sm font-medium text-white">
           {t.presence.cardAction}

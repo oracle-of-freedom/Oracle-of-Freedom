@@ -26,6 +26,7 @@ export default async function PresencePage() {
         today={lisbonToday()}
         copy={t.presence}
         homeHref={lang === "en" ? "/" : "/es"}
+        lang={lang}
       />
     </main>
   );

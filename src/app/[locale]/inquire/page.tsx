@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { InquiryForm } from "@/components/inquiry-form";
+import { StayBanners } from "@/components/stay-banners";
 import { TokenText } from "@/components/token-text";
 import { WhatsAppLink } from "@/components/whatsapp-link";
 import { getCopy } from "@/content";
@@ -45,6 +46,7 @@ export default async function InquirePage({
       <div>
         <h1 className="font-serif text-5xl leading-[1.05] md:text-6xl">{copy.inquire.title}</h1>
         <p className="mt-4 max-w-xl text-lg text-ink/80">{copy.inquire.dek}</p>
+        <StayBanners locale={loc} tone="page" />
         <div className="mt-8">
           <InquiryForm
             copy={{ ...copy.form, place: applyTokens(copy.form.place, tokens) }}

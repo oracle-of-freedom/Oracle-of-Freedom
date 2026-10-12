@@ -105,6 +105,8 @@ export type Copy = {
     title: string;
     dek: string;
     stayNear: string;
+    bookDates: string;
+    also: string;
     elsewhere: string;
     manifesto: string;
     doorsTitle: string;
