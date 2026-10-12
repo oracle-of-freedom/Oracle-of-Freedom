@@ -62,17 +62,20 @@ export function studioCopy(lang: StudioLang) {
     },
     presence: {
       card: en ? "Places and dates" : "Lugares y fechas",
-      cardEmpty: en ? "No city on the homepage yet." : "Todavía no hay ninguna ciudad en la portada.",
+      cardEmpty: en ? "No place on the homepage yet." : "Todavía no hay ningún lugar en la portada.",
       cardAction: en ? "Write a place" : "Anotar un lugar",
       title: en ? "Places and dates" : "Lugares y fechas",
       intro: en
-        ? "Write the city, the country and the dates here. Publishing puts that banner on the homepage and on every page that names where she is available. Leave this empty and those lines name no city. A wedding or festival somewhere else stays an invitation to write soon."
-        : "Aquí escribes la ciudad, el país y las fechas. Al publicar, ese banner sale en la portada y en cada página que dice dónde está disponible. Si lo dejas vacío, esas líneas no nombran ninguna ciudad. Una boda o un festival en otro lugar sigue siendo una invitación a escribir pronto.",
+        ? "Choose the country from the list, then the dates. Add another country with the plus when the same dates cover a neighbour too. The city is optional. Publishing puts a banner on the homepage and on the pages where that availability helps someone book."
+        : "Elige el país en la lista y luego las fechas. Con el más añades otro país cuando las mismas fechas cubren también un vecino. La ciudad es opcional. Al publicar, sale un banner en la portada y en las páginas donde esa disponibilidad ayuda a reservar.",
       region: en ? "Region" : "Región",
       europe: en ? "Europe" : "Europa",
       latin: en ? "Latin America" : "América Latina",
-      city: en ? "City" : "Ciudad",
+      city: en ? "City, if you already know it" : "Ciudad, si ya la sabes",
+      cityHint: en ? "You can publish with the country alone." : "Puedes publicar solo con el país.",
       country: en ? "Country" : "País",
+      chooseCountry: en ? "Choose a country" : "Elige un país",
+      addCountry: en ? "Add another country" : "Añadir otro país",
       from: en ? "From" : "Desde",
       to: en ? "To" : "Hasta",
       visible: en ? "Show on the homepage" : "Mostrar en la portada",
@@ -84,8 +87,8 @@ export function studioCopy(lang: StudioLang) {
       empty: en ? "No place yet. The homepage is not announcing a city." : "Todavía no hay ningún lugar. La portada no anuncia ninguna ciudad.",
       preview: en ? "On the homepage" : "En la portada",
       example: en
-        ? "It will read like this: Available 1–15 February in the city you write."
-        : "Se leerá así: Disponible del 1 al 15 de febrero en la ciudad que escribas.",
+        ? "It will read like this: 1–15 Feb · Costa Rica."
+        : "Se leerá así: 1–15 feb · Costa Rica.",
       hidden: en ? "Hidden" : "Oculta",
       past: en ? "The date has passed" : "La fecha ya pasó",
       newStay: en ? "Another place" : "Otro lugar",

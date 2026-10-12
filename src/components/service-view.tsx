@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { ServiceCopy } from "@/content/types";
 import { postById } from "@/content/journal";
-import { AvailabilityAnswer, availabilityPlain } from "@/components/availability-answer";
 import { GalleryGrid } from "@/components/gallery";
 import { FromPrice, PackageCards } from "@/components/packages";
 import { StayBanners } from "@/components/stay-banners";
@@ -12,14 +11,11 @@ import { TokenText } from "@/components/token-text";
 import { VideoGrid } from "@/components/video-grid";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
-import { getCopy } from "@/content";
 import { gallery, imagesForPage, settings, siteUrl } from "@/lib/content";
 import { festivalFilmSpan } from "@/lib/delivery-copy";
 import { applyTokens, buildTokenMap, displayTiming } from "@/lib/delivery";
-import { presenceAreas, presenceTokens } from "@/lib/presence-copy";
-import { visibleStays } from "@/lib/presence";
 import { getSettings } from "@/lib/offers";
-import { lisbonToday, mergeCatalog, type LiveSettings, type PricedPackage } from "@/lib/pricing";
+import { mergeCatalog, type LiveSettings, type PricedPackage } from "@/lib/pricing";
 import type { Locale } from "@/i18n/routing";
 import type { Copy } from "@/content/types";
 
@@ -58,16 +54,9 @@ export async function ServiceView({
   const hero =
     (heroId ? gallery.find((image) => image.id === heroId) : undefined) ?? images[0];
   const stored = await getSettings();
-  const today = lisbonToday();
-  const home = getCopy(locale).home;
-  const openStays = visibleStays(stored.stays, today);
-  const tokens: Record<string, string> = {
-    ...buildTokenMap(stored.timings),
-    ...presenceTokens(locale, stored.stays, today),
-  };
+  const tokens: Record<string, string> = buildTokenMap(stored.timings);
   const faqTokens = {
     ...tokens,
-    "{availability}": availabilityPlain(locale, openStays, home.elsewhere),
     "{festivalFilmSpan}": festivalFilmSpan(locale, stored),
     ...(group === "festivals"
       ? { "{artistWeeks}": displayTiming(tokens["{artistWeeks}"] ?? "", locale) }
@@ -106,7 +95,7 @@ export async function ServiceView({
           "@type": "Service",
           name: applyTokens(copy.subtitle || copy.title, tokens),
           provider: { "@type": "ProfessionalService", name: settings.brand, url: siteUrl() },
-          areaServed: presenceAreas(stored.stays, today),
+          areaServed: ["Europe", "Latin America"],
           offers,
         }}
       />
@@ -143,6 +132,7 @@ export async function ServiceView({
             <p className="mt-4 max-w-2xl text-lg text-sand">{applyTokens(copy.subtitle, tokens)}</p>
           ) : null}
           <p className="mt-3 max-w-2xl text-sand/85">{copy.dek}</p>
+          <StayBanners locale={locale} tone="photo" />
           {lead ? (
             <FromPrice
               locale={locale}
@@ -251,21 +241,8 @@ export async function ServiceView({
         {copy.where && copy.whereTitle ? (
           <section className="mx-auto max-w-6xl px-4 py-8 md:px-6">
             <h2 className="font-serif text-4xl">{copy.whereTitle}</h2>
-            {copy.where.includes("{availability}") ? (
-              <StayBanners
-                locale={locale}
-                stays={openStays}
-                bookLabel={home.stayNear}
-                elsewhere={home.elsewhere}
-                className="mt-6"
-                pillClassName="bg-terracotta/15 ring-1 ring-terracotta/40"
-                lineClassName="text-terracotta"
-                noteClassName="text-ink/70"
-                elsewhereClassName="max-w-3xl text-base leading-snug text-ink/80"
-              />
-            ) : (
-              <p className="mt-4 text-lg text-ink/80">{applyTokens(copy.where, tokens)}</p>
-            )}
+            <StayBanners locale={locale} tone="page" showElsewhere={false} />
+            <p className="mt-4 max-w-3xl text-base leading-snug text-ink/80">{applyTokens(copy.where, tokens)}</p>
           </section>
         ) : null}
 
@@ -355,13 +332,7 @@ export async function ServiceView({
                 <summary className="cursor-pointer list-none font-medium [&::-webkit-details-marker]:hidden">
                   {item.q}
                 </summary>
-                <AvailabilityAnswer
-                  text={item.a}
-                  tokens={faqTokens}
-                  locale={locale}
-                  stays={openStays}
-                  elsewhere={home.elsewhere}
-                />
+                <p className="pt-3 text-ink/80">{applyTokens(item.a, faqTokens)}</p>
               </details>
             ))}
           </div>

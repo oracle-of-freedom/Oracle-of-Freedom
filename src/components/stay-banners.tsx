@@ -1,53 +1,110 @@
 import { Link } from "@/i18n/navigation";
+import { getCopy } from "@/content";
+import { JsonLd } from "@/components/json-ld";
+import { getSettings } from "@/lib/offers";
+import { absoluteUrl } from "@/lib/seo";
+import { getPathname } from "@/i18n/navigation";
+import { settings } from "@/lib/content";
+import { lisbonToday } from "@/lib/pricing";
+import {
+  chipLabel,
+  placeDetail,
+  placeTitle,
+  shortWhen,
+  stayEvents,
+  visibleStays,
+} from "@/lib/presence";
 import type { Locale } from "@/i18n/routing";
-import { stayLine, type PresenceStay } from "@/lib/presence";
-import { cn } from "@/lib/utils";
 
-/** Homepage stay pills: sand at half opacity, one row from md, stacked below. */
-export function StayBanners({
+export async function StayBanners({
   locale,
-  stays,
-  bookLabel,
-  elsewhere,
-  className,
-  pillClassName,
-  lineClassName,
-  noteClassName,
-  elsewhereClassName = "text-sand/90",
+  tone,
+  showElsewhere = true,
 }: {
   locale: Locale;
-  stays: PresenceStay[];
-  bookLabel: string;
-  elsewhere: string;
-  className?: string;
-  pillClassName?: string;
-  lineClassName?: string;
-  noteClassName?: string;
-  elsewhereClassName?: string;
+  tone: "photo" | "page";
+  showElsewhere?: boolean;
 }) {
+  const copy = getCopy(locale).home;
+  const stored = await getSettings();
+  const stays = visibleStays(stored.stays, lisbonToday());
+  if (stays.length === 0) return null;
+  const [featured, ...later] = stays;
+  const onPhoto = tone === "photo";
+  const bannerClass = onPhoto
+    ? "rounded-2xl bg-sand px-4 py-3 text-ink"
+    : "rounded-2xl bg-terracotta/15 px-4 py-3 text-ink ring-1 ring-terracotta/40";
+  const placeClass = onPhoto ? "font-serif text-2xl leading-tight" : "font-serif text-2xl leading-tight text-terracotta";
+  const whenClass = onPhoto ? "mt-1 text-sm font-medium" : "mt-1 text-sm font-medium text-terracotta";
+  const buttonClass =
+    "mt-3 inline-flex min-h-11 items-center rounded-full bg-terracotta px-4 text-sm font-medium text-white";
+  const chipClass = onPhoto
+    ? "rounded-full bg-sand/90 px-3 py-1 text-sm text-ink"
+    : "rounded-full bg-terracotta/15 px-3 py-1 text-sm text-terracotta ring-1 ring-terracotta/35";
+  const elsewhereClass = onPhoto
+    ? "max-w-xl text-sm leading-relaxed text-sand underline decoration-white/40 underline-offset-4"
+    : "max-w-3xl text-base leading-snug text-ink/80 no-underline";
+
+  const several = featured.countries.length > 1;
+
   return (
-    <>
-      {stays.length > 0 ? (
-        <div
-          className={cn(
-            "mt-5 flex max-w-xl flex-col items-start gap-2 md:grid md:max-w-none md:[grid-template-columns:repeat(var(--stay-cols),minmax(0,1fr))]",
-            className,
-          )}
-          style={{ "--stay-cols": stays.length } as React.CSSProperties}
-        >
-          {stays.map((stay) => (
-            <Link
-              key={stay.id}
-              href="/inquire"
-              className={cn("min-w-0 rounded-2xl bg-sand/50 px-4 py-3 text-ink md:h-full", pillClassName)}
-            >
-              <span className={cn("block text-base leading-snug font-medium", lineClassName)}>{stayLine(locale, stay)}</span>
-              <span className={cn("mt-1 block text-sm text-ink", noteClassName)}>{bookLabel}</span>
+    <div className={several ? "mt-5 grid max-w-xl gap-3 md:max-w-3xl" : "mt-5 grid max-w-xl gap-3"}>
+      <div className={several ? "grid gap-2 md:grid-cols-2" : "grid gap-2"}>
+        {featured.countries.map((code) => (
+          <div key={code} className={bannerClass}>
+            <p className={placeClass}>{placeTitle(locale, featured, code)}</p>
+            {placeDetail(locale, featured, code) ? (
+              <p className="text-sm text-ink/70">{placeDetail(locale, featured, code)}</p>
+            ) : null}
+            <p className={whenClass}>{shortWhen(locale, featured.starts, featured.ends)}</p>
+            <Link href="/inquire" className={buttonClass}>
+              {copy.bookDates}
             </Link>
-          ))}
+          </div>
+        ))}
+      </div>
+      {later.length > 0 ? (
+        <div className="flex flex-wrap gap-2">
+          {later.flatMap((stay) =>
+            stay.countries.map((code) => (
+              <Link key={`${stay.id}-${code}`} href="/inquire" className={chipClass}>
+                {copy.also}: {chipLabel(locale, stay, code)}
+              </Link>
+            )),
+          )}
         </div>
       ) : null}
-      <p className={cn("mt-4 max-w-xl text-base leading-snug", elsewhereClassName)}>{elsewhere}</p>
-    </>
+      {showElsewhere ? (
+        <Link href="/inquire" className={elsewhereClass}>
+          {copy.elsewhere}
+        </Link>
+      ) : null}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": stays.flatMap((stay) =>
+            stayEvents(locale, stay).map((event) => ({
+              "@type": "Event",
+              name: event.name,
+              startDate: stay.starts,
+              endDate: stay.ends,
+              eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+              eventStatus: "https://schema.org/EventScheduled",
+              location: {
+                "@type": "Place",
+                name: event.placeName,
+                address: {
+                  "@type": "PostalAddress",
+                  ...(event.locality ? { addressLocality: event.locality } : {}),
+                  addressCountry: event.code,
+                },
+              },
+              organizer: { "@type": "Person", name: settings.founder },
+              url: absoluteUrl(getPathname({ locale, href: "/inquire" })),
+            })),
+          ),
+        }}
+      />
+    </div>
   );
 }

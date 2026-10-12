@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { getPathname, Link } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import { GalleryGrid } from "@/components/gallery";
-import { JsonLd } from "@/components/json-ld";
 import { OmMark } from "@/components/om-mark";
 import { StayBanners } from "@/components/stay-banners";
 import { Testimonials } from "@/components/testimonials";
@@ -10,10 +9,9 @@ import { getCopy } from "@/content";
 import { posts } from "@/content/journal";
 import type { Locale } from "@/i18n/routing";
 import { featuredImages, formatEuro, imageById, settings } from "@/lib/content";
-import { getCatalog, getSettings } from "@/lib/offers";
-import { openingPrice, lisbonToday } from "@/lib/pricing";
-import { eventName, visibleStays } from "@/lib/presence";
-import { absoluteUrl, pageMetadata } from "@/lib/seo";
+import { getCatalog } from "@/lib/offers";
+import { openingPrice } from "@/lib/pricing";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -31,8 +29,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
-  const [catalog, live] = await Promise.all([getCatalog(), getSettings()]);
-  const stays = visibleStays(live.stays, lisbonToday());
+  const catalog = await getCatalog();
   const hero = imageById(settings.heroImageId);
   const mobile = imageById(settings.mobileHeroImageId);
   const about = imageById(settings.aboutImageId);
@@ -99,12 +96,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             {copy.home.title}
           </h1>
           <p className="mt-5 max-w-xl text-lg text-sand/90">{copy.home.dek}</p>
-          <StayBanners
-            locale={loc}
-            stays={stays}
-            bookLabel={copy.home.stayNear}
-            elsewhere={copy.home.elsewhere}
-          />
+          <StayBanners locale={loc} tone="photo" />
           <div className="mt-6 flex flex-wrap gap-3">
             <Button asChild variant="light" size="lg">
               <Link href="/inquire">{copy.common.checkAvailability}</Link>
@@ -115,33 +107,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </div>
         </div>
       </section>
-      {stays.length > 0 ? (
-        <JsonLd
-          data={{
-            "@context": "https://schema.org",
-            "@graph": stays.map((stay) => ({
-              "@type": "Event",
-              name: eventName(loc, stay),
-              startDate: stay.starts,
-              endDate: stay.ends,
-              eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-              eventStatus: "https://schema.org/EventScheduled",
-              location: {
-                "@type": "Place",
-                name: `${stay.city}, ${stay.country}`,
-                address: {
-                  "@type": "PostalAddress",
-                  addressLocality: stay.city,
-                  addressCountry: stay.country,
-                },
-              },
-              organizer: { "@type": "Person", name: settings.founder },
-              url: absoluteUrl(getPathname({ locale: loc, href: "/inquire" })),
-            })),
-          }}
-        />
-      ) : null}
-
       <section className="mx-auto max-w-6xl px-4 pt-20 pb-8 md:px-6 md:pt-28">
         <h2 className="font-serif text-4xl md:text-5xl">{copy.home.doorsTitle}</h2>
         <div className="mt-8 grid gap-4 md:grid-cols-3">

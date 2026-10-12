@@ -1,6 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { GalleryGrid } from "@/components/gallery";
+import { StayBanners } from "@/components/stay-banners";
 import { Testimonials } from "@/components/testimonials";
 import { getCopy } from "@/content";
 import type { Locale } from "@/i18n/routing";
@@ -50,6 +51,7 @@ export default async function PeoplePage({ params }: { params: Promise<{ locale:
         <p className="text-xs tracking-[0.22em] text-terracotta-ink uppercase">{copy.nav.people}</p>
         <h1 className="mt-3 max-w-4xl font-serif text-5xl leading-[1.05] md:text-7xl">{copy.people.title}</h1>
         <p className="mt-5 max-w-2xl text-lg text-ink/80">{copy.people.dek}</p>
+        <StayBanners locale={loc} tone="page" />
       </header>
       <section className="mx-auto grid max-w-6xl gap-4 px-4 md:grid-cols-2 md:px-6">
         {doors.map((door) => (

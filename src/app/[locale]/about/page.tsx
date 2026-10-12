@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { StayBanners } from "@/components/stay-banners";
 import { TokenText } from "@/components/token-text";
 import { Button } from "@/components/ui/button";
 import { getCopy } from "@/content";
@@ -67,6 +68,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <div>
           <p className="text-xs tracking-[0.22em] text-terracotta-ink uppercase">{settings.founder}</p>
           <h1 className="mt-3 font-serif text-5xl leading-[1.05] md:text-7xl">{copy.about.title}</h1>
+          <StayBanners locale={loc} tone="page" />
           <div className="mt-8 space-y-5 text-lg text-ink/85">
             {copy.about.paragraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>

@@ -2,16 +2,11 @@ import { cache } from "react";
 import { applyTokens, buildTokenMap, splitTokenText } from "@/lib/delivery";
 import type { Locale } from "@/i18n/routing";
 import { getSettings } from "@/lib/offers";
-import { presenceTokens } from "@/lib/presence-copy";
-import { lisbonToday } from "@/lib/pricing";
 import { isPlaceholder } from "@/lib/utils";
 
 export const liveTokenMap = cache(async (locale: Locale = "en"): Promise<Record<string, string>> => {
   const stored = await getSettings();
-  return {
-    ...buildTokenMap(stored.timings),
-    ...presenceTokens(locale, stored.stays, lisbonToday()),
-  };
+  return buildTokenMap(stored.timings);
 });
 
 export async function replaceTokens(text: string, locale: Locale = "en") {
