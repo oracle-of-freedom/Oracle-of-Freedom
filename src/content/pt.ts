@@ -48,44 +48,44 @@ export const pt: Copy = {
     },
     about: {
       title: "Sobre a Agota · Europa e América Latina",
-      description: "Conhece a Agota Urbikaite. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo.",
+      description: "Conhece a Agota Urbikaite. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.",
       keywords: "Agota Urbikaite fotógrafa; fotografia espontânea; Europa; América Latina",
     },
     people: {
       title: "Pessoas · Retratos e casamentos íntimos boho",
-      description: "Retratos e casamentos íntimos boho. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo. Sessões desde 175 €.",
+      description: "Retratos e casamentos íntimos boho. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade. Sessões desde 175 €.",
       keywords: "Europa; América Latina; casamento boho",
     },
     portraits: {
       title: "Sessão de casal e de noivado · Europa e América Latina",
       description:
-        "Sessões de retrato para uma pessoa, um casal, uma família ou amigos. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo. Naturais, sem poses. Desde 175 €.",
+        "Sessões de retrato para uma pessoa, um casal, uma família ou amigos. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade. Naturais, sem poses. Desde 175 €.",
       keywords: "Europa; América Latina; pedido de casamento",
     },
     elopements: {
       title: "Fotógrafa de elopements boho · Europa e América Latina",
-      description: "Elopements íntimos. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo. Círculos pequenos, até cerca de 30 pessoas. Desde 690 €.",
+      description: "Elopements íntimos. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade. Círculos pequenos, até cerca de 30 pessoas. Desde 690 €.",
       keywords: "Europa; América Latina; casamento íntimo",
     },
     experiences: {
       title: "Experiências · Retiros, festivais e artistas",
-      description: "Retiros, festivais, DJs e artistas de fogo. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo.",
+      description: "Retiros, festivais, DJs e artistas de fogo. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.",
       keywords: "Europa; América Latina",
     },
     retreats: {
       title: "Fotógrafa de retiros · Europa e América Latina",
-      description: "Fotografia e vídeo de retiros. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo. Com consentimento e licença comercial. Desde 400 €/dia.",
+      description: "Fotografia e vídeo de retiros. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade. Com consentimento e licença comercial. Desde 400 €/dia.",
       keywords: "Europa; América Latina; vídeo para retiros",
     },
     festivals: {
       title: "Fotógrafa de festivais e DJs · Europa e América Latina",
-      description: "Fotos de imprensa, clips de sets, retratos de fogo e videoclipes. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo. Desde 190 €.",
+      description: "Fotos de imprensa, clips de sets, retratos de fogo e videoclipes. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade. Desde 190 €.",
       keywords: "Europa; América Latina; videoclipe",
     },
     places: {
       title: "Fotógrafa de eco-alojamentos · Europa e América Latina",
       description:
-        "Fotografias e reels para eco-quintas, surf houses e alojamentos boutique. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo. Desde 475 €.",
+        "Fotografias e reels para eco-quintas, surf houses e alojamentos boutique. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade. Desde 475 €.",
       keywords: "Europa; América Latina; alojamento local",
     },
     portfolio: {
@@ -261,7 +261,7 @@ export const pt: Copy = {
   portraits: {
     eyebrow: "Sessões de retrato",
     title: "Para os descalços, os incendiados e os livres.",
-    subtitle: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo.",
+    subtitle: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.",
     dek: "Uma sessão para ti, para dois ou para as pessoas que amas. Pessoas, casais, noivado, famílias e amigos.",
     cta: "Marcar sessão",
     personalizeCta: "Personaliza a tua sessão",
@@ -315,7 +315,7 @@ export const pt: Copy = {
     },
     whereTitle: "Onde podemos fotografar",
     where:
-      "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo.",
+      "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.",
     processTitle: "Como funciona",
     process: [
       { title: "Diz olá", body: "Envia o formulário ou uma mensagem de WhatsApp com a data que imaginas e aquilo que sonhas." },
@@ -332,7 +332,7 @@ export const pt: Copy = {
       { q: "Qual é a melhor hora?", a: "A hora dourada, logo a seguir ao nascer do sol ou antes do pôr do sol. Eu escolho o horário conforme a data e o local." },
       { q: "E se chover?", a: "Mudamos a sessão para outro dia ou abraçamos o drama das nuvens: vocês decidem." },
       { q: "Ajudas num pedido de casamento surpresa?", a: "Sim. Ajudo-te a escolher o sítio e o momento, e escondo-me à vista de todos." },
-      { q: "Onde fotografas?", a: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo." },
+      { q: "Onde fotografas?", a: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade." },
       { q: "Como marco?", a: "Envia o formulário. Um sinal de {deposit} garante a tua data." },
       { q: "Quando chega a galeria?", a: "As fotografias, em {artistWeeks}. Os filmes e as coleções foto+vídeo, em {artistFilmWeeks}. A entrega expressa é um extra pago: fotografias em {expressPhoto}, filme ou o combo completo em {expressFilm}." },
     ],
@@ -341,7 +341,7 @@ export const pt: Copy = {
   elopements: {
     eyebrow: "Casamentos boho e elopements",
     title: "Para os descalços, os incendiados e os livres.",
-    subtitle: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo.",
+    subtitle: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.",
     dek: "Votos descalços. Meia dúzia de pessoas que amam. Um dia que sabe a liberdade.",
     cta: "Ver a minha data",
     inquiry: "elopement",
@@ -434,7 +434,7 @@ export const pt: Copy = {
       { q: "Ainda não sabemos onde. Ajudas?", a: "É uma das minhas partes preferidas. Digam-me a vossa vibe (oceano, floresta, planícies de ar desértico, montanhas) e desenhamos a visão juntos." },
       { q: "Também fazes vídeo?", a: "Sim. O filme de elopement e o highlight de casamento íntimo reservam-se sozinhos, mas como sou só uma pessoa, não consigo captar os vossos momentos especiais ao mesmo tempo em foto e em vídeo." },
       { q: "Fotografas a noite e a celebração depois da cerimónia?", a: "Sim, adoro captar a noite e a dança. A vossa festa está em boas mãos." },
-      { q: "Viajas?", a: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo." },
+      { q: "Viajas?", a: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade." },
       { q: "Com quanta antecedência devemos reservar?", a: "Cerca de 6 meses antes é o ideal, mas às vezes bastam algumas semanas, por isso é só perguntarem." },
       { q: "Quando chegam as fotografias e o filme?", a: "As fotografias, em {weeks}. Os filmes seguem o prazo do filme, {filmWeeks}. A antevisão sai em 48 horas. A entrega expressa é um extra pago: fotografias em {expressPhoto}, filme em {expressFilm}." },
     ],
@@ -443,7 +443,7 @@ export const pt: Copy = {
   retreats: {
     eyebrow: "Retiros e encontros",
     title: "Para os descalços, os incendiados e os livres.",
-    subtitle: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo.",
+    subtitle: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.",
     dek: "O teu próximo retiro vende-se com a sensação do anterior. Vamos captá-la.",
     cta: "Planear a cobertura do meu retiro",
     inquiry: "retreat",
@@ -531,7 +531,7 @@ export const pt: Copy = {
       { q: "Posso usar as imagens em anúncios e plataformas?", a: "Sim, a licença comercial para o teu próprio marketing está incluída." },
       { q: "Também filmas?", a: "Sim. O pacote de 3 dias inclui 5 reels verticais curtos, e num retiro de 1 dia podes acrescentar 3 reels ou vídeo de drone." },
       { q: "Os participantes têm de assinar alguma coisa?", a: "Antes do retiro partilho contigo um sistema simples de consentimento, e qualquer pessoa pode dizer que não." },
-      { q: "Viajas para o estrangeiro?", a: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo." },
+      { q: "Viajas para o estrangeiro?", a: "Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade." },
       { q: "Com quanta antecedência devo marcar?", a: "Cerca de 4 meses antes é o ideal, mas às vezes bastam algumas semanas, por isso é só perguntarem." },
     ],
     guide: { post: "retreat", label: "Como fotografar o teu retiro para encher o próximo" },
