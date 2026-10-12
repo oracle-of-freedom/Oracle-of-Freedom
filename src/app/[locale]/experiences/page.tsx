@@ -4,10 +4,22 @@ import { GalleryGrid } from "@/components/gallery";
 import { VideoGrid } from "@/components/video-grid";
 import { getCopy } from "@/content";
 import type { Locale } from "@/i18n/routing";
-import { formatEuro, imagesForPage } from "@/lib/content";
+import { formatEuro, imagesForPage, type GalleryImage } from "@/lib/content";
 import { getCatalog } from "@/lib/offers";
 import { openingPrice } from "@/lib/pricing";
 import { pageMetadata } from "@/lib/seo";
+
+/** The tent DJ and the flower-crown portrait trade places. Every other photo stays in sequence. */
+function swapExperiencePhotos(images: GalleryImage[]) {
+  const next = images.slice();
+  const tentDj = next.findIndex((image) => image.id === "experience-11");
+  const flowerCrown = next.findIndex((image) => image.id === "experience-19");
+  if (tentDj < 0 || flowerCrown < 0) return next;
+  const tent = next[tentDj];
+  next[tentDj] = next[flowerCrown];
+  next[flowerCrown] = tent;
+  return next;
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -76,7 +88,7 @@ export default async function ExperiencesPage({ params }: { params: Promise<{ lo
       </section>
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <GalleryGrid
-          images={imagesForPage("experiences")}
+          images={swapExperiencePhotos(imagesForPage("experiences"))}
           locale={loc}
           foldMobile
           mobileVisible={4}
