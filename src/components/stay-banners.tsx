@@ -11,6 +11,8 @@ export function StayBanners({
   elsewhere,
   className,
   pillClassName,
+  lineClassName,
+  noteClassName,
   elsewhereClassName = "text-sand/90",
 }: {
   locale: Locale;
@@ -19,6 +21,8 @@ export function StayBanners({
   elsewhere: string;
   className?: string;
   pillClassName?: string;
+  lineClassName?: string;
+  noteClassName?: string;
   elsewhereClassName?: string;
 }) {
   return (
@@ -37,8 +41,8 @@ export function StayBanners({
               href="/inquire"
               className={cn("min-w-0 rounded-2xl bg-sand/50 px-4 py-3 text-ink md:h-full", pillClassName)}
             >
-              <span className="block text-base leading-snug font-medium">{stayLine(locale, stay)}</span>
-              <span className="mt-1 block text-sm text-ink">{bookLabel}</span>
+              <span className={cn("block text-base leading-snug font-medium", lineClassName)}>{stayLine(locale, stay)}</span>
+              <span className={cn("mt-1 block text-sm text-ink", noteClassName)}>{bookLabel}</span>
             </Link>
           ))}
         </div>

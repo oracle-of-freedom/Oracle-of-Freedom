@@ -258,7 +258,9 @@ export async function ServiceView({
                 bookLabel={home.stayNear}
                 elsewhere={home.elsewhere}
                 className="mt-6"
-                pillClassName="bg-white/80 ring-1 ring-ink/10"
+                pillClassName="bg-terracotta/15 ring-1 ring-terracotta/40"
+                lineClassName="text-terracotta"
+                noteClassName="text-ink/70"
                 elsewhereClassName="max-w-3xl text-base leading-snug text-ink/80"
               />
             ) : (
