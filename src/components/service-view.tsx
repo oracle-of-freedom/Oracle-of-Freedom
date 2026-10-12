@@ -252,15 +252,15 @@ export async function ServiceView({
           <section className="mx-auto max-w-6xl px-4 py-8 md:px-6">
             <h2 className="font-serif text-4xl">{copy.whereTitle}</h2>
             {copy.where.includes("{availability}") ? (
-              <div className="mt-6 rounded-3xl bg-night px-4 py-5 md:px-6">
-                <StayBanners
-                  locale={locale}
-                  stays={openStays}
-                  bookLabel={home.stayNear}
-                  elsewhere={home.elsewhere}
-                  className="mt-0"
-                />
-              </div>
+              <StayBanners
+                locale={locale}
+                stays={openStays}
+                bookLabel={home.stayNear}
+                elsewhere={home.elsewhere}
+                className="mt-6"
+                pillClassName="bg-white/80 ring-1 ring-ink/10"
+                elsewhereClassName="max-w-3xl text-base leading-snug text-ink/80"
+              />
             ) : (
               <p className="mt-4 text-lg text-ink/80">{applyTokens(copy.where, tokens)}</p>
             )}
