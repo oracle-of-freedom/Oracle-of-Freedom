@@ -33,6 +33,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const hero = imageById(settings.heroImageId);
   const mobile = imageById(settings.mobileHeroImageId);
   const about = imageById(settings.aboutImageId);
+  const aboutTeaser = {
+    src: "/images/portfolio/home-about-dog.jpg",
+    width: 1300,
+    height: 2006,
+    alt: {
+      en: "Agota standing with her dog in the hills",
+      es: "Agota de pie con su perro en las colinas",
+      pt: "Agota em pé com o seu cão nas colinas",
+    },
+  };
   const doors = [
     {
       href: "/people" as const,
@@ -189,11 +199,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-2 md:px-6">
         <Image
-          src={about.src}
-          alt={about.alt[loc]}
-          width={about.width}
-          height={about.height}
-          className="aspect-[4/5] rounded-[2rem] object-cover"
+          src={aboutTeaser.src}
+          alt={aboutTeaser.alt[loc]}
+          width={aboutTeaser.width}
+          height={aboutTeaser.height}
+          className="h-auto w-full rounded-[2rem]"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
         <div>
