@@ -27,7 +27,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const copy = getCopy(locale);
   const primary = imageById(settings.aboutImageId);
   const secondary = imageById("about-portrait");
-  const atWork = ["about-work-01"].map((id) => imageById(id));
+  const atWork = ["about-work-01", "about-work-02", "about-work-03"].map((id) => imageById(id));
 
   return (
     <article>
@@ -83,7 +83,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <p className="mt-8 max-w-3xl text-ink/80">
           <TokenText text={copy.about.facts} />
         </p>
-        <div className="mt-10 max-w-md space-y-8">
+        <h2 className="mt-12 font-serif text-4xl">{copy.about.bts}</h2>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {atWork.map((image) => (
             <figure key={image.id}>
               <Image
@@ -93,8 +94,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 height={image.height}
                 placeholder="blur"
                 blurDataURL={image.blur}
-                className="w-full rounded-3xl object-cover"
-                sizes="(max-width: 768px) 100vw, 28rem"
+                className="h-auto w-full rounded-3xl object-cover"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
               {image.caption?.[loc] ? (
                 <figcaption className="mt-3 text-sm text-ink/60">{image.caption[loc]}</figcaption>

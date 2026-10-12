@@ -258,7 +258,7 @@ export const en: Copy = {
     ],
     facts:
       "10+ years in photo & video · Photo + film · Languages: {languages}",
-    bts: "PLACEHOLDER — photos of Agota at work, still to be taken. This block stays empty until they exist.",
+    bts: "At work",
     closingTitle: "Let's create something real together.",
   },
   people: {

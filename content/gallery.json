@@ -102,6 +102,54 @@
       "source": "Agota Urbikaite"
     },
     {
+      "id": "about-work-02",
+      "src": "/images/portfolio/about-work-02.jpg",
+      "width": 853,
+      "height": 580,
+      "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gAQTGF2YzYxLjE5LjEwMQD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAFAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAP/xAAYEAADAQEAAAAAAAAAAAAAAAAAAQIhE//EABUBAQEAAAAAAAAAAAAAAAAAAAAE/8QAFREBAQAAAAAAAAAAAAAAAAAAABH/2gAMAwEAAhEDEQA/AI8ZcVrwAE1H/9k=",
+      "category": "portraits",
+      "categories": [
+        "portraits"
+      ],
+      "pages": [
+        "about"
+      ],
+      "featured": false,
+      "provisional": false,
+      "placeholder": false,
+      "order": 4,
+      "alt": {
+        "en": "Agota in a green top with blue dreadlocks, smiling while holding a camera at an outdoor gathering.",
+        "es": "Agota con un top verde y dreadlocks azules, sonriendo con una cámara en un encuentro al aire libre.",
+        "pt": "Agota com um top verde e dreadlocks azuis, a sorrir com uma câmara num encontro ao ar livre."
+      },
+      "source": "Agota Urbikaite"
+    },
+    {
+      "id": "about-work-03",
+      "src": "/images/portfolio/about-work-03.jpg",
+      "width": 940,
+      "height": 622,
+      "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gAQTGF2YzYxLjE5LjEwMQD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAFAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAL/xAAcEAADAAEFAAAAAAAAAAAAAAAAAQIDBBEhMVH/xAAVAQEBAAAAAAAAAAAAAAAAAAABBP/EABYRAQEBAAAAAAAAAAAAAAAAAAARIf/aAAwDAQACEQMRAD8AmNLLxVSp8erfsAE1wv/Z",
+      "category": "portraits",
+      "categories": [
+        "portraits"
+      ],
+      "pages": [
+        "about"
+      ],
+      "featured": false,
+      "provisional": false,
+      "placeholder": false,
+      "order": 5,
+      "alt": {
+        "en": "Agota in a red jacket and black dress, holding a camera in front of a painted mural.",
+        "es": "Agota con una chaqueta roja y un vestido negro, con una cámara frente a un mural pintado.",
+        "pt": "Agota com um casaco vermelho e um vestido preto, com uma câmara em frente a um mural pintado."
+      },
+      "source": "Agota Urbikaite"
+    },
+    {
       "id": "festival-01",
       "src": "/images/portfolio/festival-01.jpg",
       "width": 630,
