@@ -99,12 +99,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </h1>
           <p className="mt-5 max-w-xl text-lg text-sand/90">{copy.home.dek}</p>
           {stays.length > 0 ? (
-            <div className="mt-5 flex max-w-xl flex-col items-start gap-2">
+            <div
+              className="mt-5 flex max-w-xl flex-col items-start gap-2 md:grid md:max-w-none md:[grid-template-columns:repeat(var(--stay-cols),minmax(0,1fr))]"
+              style={{ "--stay-cols": stays.length } as React.CSSProperties}
+            >
               {stays.map((stay) => (
                 <Link
                   key={stay.id}
                   href="/inquire"
-                  className="rounded-2xl bg-sand/50 px-4 py-3 text-ink"
+                  className="min-w-0 rounded-2xl bg-sand/50 px-4 py-3 text-ink md:h-full"
                 >
                   <span className="block text-base leading-snug font-medium">{stayLine(loc, stay)}</span>
                   <span className="mt-1 block text-sm text-ink">{copy.home.stayNear}</span>
