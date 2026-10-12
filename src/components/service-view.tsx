@@ -241,7 +241,7 @@ export async function ServiceView({
         {copy.where && copy.whereTitle ? (
           <section className="mx-auto max-w-6xl px-4 py-8 md:px-6">
             <h2 className="font-serif text-4xl">{copy.whereTitle}</h2>
-            <StayBanners locale={locale} tone="page" showElsewhere={false} />
+            <StayBanners locale={locale} tone="peach" showElsewhere={false} />
             <p className="mt-4 max-w-3xl text-base leading-snug text-ink/80">{applyTokens(copy.where, tokens)}</p>
           </section>
         ) : null}

@@ -22,7 +22,7 @@ export async function StayBanners({
   showElsewhere = true,
 }: {
   locale: Locale;
-  tone: "photo" | "page";
+  tone: "photo" | "page" | "peach";
   showElsewhere?: boolean;
 }) {
   const copy = getCopy(locale).home;
@@ -31,19 +31,24 @@ export async function StayBanners({
   if (stays.length === 0) return null;
   const [featured, ...later] = stays;
   const onPhoto = tone === "photo";
+  const warm = tone === "peach";
   const bannerClass = onPhoto
     ? "rounded-2xl bg-sand px-4 py-3 text-ink"
-    : "rounded-2xl bg-terracotta/15 px-4 py-3 text-ink ring-1 ring-terracotta/40";
-  const placeClass = onPhoto ? "font-serif text-2xl leading-tight" : "font-serif text-2xl leading-tight text-terracotta";
-  const whenClass = onPhoto ? "mt-1 text-sm font-medium" : "mt-1 text-sm font-medium text-terracotta";
+    : warm
+      ? "rounded-2xl bg-terracotta/15 px-4 py-3 text-ink ring-1 ring-terracotta/40"
+      : "rounded-2xl bg-white px-4 py-3 text-ink shadow-sm";
+  const placeClass = warm ? "font-serif text-2xl leading-tight text-terracotta" : "font-serif text-2xl leading-tight";
+  const whenClass = warm ? "mt-1 text-sm font-medium text-terracotta" : "mt-1 text-sm font-medium";
   const buttonClass =
     "mt-3 inline-flex min-h-11 items-center rounded-full bg-terracotta px-4 text-sm font-medium text-white";
   const chipClass = onPhoto
     ? "rounded-full bg-sand/90 px-3 py-1 text-sm text-ink"
-    : "rounded-full bg-terracotta/15 px-3 py-1 text-sm text-terracotta ring-1 ring-terracotta/35";
+    : warm
+      ? "rounded-full bg-terracotta/15 px-3 py-1 text-sm text-terracotta ring-1 ring-terracotta/35"
+      : "rounded-full bg-white px-3 py-1 text-sm text-ink shadow-sm";
   const elsewhereClass = onPhoto
     ? "max-w-xl text-sm leading-relaxed text-sand underline decoration-white/40 underline-offset-4"
-    : "max-w-3xl text-base leading-snug text-ink/80 no-underline";
+    : "max-w-xl text-sm leading-relaxed text-ink underline decoration-ink/30 underline-offset-4";
 
   const several = featured.countries.length > 1;
 
