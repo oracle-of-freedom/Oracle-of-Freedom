@@ -340,7 +340,6 @@ export const en: Copy = {
         ],
       },
     },
-    travelNote: "{availability}",
     whereTitle: "Where we can shoot",
     where: "{availability}",
     processTitle: "How it works",
@@ -441,7 +440,6 @@ export const en: Copy = {
         ],
       },
     },
-    travelNote: "{availability}",
     dayTitle: "What your day could look like",
     day: "Sunrise vows on a wild beach. A walk through the forest with flowers in your hair. A ceremony led by a friend, a shaman or a celebrant. Your people in a circle, drums and laughter. A long table under fairy lights. A fire dance to close the night.",
     comingSoon:
@@ -537,7 +535,7 @@ export const en: Copy = {
         ],
       },
     },
-    travelNote: "{availability} Accommodation and meals on site are usually covered by the retreat.",
+    travelNote: "Accommodation and meals on site are usually covered by the retreat.",
     consentTitle: "How I work in sacred spaces",
     consent: [
       "I join your opening circle and introduce myself, so people feel safe.",
@@ -682,7 +680,6 @@ export const en: Copy = {
         ],
       },
     },
-    travelNote: "{availability}",
     videosTitle: "Watch",
     videosNote:
       "Some films open on Instagram. Press play and the others start here.",
@@ -786,7 +783,6 @@ export const en: Copy = {
       "Vertical reels",
       "A commercial licence for your own marketing",
     ],
-    travelNote: "{availability}",
     comingSoon: "Dedicated stay and room collaborations are still in progress.",
     processTitle: "How it works",
     process: [
