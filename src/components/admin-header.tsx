@@ -7,6 +7,7 @@ import { studioLang } from "@/lib/studio-locale.server";
 
 const sectionIds = [
   { href: "/admin", id: "today" },
+  { href: "/admin/presence", id: "presence" },
   { href: "/admin/inquiries", id: "inquiries" },
   { href: "/admin/calendar", id: "calendar" },
   { href: "/admin/prices", id: "prices" },
@@ -37,6 +38,14 @@ function TabIcon({ id }: { id: StudioSection }) {
       <svg {...common}>
         <path d="M5 5h14v15H5z" />
         <path d="M8 3v4M16 3v4M5 10h14" />
+      </svg>
+    );
+  }
+  if (id === "presence") {
+    return (
+      <svg {...common}>
+        <path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z" />
+        <circle cx="12" cy="10" r="2.2" />
       </svg>
     );
   }
@@ -108,7 +117,7 @@ export async function AdminHeader({ current, title }: { current: StudioSection; 
         style={{ height: "var(--studio-nav)", paddingBottom: "env(safe-area-inset-bottom)" }}
         aria-label={t.nav.menu}
       >
-        <ul className="grid h-full grid-cols-4">
+        <ul className="grid h-full grid-cols-5">
           {links.map((link) => {
             const active = link.id === current;
             return (
@@ -123,7 +132,7 @@ export async function AdminHeader({ current, title }: { current: StudioSection; 
                   }
                 >
                   <TabIcon id={link.id} />
-                  <span className="text-[11px] leading-none">{link.label}</span>
+                  <span className="max-w-full truncate px-0.5 text-center text-[10px] leading-none">{link.label}</span>
                 </Link>
               </li>
             );

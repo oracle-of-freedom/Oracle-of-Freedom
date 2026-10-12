@@ -54,6 +54,16 @@ export default async function AdminPage() {
       <AdminHeader current="today" title={t.home.title} />
       <p className="mt-2 text-sm text-ink/60 md:mt-3 md:text-lg">{dayLabel(today, lang)}</p>
 
+      <Link href="/admin/presence" className="mt-4 block rounded-3xl bg-white px-5 py-5 shadow-sm">
+        <span className="text-xs tracking-[0.16em] text-ember uppercase">{t.presence.card}</span>
+        <span className="mt-2 block font-serif text-2xl leading-snug">
+          {nextStay ? stayLine(lang, nextStay) : t.presence.cardEmpty}
+        </span>
+        <span className="mt-4 inline-flex min-h-12 items-center rounded-full bg-terracotta px-5 text-sm font-medium text-white">
+          {t.presence.cardAction}
+        </span>
+      </Link>
+
       {featuredBooking ? (
         <Link href="/admin/calendar" className="mt-5 block rounded-3xl bg-white px-5 py-5 shadow-sm">
           <span className="text-xs tracking-[0.16em] text-ember uppercase">{t.home.next}</span>
@@ -111,11 +121,6 @@ export default async function AdminPage() {
           {t.home.moreInquiries(moreInquiries)}
         </Link>
       ) : null}
-
-      <Link href="/admin/presence" className="mt-6 block min-h-12 rounded-3xl bg-white px-5 py-4">
-        <span className="text-xs tracking-[0.16em] text-ember uppercase">{t.presence.card}</span>
-        <span className="mt-1 block">{nextStay ? stayLine(lang, nextStay) : t.presence.cardEmpty}</span>
-      </Link>
     </main>
   );
 }

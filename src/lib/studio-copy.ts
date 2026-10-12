@@ -8,6 +8,7 @@ export function studioCopy(lang: StudioLang) {
       today: en ? "Today" : "Hoy",
       inquiries: en ? "Inquiries" : "Solicitudes",
       calendar: en ? "Calendar" : "Agenda",
+      presence: en ? "Places" : "Lugares",
       prices: en ? "Prices" : "Precios",
       logout: en ? "Log out" : "Salir",
       menu: en ? "Studio" : "Estudio",
@@ -23,8 +24,8 @@ export function studioCopy(lang: StudioLang) {
     login: {
       title: en ? "Studio" : "Estudio",
       intro: en
-        ? "Enter the password to see inquiries, the calendar, prices and delivery times."
-        : "Escribe la contraseña para ver solicitudes, la agenda, los precios y los plazos.",
+        ? "Enter the password to see inquiries, the calendar, places, prices and delivery times."
+        : "Escribe la contraseña para ver solicitudes, la agenda, los lugares, los precios y los plazos.",
       password: en ? "Password" : "Contraseña",
       enter: en ? "Enter" : "Entrar",
       checking: en ? "Checking…" : "Comprobando…",
@@ -60,12 +61,13 @@ export function studioCopy(lang: StudioLang) {
             : `${count} solicitudes nuevas`,
     },
     presence: {
-      card: en ? "Where I'll be" : "Dónde estaré",
-      cardEmpty: en ? "No city on the homepage." : "Ninguna ciudad en la portada.",
-      title: en ? "Where I'll be" : "Dónde estaré",
+      card: en ? "Places and dates" : "Lugares y fechas",
+      cardEmpty: en ? "No city on the homepage yet." : "Todavía no hay ninguna ciudad en la portada.",
+      cardAction: en ? "Write a place" : "Anotar un lugar",
+      title: en ? "Places and dates" : "Lugares y fechas",
       intro: en
-        ? "A city and its dates become the banner. A wedding or festival somewhere else stays an invitation to write soon."
-        : "Una ciudad y sus fechas pasan al banner. Una boda o un festival en otro lugar sigue siendo una invitación a escribir pronto.",
+        ? "Write the city, the country and the dates here. Publishing puts that banner on the homepage. Leave this empty and the homepage names no city. A wedding or festival somewhere else stays an invitation to write soon."
+        : "Aquí escribes la ciudad, el país y las fechas. Al publicar, ese banner sale en la portada. Si lo dejas vacío, la portada no nombra ninguna ciudad. Una boda o un festival en otro lugar sigue siendo una invitación a escribir pronto.",
       region: en ? "Region" : "Región",
       europe: en ? "Europe" : "Europa",
       latin: en ? "Latin America" : "América Latina",
@@ -73,15 +75,32 @@ export function studioCopy(lang: StudioLang) {
       country: en ? "Country" : "País",
       from: en ? "From" : "Desde",
       to: en ? "To" : "Hasta",
-      visible: en ? "Visible" : "Visible",
-      save: en ? "Save this stay" : "Guardar esta estancia",
+      visible: en ? "Show on the homepage" : "Mostrar en la portada",
+      save: en ? "Publish on the homepage" : "Publicar en la portada",
       remove: en ? "Remove" : "Quitar",
-      saved: en ? "Saved. The homepage will show it." : "Guardado. La portada lo mostrará.",
-      empty: en ? "No stay yet." : "Todavía no hay ninguna estancia.",
+      saved: en ? "Published. The homepage shows this banner." : "Publicado. La portada ya muestra este banner.",
+      removed: en ? "Removed. The homepage keeps the places that remain." : "Quitado. La portada se queda con los lugares que siguen.",
+      cleared: en ? "Removed. The homepage is not announcing a city." : "Quitado. La portada no anuncia ninguna ciudad.",
+      empty: en ? "No place yet. The homepage is not announcing a city." : "Todavía no hay ningún lugar. La portada no anuncia ninguna ciudad.",
       preview: en ? "On the homepage" : "En la portada",
+      example: en
+        ? "It will read like this: Available 1–15 February in the city you write."
+        : "Se leerá así: Disponible del 1 al 15 de febrero en la ciudad que escribas.",
       hidden: en ? "Hidden" : "Oculta",
       past: en ? "The date has passed" : "La fecha ya pasó",
-      newStay: en ? "New stay" : "Nueva estancia",
+      newStay: en ? "Another place" : "Otro lugar",
+      seeHome: en ? "See the homepage" : "Ver la portada",
+      storage: {
+        blob: en
+          ? "Publishing updates the live homepage within a few seconds."
+          : "Al publicar, la portada en línea se actualiza en unos segundos.",
+        local: en
+          ? "This computer only. The published site does not change from here."
+          : "Solo este ordenador. La web publicada no cambia desde aquí.",
+        readonly: en
+          ? "Saving is off until the studio storage is connected. The homepage will not show a city."
+          : "No se puede guardar hasta conectar el almacén del estudio. La portada no mostrará ninguna ciudad.",
+      },
     },
     inquiries: {
       title: en ? "Inquiries" : "Solicitudes",

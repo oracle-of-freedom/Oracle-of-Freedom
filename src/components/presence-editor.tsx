@@ -17,11 +17,15 @@ type PresenceCopy = {
   save: string;
   remove: string;
   saved: string;
+  removed: string;
+  cleared: string;
   empty: string;
   preview: string;
+  example: string;
   hidden: string;
   past: string;
   newStay: string;
+  seeHome: string;
 };
 
 function blankStay(): PresenceStay {
@@ -40,10 +44,12 @@ export function PresenceEditor({
   initial,
   today,
   copy,
+  homeHref,
 }: {
   initial: PresenceStay[];
   today: string;
   copy: PresenceCopy;
+  homeHref: string;
 }) {
   const [stays, setStays] = useState(initial);
   const [draft, setDraft] = useState<PresenceStay>(blankStay);
@@ -55,7 +61,7 @@ export function PresenceEditor({
     draft.starts.length === 10 &&
     draft.ends >= draft.starts;
 
-  function persist(next: PresenceStay[], resetDraft: boolean) {
+  function persist(next: PresenceStay[], resetDraft: boolean, message: string) {
     setNote("");
     startTransition(async () => {
       const result = await saveStays(next);
@@ -65,7 +71,7 @@ export function PresenceEditor({
       }
       setStays(next);
       if (resetDraft) setDraft(blankStay());
-      setNote(copy.saved);
+      setNote(message);
     });
   }
 
@@ -75,7 +81,7 @@ export function PresenceEditor({
     const next = stays.some((item) => item.id === stay.id)
       ? stays.map((item) => (item.id === stay.id ? stay : item))
       : [stay, ...stays];
-    persist(next, true);
+    persist(next, true, copy.saved);
   }
 
   return (
@@ -119,14 +125,18 @@ export function PresenceEditor({
           />
           {copy.visible}
         </label>
-        {ready ? (
-          <div className="rounded-2xl bg-sand px-4 py-3 text-sm leading-relaxed">
-            <p className="text-xs tracking-[0.16em] text-ember uppercase">{copy.preview}</p>
-            <p className="mt-2">{stayLine("es", draft)}</p>
-            <p>{stayLine("en", draft)}</p>
-            <p>{stayLine("pt", draft)}</p>
-          </div>
-        ) : null}
+        <div className="rounded-2xl bg-sand px-4 py-3 text-sm leading-relaxed">
+          <p className="text-xs tracking-[0.16em] text-ember uppercase">{copy.preview}</p>
+          {ready ? (
+            <>
+              <p className="mt-2">{stayLine("es", draft)}</p>
+              <p>{stayLine("en", draft)}</p>
+              <p>{stayLine("pt", draft)}</p>
+            </>
+          ) : (
+            <p className="mt-2 text-ink/70">{copy.example}</p>
+          )}
+        </div>
         <div className="flex flex-wrap gap-2">
           <button type="submit" disabled={pending} className="inline-flex min-h-12 items-center rounded-full bg-terracotta px-5 text-sm font-medium text-white disabled:opacity-60">
             {copy.save}
@@ -140,6 +150,9 @@ export function PresenceEditor({
           </button>
         </div>
         {note ? <p className="text-sm">{note}</p> : null}
+        <a href={homeHref} className="inline-flex min-h-12 items-center text-sm underline underline-offset-4">
+          {copy.seeHome}
+        </a>
       </form>
 
       {stays.length === 0 ? <p className="text-sm text-ink/60">{copy.empty}</p> : null}
@@ -160,7 +173,10 @@ export function PresenceEditor({
             </button>
             <button
               type="button"
-              onClick={() => persist(stays.filter((item) => item.id !== stay.id), draft.id === stay.id)}
+              onClick={() => {
+                const next = stays.filter((item) => item.id !== stay.id);
+                persist(next, draft.id === stay.id, next.length === 0 ? copy.cleared : copy.removed);
+              }}
               disabled={pending}
               className="inline-flex min-h-12 items-center rounded-full border border-ink/15 px-4 text-sm"
             >
