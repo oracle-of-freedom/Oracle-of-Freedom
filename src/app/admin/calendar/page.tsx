@@ -6,6 +6,7 @@ import { parseMonth } from "@/lib/bookings";
 import { readBookings, writeBookings } from "@/lib/booking-store";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { reconcileGoogleBookings } from "@/lib/google-calendar";
+import { importInboundIcal } from "@/lib/inbound-ical";
 import { lisbonToday } from "@/lib/pricing";
 import { storageMode } from "@/lib/store";
 import { studioCopy } from "@/lib/studio-copy";
@@ -27,17 +28,23 @@ export default async function CalendarPage({
   let bookings = await readBookings();
   const [year, monthNumber] = month.split("-").map(Number);
   const lastDay = new Date(Date.UTC(year, monthNumber, 0)).getUTCDate();
+  const from = `${month}-01`;
+  const to = `${month}-${String(lastDay).padStart(2, "0")}`;
   try {
-    const synced = await reconcileGoogleBookings(
-      config,
-      bookings,
-      `${month}-01`,
-      `${month}-${String(lastDay).padStart(2, "0")}`,
-    );
+    const synced = await reconcileGoogleBookings(config, bookings, from, to);
     bookings = synced.bookings;
     if (synced.changed) await writeBookings(bookings);
   } catch (error) {
     console.error("[calendar] Google event sync failed", error);
+  }
+  if (config.inboundIcalUrl) {
+    try {
+      const inbound = await importInboundIcal(config.inboundIcalUrl, bookings, from, to);
+      bookings = inbound.bookings;
+      if (inbound.changed) await writeBookings(bookings);
+    } catch (error) {
+      console.error("[calendar] inbound iCal sync failed", error);
+    }
   }
   return (
     <main className="studio-page-dock mx-auto max-w-6xl px-4 py-4 md:py-12">

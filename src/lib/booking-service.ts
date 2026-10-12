@@ -7,6 +7,7 @@ import { readBookings, writeBookings } from "@/lib/booking-store";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { activeBookingType } from "@/lib/availability";
 import { googleBusy, reconcileGoogleBookings } from "@/lib/google-calendar";
+import { importInboundIcal } from "@/lib/inbound-ical";
 import { lisbonToday } from "@/lib/pricing";
 
 function addDays(date: string, days: number) {
@@ -29,6 +30,16 @@ export async function publicAvailability(typeId: string) {
     if (synced.changed) await writeBookings(bookings);
   } catch (error) {
     console.error("[calendar] linked Google event sync failed", error);
+  }
+
+  if (config.inboundIcalUrl) {
+    try {
+      const inbound = await importInboundIcal(config.inboundIcalUrl, bookings, today, to);
+      bookings = inbound.bookings;
+      if (inbound.changed) await writeBookings(bookings);
+    } catch (error) {
+      console.error("[calendar] inbound iCal sync failed", error);
+    }
   }
 
   let externalBusy: BusyInterval[] = [];

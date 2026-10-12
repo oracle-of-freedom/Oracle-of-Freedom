@@ -17,8 +17,9 @@ export async function GET(request: Request) {
   if (!token || !tokensMatch(token, config.icalToken)) {
     return new Response("Not found", { status: 404 });
   }
+  const bookings = (await readBookings()).filter((item) => item.origin !== "ical");
   return icalResponse(
-    bookingsIcal(await readBookings(), "Agota · Oracle of Freedom"),
+    bookingsIcal(bookings, "Agota · Oracle of Freedom"),
     "oracle-of-freedom-calendar.ics",
   );
 }

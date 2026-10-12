@@ -11,6 +11,7 @@ import { writeBookings } from "@/lib/booking-store";
 import type { Booking } from "@/lib/bookings";
 import { bookingsIcal } from "@/lib/ical";
 import { upsertGoogleEvent } from "@/lib/google-calendar";
+import { notifyStudio } from "@/lib/push";
 import { settings, siteUrl } from "@/lib/content";
 
 const schema = z.object({
@@ -158,6 +159,17 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("[booking] Google event creation failed", error);
   }
+
+  await notifyStudio({
+    kind: booking.kind === "meeting" ? "consultation" : "appointment",
+    name: data.name,
+    detail: {
+      en: `${available.bookingType.label.en} · ${data.date} ${data.start}`,
+      es: `${available.bookingType.label.es} · ${data.date} ${data.start}`,
+    },
+    url: "/admin/calendar",
+    tag: `booking-${booking.id}`,
+  });
 
   let emailed = false;
   try {

@@ -438,26 +438,21 @@ export function studioCopy(lang: StudioLang) {
       primary: en ? " · primary" : " · principal",
       useCalendar: en ? "Use this calendar" : "Usar este calendario",
       disconnect: en ? "Disconnect Google" : "Desconectar Google",
-      ical: en ? "iCal subscription" : "Suscripción iCal",
+      ical: en ? "Phone calendar" : "Calendario del celular",
       icalIntro: en
-        ? "Tap Start, then copy the private address into your calendar app."
-        : "Pulsa Iniciar y copia la dirección privada en tu app de calendario.",
-      calendarName: en ? "Calendar name" : "Nombre del calendario",
-      privateAddress: en ? "Private address" : "Dirección privada",
-      appleMac: en
-        ? "Apple Calendar on a Mac: File, then New Calendar Subscription. Paste the private address. If it asks for a name, use the one above."
-        : "Calendario de Apple en un Mac: Archivo, luego Nueva suscripción a calendario. Pega la dirección privada. Si pide un nombre, usa el de arriba.",
-      iphone: en
-        ? "iPhone: Settings, then Calendar, then Accounts, then Add Account, then Other, then Add Subscribed Calendar. Paste the private address."
-        : "iPhone: Ajustes, luego Calendario, luego Cuentas, luego Añadir cuenta, luego Otra, luego Añadir calendario suscrito. Pega la dirección privada.",
-      outlook: en
-        ? "Outlook: Add calendar, then Subscribe from web. Paste the private address and use the name above."
-        : "Outlook: Añadir calendario, luego Suscribirse desde la web. Pega la dirección privada y usa el nombre de arriba.",
-      otherGoogle: en
-        ? "Another Google account: Settings, then Add calendar, then From URL. Paste the private address. Google can take several hours to show new bookings."
-        : "Otra cuenta de Google: Ajustes, luego Añadir calendario, luego Desde URL. Pega la dirección privada. Google puede tardar varias horas en mostrar las citas nuevas.",
-      subscribe: en ? "Subscribe" : "Suscribirse",
-      newLink: en ? "Create another private link" : "Crear otro enlace privado",
+        ? "Copy the outgoing URL into the phone calendar. Paste the phone calendar’s secret URL into the incoming field."
+        : "Copia la URL de salida y pégala en el calendario del celular. En la URL de entrada pega la dirección secreta de ese calendario.",
+      outbound: en ? "Outgoing URL" : "URL de salida",
+      outboundHelp: en
+        ? "Ready to copy. On iPhone: Settings, Calendar, Accounts, Add Account, Other, Add Subscribed Calendar."
+        : "Lista para copiar. En el iPhone: Ajustes, Calendario, Cuentas, Añadir cuenta, Otra, Añadir calendario suscrito.",
+      inbound: en ? "Incoming URL" : "URL de entrada",
+      inboundHelp: en
+        ? "Paste the secret address from the phone calendar. Those events show up in the studio."
+        : "Pega la dirección secreta del calendario del celular. Esas citas aparecen en el estudio.",
+      saveInbound: en ? "Save incoming URL" : "Guardar URL de entrada",
+      inboundSaved: en ? "Incoming URL saved." : "URL de entrada guardada.",
+      newLink: en ? "Create another outgoing link" : "Crear otro enlace de salida",
     },
     errors: {
       password: en ? "The password does not match." : "La contraseña no coincide.",
@@ -504,6 +499,12 @@ export function studioCopy(lang: StudioLang) {
         ? "Paste the Google Cloud Client secret into the Client secret field."
         : "Pega el Client secret de Google Cloud en la casilla Client secret.",
       googleSave: en ? "The Google setup was not saved." : "No se guardó la configuración de Google.",
+      inboundUrl: en
+        ? "The incoming URL has to be an https calendar address."
+        : "La URL de entrada tiene que ser una dirección https del calendario.",
+      inboundRead: en
+        ? "The incoming URL is saved, but that calendar did not answer."
+        : "La URL de entrada quedó guardada, pero ese calendario no respondió.",
       timingPhrase: (label: string, example: string) =>
         en
           ? `Keep “${label}” to a short phrase, like “${example}”.`

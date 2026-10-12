@@ -43,6 +43,7 @@ export type CalendarConfig = {
   bufferMinutes: number;
   defaultLocation: string;
   icalToken: string;
+  inboundIcalUrl?: string;
   google?: GoogleConnection;
   googleApp?: GoogleAppSettings;
 };
@@ -51,6 +52,54 @@ const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 export function newCalendarToken() {
   return randomBytes(24).toString("base64url");
+}
+
+export function isPrivateCalendarHost(host: string) {
+  let name = host.toLowerCase().replace(/^\[|\]$/g, "");
+  if (name.startsWith("::ffff:")) name = name.slice("::ffff:".length);
+  if (
+    name === "localhost" ||
+    name.endsWith(".localhost") ||
+    name.endsWith(".local") ||
+    name === "metadata.google.internal" ||
+    (name.includes(":") &&
+      (name === "::1" || name.startsWith("fe80:") || name.startsWith("fc") || name.startsWith("fd")))
+  ) {
+    return true;
+  }
+  const ipv4 = name.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (!ipv4) return false;
+  const a = Number(ipv4[1]);
+  const b = Number(ipv4[2]);
+  if ([a, b, Number(ipv4[3]), Number(ipv4[4])].some((part) => part > 255)) return true;
+  if (a === 10 || a === 127 || a === 0) return true;
+  if (a === 169 && b === 254) return true;
+  if (a === 192 && b === 168) return true;
+  if (a === 172 && b >= 16 && b <= 31) return true;
+  if (a === 100 && b >= 64 && b <= 127) return true;
+  return false;
+}
+
+export function normalizeInboundIcalUrl(raw: string) {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  let value = trimmed;
+  if (value.toLowerCase().startsWith("webcal://")) value = `https://${value.slice("webcal://".length)}`;
+  if (value.toLowerCase().startsWith("webcals://")) value = `https://${value.slice("webcals://".length)}`;
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:" || url.username || url.password) return null;
+  if (url.toString().length > 2000) return null;
+  if (isPrivateCalendarHost(url.hostname)) return null;
+  const ownFeed =
+    (url.hostname === "oracleoffreedom.com" || url.hostname.endsWith(".vercel.app")) &&
+    url.pathname.includes("/api/calendar/feed");
+  if (ownFeed) return null;
+  return url.toString();
 }
 
 export function defaultCalendarConfig(): CalendarConfig {
@@ -170,6 +219,13 @@ export function parseCalendarConfig(value: unknown): CalendarConfig | null {
     return null;
   }
   if (item.googleApp && !validGoogleApp(item.googleApp)) delete item.googleApp;
+  if (typeof item.inboundIcalUrl === "string") {
+    const inbound = normalizeInboundIcalUrl(item.inboundIcalUrl);
+    if (inbound) item.inboundIcalUrl = inbound;
+    else delete item.inboundIcalUrl;
+  } else {
+    delete item.inboundIcalUrl;
+  }
   return item as CalendarConfig;
 }
 

@@ -3,7 +3,7 @@ export const BOOKING_STATUSES = ["hold", "confirmed", "done", "cancelled"] as co
 
 export type BookingKind = (typeof BOOKING_KINDS)[number];
 export type BookingStatus = (typeof BOOKING_STATUSES)[number];
-export type BookingOrigin = "studio" | "web" | "google";
+export type BookingOrigin = "studio" | "web" | "google" | "ical";
 
 export type Booking = {
   id: string;
@@ -73,7 +73,8 @@ export function isBooking(value: unknown): value is Booking {
     (item.origin === undefined ||
       item.origin === "studio" ||
       item.origin === "web" ||
-      item.origin === "google") &&
+      item.origin === "google" ||
+      item.origin === "ical") &&
     (item.bookingTypeId === undefined ||
       (typeof item.bookingTypeId === "string" && item.bookingTypeId.length <= 60)) &&
     (item.locale === undefined || item.locale === "en" || item.locale === "es" || item.locale === "pt") &&

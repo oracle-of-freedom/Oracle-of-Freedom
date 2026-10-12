@@ -305,6 +305,7 @@ function eventBody(booking: Booking) {
 }
 
 export async function upsertGoogleEvent(config: CalendarConfig, booking: Booking) {
+  if (booking.origin === "ical") return booking;
   if (!config.google || !googleAppFromConfig(config)) return booking;
   const access = await accessToken(config);
   const calendar = encodeURIComponent(config.google.calendarId);
@@ -528,6 +529,7 @@ export async function pushUnlinkedBookings(
     (booking) =>
       !booking.googleEventId &&
       booking.origin !== "google" &&
+      booking.origin !== "ical" &&
       booking.status !== "cancelled" &&
       booking.date >= from &&
       booking.date <= to,

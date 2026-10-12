@@ -31,5 +31,8 @@ The site builds with no secrets set. Copy `.env.example` to `.env.local` only wh
 - `KEYSTATIC_SECRET`
 - `ADMIN_PASSWORD`
 - `BLOB_READ_WRITE_TOKEN`
+- `VAPID_PUBLIC_KEY`
+- `VAPID_PRIVATE_KEY`
+- `VAPID_SUBJECT`
 
 Photographs in `public/images/portfolio/` and `src/app/favicon.ico` are solid-colour stand-ins. Testimonials in `content/testimonials.json` stay marked `placeholder: true` until the quotes are real.

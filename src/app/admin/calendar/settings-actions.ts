@@ -6,6 +6,7 @@ import type { ActionState } from "@/app/admin/actions";
 import { isAdmin } from "@/lib/admin-auth";
 import {
   newCalendarToken,
+  normalizeInboundIcalUrl,
   parseCalendarConfig,
   type CalendarConfig,
 } from "@/lib/calendar-config";
@@ -13,7 +14,10 @@ import {
   readCalendarConfig,
   writeCalendarConfig,
 } from "@/lib/calendar-config-store";
+import { readBookings, writeBookings } from "@/lib/booking-store";
 import { encryptGoogleToken, listGoogleCalendars } from "@/lib/google-calendar";
+import { importInboundIcal } from "@/lib/inbound-ical";
+import { lisbonToday } from "@/lib/pricing";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
 
@@ -58,6 +62,7 @@ export async function saveCalendarSettings(
       error: t.errors.settingsCheck,
     };
   }
+  if (current.inboundIcalUrl) candidate.inboundIcalUrl = current.inboundIcalUrl;
   try {
     await writeCalendarConfig(candidate);
     refresh();
@@ -145,6 +150,49 @@ export async function saveGoogleAppSettings(
       error: error instanceof Error ? error.message : t.errors.googleSave,
     };
   }
+}
+
+function addDays(date: string, days: number) {
+  const value = new Date(`${date}T00:00:00Z`);
+  value.setUTCDate(value.getUTCDate() + days);
+  return value.toISOString().slice(0, 10);
+}
+
+export async function saveInboundIcal(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await guard();
+  const t = studioCopy(await studioLang());
+  const current = await readCalendarConfig();
+  const normalized = normalizeInboundIcalUrl(clean(formData.get("url"), 2000));
+  if (normalized === null) return { error: t.errors.inboundUrl };
+  const next = { ...current };
+  if (normalized) next.inboundIcalUrl = normalized;
+  else delete next.inboundIcalUrl;
+  await writeCalendarConfig(next);
+  try {
+    const bookings = await readBookings();
+    if (!normalized) {
+      const kept = bookings.filter((item) => item.origin !== "ical");
+      if (kept.length !== bookings.length) await writeBookings(kept);
+    } else {
+      const today = lisbonToday();
+      const synced = await importInboundIcal(
+        normalized,
+        bookings,
+        addDays(today, -14),
+        addDays(today, Math.min(current.daysAhead || 60, 90)),
+      );
+      if (synced.changed) await writeBookings(synced.bookings);
+    }
+  } catch (error) {
+    console.error("[calendar] inbound iCal sync failed", error);
+    refresh();
+    return { error: t.errors.inboundRead };
+  }
+  refresh();
+  return { ok: true };
 }
 
 export async function disconnectGoogleCalendar() {

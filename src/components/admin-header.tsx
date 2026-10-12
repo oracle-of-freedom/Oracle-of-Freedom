@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { logout } from "@/app/admin/actions";
+import { NotificationPrompt } from "@/components/notification-prompt";
 import { OfflineBanner } from "@/components/offline-banner";
 import { LanguageToggle } from "@/components/studio-lang";
 import { studioCopy } from "@/lib/studio-copy";
@@ -112,6 +113,7 @@ export async function AdminHeader({ current, title }: { current: StudioSection; 
         </div>
       </header>
       <OfflineBanner />
+      <NotificationPrompt />
       <nav
         className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-sand/95 backdrop-blur-md md:hidden"
         style={{ height: "var(--studio-nav)", paddingBottom: "env(safe-area-inset-bottom)" }}

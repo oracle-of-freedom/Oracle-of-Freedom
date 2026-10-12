@@ -9,6 +9,7 @@ import { es } from "@/content/es";
 import { settings } from "@/lib/content";
 import { languageLabel, type Inquiry } from "@/lib/inquiries";
 import { readInquiries, writeInquiries } from "@/lib/inquiry-store";
+import { notifyStudio } from "@/lib/push";
 import { BUDGET_UNSURE, budgetGroup, gradeInquiry, multiDayCoverage, peopleMode } from "@/lib/lead";
 
 const schema = z.object({
@@ -152,13 +153,31 @@ export async function POST(request: Request) {
     budgetLabel,
     grade,
   };
+  let saved = false;
   try {
     const current = await readInquiries();
     await writeInquiries([inquiry, ...current]);
     revalidatePath("/admin");
     revalidatePath("/admin/inquiries");
+    saved = true;
   } catch (error) {
     console.error("[inquiry] storage failed", error);
+  }
+  if (saved) {
+    const service = {
+      en: label(en.form.services, data.service),
+      es: label(es.form.services, data.service),
+    };
+    await notifyStudio({
+      kind: "inquiry",
+      name: data.name,
+      detail: {
+        en: data.place ? `${service.en} · ${data.place}` : service.en,
+        es: data.place ? `${service.es} · ${data.place}` : service.es,
+      },
+      url: `/admin/inquiries/${inquiry.id}`,
+      tag: `inquiry-${inquiry.id}`,
+    });
   }
 
   const apiKey = process.env.RESEND_API_KEY;
