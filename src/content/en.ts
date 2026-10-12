@@ -47,63 +47,52 @@ export const en: Copy = {
       keywords: "photographer Europe; photographer Latin America; wedding photographer; festival photographer",
     },
     about: {
-      title: "About Agota · Algarve & Lisbon Photographer",
-      description:
-        "Meet Agota Urbikaite. Every session is covered from the Algarve to Lisbon. Weddings, retreats, festivals and commercial work can go further.",
-      keywords: "Agota Urbikaite photographer; Algarve and Lisbon photographer; candid photographer Portugal",
+      title: "About Agota · {presencePlaces}",
+      description: "Meet Agota Urbikaite. {availability}",
+      keywords: "Agota Urbikaite photographer; candid photographer; {presenceKeywords}",
     },
     people: {
       title: "People · Portraits & Intimate Boho Weddings",
-      description:
-        "Portraits and intimate boho weddings from the Algarve to Lisbon, coast included. Weddings can travel further. Sessions from €175.",
-      keywords: "Algarve couples photographer; Lisbon wedding photographer; boho wedding photographer Portugal",
+      description: "Portraits and intimate boho weddings. {availability} Sessions from €175.",
+      keywords: "{presenceKeywords}; boho wedding photographer",
     },
     portraits: {
-      title: "Couples & Engagement Photographer · Algarve & Lisbon",
+      title: "Couples & Engagement Photographer · {presencePlaces}",
       description:
-        "Portrait sessions for one person, a couple, a family or friends, from the Algarve to Lisbon. Natural, no stiff posing. From €175.",
-      keywords:
-        "Algarve couples photographer; Lisbon engagement photographer; Algarve photoshoot; Lisbon couple photos; proposal photographer Lisbon",
+        "Portrait sessions for one person, a couple, a family or friends. {availability} Natural, no stiff posing. From €175.",
+      keywords: "{presenceKeywords}; proposal photographer",
     },
     elopements: {
-      title: "Boho Elopement Photographer · Algarve & Lisbon",
-      description:
-        "Intimate boho elopements from the Algarve to Lisbon, and further across Portugal, Europe and beyond. Small circles, up to about 30 guests. From €690.",
-      keywords:
-        "Algarve elopement photographer; Lisbon elopement photographer; boho elopement Portugal; intimate wedding photographer Portugal",
+      title: "Boho Elopement Photographer · {presencePlaces}",
+      description: "Intimate boho elopements. {availability} Small circles, up to about 30 guests. From €690.",
+      keywords: "{presenceKeywords}; intimate wedding photographer",
     },
     experiences: {
       title: "Experiences · Retreats, Festivals & Artists",
-      description:
-        "Retreats, festivals, DJs and fire artists. Based from the Algarve to Lisbon, and travelling further for the bigger gatherings.",
-      keywords: "Algarve retreat photographer; Lisbon festival photographer; retreat photographer Portugal",
+      description: "Retreats, festivals, DJs and fire artists. {availability}",
+      keywords: "{presenceKeywords}",
     },
     retreats: {
-      title: "Retreat Photographer · Algarve, Lisbon & beyond",
-      description:
-        "Retreat photo and film from the Algarve to Lisbon, and further across Portugal and Europe. Consent-first, commercial licence included. From €400/day.",
-      keywords:
-        "Algarve retreat photographer; Lisbon retreat photographer; yoga retreat photographer Portugal; retreat videographer Europe",
+      title: "Retreat Photographer · {presencePlaces}",
+      description: "Retreat photo and film. {availability} Consent-first, commercial licence included. From €400/day.",
+      keywords: "{presenceKeywords}; retreat videographer",
     },
     festivals: {
-      title: "Festival & DJ Photographer · Algarve & Lisbon",
-      description:
-        "Press shots, live sets, fire portraits and music videos. Based from the Algarve to Lisbon, travelling for festivals and commercial shoots. From €190.",
-      keywords:
-        "Algarve festival photographer; Lisbon DJ photographer; fire show photographer; music video Portugal",
+      title: "Festival & DJ Photographer · {presencePlaces}",
+      description: "Press shots, live sets, fire portraits and music videos. {availability} From €190.",
+      keywords: "{presenceKeywords}; music video",
     },
     places: {
-      title: "Eco-Stay Photographer · Algarve & Lisbon",
+      title: "Eco-Stay Photographer · {presencePlaces}",
       description:
-        "Photos and reels for eco-quintas, surf houses and boutique stays from the Algarve to Lisbon. Commercial shoots can travel further. From €475.",
-      keywords:
-        "Algarve hotel photographer; Lisbon surf house photography; eco hotel photographer Portugal; Airbnb photographer Algarve",
+        "Photos and reels for eco-quintas, surf houses and boutique stays. {availability} From €475.",
+      keywords: "{presenceKeywords}; Airbnb photographer",
     },
     portfolio: {
       title: "Portfolio · Oracle of Freedom",
       description:
         "Real moments of the wild ones. Portraits, gatherings, festivals, fire, DJs and film.",
-      keywords: "Agota Urbikaite portfolio; boho photographer portfolio Portugal",
+      keywords: "Agota Urbikaite portfolio; boho photographer portfolio; {presenceKeywords}",
     },
     journal: {
       title: "Journal · Guides for Free Spirits",
@@ -115,12 +104,12 @@ export const en: Copy = {
       title: "Inquire · Oracle of Freedom",
       description:
         "Tell me your story: date, place and dream. I reply within 48 hours. WhatsApp or email welcome.",
-      keywords: "book Algarve photographer; book Lisbon photographer; contact Oracle of Freedom",
+      keywords: "book photographer; contact Oracle of Freedom; {presenceKeywords}",
     },
     book: {
       title: "Book a call · Oracle of Freedom",
       description: "Choose a time to meet photographer and filmmaker Agota Urbikaite.",
-      keywords: "book Agota Urbikaite; book Algarve photographer; book Lisbon photographer",
+      keywords: "book Agota Urbikaite; {presenceKeywords}",
     },
     privacy: {
       title: "Privacy · Oracle of Freedom",
@@ -291,7 +280,7 @@ export const en: Copy = {
   portraits: {
     eyebrow: "Portrait sessions",
     title: "For the barefoot, the fire-lit and the free.",
-    subtitle: "Portrait sessions, from the Algarve to Lisbon",
+    subtitle: "{availability}",
     dek: "One session for you, for two, or for the people you love. Individuals, couples, engagement, families and friends.",
     cta: "Book your session",
     personalizeCta: "Personalize your session",
@@ -351,11 +340,9 @@ export const en: Copy = {
         ],
       },
     },
-    travelNote:
-      "Travel within {baseArea} is included for every session. Weddings, retreats, festivals and commercial shoots can go further — the rest of Portugal, Europe and beyond — with travel quoted at cost.",
+    travelNote: "{availability}",
     whereTitle: "Where we can shoot",
-    where:
-      "All of the Algarve, and the coast up to Lisbon: the south, the Costa Vicentina, the Alentejo shore, Comporta, Arrábida and the city itself. Ericeira and Sintra sit just north of Lisbon — tell me if that's the plan. For a wedding, retreat, festival or commercial shoot, the rest of Portugal, Europe and beyond are open.",
+    where: "{availability}",
     processTitle: "How it works",
     process: [
       { title: "Say hi", body: "Send the form or a WhatsApp with your date idea and what you're dreaming of." },
@@ -372,7 +359,7 @@ export const en: Copy = {
       { q: "What time is best?", a: "Golden hour — the hour after sunrise or before sunset. I'll pick the timing for your date and place." },
       { q: "What if it rains?", a: "We move the session to another day free of charge, or we embrace the drama of the clouds — your choice." },
       { q: "Can you help plan a surprise proposal?", a: "Yes. I'll help you pick the spot and timing, and hide in plain sight." },
-      { q: "Where do you photograph?", a: "Every session includes travel from the Algarve to Lisbon, along the coast in between. Weddings, retreats, festivals and commercial shoots can go further, with travel quoted at cost." },
+      { q: "Where do you photograph?", a: "{availability}" },
       { q: "How do I book?", a: "Send the inquiry form. A {deposit} deposit secures your date." },
       { q: "When does the gallery arrive?", a: "Photographs in {artistWeeks}. Films and photo+film collections in {artistFilmWeeks}. Express delivery is a paid add-on: photographs in {expressPhoto}, film or the full combo in {expressFilm}." },
     ],
@@ -381,7 +368,7 @@ export const en: Copy = {
   elopements: {
     eyebrow: "Boho weddings & elopements",
     title: "For the barefoot, the fire-lit and the free.",
-    subtitle: "Boho elopements from the Algarve to Lisbon, and further",
+    subtitle: "{availability}",
     dek: "Barefoot vows. A handful of people you love. A day that feels like freedom.",
     cta: "Check my date",
     inquiry: "elopement",
@@ -454,8 +441,7 @@ export const en: Copy = {
         ],
       },
     },
-    travelNote:
-      "Travel within {baseArea} is included. Elopements and intimate weddings further away — the rest of Portugal, Europe and beyond — are quoted at cost.",
+    travelNote: "{availability}",
     dayTitle: "What your day could look like",
     day: "Sunrise vows on a wild beach. A walk through the forest with flowers in your hair. A ceremony led by a friend, a shaman or a celebrant. Your people in a circle, drums and laughter. A long table under fairy lights. A fire dance to close the night.",
     comingSoon:
@@ -477,7 +463,7 @@ export const en: Copy = {
       { q: "We don't know where to elope yet. Can you help?", a: "That's one of my favourite parts. Tell me your vibe (ocean, forest, desert-like plains, mountains) and we'll curate the vision together." },
       { q: "Do you do video too?", a: "Yes. An elopement film and a small-wedding highlight can be booked on their own, but as I am only one person, I'm unable to capture your special moments in both photo and video." },
       { q: "Can you photograph the night and the celebration after the ceremony?", a: "Yes, I love capturing the night and the dancing. Your after-party is safe with me." },
-      { q: "Do you travel?", a: "Yes. The Algarve-to-Lisbon coast is included. For a wedding I also travel the rest of Portugal, Europe and beyond, including tropical destinations, with travel quoted at cost." },
+      { q: "Do you travel?", a: "{availability}" },
       { q: "How far in advance should we book?", a: "Around 6 months ahead is ideal, but sometimes a few weeks is enough, so just ask." },
       { q: "When do we receive the photographs and the film?", a: "Photographs in {weeks}. Films follow the film timeline, {filmWeeks}. A sneak peek goes out within 48 hours. Express delivery is a paid add-on: photographs in {expressPhoto}, film in {expressFilm}." },
     ],
@@ -486,7 +472,7 @@ export const en: Copy = {
   retreats: {
     eyebrow: "Retreats & gatherings",
     title: "For the barefoot, the fire-lit and the free.",
-    subtitle: "Retreat photographer, from the Algarve to Lisbon and further",
+    subtitle: "{availability}",
     dek: "Your next retreat sells on the feeling of the last one. Let's capture it.",
     cta: "Plan your retreat coverage",
     inquiry: "retreat",
@@ -551,8 +537,7 @@ export const en: Copy = {
         ],
       },
     },
-    travelNote:
-      "Retreats on the coast from the Algarve to Lisbon include my travel. Further retreats — the rest of Portugal, Europe and beyond — are quoted at cost. Accommodation and meals on site are usually covered by the retreat.",
+    travelNote: "{availability} Accommodation and meals on site are usually covered by the retreat.",
     consentTitle: "How I work in sacred spaces",
     consent: [
       "I join your opening circle and introduce myself, so people feel safe.",
@@ -575,7 +560,7 @@ export const en: Copy = {
       { q: "Can I use the images for ads and listings?", a: "Yes — a commercial licence is included for your own marketing." },
       { q: "Do you also film?", a: "Yes. The 3-day package includes 5 short vertical reels, and for a 1-day retreat you can add 3 reels or drone video." },
       { q: "Do guests need to sign anything?", a: "I'll share a simple consent approach with you before the retreat, and anyone can opt out." },
-      { q: "Do you travel abroad?", a: "Yes. Retreats are one of the projects I leave the Algarve–Lisbon coast for: the rest of Portugal, Spain, Europe and tropical destinations, with travel quoted at cost." },
+      { q: "Do you travel abroad?", a: "{availability}" },
       { q: "How early should I book?", a: "Around 4 months ahead is ideal, but sometimes a few weeks is enough, so just ask." },
     ],
     guide: { post: "retreat", label: "How to photograph your retreat so it sells out next time" },
@@ -697,8 +682,7 @@ export const en: Copy = {
         ],
       },
     },
-    travelNote:
-      "Artist sessions from the Algarve to Lisbon include travel. Festivals and commercial shoots further away — the rest of Portugal, Europe and beyond — are quoted at cost.",
+    travelNote: "{availability}",
     videosTitle: "Watch",
     videosNote:
       "Some films open on Instagram. Press play and the others start here.",
@@ -802,8 +786,7 @@ export const en: Copy = {
       "Vertical reels",
       "A commercial licence for your own marketing",
     ],
-    travelNote:
-      "A content day from the Algarve to Lisbon includes travel. Commercial shoots further away — the rest of Portugal, Europe and beyond — are quoted at cost.",
+    travelNote: "{availability}",
     comingSoon: "Dedicated stay and room collaborations are still in progress.",
     processTitle: "How it works",
     process: [
@@ -873,7 +856,7 @@ export const en: Copy = {
       {
         title: "Who",
         body: [
-          "Oracle of Freedom is Agota Urbikaite, working from the Algarve to Lisbon. Email: agota@oracleoffreedom.com.",
+          "Oracle of Freedom is Agota Urbikaite. {availability} Email: agota@oracleoffreedom.com.",
         ],
       },
       {
@@ -929,7 +912,7 @@ export const en: Copy = {
     dateFrom: "Coverage from",
     dateTo: "Coverage to",
     flexible: "My date is flexible",
-    place: "Where? (the Algarve to Lisbon is included — or say if it's further)",
+    place: "Where? {availability}",
     people: "How many people?",
     peopleOptions: { "1": "1", "2": "2", "3-10": "3–10", "11-30": "11–30", "30+": "30+" },
     eventOptions: { "lt-10": "Under 10", "10-20": "10–20", "20-40": "20–40", "40+": "40+" },

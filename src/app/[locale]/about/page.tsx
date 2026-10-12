@@ -5,7 +5,7 @@ import { TokenText } from "@/components/token-text";
 import { Button } from "@/components/ui/button";
 import { getCopy } from "@/content";
 import type { Locale } from "@/i18n/routing";
-import { imageById, settings } from "@/lib/content";
+import { imageById, settings, type GalleryImage } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -20,6 +20,36 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   });
 }
 
+function AtWorkFigure({
+  image,
+  locale,
+  sizes,
+  className,
+}: {
+  image: GalleryImage;
+  locale: Locale;
+  sizes: string;
+  className?: string;
+}) {
+  return (
+    <figure className={className}>
+      <Image
+        src={image.src}
+        alt={image.alt[locale]}
+        width={image.width}
+        height={image.height}
+        placeholder="blur"
+        blurDataURL={image.blur}
+        className="h-auto w-full rounded-3xl object-cover"
+        sizes={sizes}
+      />
+      {image.caption?.[locale] ? (
+        <figcaption className="mt-3 text-sm text-ink/60">{image.caption[locale]}</figcaption>
+      ) : null}
+    </figure>
+  );
+}
+
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -27,7 +57,9 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const copy = getCopy(locale);
   const primary = imageById(settings.aboutImageId);
   const secondary = imageById("about-portrait");
-  const atWork = ["about-work-01", "about-work-02", "about-work-03"].map((id) => imageById(id));
+  const atWork = imageById("about-work-01");
+  const rewild = imageById("about-work-04");
+  const donkeyPhotos = ["about-work-02", "about-work-03"].map((id) => imageById(id));
 
   return (
     <article>
@@ -84,24 +116,14 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           <TokenText text={copy.about.facts} />
         </p>
         <h2 className="mt-12 font-serif text-4xl">{copy.about.bts}</h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {atWork.map((image) => (
-            <figure key={image.id}>
-              <Image
-                src={image.src}
-                alt={image.alt[loc]}
-                width={image.width}
-                height={image.height}
-                placeholder="blur"
-                blurDataURL={image.blur}
-                className="h-auto w-full rounded-3xl object-cover"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              />
-              {image.caption?.[loc] ? (
-                <figcaption className="mt-3 text-sm text-ink/60">{image.caption[loc]}</figcaption>
-              ) : null}
-            </figure>
-          ))}
+        <div className="mt-8 grid items-start gap-4 lg:grid-cols-3">
+          <AtWorkFigure image={atWork} locale={loc} sizes="(max-width: 1024px) 100vw, 33vw" className="lg:col-start-1 lg:row-start-1" />
+          <div className="grid gap-4 lg:col-span-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+            {donkeyPhotos.map((image) => (
+              <AtWorkFigure key={image.id} image={image} locale={loc} sizes="(max-width: 1024px) 100vw, 66vw" />
+            ))}
+          </div>
+          <AtWorkFigure image={rewild} locale={loc} sizes="(max-width: 1024px) 100vw, 33vw" className="lg:col-start-1 lg:row-start-2" />
         </div>
       </section>
 

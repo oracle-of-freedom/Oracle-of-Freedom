@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { applyTokens } from "@/lib/delivery";
 import { getPathname } from "@/i18n/navigation";
 import { routing, type Locale, type StaticPathname } from "@/i18n/routing";
 import { ogLocale, siteUrl } from "@/lib/content";
+import { liveTokenMap } from "@/components/token-text";
 
 type Href =
   | StaticPathname
@@ -31,7 +33,7 @@ export function languageAlternates(hrefForLocale: (locale: Locale) => Href) {
   return languages;
 }
 
-export function pageMetadata({
+export async function pageMetadata({
   locale,
   title,
   description,
@@ -45,7 +47,13 @@ export function pageMetadata({
   keywords?: string;
   hrefForLocale: (locale: Locale) => Href;
   noIndex?: boolean;
-}): Metadata {
+}): Promise<Metadata> {
+  const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
+  const tokens = await liveTokenMap(loc);
+  const resolve = (value: string) => applyTokens(value, tokens).replace(/[ \t]{2,}/g, " ").trim();
+  title = resolve(title);
+  description = resolve(description);
+  keywords = keywords ? resolve(keywords) : keywords;
   const languages = languageAlternates(hrefForLocale);
   const canonical =
     languages[locale === "pt" ? "pt-PT" : locale] ?? languages.en;

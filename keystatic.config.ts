@@ -62,7 +62,7 @@ export default config({
         whatsappIsPlaceholder: fields.checkbox({ label: "Number is still a placeholder" }),
         baseArea: fields.text({
           label: "Base area",
-          description: "English phrase used in travel notes: the Algarve and the coast up to Lisbon. Spanish and Portuguese name the same region in the copy files.",
+          description: "No longer shown on the site. Dates and places come from the homepage stays.",
         }),
         depositPercent: fields.text({ label: "Deposit" }),
         languagesSpoken: fields.text({

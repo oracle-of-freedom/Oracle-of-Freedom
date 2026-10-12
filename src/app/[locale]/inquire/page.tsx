@@ -8,6 +8,8 @@ import type { Locale } from "@/i18n/routing";
 import { settings } from "@/lib/content";
 import { getSettings } from "@/lib/offers";
 import { hasPromoCode } from "@/lib/pricing";
+import { applyTokens } from "@/lib/delivery";
+import { liveTokenMap } from "@/components/token-text";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -34,6 +36,7 @@ export default async function InquirePage({
   setRequestLocale(locale);
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
+  const tokens = await liveTokenMap(loc);
   const showPromoCode = hasPromoCode(await getSettings());
   const thankYouPath = getPathname({ locale: loc, href: "/thank-you" });
 
@@ -44,7 +47,7 @@ export default async function InquirePage({
         <p className="mt-4 max-w-xl text-lg text-ink/80">{copy.inquire.dek}</p>
         <div className="mt-8">
           <InquiryForm
-            copy={copy.form}
+            copy={{ ...copy.form, place: applyTokens(copy.form.place, tokens) }}
             locale={loc}
             initialService={service}
             thankYouPath={thankYouPath}

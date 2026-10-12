@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { getCopy } from "@/content";
 import { postBySlug, posts } from "@/content/journal";
 import { routing, type Locale } from "@/i18n/routing";
+import { applyTokens } from "@/lib/delivery";
+import { liveTokenMap } from "@/components/token-text";
 import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -45,6 +47,7 @@ export default async function JournalPostPage({
   const post = postBySlug(loc, slug);
   if (!post) notFound();
   const copy = getCopy(locale);
+  const body = applyTokens(post.body[loc], await liveTokenMap(loc));
   const related = posts.filter((item) => item.id !== post.id);
 
   return (
@@ -57,7 +60,7 @@ export default async function JournalPostPage({
         {post.date}
       </time>
       <div className="mt-10">
-        <Markdown text={post.body[loc]} />
+        <Markdown text={body} />
       </div>
       <div className="mt-12">
         <Button asChild>
