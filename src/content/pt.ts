@@ -815,7 +815,7 @@ export const pt: Copy = {
       {
         title: "O que o formulário recolhe",
         body: [
-          "O teu nome, email, a história que quiseres contar e, se os deres, telefone, data, local, orçamento e como me encontraste. Envias isto para a Agota poder responder sobre uma possível colaboração.",
+          "O teu nome, email, a história que quiseres contar e, se os deres, telefone, data, local, orçamento e como me encontraste. Envias-me isto para eu poder responder sobre uma possível colaboração.",
           "As mensagens seguem para agota@oracleoffreedom.com através da Resend quando esse serviço está configurado. Até lá o formulário funciona, mas nada é entregue.",
           "Os pedidos conservam-se só o tempo necessário para responder e acompanhar a conversa, e depois apagam-se.",
         ],
@@ -909,7 +909,7 @@ export const pt: Copy = {
     wishPlaceholder: "Quem vem, quanto tempo, que sítio e o que queres que as fotografias transmitam.",
     errors: {
       required: "Este campo é preciso.",
-      email: "Acrescenta um email para o qual a Agota possa responder.",
+      email: "Acrescenta um email para o qual eu possa responder.",
       consent: "É preciso o consentimento para enviar a mensagem.",
       date: "Acrescenta uma data ou marca que a tua data é flexível.",
       dateEnd: "Acrescenta a data final ou marca que a tua data é flexível.",
