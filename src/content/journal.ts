@@ -64,7 +64,7 @@ Many couples marry legally at home and celebrate here. A friend, a celebrant or 
 
 ## What a simple day costs
 
-A straightforward elopement — place, a few people, food, flowers from the field, and photography — often lands around €1,500–2,500 all in, before travel. Photography starts at €690 for 3–4 hours and €1,100 when the night, the fire and the dancing are part of it (a small wedding, up to about 30 guests). An elopement film starts at €650 and a small-wedding highlight at €875. These figures are starting prices, confirmed in the quote. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it.
+A straightforward elopement — place, a few people, food, flowers from the field, and photography — often lands around €1,500–2,500 all in, before travel. Photography starts at €690 for 3–4 hours and €1,100 when the night, the fire and the dancing are part of it (a small wedding, up to about 30 guests). An elopement film starts at €650 and a small-wedding highlight at €875. These figures are starting prices, confirmed in the quote. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.
 
 If you do not know the place yet, that is a good place to start. Tell me ocean, forest, plains or mountain and I will answer with somewhere real.`,
       es: `Portugal trata bien a una boda pequeña. La luz se queda baja y dorada durante una hora larga, la costa es salvaje sin quedar lejos, y una ceremonia simbólica puede ocurrir en un acantilado con la gente que de verdad quieres en el círculo.
@@ -93,7 +93,7 @@ Muchas parejas se casan legalmente en su país y lo celebran aquí. Un amigo, un
 
 ## Lo que cuesta un día sencillo
 
-Un elopement sencillo — lugar, pocas personas, comida, flores del campo y fotografía — suele quedar alrededor de 1.500–2.500 € en total, sin viajes. La fotografía empieza en 690 € por 3–4 horas y en 1.100 € cuando la noche, el fuego y el baile forman parte (una boda íntima, hasta unas 30 personas). Una película de elopement empieza en 650 € y un highlight de boda íntima en 875 €. Estas cifras son precios de partida, que se confirman en el presupuesto. Sesiones en Europa y América Latina. Si el evento es en otro lugar, escribe pronto para que Agota vea si puede hacerlo.
+Un elopement sencillo — lugar, pocas personas, comida, flores del campo y fotografía — suele quedar alrededor de 1.500–2.500 € en total, sin viajes. La fotografía empieza en 690 € por 3–4 horas y en 1.100 € cuando la noche, el fuego y el baile forman parte (una boda íntima, hasta unas 30 personas). Una película de elopement empieza en 650 € y un highlight de boda íntima en 875 €. Estas cifras son precios de partida, que se confirman en el presupuesto. Sesiones en Europa y América Latina. Si el evento es en otro lugar, escríbeme pronto para que pueda comprobar mi disponibilidad.
 
 Si aún no sabéis el lugar, ese es un buen comienzo. Decidme océano, bosque, llanura o montaña y os respondo con un sitio real.`,
       pt: `Portugal trata bem um casamento pequeno. A luz fica baixa e dourada durante uma hora longa, a costa é selvagem sem ficar longe, e uma cerimónia simbólica pode acontecer numa falésia com as pessoas que realmente queres no círculo.
@@ -122,7 +122,7 @@ Muitos casais casam legalmente no seu país e celebram aqui. Um amigo, um celebr
 
 ## O que custa um dia simples
 
-Um elopement simples — local, poucas pessoas, comida, flores do campo e fotografia — costuma ficar à volta de 1.500–2.500 € no total, sem deslocações. A fotografia começa em 690 € por 3–4 horas e em 1.100 € quando a noite, o fogo e a dança fazem parte (um casamento íntimo, até cerca de 30 pessoas). Um filme de elopement começa em 650 € e um highlight de casamento íntimo em 875 €. Estes valores são preços de partida, confirmados no orçamento. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo.
+Um elopement simples — local, poucas pessoas, comida, flores do campo e fotografia — costuma ficar à volta de 1.500–2.500 € no total, sem deslocações. A fotografia começa em 690 € por 3–4 horas e em 1.100 € quando a noite, o fogo e a dança fazem parte (um casamento íntimo, até cerca de 30 pessoas). Um filme de elopement começa em 650 € e um highlight de casamento íntimo em 875 €. Estes valores são preços de partida, confirmados no orçamento. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.
 
 Se ainda não sabem o local, é um bom começo. Digam-me oceano, floresta, planície ou montanha e eu respondo com um sítio real.`,
     },
@@ -260,7 +260,7 @@ Um dia de retiro começa em 400 € e é editado no local. Um retiro de três di
       pt: "sessão fotográfica Ericeira; sessão de casal Sintra",
     },
     body: {
-      en: `Ericeira and Sintra sit close enough for one golden hour on the rocks and another under the trees. This list follows the public coast and the forest edge. Private land and ticketed gardens need a yes before we walk in. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it.
+      en: `Ericeira and Sintra sit close enough for one golden hour on the rocks and another under the trees. This list follows the public coast and the forest edge. Private land and ticketed gardens need a yes before we walk in. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.
 
 ## Ericeira
 
@@ -289,7 +289,7 @@ Sand, clay, moss, cream, a little terracotta. Nothing with a big logo. Bare feet
 Lisbon is under an hour from Ericeira in easy traffic, longer on a Friday. Sintra needs patience and a car, or a taxi that can wait. We pick the clock for the light, not for convenience, and we leave a gap in case the fog sits down.
 
 Portrait sessions start at €175, for one person, a couple, a family or friends. The final price depends on the length, the photographs, the places and how many people. A short film starts at €250, or €475 for the portrait session and the film together. Tell me the week you are here and whether you want ocean, forest, or both.`,
-      es: `Ericeira y Sintra están lo bastante cerca para una hora dorada en las rocas y otra bajo los árboles. Esta lista sigue la costa pública y el borde del bosque. El terreno privado y los jardines con entrada necesitan un sí antes de entrar. Sesiones en Europa y América Latina. Si el evento es en otro lugar, escribe pronto para que Agota vea si puede hacerlo.
+      es: `Ericeira y Sintra están lo bastante cerca para una hora dorada en las rocas y otra bajo los árboles. Esta lista sigue la costa pública y el borde del bosque. El terreno privado y los jardines con entrada necesitan un sí antes de entrar. Sesiones en Europa y América Latina. Si el evento es en otro lugar, escríbeme pronto para que pueda comprobar mi disponibilidad.
 
 ## Ericeira
 
@@ -318,7 +318,7 @@ Arena, arcilla, musgo, crema, un poco de terracota. Nada con un logo grande. Pie
 Lisboa queda a menos de una hora de Ericeira con poco tráfico, más un viernes. Sintra pide paciencia y un coche, o un taxi que pueda esperar. Elegimos la hora por la luz, no por la comodidad, y dejamos un margen por si se sienta la niebla.
 
 Las sesiones de retrato empiezan en 175 €, para una persona, una pareja, una familia o amigos. El precio final depende de la duración, las fotografías, los lugares y cuántas personas sois. Una película corta empieza en 250 €, o en 475 € con la sesión de retrato y el vídeo juntos. Contadme la semana en la que estáis y si queréis océano, bosque o los dos.`,
-      pt: `A Ericeira e Sintra ficam perto o suficiente para uma hora dourada nas rochas e outra debaixo das árvores. Esta lista segue a costa pública e a orla da floresta. Terreno privado e jardins com bilhete precisam de um sim antes de entrarmos. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve cedo para a Agota ver se pode fazê-lo.
+      pt: `A Ericeira e Sintra ficam perto o suficiente para uma hora dourada nas rochas e outra debaixo das árvores. Esta lista segue a costa pública e a orla da floresta. Terreno privado e jardins com bilhete precisam de um sim antes de entrarmos. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.
 
 ## Ericeira
 

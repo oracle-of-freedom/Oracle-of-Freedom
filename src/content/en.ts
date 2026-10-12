@@ -48,44 +48,44 @@ export const en: Copy = {
     },
     about: {
       title: "About Agota · Europe and Latin America",
-      description: "Meet Agota Urbikaite. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it.",
+      description: "Meet Agota Urbikaite. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.",
       keywords: "Agota Urbikaite photographer; candid photographer; Europe; Latin America",
     },
     people: {
       title: "People · Portraits & Intimate Boho Weddings",
-      description: "Portraits and intimate boho weddings. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it. Sessions from €175.",
+      description: "Portraits and intimate boho weddings. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability. Sessions from €175.",
       keywords: "Europe; Latin America; boho wedding photographer",
     },
     portraits: {
       title: "Couples & Engagement Photographer · Europe and Latin America",
       description:
-        "Portrait sessions for one person, a couple, a family or friends. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it. Natural, no stiff posing. From €175.",
+        "Portrait sessions for one person, a couple, a family or friends. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability. Natural, no stiff posing. From €175.",
       keywords: "Europe; Latin America; proposal photographer",
     },
     elopements: {
       title: "Boho Elopement Photographer · Europe and Latin America",
-      description: "Intimate boho elopements. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it. Small circles, up to about 30 guests. From €690.",
+      description: "Intimate boho elopements. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability. Small circles, up to about 30 guests. From €690.",
       keywords: "Europe; Latin America; intimate wedding photographer",
     },
     experiences: {
       title: "Experiences · Retreats, Festivals & Artists",
-      description: "Retreats, festivals, DJs and fire artists. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it.",
+      description: "Retreats, festivals, DJs and fire artists. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.",
       keywords: "Europe; Latin America",
     },
     retreats: {
       title: "Retreat Photographer · Europe and Latin America",
-      description: "Retreat photo and film. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it. Consent-first, commercial licence included. From €400/day.",
+      description: "Retreat photo and film. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability. Consent-first, commercial licence included. From €400/day.",
       keywords: "Europe; Latin America; retreat videographer",
     },
     festivals: {
       title: "Festival & DJ Photographer · Europe and Latin America",
-      description: "Press shots, live sets, fire portraits and music videos. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it. From €190.",
+      description: "Press shots, live sets, fire portraits and music videos. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability. From €190.",
       keywords: "Europe; Latin America; music video",
     },
     places: {
       title: "Eco-Stay Photographer · Europe and Latin America",
       description:
-        "Photos and reels for eco-quintas, surf houses and boutique stays. Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it. From €475.",
+        "Photos and reels for eco-quintas, surf houses and boutique stays. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability. From €475.",
       keywords: "Europe; Latin America; Airbnb photographer",
     },
     portfolio: {
@@ -283,7 +283,7 @@ export const en: Copy = {
   portraits: {
     eyebrow: "Portrait sessions",
     title: "For the barefoot, the fire-lit and the free.",
-    subtitle: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it.",
+    subtitle: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.",
     dek: "One session for you, for two, or for the people you love. Individuals, couples, engagement, families and friends.",
     cta: "Book your session",
     personalizeCta: "Personalize your session",
@@ -344,7 +344,7 @@ export const en: Copy = {
       },
     },
     whereTitle: "Where we can shoot",
-    where: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it.",
+    where: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.",
     processTitle: "How it works",
     process: [
       { title: "Say hi", body: "Send the form or a WhatsApp with your date idea and what you're dreaming of." },
@@ -361,7 +361,7 @@ export const en: Copy = {
       { q: "What time is best?", a: "Golden hour — the hour after sunrise or before sunset. I'll pick the timing for your date and place." },
       { q: "What if it rains?", a: "We move the session to another day free of charge, or we embrace the drama of the clouds — your choice." },
       { q: "Can you help plan a surprise proposal?", a: "Yes. I'll help you pick the spot and timing, and hide in plain sight." },
-      { q: "Where do you photograph?", a: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it." },
+      { q: "Where do you photograph?", a: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability." },
       { q: "How do I book?", a: "Send the inquiry form. A {deposit} deposit secures your date." },
       { q: "When does the gallery arrive?", a: "Photographs in {artistWeeks}. Films and photo+film collections in {artistFilmWeeks}. Express delivery is a paid add-on: photographs in {expressPhoto}, film or the full combo in {expressFilm}." },
     ],
@@ -370,7 +370,7 @@ export const en: Copy = {
   elopements: {
     eyebrow: "Boho weddings & elopements",
     title: "For the barefoot, the fire-lit and the free.",
-    subtitle: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it.",
+    subtitle: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.",
     dek: "Barefoot vows. A handful of people you love. A day that feels like freedom.",
     cta: "Check my date",
     inquiry: "elopement",
@@ -464,7 +464,7 @@ export const en: Copy = {
       { q: "We don't know where to elope yet. Can you help?", a: "That's one of my favourite parts. Tell me your vibe (ocean, forest, desert-like plains, mountains) and we'll curate the vision together." },
       { q: "Do you do video too?", a: "Yes. An elopement film and a small-wedding highlight can be booked on their own, but as I am only one person, I'm unable to capture your special moments in both photo and video." },
       { q: "Can you photograph the night and the celebration after the ceremony?", a: "Yes, I love capturing the night and the dancing. Your after-party is safe with me." },
-      { q: "Do you travel?", a: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it." },
+      { q: "Do you travel?", a: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability." },
       { q: "How far in advance should we book?", a: "Around 6 months ahead is ideal, but sometimes a few weeks is enough, so just ask." },
       { q: "When do we receive the photographs and the film?", a: "Photographs in {weeks}. Films follow the film timeline, {filmWeeks}. A sneak peek goes out within 48 hours. Express delivery is a paid add-on: photographs in {expressPhoto}, film in {expressFilm}." },
     ],
@@ -473,7 +473,7 @@ export const en: Copy = {
   retreats: {
     eyebrow: "Retreats & gatherings",
     title: "For the barefoot, the fire-lit and the free.",
-    subtitle: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it.",
+    subtitle: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.",
     dek: "Your next retreat sells on the feeling of the last one. Let's capture it.",
     cta: "Plan your retreat coverage",
     inquiry: "retreat",
@@ -561,7 +561,7 @@ export const en: Copy = {
       { q: "Can I use the images for ads and listings?", a: "Yes — a commercial licence is included for your own marketing." },
       { q: "Do you also film?", a: "Yes. The 3-day package includes 5 short vertical reels, and for a 1-day retreat you can add 3 reels or drone video." },
       { q: "Do guests need to sign anything?", a: "I'll share a simple consent approach with you before the retreat, and anyone can opt out." },
-      { q: "Do you travel abroad?", a: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so Agota can check whether she can take it." },
+      { q: "Do you travel abroad?", a: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability." },
       { q: "How early should I book?", a: "Around 4 months ahead is ideal, but sometimes a few weeks is enough, so just ask." },
     ],
     guide: { post: "retreat", label: "How to photograph your retreat so it sells out next time" },
