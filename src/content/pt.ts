@@ -158,7 +158,7 @@ export const pt: Copy = {
     readGuides: "Ler os guias",
     meet: "Conhecer a Agota",
     from: "Desde",
-    priceNote: "Preços desde, em EUR e sem IVA. Casamentos, alojamentos e festivais confirmam-se com um orçamento.",
+    priceNote: "Preços desde, em EUR. Casamentos, alojamentos e festivais confirmam-se com um orçamento.",
     offer: "Oferta",
     saveSeparately: "Poupam {amount} em relação a reservar em separado",
     placeholderTitle: "Pendente — não é um testemunho publicado",
@@ -310,8 +310,6 @@ export const pt: Copy = {
         ],
       },
     },
-    travelNote:
-      "{availability}",
     whereTitle: "Onde podemos fotografar",
     where:
       "{availability}",
@@ -413,8 +411,6 @@ export const pt: Copy = {
         ],
       },
     },
-    travelNote:
-      "{availability}",
     dayTitle: "Como pode ser o vosso dia",
     day: "Votos ao nascer do sol numa praia selvagem. Um passeio pela floresta com flores no cabelo. Uma cerimónia conduzida por um amigo, um xamã ou um celebrante. A vossa gente em círculo, tambores e gargalhadas. Uma mesa comprida sob luzinhas. Uma dança de fogo para fechar a noite.",
     comingSoon: "Em breve: a nossa primeira história completa de elopement boho. Até lá, estas são fotografias de casal e de encontros, não um dia de casamento.",
@@ -509,8 +505,7 @@ export const pt: Copy = {
         ],
       },
     },
-    travelNote:
-      "{availability} O alojamento e as refeições no local costumam ficar a cargo do retiro.",
+    travelNote: "O alojamento e as refeições no local costumam ficar a cargo do retiro.",
     consentTitle: "Como trabalho em espaços sagrados",
     consent: [
       "Apresento-me no círculo de abertura, para que todos se sintam seguros.",
@@ -651,8 +646,6 @@ export const pt: Copy = {
         ],
       },
     },
-    travelNote:
-      "{availability}",
     videosTitle: "Vê",
     videosNote: "Alguns vídeos abrem no Instagram. Carrega em reproduzir e os outros começam aqui.",
     processTitle: "Como funciona",
@@ -750,8 +743,6 @@ export const pt: Copy = {
     },
     deliverablesTitle: "O que recebes",
     deliverables: ["Fotografias horizontais para OTAs e o teu site", "Imagens lifestyle", "Reels verticais", "Licença comercial para o teu próprio marketing"],
-    travelNote:
-      "{availability}",
     comingSoon: "As colaborações dedicadas com alojamentos e quartos continuam a caminho.",
     processTitle: "Como funciona",
     process: [

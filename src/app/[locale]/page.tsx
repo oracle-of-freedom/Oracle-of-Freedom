@@ -3,6 +3,7 @@ import { getPathname, Link } from "@/i18n/navigation";
 import { GalleryGrid } from "@/components/gallery";
 import { JsonLd } from "@/components/json-ld";
 import { OmMark } from "@/components/om-mark";
+import { StayBanners } from "@/components/stay-banners";
 import { Testimonials } from "@/components/testimonials";
 import { Button } from "@/components/ui/button";
 import { getCopy } from "@/content";
@@ -11,7 +12,7 @@ import type { Locale } from "@/i18n/routing";
 import { featuredImages, formatEuro, imageById, settings } from "@/lib/content";
 import { getCatalog, getSettings } from "@/lib/offers";
 import { openingPrice, lisbonToday } from "@/lib/pricing";
-import { eventName, stayLine, visibleStays } from "@/lib/presence";
+import { eventName, visibleStays } from "@/lib/presence";
 import { absoluteUrl, pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -98,24 +99,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             {copy.home.title}
           </h1>
           <p className="mt-5 max-w-xl text-lg text-sand/90">{copy.home.dek}</p>
-          {stays.length > 0 ? (
-            <div
-              className="mt-5 flex max-w-xl flex-col items-start gap-2 md:grid md:max-w-none md:[grid-template-columns:repeat(var(--stay-cols),minmax(0,1fr))]"
-              style={{ "--stay-cols": stays.length } as React.CSSProperties}
-            >
-              {stays.map((stay) => (
-                <Link
-                  key={stay.id}
-                  href="/inquire"
-                  className="min-w-0 rounded-2xl bg-sand/50 px-4 py-3 text-ink md:h-full"
-                >
-                  <span className="block text-base leading-snug font-medium">{stayLine(loc, stay)}</span>
-                  <span className="mt-1 block text-sm text-ink">{copy.home.stayNear}</span>
-                </Link>
-              ))}
-            </div>
-          ) : null}
-          <p className="mt-4 max-w-xl text-base leading-snug text-sand/90">{copy.home.elsewhere}</p>
+          <StayBanners
+            locale={loc}
+            stays={stays}
+            bookLabel={copy.home.stayNear}
+            elsewhere={copy.home.elsewhere}
+          />
           <div className="mt-6 flex flex-wrap gap-3">
             <Button asChild variant="light" size="lg">
               <Link href="/inquire">{copy.common.checkAvailability}</Link>

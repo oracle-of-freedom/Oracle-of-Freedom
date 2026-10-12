@@ -2,18 +2,22 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { ServiceCopy } from "@/content/types";
 import { postById } from "@/content/journal";
+import { AvailabilityAnswer, availabilityPlain } from "@/components/availability-answer";
 import { GalleryGrid } from "@/components/gallery";
 import { FromPrice, PackageCards } from "@/components/packages";
+import { StayBanners } from "@/components/stay-banners";
 import { WhatsAppLink } from "@/components/whatsapp-link";
 import { Testimonials } from "@/components/testimonials";
 import { TokenText } from "@/components/token-text";
 import { VideoGrid } from "@/components/video-grid";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
+import { getCopy } from "@/content";
 import { gallery, imagesForPage, settings, siteUrl } from "@/lib/content";
 import { festivalFilmSpan } from "@/lib/delivery-copy";
 import { applyTokens, buildTokenMap, displayTiming } from "@/lib/delivery";
 import { presenceAreas, presenceTokens } from "@/lib/presence-copy";
+import { visibleStays } from "@/lib/presence";
 import { getSettings } from "@/lib/offers";
 import { lisbonToday, mergeCatalog, type LiveSettings, type PricedPackage } from "@/lib/pricing";
 import type { Locale } from "@/i18n/routing";
@@ -55,12 +59,15 @@ export async function ServiceView({
     (heroId ? gallery.find((image) => image.id === heroId) : undefined) ?? images[0];
   const stored = await getSettings();
   const today = lisbonToday();
+  const home = getCopy(locale).home;
+  const openStays = visibleStays(stored.stays, today);
   const tokens: Record<string, string> = {
     ...buildTokenMap(stored.timings),
     ...presenceTokens(locale, stored.stays, today),
   };
   const faqTokens = {
     ...tokens,
+    "{availability}": availabilityPlain(locale, openStays, home.elsewhere),
     "{festivalFilmSpan}": festivalFilmSpan(locale, stored),
     ...(group === "festivals"
       ? { "{artistWeeks}": displayTiming(tokens["{artistWeeks}"] ?? "", locale) }
@@ -242,9 +249,21 @@ export async function ServiceView({
         </section>
 
         {copy.where && copy.whereTitle ? (
-          <section className="mx-auto max-w-3xl px-4 py-8 md:px-6">
+          <section className="mx-auto max-w-6xl px-4 py-8 md:px-6">
             <h2 className="font-serif text-4xl">{copy.whereTitle}</h2>
-            <p className="mt-4 text-lg text-ink/80">{applyTokens(copy.where, tokens)}</p>
+            {copy.where.includes("{availability}") ? (
+              <div className="mt-6 rounded-3xl bg-night px-4 py-5 md:px-6">
+                <StayBanners
+                  locale={locale}
+                  stays={openStays}
+                  bookLabel={home.stayNear}
+                  elsewhere={home.elsewhere}
+                  className="mt-0"
+                />
+              </div>
+            ) : (
+              <p className="mt-4 text-lg text-ink/80">{applyTokens(copy.where, tokens)}</p>
+            )}
           </section>
         ) : null}
 
@@ -334,7 +353,13 @@ export async function ServiceView({
                 <summary className="cursor-pointer list-none font-medium [&::-webkit-details-marker]:hidden">
                   {item.q}
                 </summary>
-                <p className="pt-3 text-ink/80">{applyTokens(item.a, faqTokens)}</p>
+                <AvailabilityAnswer
+                  text={item.a}
+                  tokens={faqTokens}
+                  locale={locale}
+                  stays={openStays}
+                  elsewhere={home.elsewhere}
+                />
               </details>
             ))}
           </div>
