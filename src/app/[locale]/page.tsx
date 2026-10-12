@@ -99,7 +99,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </h1>
           <p className="mt-5 max-w-xl text-lg text-sand/90">{copy.home.dek}</p>
           {stays.length > 0 ? (
-            <div className="mt-5 flex max-w-xl flex-col items-start gap-2">
+            <div className="mt-5 flex max-w-xl flex-col items-start gap-2 md:max-w-none md:flex-row md:flex-wrap">
               {stays.map((stay) => (
                 <Link
                   key={stay.id}
