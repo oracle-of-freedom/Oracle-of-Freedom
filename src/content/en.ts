@@ -861,7 +861,7 @@ export const en: Copy = {
       {
         title: "What the inquiry form collects",
         body: [
-          "Your name, email, the story you choose to tell, and any optional phone number, date, place, budget and how you found the site. You send it so Agota can reply about a possible collaboration.",
+          "Your name, email, the story you choose to tell, and any optional phone number, date, place, budget and how you found the site. You send it so I can reply about a possible collaboration.",
           "Messages are emailed to agota@oracleoffreedom.com through Resend when that service is configured. Until then, the form still runs, but nothing is delivered.",
           "Inquiries are kept only as long as needed to reply and follow the conversation, then deleted.",
         ],
@@ -955,7 +955,7 @@ export const en: Copy = {
     wishPlaceholder: "Who is coming, how long, which place, and what you want the photographs to feel like.",
     errors: {
       required: "This field is needed.",
-      email: "Add an email address Agota can reply to.",
+      email: "Add an email address I can reply to.",
       consent: "Consent is needed before the message can be sent.",
       date: "Add a date, or tick that your date is flexible.",
       dateEnd: "Add the end date, or tick that your date is flexible.",
