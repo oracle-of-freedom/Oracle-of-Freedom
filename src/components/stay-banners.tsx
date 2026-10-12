@@ -19,9 +19,11 @@ import type { Locale } from "@/i18n/routing";
 export async function StayBanners({
   locale,
   tone,
+  showElsewhere = true,
 }: {
   locale: Locale;
-  tone: "photo" | "page";
+  tone: "photo" | "page" | "peach";
+  showElsewhere?: boolean;
 }) {
   const copy = getCopy(locale).home;
   const stored = await getSettings();
@@ -29,15 +31,21 @@ export async function StayBanners({
   if (stays.length === 0) return null;
   const [featured, ...later] = stays;
   const onPhoto = tone === "photo";
+  const warm = tone === "peach";
   const bannerClass = onPhoto
     ? "rounded-2xl bg-sand px-4 py-3 text-ink"
-    : "rounded-2xl bg-white px-4 py-3 text-ink shadow-sm";
-  const buttonClass = onPhoto
-    ? "mt-3 inline-flex min-h-11 items-center rounded-full bg-terracotta px-4 text-sm font-medium text-white"
-    : "mt-3 inline-flex min-h-11 items-center rounded-full bg-terracotta px-4 text-sm font-medium text-white";
+    : warm
+      ? "rounded-2xl bg-terracotta/15 px-4 py-3 text-ink ring-1 ring-terracotta/40"
+      : "rounded-2xl bg-white px-4 py-3 text-ink shadow-sm";
+  const placeClass = warm ? "font-serif text-2xl leading-tight text-terracotta" : "font-serif text-2xl leading-tight";
+  const whenClass = warm ? "mt-1 text-sm font-medium text-terracotta" : "mt-1 text-sm font-medium";
+  const buttonClass =
+    "mt-3 inline-flex min-h-11 items-center rounded-full bg-terracotta px-4 text-sm font-medium text-white";
   const chipClass = onPhoto
     ? "rounded-full bg-sand/90 px-3 py-1 text-sm text-ink"
-    : "rounded-full bg-white px-3 py-1 text-sm text-ink shadow-sm";
+    : warm
+      ? "rounded-full bg-terracotta/15 px-3 py-1 text-sm text-terracotta ring-1 ring-terracotta/35"
+      : "rounded-full bg-white px-3 py-1 text-sm text-ink shadow-sm";
   const elsewhereClass = onPhoto
     ? "max-w-xl text-sm leading-relaxed text-sand underline decoration-white/40 underline-offset-4"
     : "max-w-xl text-sm leading-relaxed text-ink underline decoration-ink/30 underline-offset-4";
@@ -49,11 +57,11 @@ export async function StayBanners({
       <div className={several ? "grid gap-2 md:grid-cols-2" : "grid gap-2"}>
         {featured.countries.map((code) => (
           <div key={code} className={bannerClass}>
-            <p className="font-serif text-2xl leading-tight">{placeTitle(locale, featured, code)}</p>
+            <p className={placeClass}>{placeTitle(locale, featured, code)}</p>
             {placeDetail(locale, featured, code) ? (
               <p className="text-sm text-ink/70">{placeDetail(locale, featured, code)}</p>
             ) : null}
-            <p className="mt-1 text-sm font-medium">{shortWhen(locale, featured.starts, featured.ends)}</p>
+            <p className={whenClass}>{shortWhen(locale, featured.starts, featured.ends)}</p>
             <Link href="/inquire" className={buttonClass}>
               {copy.bookDates}
             </Link>
@@ -71,9 +79,11 @@ export async function StayBanners({
           )}
         </div>
       ) : null}
-      <Link href="/inquire" className={elsewhereClass}>
-        {copy.elsewhere}
-      </Link>
+      {showElsewhere ? (
+        <Link href="/inquire" className={elsewhereClass}>
+          {copy.elsewhere}
+        </Link>
+      ) : null}
       <JsonLd
         data={{
           "@context": "https://schema.org",
