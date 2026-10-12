@@ -47,7 +47,7 @@ function CopyButton({ value }: { value: string }) {
     <Button
       type="button"
       variant="outline"
-      className="shrink-0"
+      className="w-full shrink-0 sm:w-auto"
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(value);
@@ -589,61 +589,6 @@ export function CalendarSettings({
               <Button type="submit" variant="outline">{t.settings.disconnect}</Button>
             </form>
           ) : null}
-        </section>
-
-        <section className="rounded-3xl bg-white/70 p-4 md:p-6">
-          <h2 className="font-serif text-2xl md:text-3xl">{t.settings.ical}</h2>
-          <p className="mt-3 text-sm text-ink/70">{t.settings.icalIntro}</p>
-          <Button
-            type="button"
-            className={cn("mt-4", icalOpen && "md:hidden", phonePane === "ical" && "max-md:hidden")}
-            onClick={() => {
-              setIcalOpen(true);
-              setPhonePane("ical");
-            }}
-          >
-            {t.settings.start}
-          </Button>
-          <div className={cn("mt-4 gap-4", phonePane === "ical" ? "max-md:grid" : "max-md:hidden", icalOpen ? "md:grid" : "md:hidden")}>
-              <div>
-                <Label htmlFor="ical-name">{t.settings.calendarName}</Label>
-                <div className="flex gap-2">
-                  <Input id="ical-name" value={calendarName} maxLength={80} onChange={(event) => setCalendarName(event.target.value)} />
-                  <CopyButton value={calendarName} />
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="ical-feed">{t.settings.privateAddress}</Label>
-                <div className="flex gap-2">
-                  <Input id="ical-feed" readOnly value={feedUrl} className="text-xs" />
-                  <CopyButton value={feedUrl} />
-                </div>
-              </div>
-              <ol className="grid list-decimal gap-3 pl-5 text-sm text-ink/80">
-                <li>{t.settings.appleMac}</li>
-                <li>{t.settings.iphone}</li>
-                <li>{t.settings.outlook}</li>
-                <li>{t.settings.otherGoogle}</li>
-              </ol>
-              <div className="flex flex-wrap gap-3">
-                <Button asChild>
-                  <a href={feedUrl.replace(/^https?:/, "webcal:")}>{t.settings.subscribe}</a>
-                </Button>
-                <form action={regenerateIcalToken}>
-                  <Button type="submit" variant="outline">{t.settings.newLink}</Button>
-                </form>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setIcalOpen(false);
-                    setPhonePane((current) => (current === "ical" ? null : current));
-                  }}
-                >
-                  {t.settings.close}
-                </Button>
-              </div>
-            </div>
         </section>
       </div>
     </section>
