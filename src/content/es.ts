@@ -47,57 +47,51 @@ export const es: Copy = {
       keywords: "fotógrafa Europa; fotógrafa América Latina; foto y vídeo bodas; fotógrafa de festivales",
     },
     about: {
-      title: "Sobre Agota · Fotógrafa del Algarve a Lisboa",
-      description:
-        "Conoce a Agota Urbikaite. Cada sesión cubre del Algarve a Lisboa. Bodas, retiros, festivales y trabajos comerciales pueden ir más lejos.",
-      keywords: "Agota Urbikaite fotógrafa; fotógrafa Algarve y Lisboa; fotógrafa natural Portugal",
+      title: "Sobre Agota · {presencePlaces}",
+      description: "Conoce a Agota Urbikaite. {availability}",
+      keywords: "Agota Urbikaite fotógrafa; fotógrafa natural; {presenceKeywords}",
     },
     people: {
       title: "Personas · Retratos y bodas íntimas boho",
-      description:
-        "Retratos y bodas íntimas boho del Algarve a Lisboa, costa incluida. Las bodas pueden viajar más lejos. Sesiones desde 175 €.",
-      keywords: "fotógrafa de parejas Algarve; fotógrafa de bodas Lisboa; boda boho Portugal",
+      description: "Retratos y bodas íntimas boho. {availability} Sesiones desde 175 €.",
+      keywords: "{presenceKeywords}; boda boho",
     },
     portraits: {
-      title: "Sesión de pareja y preboda · Algarve y Lisboa",
+      title: "Sesión de pareja y preboda · {presencePlaces}",
       description:
-        "Sesiones de retrato para una persona, una pareja, una familia o amigos, del Algarve a Lisboa. Naturales, sin poses rígidas. Desde 175 €.",
-      keywords: "fotógrafa de parejas Algarve; preboda Lisboa; sesión de fotos Algarve; pedida de mano Lisboa",
+        "Sesiones de retrato para una persona, una pareja, una familia o amigos. {availability} Naturales, sin poses rígidas. Desde 175 €.",
+      keywords: "{presenceKeywords}; pedida de mano",
     },
     elopements: {
-      title: "Fotógrafa de elopements boho · Algarve y Lisboa",
-      description:
-        "Elopements íntimos del Algarve a Lisboa, y más lejos por Portugal, Europa y más allá. Círculos pequeños, hasta unas 30 personas. Desde 690 €.",
-      keywords: "fotógrafa elopement Algarve; elopement Lisboa; boda boho Portugal; boda íntima fotógrafa",
+      title: "Fotógrafa de elopements boho · {presencePlaces}",
+      description: "Elopements íntimos. {availability} Círculos pequeños, hasta unas 30 personas. Desde 690 €.",
+      keywords: "{presenceKeywords}; boda íntima fotógrafa",
     },
     experiences: {
       title: "Experiencias · Retiros, festivales y artistas",
-      description:
-        "Retiros, festivales, DJs y artistas de fuego. Con base del Algarve a Lisboa, y viajando más lejos para los encuentros grandes.",
-      keywords: "fotógrafa de retiros Algarve; fotógrafa de festivales Lisboa; fotógrafa de retiros Portugal",
+      description: "Retiros, festivales, DJs y artistas de fuego. {availability}",
+      keywords: "{presenceKeywords}",
     },
     retreats: {
-      title: "Fotógrafa de retiros · Algarve, Lisboa y más allá",
-      description:
-        "Foto y vídeo de retiros del Algarve a Lisboa, y más lejos por Portugal y Europa. Con consentimiento y licencia comercial. Desde 400 €/día.",
-      keywords: "fotógrafa retiros Algarve; fotógrafa retiros Lisboa; fotógrafa retiros de yoga; videógrafa retiros",
+      title: "Fotógrafa de retiros · {presencePlaces}",
+      description: "Foto y vídeo de retiros. {availability} Con consentimiento y licencia comercial. Desde 400 €/día.",
+      keywords: "{presenceKeywords}; videógrafa retiros",
     },
     festivals: {
-      title: "Fotógrafa de festivales y DJs · Algarve y Lisboa",
-      description:
-        "Fotos de prensa, clips de sets, retratos de fuego y videoclips. Del Algarve a Lisboa, y de viaje para festivales y trabajos comerciales. Desde 190 €.",
-      keywords: "fotógrafa de festivales Algarve; fotógrafo DJ Lisboa; fotógrafa fire show; videoclip Portugal",
+      title: "Fotógrafa de festivales y DJs · {presencePlaces}",
+      description: "Fotos de prensa, clips de sets, retratos de fuego y videoclips. {availability} Desde 190 €.",
+      keywords: "{presenceKeywords}; videoclip",
     },
     places: {
-      title: "Fotógrafa de eco-alojamientos · Algarve y Lisboa",
+      title: "Fotógrafa de eco-alojamientos · {presencePlaces}",
       description:
-        "Fotos y reels para eco-quintas, surf houses y alojamientos boutique del Algarve a Lisboa. Los trabajos comerciales pueden viajar más lejos. Desde 475 €.",
-      keywords: "fotógrafa hoteles Algarve; surf house Lisboa; fotógrafa Airbnb Algarve; fotos para casa rural",
+        "Fotos y reels para eco-quintas, surf houses y alojamientos boutique. {availability} Desde 475 €.",
+      keywords: "{presenceKeywords}; fotos para casa rural",
     },
     portfolio: {
       title: "Portfolio · Oracle of Freedom",
       description: "Momentos reales de las almas indómitas. Retratos, encuentros, festivales, fuego, DJs y vídeo.",
-      keywords: "portfolio Agota Urbikaite; fotógrafa boho Portugal",
+      keywords: "portfolio Agota Urbikaite; fotógrafa boho; {presenceKeywords}",
     },
     journal: {
       title: "Journal · Guías para espíritus libres",
@@ -108,12 +102,12 @@ export const es: Copy = {
     inquire: {
       title: "Contacto · Oracle of Freedom",
       description: "Cuéntame tu historia: fecha, lugar y sueño. Respondo en 48 horas. También por WhatsApp o email.",
-      keywords: "contactar fotógrafa Algarve; contactar fotógrafa Lisboa",
+      keywords: "contactar fotógrafa; {presenceKeywords}",
     },
     book: {
       title: "Reserva una llamada · Oracle of Freedom",
       description: "Elige una hora para conocer a la fotógrafa y videógrafa Agota Urbikaite.",
-      keywords: "reservar Agota Urbikaite; reservar fotógrafa Algarve; reservar fotógrafa Lisboa",
+      keywords: "reservar Agota Urbikaite; {presenceKeywords}",
     },
     privacy: {
       title: "Privacidad · Oracle of Freedom",
@@ -264,7 +258,7 @@ export const es: Copy = {
   portraits: {
     eyebrow: "Sesiones de retrato",
     title: "Para quienes van descalzos, arden y viven libres.",
-    subtitle: "Sesiones de retrato, del Algarve a Lisboa",
+    subtitle: "{availability}",
     dek: "Una sesión para ti, para dos o para la gente que quieres. Personas, parejas, preboda, familias y amigos.",
     cta: "Reservar sesión",
     personalizeCta: "Personaliza tu sesión",
@@ -316,11 +310,9 @@ export const es: Copy = {
         ],
       },
     },
-    travelNote:
-      "El desplazamiento está incluido en cada sesión, del Algarve a Lisboa, con la costa de por medio. Bodas, retiros, festivales y trabajos comerciales pueden ir más lejos — el resto de Portugal, Europa y más allá — con el viaje a coste real.",
+    travelNote: "{availability}",
     whereTitle: "Dónde podemos hacer la sesión",
-    where:
-      "Todo el Algarve y la costa hasta Lisboa: el sur, la Costa Vicentina, el litoral del Alentejo, Comporta, Arrábida y la ciudad. Ericeira y Sintra quedan justo al norte de Lisboa: dímelo si ese es el plan. Para una boda, un retiro, un festival o un trabajo comercial, el resto de Portugal, Europa y más allá están abiertos.",
+    where: "{availability}",
     processTitle: "Cómo funciona",
     process: [
       { title: "Escríbeme", body: "Envía el formulario o un WhatsApp con tu idea de fecha y lo que sueñas." },
@@ -337,7 +329,7 @@ export const es: Copy = {
       { q: "¿Cuál es la mejor hora?", a: "La hora dorada, justo después del amanecer o antes del atardecer. Yo elijo el horario según fecha y lugar." },
       { q: "¿Y si llueve?", a: "Cambiamos la sesión de día o abrazamos el drama de las nubes: tú decides." },
       { q: "¿Me ayudas con una pedida sorpresa?", a: "Sí. Te ayudo a elegir el sitio y el momento, y me escondo a plena vista." },
-      { q: "¿Dónde fotografías?", a: "Cada sesión incluye el desplazamiento del Algarve a Lisboa, por la costa de por medio. Bodas, retiros, festivales y trabajos comerciales pueden ir más lejos, con el viaje a coste real." },
+      { q: "¿Dónde fotografías?", a: "{availability}" },
       { q: "¿Cómo reservo?", a: "Envía el formulario. Una señal del {deposit} asegura tu fecha." },
       { q: "¿Cuándo llega la galería?", a: "Las fotografías, en {artistWeeks}. El vídeo y las colecciones foto+vídeo, en {artistFilmWeeks}. La entrega exprés es un extra de pago: fotografías en {expressPhoto}, vídeo o el combo completo en {expressFilm}." },
     ],
@@ -346,7 +338,7 @@ export const es: Copy = {
   elopements: {
     eyebrow: "Bodas boho y elopements",
     title: "Para quienes van descalzos, arden y viven libres.",
-    subtitle: "Elopements boho del Algarve a Lisboa, y más lejos",
+    subtitle: "{availability}",
     dek: "Votos descalzos. Unas pocas personas que amáis. Un día que se siente como libertad.",
     cta: "Consultar mi fecha",
     inquiry: "elopement",
@@ -419,8 +411,7 @@ export const es: Copy = {
         ],
       },
     },
-    travelNote:
-      "El desplazamiento del Algarve a Lisboa está incluido. Los elopements y las bodas íntimas más lejos — el resto de Portugal, Europa y más allá — se presupuestan a coste real.",
+    travelNote: "{availability}",
     dayTitle: "Cómo podría ser vuestro día",
     day: "Votos al amanecer en una playa salvaje. Un paseo por el bosque con flores en el pelo. Una ceremonia guiada por un amigo, un chamán o un oficiante. Vuestra gente en círculo, tambores y risas. Una mesa larga bajo guirnaldas de luz. Una danza de fuego para cerrar la noche.",
     comingSoon: "Próximamente: nuestra primera historia completa de elopement boho. Hasta entonces, estas son fotos de pareja y de encuentros, no un día de boda.",
@@ -441,7 +432,7 @@ export const es: Copy = {
       { q: "Aún no sabemos dónde. ¿Nos ayudas?", a: "Es una de mis partes favoritas. Decidme vuestra vibra (océano, bosque, llanuras de aire desértico, montañas) y diseñamos la visión juntos." },
       { q: "¿También haces vídeo?", a: "Sí. La película de elopement y el highlight de boda íntima se reservan solos, pero como soy una sola persona, no puedo captar vuestros momentos especiales a la vez en foto y en vídeo." },
       { q: "¿Puedes fotografiar la noche y la celebración después de la ceremonia?", a: "Sí, me encanta captar la noche y el baile. Vuestra fiesta está en buenas manos." },
-      { q: "¿Viajas?", a: "Sí. La costa del Algarve a Lisboa está incluida. Para una boda también viajo por el resto de Portugal, Europa y más allá, incluidos destinos tropicales, con el desplazamiento a coste real." },
+      { q: "¿Viajas?", a: "{availability}" },
       { q: "¿Con cuánta antelación reservamos?", a: "Unos 6 meses antes es lo ideal, pero a veces bastan unas semanas, así que pregúntame." },
       { q: "¿Cuándo llegan las fotografías y el vídeo?", a: "Las fotografías, en {weeks}. El vídeo sigue el plazo del vídeo, {filmWeeks}. El adelanto sale en 48 horas. La entrega exprés es un extra de pago: fotografías en {expressPhoto}, vídeo en {expressFilm}." },
     ],
@@ -450,7 +441,7 @@ export const es: Copy = {
   retreats: {
     eyebrow: "Retiros y encuentros",
     title: "Para quienes van descalzos, arden y viven libres.",
-    subtitle: "Fotógrafa de retiros, del Algarve a Lisboa y más lejos",
+    subtitle: "{availability}",
     dek: "Tu próximo retiro se vende con la sensación del anterior. Vamos a capturarla.",
     cta: "Planificar la cobertura de mi retiro",
     inquiry: "retreat",
@@ -515,8 +506,7 @@ export const es: Copy = {
         ],
       },
     },
-    travelNote:
-      "Los retiros en la costa del Algarve a Lisboa incluyen mi desplazamiento. Los que quedan más lejos — el resto de Portugal, Europa y más allá — se presupuestan a coste real. El alojamiento y las comidas en el lugar suelen correr a cargo del retiro.",
+    travelNote: "{availability} El alojamiento y las comidas en el lugar suelen correr a cargo del retiro.",
     consentTitle: "Cómo trabajo en espacios sagrados",
     consent: [
       "Me presento en el círculo de apertura para que todos se sientan seguros.",
@@ -539,7 +529,7 @@ export const es: Copy = {
       { q: "¿Puedo usar las imágenes en anuncios y en plataformas?", a: "Sí, la licencia comercial para tu propio marketing está incluida." },
       { q: "¿También grabas vídeo?", a: "Sí. El paquete de 3 días incluye 5 reels verticales cortos, y en un retiro de 1 día puedes añadir 3 reels o vídeo de dron." },
       { q: "¿Tienen que firmar algo los participantes?", a: "Antes del retiro te comparto un sistema sencillo de consentimiento, y cualquiera puede decir que no." },
-      { q: "¿Viajas al extranjero?", a: "Sí. Los retiros son uno de los proyectos por los que salgo de la costa del Algarve a Lisboa: el resto de Portugal, España, Europa y destinos tropicales, con el viaje a coste real." },
+      { q: "¿Viajas al extranjero?", a: "{availability}" },
       { q: "¿Con cuánta antelación reservo?", a: "Unos 4 meses antes es lo ideal, pero a veces bastan unas semanas, así que pregúntame." },
     ],
     guide: { post: "retreat", label: "Cómo fotografiar tu retiro para llenar el próximo" },
@@ -657,8 +647,7 @@ export const es: Copy = {
         ],
       },
     },
-    travelNote:
-      "Las sesiones de artista del Algarve a Lisboa incluyen el desplazamiento. Festivales y trabajos comerciales más lejos — el resto de Portugal, Europa y más allá — se presupuestan a coste real.",
+    travelNote: "{availability}",
     videosTitle: "Mira",
     videosNote: "Algunos vídeos se abren en Instagram. Pulsa reproducir y los demás empiezan aquí.",
     processTitle: "Cómo funciona",
@@ -756,8 +745,7 @@ export const es: Copy = {
     },
     deliverablesTitle: "Qué recibes",
     deliverables: ["Fotos horizontales para OTAs y tu web", "Imágenes lifestyle", "Reels verticales", "Licencia comercial para tu propio marketing"],
-    travelNote:
-      "Una jornada de contenido del Algarve a Lisboa incluye el desplazamiento. Los trabajos comerciales más lejos — el resto de Portugal, Europa y más allá — se presupuestan a coste real.",
+    travelNote: "{availability}",
     comingSoon: "Las colaboraciones dedicadas con alojamientos y habitaciones siguen en marcha.",
     processTitle: "Cómo funciona",
     process: [
@@ -823,7 +811,7 @@ export const es: Copy = {
     title: "Aviso de privacidad",
     updated: "Actualizado el 7 de octubre de 2026. Es un aviso breve, no una política legal completa.",
     sections: [
-      { title: "Quién", body: ["Oracle of Freedom es Agota Urbikaite, con base del Algarve a Lisboa. Email: agota@oracleoffreedom.com."] },
+      { title: "Quién", body: ["Oracle of Freedom es Agota Urbikaite. {availability} Email: agota@oracleoffreedom.com."] },
       {
         title: "Qué recoge el formulario",
         body: [
@@ -877,7 +865,7 @@ export const es: Copy = {
     dateFrom: "Cobertura desde",
     dateTo: "Cobertura hasta",
     flexible: "Mi fecha es flexible",
-    place: "¿Dónde? (del Algarve a Lisboa está incluido — o dime si es más lejos)",
+    place: "¿Dónde? {availability}",
     people: "¿Cuántas personas?",
     peopleOptions: { "1": "1", "2": "2", "3-10": "3–10", "11-30": "11–30", "30+": "Más de 30" },
     eventOptions: { "lt-10": "Menos de 10", "10-20": "10–20", "20-40": "20–40", "40+": "Más de 40" },

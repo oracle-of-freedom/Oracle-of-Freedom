@@ -14,6 +14,9 @@ import { WhatsAppButton } from "@/components/whatsapp-button";
 import { getCopy } from "@/content";
 import { routing } from "@/i18n/routing";
 import { htmlLang, settings, siteUrl } from "@/lib/content";
+import { getSettings } from "@/lib/offers";
+import { presenceAreas } from "@/lib/presence-copy";
+import { lisbonToday } from "@/lib/pricing";
 import "../globals.css";
 
 const serif = DM_Serif_Display({
@@ -60,6 +63,7 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const copy = getCopy(locale);
+  const stored = await getSettings();
   const items: NavItem[] = [
     { href: "/people", label: copy.nav.people },
     { href: "/experiences", label: copy.nav.experiences },
@@ -115,7 +119,7 @@ export default async function LocaleLayout({
               email: settings.email,
               image: `${siteUrl()}/images/portfolio/cover-wide.jpg`,
               founder: { "@type": "Person", name: settings.founder },
-              areaServed: ["Europe", "Latin America"],
+              areaServed: presenceAreas(stored.stays, lisbonToday()),
               sameAs: [settings.instagramUrl],
               priceRange: "€€",
               description: copy.meta.home.description,

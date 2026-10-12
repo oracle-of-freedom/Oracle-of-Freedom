@@ -13,8 +13,9 @@ import { Button } from "@/components/ui/button";
 import { gallery, imagesForPage, settings, siteUrl } from "@/lib/content";
 import { festivalFilmSpan } from "@/lib/delivery-copy";
 import { applyTokens, buildTokenMap, displayTiming } from "@/lib/delivery";
+import { presenceAreas, presenceTokens } from "@/lib/presence-copy";
 import { getSettings } from "@/lib/offers";
-import { mergeCatalog, type LiveSettings, type PricedPackage } from "@/lib/pricing";
+import { lisbonToday, mergeCatalog, type LiveSettings, type PricedPackage } from "@/lib/pricing";
 import type { Locale } from "@/i18n/routing";
 import type { Copy } from "@/content/types";
 
@@ -53,7 +54,11 @@ export async function ServiceView({
   const hero =
     (heroId ? gallery.find((image) => image.id === heroId) : undefined) ?? images[0];
   const stored = await getSettings();
-  const tokens = buildTokenMap(stored.timings);
+  const today = lisbonToday();
+  const tokens: Record<string, string> = {
+    ...buildTokenMap(stored.timings),
+    ...presenceTokens(locale, stored.stays, today),
+  };
   const faqTokens = {
     ...tokens,
     "{festivalFilmSpan}": festivalFilmSpan(locale, stored),
@@ -92,9 +97,9 @@ export async function ServiceView({
         data={{
           "@context": "https://schema.org",
           "@type": "Service",
-          name: copy.subtitle || copy.title,
+          name: applyTokens(copy.subtitle || copy.title, tokens),
           provider: { "@type": "ProfessionalService", name: settings.brand, url: siteUrl() },
-          areaServed: ["Algarve", "Lisbon", "Portugal", "Europe"],
+          areaServed: presenceAreas(stored.stays, today),
           offers,
         }}
       />
@@ -127,7 +132,9 @@ export async function ServiceView({
         <div className="relative z-10 mx-auto flex min-h-[78svh] max-w-6xl flex-col justify-end px-4 pt-24 pb-12 md:px-6">
           <p className="text-xs tracking-[0.22em] text-ember uppercase">{copy.eyebrow}</p>
           <h1 className="mt-3 max-w-4xl font-serif text-4xl leading-[1.05] text-white md:text-6xl">{copy.title}</h1>
-          {copy.subtitle ? <p className="mt-4 max-w-2xl text-lg text-sand">{copy.subtitle}</p> : null}
+          {copy.subtitle ? (
+            <p className="mt-4 max-w-2xl text-lg text-sand">{applyTokens(copy.subtitle, tokens)}</p>
+          ) : null}
           <p className="mt-3 max-w-2xl text-sand/85">{copy.dek}</p>
           {lead ? (
             <FromPrice
@@ -228,7 +235,7 @@ export async function ServiceView({
           />
           {copy.travelNote ? (
             <p className="mt-6 text-sm text-ink/70">
-              <TokenText text={copy.travelNote} />
+              <TokenText text={copy.travelNote} locale={locale} />
             </p>
           ) : null}
           <p className="mt-2 text-sm text-ink/60">{common.priceNote}</p>
@@ -237,7 +244,7 @@ export async function ServiceView({
         {copy.where && copy.whereTitle ? (
           <section className="mx-auto max-w-3xl px-4 py-8 md:px-6">
             <h2 className="font-serif text-4xl">{copy.whereTitle}</h2>
-            <p className="mt-4 text-lg text-ink/80">{copy.where}</p>
+            <p className="mt-4 text-lg text-ink/80">{applyTokens(copy.where, tokens)}</p>
           </section>
         ) : null}
 

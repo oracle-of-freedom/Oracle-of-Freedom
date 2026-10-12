@@ -47,7 +47,7 @@ export const TIMING_FIELDS = [
   },
 ] as const satisfies readonly { key: TimingKey; token: string; label: string; hint: string }[];
 
-const TOKEN_SOURCE = "\\{(?:baseArea|deposit|artistFilmWeeks|artistWeeks|filmWeeks|weeks|expressPhoto|expressFilm|languages|festivalFilmSpan)\\}";
+const TOKEN_SOURCE = "\\{(?:baseArea|deposit|artistFilmWeeks|artistWeeks|filmWeeks|weeks|expressPhoto|expressFilm|languages|festivalFilmSpan|presenceKeywords|presencePlaces|presence|availability)\\}";
 const TIMING_TOKEN = /\{(?:artistFilmWeeks|artistWeeks|filmWeeks|weeks|expressPhoto|expressFilm)\}/;
 const UNIT_WORD = "weeks|week|semanas|semana|days|day|días|día|dias|dia";
 

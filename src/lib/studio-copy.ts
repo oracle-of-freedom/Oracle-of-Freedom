@@ -66,8 +66,8 @@ export function studioCopy(lang: StudioLang) {
       cardAction: en ? "Write a place" : "Anotar un lugar",
       title: en ? "Places and dates" : "Lugares y fechas",
       intro: en
-        ? "Write the city, the country and the dates here. Publishing puts that banner on the homepage. Leave this empty and the homepage names no city. A wedding or festival somewhere else stays an invitation to write soon."
-        : "Aquí escribes la ciudad, el país y las fechas. Al publicar, ese banner sale en la portada. Si lo dejas vacío, la portada no nombra ninguna ciudad. Una boda o un festival en otro lugar sigue siendo una invitación a escribir pronto.",
+        ? "Write the city, the country and the dates here. Publishing puts that banner on the homepage and on every page that names where she is available. Leave this empty and those lines name no city. A wedding or festival somewhere else stays an invitation to write soon."
+        : "Aquí escribes la ciudad, el país y las fechas. Al publicar, ese banner sale en la portada y en cada página que dice dónde está disponible. Si lo dejas vacío, esas líneas no nombran ninguna ciudad. Una boda o un festival en otro lugar sigue siendo una invitación a escribir pronto.",
       region: en ? "Region" : "Región",
       europe: en ? "Europe" : "Europa",
       latin: en ? "Latin America" : "América Latina",

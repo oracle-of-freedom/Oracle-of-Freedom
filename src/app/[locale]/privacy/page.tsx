@@ -1,5 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
+import { TokenText } from "@/components/token-text";
 import { getCopy } from "@/content";
+import type { Locale } from "@/i18n/routing";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -17,6 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function PrivacyPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
 
   return (
@@ -29,7 +32,9 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
             <h2 className="font-serif text-3xl">{section.title}</h2>
             <div className="mt-3 space-y-3 text-ink/85">
               {section.body.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
+                <p key={paragraph}>
+                  <TokenText text={paragraph} locale={loc} />
+                </p>
               ))}
             </div>
           </section>
