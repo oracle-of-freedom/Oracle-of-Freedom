@@ -1,4 +1,5 @@
 import packagesJson from "../../content/packages.json";
+import type { PresenceStay } from "@/lib/presence";
 
 export type CatalogItem = {
   id: string;
@@ -44,6 +45,7 @@ export type LiveSettings = {
   promos: Promo[];
   timings?: Partial<Record<TimingKey, string>>;
   deliveries?: Record<string, DeliveryCopy>;
+  stays?: PresenceStay[];
 };
 
 export type StorageMode = "blob" | "local" | "readonly";

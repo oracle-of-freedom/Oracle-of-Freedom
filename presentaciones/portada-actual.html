@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portada actual</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Karla:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #1b1512; }
+    body { font-family: Karla, "Gill Sans", sans-serif; }
+    .hero { position: relative; min-height: 100svh; }
+    .hero img.photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .desk { object-position: center 30%; }
+    .mob { object-position: center center; display: none; }
+    .veil {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, #1b1512, rgba(27, 21, 18, 0.4), rgba(27, 21, 18, 0.2));
+    }
+    .copy {
+      position: relative;
+      z-index: 1;
+      max-width: 72rem;
+      min-height: 100svh;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 7rem 1.5rem 4rem;
+      color: #fff;
+    }
+    .mark { width: 40px; height: 40px; }
+    .brand {
+      margin: 1rem 0 0;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #d9913a;
+    }
+    h1 {
+      margin: 0.75rem 0 0;
+      max-width: 56rem;
+      font-family: "DM Serif Display", "Times New Roman", serif;
+      font-weight: 400;
+      font-size: 4.5rem;
+      line-height: 1.05;
+    }
+    .dek {
+      margin: 1.25rem 0 0;
+      max-width: 36rem;
+      font-size: 1.125rem;
+      line-height: 1.65;
+      color: rgba(244, 236, 225, 0.9);
+    }
+    .regions {
+      margin: 1rem 0 0;
+      max-width: 36rem;
+      font-size: 1.125rem;
+      color: #f4ece1;
+    }
+    .promo {
+      display: inline-block;
+      align-self: flex-start;
+      margin: 0.85rem 0 0;
+      max-width: 36rem;
+      padding: 0.85rem 1rem;
+      border-radius: 1rem;
+      background: #f4ece1;
+      color: #2a211c;
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .promo strong { font-weight: 500; }
+    .promo span { display: block; margin-top: 0.2rem; color: #8c3e1e; font-size: 0.95rem; }
+    .travel {
+      margin: 0.85rem 0 0;
+      max-width: 36rem;
+      font-size: 1rem;
+      line-height: 1.45;
+      color: rgba(244, 236, 225, 0.92);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+    .actions a {
+      display: inline-flex;
+      align-items: center;
+      height: 3.5rem;
+      padding: 0 1.75rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .light { background: #f4ece1; color: #2a211c; }
+    .ghost { border: 1px solid rgba(255, 255, 255, 0.7); color: #fff; }
+    @media (max-width: 767px) {
+      .desk { display: none; }
+      .mob { display: block; }
+      .copy { padding: 7rem 1rem 4rem; }
+      h1 { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <img class="photo desk" src="../public/images/portfolio/cover-wide.jpg" alt="" />
+    <img class="photo mob" src="../public/images/portfolio/portrait-01.jpg" alt="" />
+    <div class="veil"></div>
+    <div class="copy">
+      <img class="mark" src="../public/images/brand/om-logo.png" alt="" />
+      <p class="brand">Oracle of Freedom</p>
+      <h1>Para espíritus libres, encuentros sagrados y lugares con alma.</h1>
+      <p class="dek">Foto y vídeo para espíritus libres: parejas enamoradas, encuentros sagrados, almas festivaleras y los lugares que los acogen. Sesiones en Europa y América Latina. El lugar cambia con el viaje.</p>
+      <a class="promo" href="#consulta">
+        <strong>Disponible del 1 al 15 de febrero en Lagos, Portugal.</strong>
+        <span>Reserva mientras está cerca.</span>
+      </a>
+      <p class="travel">¿Una boda o un festival en otro lugar? Escríbeme pronto y preparo el viaje.</p>
+      <div class="actions">
+        <a class="light" href="#consulta">Consultar disponibilidad</a>
+        <a class="ghost" href="#trabajo">Ver el trabajo</a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

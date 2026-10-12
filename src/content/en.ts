@@ -41,10 +41,10 @@ const budgets = {
 export const en: Copy = {
   meta: {
     home: {
-      title: "Oracle of Freedom · Algarve & Lisbon Photo & Film",
+      title: "Oracle of Freedom · Photo & film in Europe and Latin America",
       description:
-        "Photo & film for free spirits, from the Algarve to Lisbon. Weddings, retreats, festivals and commercial shoots travel further across Portugal, Europe and beyond.",
-      keywords: "Algarve and Lisbon photographer; Algarve photographer; Lisbon photographer; boho photographer Portugal",
+        "Photo and film for free spirits. Sessions across Europe and Latin America. A wedding or festival somewhere else is a reason to write soon, so the trip can be shaped.",
+      keywords: "photographer Europe; photographer Latin America; wedding photographer; festival photographer",
     },
     about: {
       title: "About Agota · Algarve & Lisbon Photographer",
@@ -153,7 +153,7 @@ export const en: Copy = {
   },
   footer: {
     blurb:
-      "Photo & film by Agota Urbikaite, from the Algarve to Lisbon. Weddings, retreats, festivals and commercial shoots travel further.",
+      "Photo and film by Agota Urbikaite. Sessions across Europe and Latin America. The place changes with the journey.",
     privacy: "Privacy",
     rights: "All rights reserved.",
   },
@@ -200,7 +200,9 @@ export const en: Copy = {
   },
   home: {
     title: "For free spirits, sacred gatherings and places with soul.",
-    dek: "Photo & film for free spirits: couples in love, sacred gatherings, festival souls and the places that hold them. Every session from the Algarve to Lisbon; weddings, retreats, festivals and commercial work further afield.",
+    dek: "Photo and film for free spirits: couples in love, sacred gatherings, festival souls and the places that hold them. Sessions across Europe and Latin America. The place changes with the journey.",
+    stayNear: "Book while she is nearby.",
+    elsewhere: "A wedding or a festival somewhere else? Write soon and I'll shape the trip.",
     manifesto:
       "I don't stand on the outside looking in. I dance at the edge of the fire, I walk into the sea with you, I sit in the circle. That's where the real moments live — and that's where my camera is.",
     doorsTitle: "Three ways in",

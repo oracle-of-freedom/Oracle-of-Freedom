@@ -41,10 +41,10 @@ const budgets = {
 export const pt: Copy = {
   meta: {
     home: {
-      title: "Oracle of Freedom · Fotografia e vídeo, Algarve e Lisboa",
+      title: "Oracle of Freedom · Fotografia e vídeo na Europa e na América Latina",
       description:
-        "Fotografia e vídeo para espíritos livres, do Algarve a Lisboa. Casamentos, retiros, festivais e trabalhos comerciais viajam mais longe: o resto de Portugal, a Europa e mais além.",
-      keywords: "fotógrafa Algarve e Lisboa; fotógrafa Algarve; fotógrafa Lisboa; fotógrafa boho Portugal",
+        "Fotografia e vídeo para espíritos livres. Sessões na Europa e na América Latina. Um casamento ou um festival noutro lugar pede uma mensagem cedo, para preparar a viagem.",
+      keywords: "fotógrafa Europa; fotógrafa América Latina; fotografia de casamentos; fotógrafa de festivais",
     },
     about: {
       title: "Sobre a Agota · Fotógrafa do Algarve a Lisboa",
@@ -145,7 +145,7 @@ export const pt: Copy = {
   },
   footer: {
     blurb:
-      "Fotografia e vídeo por Agota Urbikaite, do Algarve a Lisboa. Casamentos, retiros, festivais e trabalhos comerciais viajam mais longe.",
+      "Fotografia e vídeo por Agota Urbikaite. Sessões na Europa e na América Latina. O lugar muda com a viagem.",
     privacy: "Privacidade",
     rights: "Todos os direitos reservados.",
   },
@@ -187,7 +187,9 @@ export const pt: Copy = {
   },
   home: {
     title: "Para espíritos livres, encontros sagrados e lugares com alma.",
-    dek: "Fotografia e vídeo para espíritos livres: casais apaixonados, encontros sagrados, almas de festival e os lugares que os acolhem. Cada sessão do Algarve a Lisboa; casamentos, retiros, festivais e trabalhos comerciais, mais longe.",
+    dek: "Fotografia e vídeo para espíritos livres: casais apaixonados, encontros sagrados, almas de festival e os lugares que os acolhem. Sessões na Europa e na América Latina. O lugar muda com a viagem.",
+    stayNear: "Reserva enquanto está perto.",
+    elsewhere: "Um casamento ou um festival noutro lugar? Escreve cedo e preparo a viagem.",
     manifesto:
       "Não olho de fora. Danço à beira do fogo, entro no mar contigo, sento-me no círculo. É aí que vivem os momentos verdadeiros, e é aí que está a minha câmara.",
     doorsTitle: "Três portas",

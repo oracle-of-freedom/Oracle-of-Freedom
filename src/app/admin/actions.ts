@@ -8,6 +8,7 @@ import { ADMIN_COOKIE, adminConfigured, isAdmin, passwordsMatch, sealSession, se
 import { deliveriesFromForm, timingsFromForm } from "@/lib/delivery";
 import { deliveryDefaults } from "@/lib/delivery-copy";
 import { catalog, type LiveSettings, type Promo } from "@/lib/pricing";
+import { normalizeStays, type PresenceStay } from "@/lib/presence";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
 import { readStored, writeStored } from "@/lib/store";
@@ -27,12 +28,14 @@ function withSchedule(
   base: { prices: LiveSettings["prices"]; promos: Promo[] },
   timings: LiveSettings["timings"],
   deliveries: LiveSettings["deliveries"],
+  stays: PresenceStay[] | undefined,
 ): LiveSettings {
   return {
     prices: base.prices,
     promos: base.promos,
     ...(timings && Object.keys(timings).length > 0 ? { timings } : {}),
     ...(deliveries && Object.keys(deliveries).length > 0 ? { deliveries } : {}),
+    ...(stays ? { stays } : {}),
   };
 }
 
@@ -82,7 +85,7 @@ export async function savePrices(_state: ActionState, formData: FormData): Promi
   const deliveryResult = deliveriesFromForm(formData, deliveryDefaults(), lang);
   if (deliveryResult.error) return { error: deliveryResult.error };
   try {
-    await writeStored(withSchedule({ prices, promos: current.promos }, timingResult.timings, deliveryResult.deliveries));
+    await writeStored(withSchedule({ prices, promos: current.promos }, timingResult.timings, deliveryResult.deliveries, current.stays));
     refreshSite();
   } catch (error) {
     return { error: error instanceof Error ? error.message : t.errors.prices };
@@ -132,10 +135,25 @@ export async function savePromo(_state: ActionState, formData: FormData): Promis
     ? current.promos.map((item) => (item.id === promo.id ? promo : item))
     : [promo, ...current.promos];
   try {
-    await writeStored(withSchedule({ prices: current.prices, promos }, current.timings, current.deliveries));
+    await writeStored(withSchedule({ prices: current.prices, promos }, current.timings, current.deliveries, current.stays));
     refreshSite();
   } catch (error) {
     return { error: error instanceof Error ? error.message : t.errors.promoSave };
+  }
+  return { ok: true };
+}
+
+export async function saveStays(input: unknown): Promise<ActionState> {
+  await guard();
+  const t = studioCopy(await studioLang());
+  const parsed = normalizeStays(input);
+  if ("error" in parsed) return { error: t.errors.stay };
+  const current = await readStored();
+  try {
+    await writeStored(withSchedule({ prices: current.prices, promos: current.promos }, current.timings, current.deliveries, parsed.stays));
+    refreshSite();
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : t.errors.staySave };
   }
   return { ok: true };
 }
@@ -149,6 +167,7 @@ export async function deletePromo(formData: FormData) {
       { prices: current.prices, promos: current.promos.filter((item) => item.id !== id) },
       current.timings,
       current.deliveries,
+      current.stays,
     ),
   );
   refreshSite();

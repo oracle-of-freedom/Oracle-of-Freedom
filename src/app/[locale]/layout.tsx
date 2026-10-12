@@ -115,7 +115,7 @@ export default async function LocaleLayout({
               email: settings.email,
               image: `${siteUrl()}/images/portfolio/cover-wide.jpg`,
               founder: { "@type": "Person", name: settings.founder },
-              areaServed: ["Algarve", "Lisbon", "Portugal", "Europe"],
+              areaServed: ["Europe", "Latin America"],
               sameAs: [settings.instagramUrl],
               priceRange: "€€",
               description: copy.meta.home.description,

@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { readDeliveries, readTimings } from "@/lib/delivery";
+import { parseStays } from "@/lib/presence";
 import type { LiveSettings, StorageMode } from "@/lib/pricing";
 
 const EMPTY: LiveSettings = { prices: {}, promos: [] };
@@ -26,6 +27,7 @@ function asSettings(value: unknown): LiveSettings | null {
     promos: record.promos,
     ...(timings ? { timings } : {}),
     ...(deliveries ? { deliveries } : {}),
+    ...(Array.isArray(record.stays) ? { stays: parseStays(record.stays) } : {}),
   };
 }
 

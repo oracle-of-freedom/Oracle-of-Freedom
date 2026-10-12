@@ -104,6 +104,8 @@ export type Copy = {
   home: {
     title: string;
     dek: string;
+    stayNear: string;
+    elsewhere: string;
     manifesto: string;
     doorsTitle: string;
     peopleTitle: string;

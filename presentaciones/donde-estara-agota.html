@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portada · Europa y América Latina</title>
+  <style>
+    :root {
+      --sand: #f4ece1;
+      --ink: #2a211c;
+      --terracotta: #b4532a;
+      --line: rgba(42, 33, 28, 0.14);
+      --card: #fffdf9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--sand);
+      color: var(--ink);
+      font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+    }
+    button, input, select, label { font-family: Georgia, serif; }
+    header.bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      padding: 28px 32px 8px;
+    }
+    header.bar p { margin: 6px 0 0; max-width: 42rem; font-size: 15px; line-height: 1.45; }
+    h1 { margin: 0; font-weight: 500; font-size: 32px; letter-spacing: -0.02em; }
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.7fr);
+      gap: 28px;
+      padding: 20px 32px 48px;
+      align-items: start;
+    }
+    .stage { display: grid; gap: 18px; }
+    .hero {
+      position: relative;
+      min-height: 520px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #1c1612 center / cover no-repeat;
+      color: var(--sand);
+    }
+    .hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero .veil {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(20, 14, 10, 0.15), rgba(20, 14, 10, 0.72));
+    }
+    .hero .copy {
+      position: relative;
+      z-index: 1;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 36px;
+      gap: 12px;
+    }
+    .mark { letter-spacing: 0.22em; font-size: 12px; text-transform: uppercase; }
+    .hero h2 { margin: 0; font-size: 40px; font-weight: 500; line-height: 1.05; max-width: 16ch; }
+    .dek { margin: 0; max-width: 38rem; font-size: 16px; line-height: 1.45; }
+    .regions { margin: 0; font-size: 18px; }
+    .promo {
+      display: inline-block;
+      align-self: flex-start;
+      max-width: 36rem;
+      background: var(--sand);
+      color: var(--ink);
+      border-radius: 14px;
+      padding: 12px 14px;
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .promo strong { display: block; font-weight: 600; }
+    .promo span { display: block; margin-top: 4px; font-size: 14px; }
+    .more, .travel { margin: 0; font-size: 14px; line-height: 1.4; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .actions a {
+      border-radius: 999px;
+      padding: 10px 16px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .actions .primary { background: var(--terracotta); color: var(--sand); }
+    .actions .ghost { border: 1px solid rgba(244, 236, 225, 0.7); color: var(--sand); }
+    .phone {
+      width: 280px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      background: #111;
+      justify-self: start;
+    }
+    .phone .screen { position: relative; height: 520px; }
+    .phone img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .phone .veil {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(20, 14, 10, 0.1), rgba(20, 14, 10, 0.78));
+    }
+    .phone .copy {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 16px;
+      color: var(--sand);
+      display: grid;
+      gap: 8px;
+    }
+    .phone h2 { margin: 0; font-size: 22px; font-weight: 500; line-height: 1.1; }
+    .phone .dek, .phone .more { font-size: 12px; line-height: 1.35; }
+    .phone .regions { font-size: 13px; }
+    .phone .promo { font-size: 13px; padding: 10px; }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+    .panel h3 { margin: 0; font-size: 18px; font-weight: 500; }
+    .langs, .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .langs button, .chips button, .save {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .langs button[aria-pressed="true"], .chips button[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--sand);
+      border-color: var(--ink);
+    }
+    label { display: grid; gap: 4px; font-size: 13px; }
+    input, select {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      color: var(--ink);
+      font-size: 15px;
+    }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .save { background: var(--terracotta); color: var(--sand); border-color: var(--terracotta); justify-self: start; }
+    .list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding-top: 8px;
+      font-size: 14px;
+    }
+    .note { font-size: 13px; line-height: 1.4; margin: 0; }
+    @media (max-width: 1280px) {
+      main { grid-template-columns: 1fr; padding: 16px; }
+      header.bar { padding: 20px 16px 0; flex-direction: column; align-items: start; }
+      .hero, .hero .copy { min-height: 460px; }
+      .hero h2 { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <div>
+      <h1>Portada con promociones por país</h1>
+      <p>La frase de Europa y América Latina se queda. Cada visita es una promoción con fechas, para que quien la busque en ese país la encuentre cerca.</p>
+    </div>
+  </header>
+  <main>
+    <section class="stage">
+      <article class="hero" id="desktop">
+        <img src="../public/images/portfolio/cover-wide.jpg" alt="Portada de Oracle of Freedom" />
+        <div class="veil"></div>
+        <div class="copy">
+          <div class="mark">Oracle of Freedom</div>
+          <h2 id="d-title"></h2>
+          <p class="dek" id="d-dek"></p>
+          <p class="regions" id="d-regions"></p>
+          <a class="promo" href="#consulta" id="d-promo"></a>
+          <p class="travel" id="d-travel"></p>
+          <p class="more" id="d-more"></p>
+          <div class="actions">
+            <a class="primary" href="#consulta" id="d-ask"></a>
+            <a class="ghost" href="#trabajo" id="d-work"></a>
+          </div>
+        </div>
+      </article>
+      <article class="phone" aria-label="Así se vería en el teléfono">
+        <div class="screen">
+          <img src="../public/images/portfolio/cover-wide.jpg" alt="" />
+          <div class="veil"></div>
+          <div class="copy">
+            <h2 id="p-title"></h2>
+            <p class="regions" id="p-regions"></p>
+            <a class="promo" href="#consulta" id="p-promo"></a>
+            <p class="travel" id="p-travel"></p>
+            <p class="more" id="p-more"></p>
+          </div>
+        </div>
+      </article>
+    </section>
+    <aside class="panel">
+      <h3>Probar la portada</h3>
+      <div class="langs" id="langs"></div>
+      <div class="chips" id="chips"></div>
+      <form id="form">
+        <div class="grid2">
+          <label>Región
+            <select id="region" name="region">
+              <option>Europa</option>
+              <option>América Latina</option>
+            </select>
+          </label>
+          <label>País
+            <input id="country" name="country" required />
+          </label>
+        </div>
+        <label>Ciudad
+          <input id="city" name="city" required />
+        </label>
+        <div class="grid2">
+          <label>Desde
+            <input id="start" name="start" type="date" required />
+          </label>
+          <label>Hasta
+            <input id="end" name="end" type="date" required />
+          </label>
+        </div>
+        <button class="save" type="submit">Añadir esta promoción</button>
+      </form>
+      <ul class="list" id="list"></ul>
+      <p class="note">Esto es una maqueta. La web real no cambia hasta que Agota lo apruebe. La promoción destacada es la más próxima; las demás siguen escritas debajo, en los tres idiomas.</p>
+    </aside>
+  </main>
+  <script>
+    const MONTHS = {
+      es: ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
+      en: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+      pt: ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],
+    };
+    const COPY = {
+      es: {
+        title: "Para espíritus libres, encuentros sagrados y lugares con alma.",
+        dek: "Foto y vídeo para espíritus libres: parejas enamoradas, encuentros sagrados, almas festivaleras y los lugares que los acogen. Sesiones en Europa y América Latina. El lugar cambia con el viaje.",
+        regions: "",
+        near: "Reserva mientras está cerca.",
+        travel: "¿Una boda o un festival en otro lugar? Escríbeme pronto y preparo el viaje.",
+        ask: "Consultar disponibilidad",
+        work: "Ver el trabajo",
+        more: "También",
+        promo: (a, b, month, city, country) => `Disponible del ${a} al ${b} de ${month} en ${city}, ${country}.`,
+      },
+      en: {
+        title: "For free spirits, sacred gatherings and places with soul.",
+        dek: "Photo and film for free spirits: couples in love, sacred gatherings, festival souls and the places that hold them. Sessions across Europe and Latin America. The place changes with the journey.",
+        regions: "",
+        near: "Book while she is nearby.",
+        travel: "A wedding or a festival somewhere else? Write soon and I'll shape the trip.",
+        ask: "Check availability",
+        work: "See the work",
+        more: "Also",
+        promo: (a, b, month, city, country) => `Available ${a}–${b} ${month} in ${city}, ${country}.`,
+      },
+      pt: {
+        title: "Para espíritos livres, encontros sagrados e lugares com alma.",
+        dek: "Fotografia e vídeo para espíritos livres: casais apaixonados, encontros sagrados, almas de festival e os lugares que os acolhem. Sessões na Europa e na América Latina. O lugar muda com a viagem.",
+        regions: "",
+        near: "Reserva enquanto está perto.",
+        travel: "Um casamento ou um festival noutro lugar? Escreve cedo e preparo a viagem.",
+        ask: "Consultar disponibilidade",
+        work: "Ver o trabalho",
+        more: "Também",
+        promo: (a, b, month, city, country) => `Disponível de ${a} a ${b} de ${month} em ${city}, ${country}.`,
+      },
+    };
+
+    let lang = "es";
+    let stays = [
+      { id: "lagos", region: "Europa", city: "Lagos", country: "Portugal", start: "2027-02-01", end: "2027-02-15" },
+      { id: "cdmx", region: "América Latina", city: "Ciudad de México", country: "México", start: "2027-03-03", end: "2027-03-10" },
+      { id: "ba", region: "América Latina", city: "Buenos Aires", country: "Argentina", start: "2027-04-12", end: "2027-04-20" },
+    ];
+    let featured = "lagos";
+
+    const langs = document.querySelector("#langs");
+    const chips = document.querySelector("#chips");
+    const list = document.querySelector("#list");
+    const form = document.querySelector("#form");
+
+    function day(iso) { return Number(iso.slice(8, 10)); }
+    function monthName(iso) { return MONTHS[lang][Number(iso.slice(5, 7)) - 1]; }
+    function line(stay) {
+      const copy = COPY[lang];
+      return copy.promo(day(stay.start), day(stay.end), monthName(stay.start), stay.city, stay.country);
+    }
+    function sorted() {
+      return [...stays].sort((a, b) => a.start.localeCompare(b.start));
+    }
+    function paintPromo(node, stay) {
+      const copy = COPY[lang];
+      node.innerHTML = `<strong>${line(stay)}</strong><span>${copy.near}</span>`;
+    }
+    function render() {
+      const copy = COPY[lang];
+      const order = sorted();
+      const main = order.find((item) => item.id === featured) || order[0];
+      const rest = order.filter((item) => item.id !== main.id);
+      document.querySelector("#d-title").textContent = copy.title;
+      document.querySelector("#p-title").textContent = copy.title;
+      document.querySelector("#d-dek").textContent = copy.dek;
+      for (const id of ["#d-regions", "#p-regions"]) {
+        const node = document.querySelector(id);
+        node.hidden = !copy.regions;
+        node.textContent = copy.regions;
+      }
+      document.querySelector("#d-ask").textContent = copy.ask;
+      document.querySelector("#d-work").textContent = copy.work;
+      paintPromo(document.querySelector("#d-promo"), main);
+      paintPromo(document.querySelector("#p-promo"), main);
+      document.querySelector("#d-travel").textContent = copy.travel;
+      document.querySelector("#p-travel").textContent = copy.travel;
+      const extra = rest.map((item) => `${copy.more}: ${line(item)}`).join(" ");
+      document.querySelector("#d-more").textContent = extra;
+      document.querySelector("#p-more").textContent = rest.length ? `${copy.more}: ${line(rest[0])}` : "";
+
+      langs.innerHTML = "";
+      for (const code of ["es", "en", "pt"]) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = code.toUpperCase();
+        button.setAttribute("aria-pressed", String(code === lang));
+        button.addEventListener("click", () => { lang = code; render(); });
+        langs.appendChild(button);
+      }
+      chips.innerHTML = "";
+      for (const stay of order) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = stay.city;
+        button.setAttribute("aria-pressed", String(stay.id === main.id));
+        button.addEventListener("click", () => { featured = stay.id; fill(stay); render(); });
+        chips.appendChild(button);
+      }
+      list.innerHTML = "";
+      for (const stay of order) {
+        const item = document.createElement("li");
+        item.innerHTML = `<span><strong>${stay.city}</strong>, ${stay.country}<br>${stay.region}</span><span>${stay.start.slice(8)}–${stay.end.slice(8)} ${monthName(stay.start)}</span>`;
+        list.appendChild(item);
+      }
+    }
+    function fill(stay) {
+      form.region.value = stay.region;
+      form.city.value = stay.city;
+      form.country.value = stay.country;
+      form.start.value = stay.start;
+      form.end.value = stay.end;
+    }
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const stay = {
+        id: crypto.randomUUID(),
+        region: form.region.value,
+        city: form.city.value.trim(),
+        country: form.country.value.trim(),
+        start: form.start.value,
+        end: form.end.value,
+      };
+      if (stay.end < stay.start) return;
+      stays.push(stay);
+      featured = stay.id;
+      render();
+    });
+    fill(stays[0]);
+    render();
+  </script>
+</body>
+</html>

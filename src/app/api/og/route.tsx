@@ -28,7 +28,7 @@ export function GET(request: Request) {
         <div style={{ display: "flex", marginTop: 24, fontSize: title.length > 60 ? 54 : 68, lineHeight: 1.05, maxWidth: 980 }}>
           {title}
         </div>
-        <div style={{ display: "flex", marginTop: 36, fontSize: 28, color: "#E7D6C3" }}>Algarve to Lisbon · Portugal</div>
+        <div style={{ display: "flex", marginTop: 36, fontSize: 28, color: "#E7D6C3" }}>Europe · Latin America</div>
       </div>
     ),
     { width: 1200, height: 630 },

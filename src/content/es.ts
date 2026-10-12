@@ -41,10 +41,10 @@ const budgets = {
 export const es: Copy = {
   meta: {
     home: {
-      title: "Oracle of Freedom · Foto y vídeo, Algarve y Lisboa",
+      title: "Oracle of Freedom · Foto y vídeo en Europa y América Latina",
       description:
-        "Foto y vídeo para espíritus libres, del Algarve a Lisboa. Bodas, retiros, festivales y trabajos comerciales viajan más lejos: el resto de Portugal, Europa y más allá.",
-      keywords: "fotógrafa Algarve y Lisboa; fotógrafa Algarve; fotógrafa Lisboa; fotógrafa boho Portugal",
+        "Foto y vídeo para espíritus libres. Sesiones en Europa y América Latina. Una boda o un festival en otro lugar se consulta pronto, para preparar el viaje.",
+      keywords: "fotógrafa Europa; fotógrafa América Latina; foto y vídeo bodas; fotógrafa de festivales",
     },
     about: {
       title: "Sobre Agota · Fotógrafa del Algarve a Lisboa",
@@ -145,7 +145,7 @@ export const es: Copy = {
   },
   footer: {
     blurb:
-      "Foto y vídeo por Agota Urbikaite, del Algarve a Lisboa. Bodas, retiros, festivales y trabajos comerciales viajan más lejos.",
+      "Foto y vídeo por Agota Urbikaite. Sesiones en Europa y América Latina. El lugar cambia con el viaje.",
     privacy: "Privacidad",
     rights: "Todos los derechos reservados.",
   },
@@ -187,7 +187,9 @@ export const es: Copy = {
   },
   home: {
     title: "Para espíritus libres, encuentros sagrados y lugares con alma.",
-    dek: "Foto y vídeo para espíritus libres: parejas enamoradas, encuentros sagrados, almas festivaleras y los lugares que los acogen. Cada sesión del Algarve a Lisboa; bodas, retiros, festivales y trabajos comerciales, más lejos.",
+    dek: "Foto y vídeo para espíritus libres: parejas enamoradas, encuentros sagrados, almas festivaleras y los lugares que los acogen. Sesiones en Europa y América Latina. El lugar cambia con el viaje.",
+    stayNear: "Reserva mientras está cerca.",
+    elsewhere: "¿Una boda o un festival en otro lugar? Escríbeme pronto y preparo el viaje.",
     manifesto:
       "No miro desde fuera. Bailo al borde del fuego, entro al mar contigo, me siento en el círculo. Ahí viven los momentos reales, y ahí está mi cámara.",
     doorsTitle: "Tres puertas",

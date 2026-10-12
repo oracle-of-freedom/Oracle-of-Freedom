@@ -8,8 +8,10 @@ import { dayLabel, type Booking } from "@/lib/bookings";
 import { readBookings } from "@/lib/booking-store";
 import { readInquiries } from "@/lib/inquiry-store";
 import { lisbonToday } from "@/lib/pricing";
+import { stayLine, visibleStays } from "@/lib/presence";
 import { inquiryWhen, studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
+import { readStored } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +38,8 @@ export default async function AdminPage() {
   const t = studioCopy(lang);
   const services = (lang === "en" ? en : es).form.services;
   const today = lisbonToday();
-  const [bookings, inquiries] = await Promise.all([readBookings(), readInquiries()]);
+  const [bookings, inquiries, settings] = await Promise.all([readBookings(), readInquiries(), readStored()]);
+  const nextStay = visibleStays(settings.stays, today)[0];
   const todayBookings = bookings.filter(
     (item) => item.date === today && item.status !== "cancelled",
   );
@@ -108,6 +111,11 @@ export default async function AdminPage() {
           {t.home.moreInquiries(moreInquiries)}
         </Link>
       ) : null}
+
+      <Link href="/admin/presence" className="mt-6 block min-h-12 rounded-3xl bg-white px-5 py-4">
+        <span className="text-xs tracking-[0.16em] text-ember uppercase">{t.presence.card}</span>
+        <span className="mt-1 block">{nextStay ? stayLine(lang, nextStay) : t.presence.cardEmpty}</span>
+      </Link>
     </main>
   );
 }
