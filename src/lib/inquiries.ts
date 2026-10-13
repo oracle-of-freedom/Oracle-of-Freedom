@@ -18,7 +18,14 @@ export type Inquiry = {
   languageLabel: string;
   budgetLabel: string;
   grade: string;
+  packageId?: string;
+  packageLabel?: string;
+  media?: string;
 };
+
+function optionalText(value: unknown, max: number) {
+  return value == null || (typeof value === "string" && value.length <= max);
+}
 
 const languages: Record<string, string> = {
   en: "Inglés",
@@ -56,7 +63,10 @@ export function isInquiry(value: unknown): value is Inquiry {
     typeof item.language === "string" &&
     typeof item.languageLabel === "string" &&
     typeof item.budgetLabel === "string" &&
-    typeof item.grade === "string"
+    typeof item.grade === "string" &&
+    optionalText(item.packageId, 80) &&
+    optionalText(item.packageLabel, 200) &&
+    optionalText(item.media, 40)
   );
 }
 

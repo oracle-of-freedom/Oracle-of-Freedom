@@ -160,6 +160,8 @@ export function studioCopy(lang: StudioLang) {
       place: en ? "Place" : "Lugar",
       clientLanguage: en ? "Language" : "Idioma",
       budget: en ? "Budget" : "Presupuesto",
+      package: en ? "Package" : "Paquete",
+      media: en ? "Photo or film" : "Foto o vídeo",
       noStory: en ? "No story written." : "No escribió una historia.",
       whatsappMissing: en ? "WhatsApp · no phone" : "WhatsApp · sin teléfono",
       replied: en ? "Mark replied" : "Marcar respondida",
@@ -438,18 +440,20 @@ export function studioCopy(lang: StudioLang) {
       primary: en ? " · primary" : " · principal",
       useCalendar: en ? "Use this calendar" : "Usar este calendario",
       disconnect: en ? "Disconnect Google" : "Desconectar Google",
-      ical: en ? "Phone calendar" : "Calendario del celular",
+      ical: en ? "Android calendar" : "Calendario en Android",
       icalIntro: en
-        ? "Copy the outgoing URL into the phone calendar. Paste the phone calendar’s secret URL into the incoming field."
-        : "Copia la URL de salida y pégala en el calendario del celular. En la URL de entrada pega la dirección secreta de ese calendario.",
+        ? "Use Chrome on the Android phone, signed in to the Google account of that calendar."
+        : "Usa Chrome en el Android, con la cuenta de Google de ese calendario.",
       outbound: en ? "Outgoing URL" : "URL de salida",
       outboundHelp: en
-        ? "Ready to copy. On iPhone: Settings, Calendar, Accounts, Add Account, Other, Add Subscribed Calendar."
-        : "Lista para copiar. En el iPhone: Ajustes, Calendario, Cuentas, Añadir cuenta, Otra, Añadir calendario suscrito.",
+        ? "Copy it. In Google Calendar, open Other calendars, tap +, choose From URL, and paste it. That creates a new calendar. On Android, if Chrome shows the small page, choose Desktop site. New bookings can take a few hours to appear."
+        : "Cópiala. En Google Calendar, abre Otros calendarios, pulsa +, elige Desde URL y pégala. Así se crea un calendario nuevo. En el Android, si Chrome muestra la página pequeña, elige Sitio de ordenador. Las citas nuevas pueden tardar unas horas.",
+      addOnAndroid: en ? "Add to Google Calendar" : "Añadir a Google Calendar",
       inbound: en ? "Incoming URL" : "URL de entrada",
       inboundHelp: en
-        ? "Paste the secret address from the phone calendar. Those events show up in the studio."
-        : "Pega la dirección secreta del calendario del celular. Esas citas aparecen en el estudio.",
+        ? "In Chrome, open calendar.google.com and choose Desktop site. Tap the gear, then your calendar, then Integrate calendar, then Secret address in iCal format. Copy it, come back, paste it here and save."
+        : "En Chrome, abre calendar.google.com y elige Sitio de ordenador. Pulsa el engranaje, tu calendario, Integrar el calendario y Dirección secreta en formato iCal. Cópiala, vuelve, pégala aquí y guarda.",
+      openSecret: en ? "Open the secret address" : "Abrir la dirección secreta",
       saveInbound: en ? "Save incoming URL" : "Guardar URL de entrada",
       inboundSaved: en ? "Incoming URL saved." : "URL de entrada guardada.",
       newLink: en ? "Create another outgoing link" : "Crear otro enlace de salida",

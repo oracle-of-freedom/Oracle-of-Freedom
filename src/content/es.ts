@@ -885,6 +885,7 @@ export const es: Copy = {
     budgets,
     media: "Foto, vídeo o ambos",
     mediaOptions: { photo: "Foto", film: "Vídeo", both: "Ambos" },
+    package: "Paquete",
     story: "Cuéntame sobre ti y tu visión",
     storyPlaceholder: "La vibra, el lugar, lo que más importa…",
     found: "¿Cómo me encontraste?",

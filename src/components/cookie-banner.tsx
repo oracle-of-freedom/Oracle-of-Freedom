@@ -18,12 +18,6 @@ export function readConsent(): Consent | null {
   }
 }
 
-export function allowEmbeds() {
-  if (typeof window === "undefined" || readConsent()?.embeds) return;
-  localStorage.setItem(KEY, JSON.stringify({ necessary: true, embeds: true }));
-  window.dispatchEvent(new Event("oof-consent"));
-}
-
 export function CookieBanner({
   text,
   accept,

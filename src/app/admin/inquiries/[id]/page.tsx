@@ -16,7 +16,9 @@ export default async function InquiryPage({ params }: { params: Promise<{ id: st
   if (!(await isAdmin())) redirect("/admin/login");
   const lang = await studioLang();
   const t = studioCopy(lang);
-  const services = (lang === "en" ? en : es).form.services;
+  const formCopy = (lang === "en" ? en : es).form;
+  const services = formCopy.services;
+  const mediaOptions = formCopy.mediaOptions;
   const { id } = await params;
   const inquiry = (await readInquiries()).find((item) => item.id === id);
   if (!inquiry) notFound();
@@ -60,6 +62,18 @@ export default async function InquiryPage({ params }: { params: Promise<{ id: st
             <dt className="text-ink/50">{t.inquiries.budget}</dt>
             <dd>{inquiry.budgetLabel}</dd>
           </div>
+          {inquiry.packageLabel ? (
+            <div>
+              <dt className="text-ink/50">{t.inquiries.package}</dt>
+              <dd>{inquiry.packageLabel}</dd>
+            </div>
+          ) : null}
+          {inquiry.media ? (
+            <div>
+              <dt className="text-ink/50">{t.inquiries.media}</dt>
+              <dd>{mediaOptions[inquiry.media] || inquiry.media}</dd>
+            </div>
+          ) : null}
         </dl>
       </article>
       <div className="studio-dock border-t border-ink/10 bg-sand/95 px-4 py-3 md:mt-6 md:border-0 md:bg-transparent md:px-0">

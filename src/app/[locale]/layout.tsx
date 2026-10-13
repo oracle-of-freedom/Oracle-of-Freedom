@@ -91,7 +91,7 @@ export default async function LocaleLayout({
             closeLabel={copy.a11y.closeMenu}
             homeLabel={copy.a11y.home}
           />
-          <div id="content">{children}</div>
+          <main id="content" className="min-w-0">{children}</main>
           <SiteFooter
             locale={locale}
             blurb={copy.footer.blurb}

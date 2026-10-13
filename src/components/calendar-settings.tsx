@@ -163,6 +163,15 @@ export function CalendarSettings({
               <CopyButton value={feedUrl} />
             </div>
             <p className="text-sm text-ink/60">{t.settings.outboundHelp}</p>
+            <Button asChild className="w-full sm:w-auto">
+              <a
+                href={`https://calendar.google.com/calendar/render?cid=${encodeURIComponent(feedUrl.replace(/^https:/, "webcal:"))}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t.settings.addOnAndroid}
+              </a>
+            </Button>
             <form action={regenerateIcalToken}>
               <Button type="submit" variant="outline" className="w-full sm:w-auto">
                 {t.settings.newLink}
@@ -188,6 +197,15 @@ export function CalendarSettings({
               <CopyButton value={inboundUrl} />
             </div>
             <p className="text-sm text-ink/60">{t.settings.inboundHelp}</p>
+            <Button asChild variant="outline" className="w-full sm:w-auto">
+              <a
+                href="https://calendar.google.com/calendar/u/0/r/settings"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t.settings.openSecret}
+              </a>
+            </Button>
             <Notice state={inboundState} saved={t.settings.inboundSaved} />
             <Button type="submit" disabled={inboundPending || mode === "readonly"} className="w-full sm:w-auto">
               {inboundPending ? t.settings.saving : t.settings.saveInbound}

@@ -10,6 +10,8 @@ import { settings } from "@/lib/content";
 import { languageLabel, type Inquiry } from "@/lib/inquiries";
 import { readInquiries, writeInquiries } from "@/lib/inquiry-store";
 import { notifyStudio } from "@/lib/push";
+import { packageById } from "@/lib/pricing";
+import { rateLimited } from "@/lib/rate-limit";
 import { BUDGET_UNSURE, budgetGroup, gradeInquiry, multiDayCoverage, peopleMode } from "@/lib/lead";
 
 const schema = z.object({
@@ -27,6 +29,7 @@ const schema = z.object({
   website: z.string().max(300).optional(),
   budget: z.string().min(1).max(40),
   media: z.string().max(40).optional(),
+  package: z.string().max(80).optional(),
   story: z.string().max(4000).optional(),
   found: z.string().min(1).max(40),
   language: z.enum(["en", "es", "lt"]),
@@ -37,16 +40,6 @@ const schema = z.object({
   locale: z.string().max(10).optional(),
 });
 
-const hits = new Map<string, number[]>();
-
-function limited(ip: string) {
-  const now = Date.now();
-  const recent = (hits.get(ip) || []).filter((time) => now - time < 10 * 60 * 1000);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > 5;
-}
-
 function label(map: Record<string, string>, key?: string) {
   if (!key) return "—";
   return map[key] || key;
@@ -54,7 +47,7 @@ function label(map: Record<string, string>, key?: string) {
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  if (limited(ip)) {
+  if (await rateLimited(ip, "inquiry")) {
     return NextResponse.json({ ok: false, error: "rate" }, { status: 429 });
   }
 
@@ -107,12 +100,16 @@ export async function POST(request: Request) {
     : multiDay && data.date && dateEnd
       ? `${data.date} – ${dateEnd}`
       : data.date || "—";
+  const chosen = packageById(data.package);
+  const packageId = chosen?.id || "";
+  const packageLabel = chosen?.label || "";
   const lines = [
     `Grade: ${grade}`,
     `Name: ${data.name}`,
     `Email: ${data.email}`,
     `Phone: ${data.phone || "—"}`,
     `Service: ${label(en.form.services, data.service)}`,
+    `Package: ${packageLabel || "—"}`,
     `Media: ${label(en.form.mediaOptions, data.media)}`,
     `Date: ${dateLine}`,
     `Place: ${data.place}`,
@@ -152,6 +149,8 @@ export async function POST(request: Request) {
     languageLabel: languageLabel(data.language),
     budgetLabel,
     grade,
+    ...(packageId ? { packageId, packageLabel } : {}),
+    ...(data.media ? { media: data.media } : {}),
   };
   let saved = false;
   try {
@@ -181,43 +180,51 @@ export async function POST(request: Request) {
   }
 
   const apiKey = process.env.RESEND_API_KEY;
+  let emailed = false;
+  let adminSent = false;
   if (!apiKey) {
     console.info(`[inquiry] email not configured · grade ${grade} · ${data.service}`);
-    return NextResponse.json({ ok: true, emailed: false, grade });
+  } else {
+    const from = process.env.RESEND_FROM_EMAIL || "Oracle of Freedom <onboarding@resend.dev>";
+    const to = process.env.INQUIRY_TO_EMAIL || settings.email;
+    const resend = new Resend(apiKey);
+    const reply = getCopy(data.language);
+    try {
+      const admin = await resend.emails.send({
+        from,
+        to,
+        replyTo: data.email,
+        subject: `[${grade}] ${label(en.form.services, data.service)} — ${data.name}`,
+        text: lines.join("\n"),
+      });
+      if (admin.error) {
+        console.error("[inquiry] admin send failed", admin.error.name, admin.error.statusCode);
+      } else {
+        adminSent = true;
+      }
+    } catch (error) {
+      console.error("[inquiry] admin send failed", error);
+    }
+    try {
+      const confirm = await resend.emails.send({
+        from,
+        to: data.email,
+        replyTo: to,
+        subject: reply.thankYou.title,
+        text: reply.inquire.confirm,
+      });
+      if (confirm.error) {
+        console.error("[inquiry] confirm send failed", confirm.error.name, confirm.error.statusCode);
+      } else {
+        emailed = true;
+      }
+    } catch (error) {
+      console.error("[inquiry] confirm send failed", error);
+    }
   }
 
-  const from = process.env.RESEND_FROM_EMAIL || "Oracle of Freedom <onboarding@resend.dev>";
-  const to = process.env.INQUIRY_TO_EMAIL || settings.email;
-  const resend = new Resend(apiKey);
-  const reply = getCopy(data.language);
-
-  try {
-    const admin = await resend.emails.send({
-      from,
-      to,
-      replyTo: data.email,
-      subject: `[${grade}] ${label(en.form.services, data.service)} — ${data.name}`,
-      text: lines.join("\n"),
-    });
-    if (admin.error) {
-      console.error("[inquiry] admin send failed", admin.error.name, admin.error.statusCode);
-      return NextResponse.json({ ok: false, emailed: false }, { status: 502 });
-    }
-    const confirm = await resend.emails.send({
-      from,
-      to: data.email,
-      replyTo: to,
-      subject: reply.thankYou.title,
-      text: reply.inquire.confirm,
-    });
-    if (confirm.error) {
-      console.error("[inquiry] confirm send failed", confirm.error.name, confirm.error.statusCode);
-      return NextResponse.json({ ok: false, emailed: false }, { status: 502 });
-    }
-  } catch (error) {
-    console.error("[inquiry] send failed", error);
-    return NextResponse.json({ ok: false, emailed: false }, { status: 502 });
+  if (saved || adminSent) {
+    return NextResponse.json({ ok: true, emailed, grade });
   }
-
-  return NextResponse.json({ ok: true, emailed: true, grade });
+  return NextResponse.json({ ok: false, emailed: false }, { status: 502 });
 }

@@ -24,6 +24,23 @@ function nextDate(value: string) {
   return date.toISOString().slice(0, 10);
 }
 
+function fold(line: string) {
+  const bytes = Buffer.from(line, "utf8");
+  if (bytes.length <= 75) return line;
+  const parts: string[] = [];
+  let start = 0;
+  let width = 75;
+  while (start < bytes.length) {
+    let end = Math.min(bytes.length, start + width);
+    while (end > start && (bytes[end] & 0xc0) === 0x80) end -= 1;
+    if (end === start) end = Math.min(bytes.length, start + width);
+    parts.push(bytes.subarray(start, end).toString("utf8"));
+    start = end;
+    width = 74;
+  }
+  return parts.map((part, index) => (index === 0 ? part : ` ${part}`)).join("\r\n");
+}
+
 function event(booking: Booking) {
   const description = [
     booking.client ? `With: ${booking.client}` : "",
@@ -54,23 +71,24 @@ function event(booking: Booking) {
     "END:VEVENT",
   ]
     .filter(Boolean)
+    .map(fold)
     .join("\r\n");
 }
 
 export function bookingsIcal(bookings: Booking[], name = "Oracle of Freedom") {
   const events = bookings
-    .filter((booking) => booking.status !== "cancelled")
-    .map(event)
-    .join("\r\n");
+    .filter((booking) => booking.status !== "cancelled" && booking.origin !== "ical" && booking.origin !== "google")
+    .map(event);
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
     "PRODID:-//Oracle of Freedom//Calendar//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
-    `X-WR-CALNAME:${escape(name)}`,
+    fold(`X-WR-CALNAME:${escape(name)}`),
     "X-WR-TIMEZONE:Europe/Lisbon",
-    events,
+    "X-PUBLISHED-TTL:PT1H",
+    ...events,
     "END:VCALENDAR",
     "",
   ].join("\r\n");

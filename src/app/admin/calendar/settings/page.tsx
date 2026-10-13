@@ -71,7 +71,7 @@ export default async function CalendarSettingsPage({
           defaultLocation: config.defaultLocation,
         }}
         mode={storageMode()}
-        feedUrl={`${siteUrl()}/api/calendar/feed?token=${config.icalToken}`}
+        feedUrl={`${siteUrl()}/api/calendar/${config.icalToken}.ics`}
         inboundIcalUrl={config.inboundIcalUrl || ""}
         redirectUri={oauthRedirectUri(config.googleApp?.redirectUri, origin)}
         savedClientId={config.googleApp?.clientId || ""}

@@ -31,6 +31,12 @@ function withLocaleCookie(response: NextResponse, locale: string) {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    const url = request.nextUrl.clone();
+    const stripped = pathname.slice(3);
+    url.pathname = stripped.startsWith("/") ? stripped || "/" : `/${stripped}`;
+    return NextResponse.redirect(url, 308);
+  }
   const isBot = BOT.test(request.headers.get("user-agent") || "");
   const cookie = request.cookies.get("NEXT_LOCALE")?.value;
 

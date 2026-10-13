@@ -8,10 +8,27 @@ import { getPathname } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { settings } from "@/lib/content";
 import { getSettings } from "@/lib/offers";
-import { hasPromoCode } from "@/lib/pricing";
+import { hasPromoCode, mediaForPackage, packageById } from "@/lib/pricing";
 import { applyTokens } from "@/lib/delivery";
 import { liveTokenMap } from "@/components/token-text";
 import { pageMetadata } from "@/lib/seo";
+
+const DAY = /^\d{4}-\d{2}-\d{2}$/;
+
+function one(value: string | string[] | undefined) {
+  return (Array.isArray(value) ? value[0] : value)?.trim() || "";
+}
+
+function packageTitle(locale: string, id: string) {
+  const copy = getCopy(locale);
+  for (const section of Object.values(copy)) {
+    if (!section || typeof section !== "object" || !("packages" in section)) continue;
+    const packages = (section as { packages?: Record<string, { name?: string }> }).packages;
+    const name = packages?.[id]?.name;
+    if (name) return name;
+  }
+  return packageById(id)?.label || id;
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -30,10 +47,21 @@ export default async function InquirePage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ service?: string }>;
+  searchParams: Promise<{
+    service?: string | string[];
+    package?: string | string[];
+    place?: string | string[];
+    from?: string | string[];
+    to?: string | string[];
+  }>;
 }) {
   const { locale } = await params;
-  const { service } = await searchParams;
+  const query = await searchParams;
+  const service = one(query.service);
+  const chosen = packageById(one(query.package));
+  const place = one(query.place).slice(0, 300);
+  const from = DAY.test(one(query.from)) ? one(query.from) : "";
+  const to = DAY.test(one(query.to)) ? one(query.to) : "";
   setRequestLocale(locale);
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
@@ -49,9 +77,17 @@ export default async function InquirePage({
         <StayBanners locale={loc} tone="page" />
         <div className="mt-8">
           <InquiryForm
+            key={[service, chosen?.id, place, from, to].join("|")}
             copy={{ ...copy.form, place: applyTokens(copy.form.place, tokens) }}
             locale={loc}
-            initialService={service}
+            initialService={service || chosen?.inquiry}
+            initialPackage={chosen?.id}
+            initialPackageLabel={chosen ? packageTitle(loc, chosen.id) : undefined}
+            packageService={chosen?.inquiry}
+            initialMedia={mediaForPackage(chosen?.id) || undefined}
+            initialPlace={place || undefined}
+            initialDate={from || undefined}
+            initialDateEnd={to && (!from || to >= from) ? to : undefined}
             thankYouPath={thankYouPath}
             showPromoCode={showPromoCode}
           />

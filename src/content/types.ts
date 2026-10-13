@@ -221,6 +221,7 @@ export type Copy = {
     budgets: Record<string, BudgetOption[]>;
     media: string;
     mediaOptions: Record<string, string>;
+    package: string;
     story: string;
     storyPlaceholder: string;
     found: string;

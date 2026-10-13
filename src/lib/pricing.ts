@@ -145,3 +145,17 @@ export function hasPromoCode(settings: LiveSettings, today = lisbonToday()) {
 export function liveBanners(settings: LiveSettings, today = lisbonToday()) {
   return settings.promos.filter((promo) => isLive(promo, today) && (promo.banner.en || promo.banner.es || promo.banner.pt));
 }
+
+export function packageById(id: string | undefined) {
+  if (!id) return undefined;
+  return catalog.find((item) => item.id === id);
+}
+
+export function mediaForPackage(id: string | undefined): "" | "photo" | "film" | "both" {
+  const item = packageById(id);
+  if (!item) return "";
+  if (item.kind === "combo" || item.id.includes("combo")) return "both";
+  if (item.kind === "video" || item.id.includes("film")) return "film";
+  if (item.kind === "photo") return "photo";
+  return "";
+}

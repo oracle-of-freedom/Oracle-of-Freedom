@@ -932,6 +932,7 @@ export const en: Copy = {
     budgets,
     media: "Photo, film or both",
     mediaOptions: { photo: "Photo", film: "Film", both: "Both" },
+    package: "Package",
     story: "Tell me about you and your vision",
     storyPlaceholder: "The vibe, the place, what matters most…",
     found: "How did you find me?",

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { allowEmbeds, readConsent } from "@/components/cookie-banner";
+import { readConsent } from "@/components/cookie-banner";
 import { MobileMore } from "@/components/mobile-more";
 import { imageById, videos, type VideoItem } from "@/lib/content";
 import type { Locale } from "@/i18n/routing";
@@ -63,16 +63,13 @@ export function VideoGrid({
 }) {
   const [consent, setConsent] = useState(false);
   const [active, setActive] = useState<string | null>(null);
+  const [opened, setOpened] = useState<string[]>([]);
   const words = chrome[locale];
   const captionClass = tone === "night" ? "mt-3 text-sm text-sand/60" : "mt-3 text-sm text-ink/60";
   const fold = (foldMobile ?? variant === "section") && videos.items.length > 1;
 
   useEffect(() => {
-    const sync = () => {
-      const allowed = Boolean(readConsent()?.embeds);
-      setConsent(allowed);
-      if (!allowed) setActive(null);
-    };
+    const sync = () => setConsent(Boolean(readConsent()?.embeds));
     sync();
     window.addEventListener("oof-consent", sync);
     return () => window.removeEventListener("oof-consent", sync);
@@ -99,10 +96,9 @@ export function VideoGrid({
             : ""
           : video.embedUrl;
         const canEmbed = Boolean(embedSrc);
-        const playing = canEmbed && active === video.id && consent;
+        const playing = canEmbed && active === video.id && (consent || opened.includes(video.id));
         const play = () => {
-          allowEmbeds();
-          setConsent(true);
+          setOpened((current) => (current.includes(video.id) ? current : [...current, video.id]));
           setActive(video.id);
         };
 

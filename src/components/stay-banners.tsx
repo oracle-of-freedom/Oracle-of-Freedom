@@ -62,7 +62,14 @@ export async function StayBanners({
               <p className="text-sm text-ink/70">{placeDetail(locale, featured, code)}</p>
             ) : null}
             <p className={whenClass}>{shortWhen(locale, featured.starts, featured.ends)}</p>
-            <Link href="/inquire" className={buttonClass}>
+            <Link
+              href={{
+                pathname: "/inquire",
+                query: { place: placeTitle(locale, featured, code), from: featured.starts, to: featured.ends },
+                hash: "form",
+              }}
+              className={buttonClass}
+            >
               {copy.bookDates}
             </Link>
           </div>
@@ -72,7 +79,15 @@ export async function StayBanners({
         <div className="flex flex-wrap gap-2">
           {later.flatMap((stay) =>
             stay.countries.map((code) => (
-              <Link key={`${stay.id}-${code}`} href="/inquire" className={chipClass}>
+              <Link
+                key={`${stay.id}-${code}`}
+                href={{
+                  pathname: "/inquire",
+                  query: { place: placeTitle(locale, stay, code), from: stay.starts, to: stay.ends },
+                  hash: "form",
+                }}
+                className={chipClass}
+              >
                 {copy.also}: {chipLabel(locale, stay, code)}
               </Link>
             )),
@@ -80,7 +95,7 @@ export async function StayBanners({
         </div>
       ) : null}
       {showElsewhere ? (
-        <Link href="/inquire" className={elsewhereClass}>
+        <Link href={{ pathname: "/inquire", hash: "form" }} className={elsewhereClass}>
           {copy.elsewhere}
         </Link>
       ) : null}

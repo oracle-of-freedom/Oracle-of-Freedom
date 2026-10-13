@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 type Result = {
   ok: boolean;
+  emailed?: boolean;
   calendarUrl?: string;
   error?: string;
 };
@@ -123,7 +124,9 @@ export function BookingWidget({
       <section className="rounded-3xl bg-white/75 p-6 md:p-10" aria-live="polite">
         <p className="text-xs tracking-[0.2em] text-ember uppercase">{copy.eyebrow}</p>
         <h2 className="mt-2 font-serif text-4xl">{copy.successTitle}</h2>
-        <p className="mt-3 max-w-xl text-ink/70">{copy.successBody}</p>
+        <p className="mt-3 max-w-xl text-ink/70">
+          {result.emailed === false ? copy.successBodySaved : copy.successBody}
+        </p>
         <div className="mt-6 flex flex-wrap gap-3">
           {result.calendarUrl ? (
             <Button asChild>
@@ -146,8 +149,8 @@ export function BookingWidget({
   }
 
   return (
-    <div className="grid gap-8">
-      <section>
+    <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8">
+      <section className="min-w-0">
         <h2 className="font-serif text-3xl">{copy.chooseType}</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {types.map((item) => {
@@ -183,7 +186,7 @@ export function BookingWidget({
         </div>
       </section>
 
-      <section>
+      <section className="min-w-0">
         <h2 className="font-serif text-3xl">{copy.chooseTime}</h2>
         {loading ? <p className="mt-4 text-ink/60">{copy.loading}</p> : null}
         {!loading && dates.length === 0 ? (
@@ -196,7 +199,7 @@ export function BookingWidget({
         ) : null}
         {dates.length > 0 ? (
           <>
-            <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
+            <div className="mt-4 flex min-w-0 gap-2 overflow-x-auto pb-2">
               {dates.map((date) => (
                 <button
                   key={date}
@@ -240,7 +243,7 @@ export function BookingWidget({
       </section>
 
       {selected ? (
-        <section className="rounded-3xl bg-white/75 p-5 md:p-8">
+        <section className="min-w-0 rounded-3xl bg-white/75 p-5 md:p-8">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h2 className="font-serif text-3xl">{copy.yourDetails}</h2>

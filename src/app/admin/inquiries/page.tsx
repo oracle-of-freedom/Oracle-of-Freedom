@@ -60,7 +60,13 @@ export default async function InquiriesPage({
               </span>
               <span className="mt-1 block font-medium">{item.name}</span>
               <span className="mt-1 block text-sm text-ink/65">
-                {(item.service in services ? services[item.service as keyof typeof services] : item.serviceLabel)} · {inquiryWhen(item.when, t)}
+                {[
+                  item.service in services ? services[item.service as keyof typeof services] : item.serviceLabel,
+                  item.packageLabel,
+                  inquiryWhen(item.when, t),
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
               </span>
             </Link>
           </li>

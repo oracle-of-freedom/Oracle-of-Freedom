@@ -13,6 +13,7 @@ import { bookingsIcal } from "@/lib/ical";
 import { upsertGoogleEvent } from "@/lib/google-calendar";
 import { notifyStudio } from "@/lib/push";
 import { settings, siteUrl } from "@/lib/content";
+import { rateLimited } from "@/lib/rate-limit";
 
 const schema = z.object({
   typeId: z.string().regex(/^[a-z0-9-]{1,60}$/),
@@ -26,16 +27,6 @@ const schema = z.object({
   consent: z.literal(true),
   company: z.string().max(200).optional(),
 });
-
-const hits = new Map<string, number[]>();
-
-function limited(ip: string) {
-  const now = Date.now();
-  const recent = (hits.get(ip) || []).filter((time) => now - time < 10 * 60 * 1000);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > 5;
-}
 
 async function sendConfirmation(booking: Booking, typeLabel: string, locale: Locale) {
   const apiKey = process.env.RESEND_API_KEY;
@@ -94,7 +85,7 @@ async function sendConfirmation(booking: Booking, typeLabel: string, locale: Loc
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  if (limited(ip)) {
+  if (await rateLimited(ip, "booking")) {
     return NextResponse.json({ ok: false, error: "rate" }, { status: 429 });
   }
   let json: unknown;

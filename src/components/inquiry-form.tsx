@@ -31,6 +31,7 @@ function schemaFor(copy: FormCopy) {
       website: z.string().optional(),
       budget: z.string().min(1, copy.errors.required),
       media: z.string().optional(),
+      package: z.string().max(80).optional(),
       story: z.string().optional(),
       found: z.string().min(1, copy.errors.required),
       language: z.string().min(1, copy.errors.required),
@@ -65,12 +66,26 @@ export function InquiryForm({
   copy,
   locale,
   initialService,
+  initialPackage,
+  initialPackageLabel,
+  packageService,
+  initialMedia,
+  initialPlace,
+  initialDate,
+  initialDateEnd,
   thankYouPath,
   showPromoCode = false,
 }: {
   copy: FormCopy;
   locale: string;
   initialService?: string;
+  initialPackage?: string;
+  initialPackageLabel?: string;
+  packageService?: string;
+  initialMedia?: string;
+  initialPlace?: string;
+  initialDate?: string;
+  initialDateEnd?: string;
   thankYouPath: string;
   showPromoCode?: boolean;
 }) {
@@ -85,16 +100,17 @@ export function InquiryForm({
       email: "",
       phone: "",
       service: presetService(initialService, copy.services),
-      date: "",
-      dateEnd: "",
+      date: initialDate || "",
+      dateEnd: initialDateEnd || "",
       flexible: false,
-      place: "",
+      place: initialPlace || "",
       people: "",
       days: "",
       placeType: "",
       website: "",
       budget: "",
-      media: "",
+      media: initialMedia && copy.mediaOptions[initialMedia] ? initialMedia : "",
+      package: initialPackage || "",
       story: "",
       found: "",
       language: locale === "es" ? "es" : "en",
@@ -109,10 +125,25 @@ export function InquiryForm({
     if (!showPromoCode) rememberPromoCode("");
   }, [showPromoCode]);
 
+  useEffect(() => {
+    if (!initialPlace && !initialDate) return;
+    document.getElementById("form")?.scrollIntoView({ block: "start" });
+  }, [initialPlace, initialDate]);
+
   const service = form.watch("service");
+  const selectedPackage = form.watch("package");
   const days = form.watch("days");
   const startDate = form.watch("date");
   const multiDay = multiDayCoverage(service, days);
+
+  useEffect(() => {
+    if (!initialPackage || !packageService || !service) return;
+    if (service === packageService) {
+      if (form.getValues("package") !== initialPackage) form.setValue("package", initialPackage);
+      return;
+    }
+    if (form.getValues("package")) form.setValue("package", "");
+  }, [service, initialPackage, packageService, form]);
 
   useEffect(() => {
     if (service !== "portraits") rememberWish("");
@@ -125,10 +156,10 @@ export function InquiryForm({
   }, [service, form]);
 
   useEffect(() => {
-    if (!multiDay && form.getValues("dateEnd")) {
-      form.setValue("dateEnd", "");
-    }
-  }, [multiDay, form]);
+    if (!service || multiDay || !form.getValues("dateEnd")) return;
+    if (asksCoverageDays(service) && !days) return;
+    form.setValue("dateEnd", "");
+  }, [service, days, multiDay, form]);
 
   const people = form.watch("people");
   const group = budgetGroup(service || "other");
@@ -169,7 +200,7 @@ export function InquiryForm({
   const error = (name: keyof Values) => form.formState.errors[name]?.message as string | undefined;
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="rounded-3xl bg-white/60 p-5 md:p-8" noValidate>
+    <form id="form" onSubmit={form.handleSubmit(onSubmit)} className="scroll-mt-28 rounded-3xl bg-white/60 p-5 md:p-8" noValidate>
       <ol className="mb-8 flex gap-3 text-xs tracking-[0.14em] uppercase" aria-label="Progress">
         {copy.steps.map((label, index) => (
           <li key={label} className={cn(index === step ? "text-terracotta-ink" : "text-ink/40")} aria-current={index === step ? "step" : undefined}>
@@ -190,6 +221,11 @@ export function InquiryForm({
             ))}
           </div>
           <FieldError>{error("service")}</FieldError>
+          {selectedPackage && selectedPackage === initialPackage && initialPackageLabel ? (
+            <p className="mt-4 rounded-2xl bg-clay/60 px-4 py-3 text-sm">
+              {copy.package}: {initialPackageLabel}
+            </p>
+          ) : null}
           {service === "portraits" ? (
             <div className="mt-6">
               <Label htmlFor="wish">{copy.wish}</Label>
@@ -361,7 +397,15 @@ export function InquiryForm({
             </div>
           ) : null}
           <label className="flex items-start gap-3 text-sm">
-            <input type="checkbox" className="mt-1" {...form.register("consent")} />
+            <input
+              type="checkbox"
+              className="mt-1"
+              {...form.register("consent", {
+                onChange: (event) => {
+                  if (event.target.checked) void form.trigger("consent");
+                },
+              })}
+            />
             <span>{copy.consent} *</span>
           </label>
           <FieldError>{error("consent")}</FieldError>

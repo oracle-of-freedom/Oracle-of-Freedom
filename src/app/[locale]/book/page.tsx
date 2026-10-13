@@ -36,13 +36,13 @@ export default async function BookPage({
   const config = await readCalendarConfig();
   const types = config.bookingTypes.filter((item) => item.active);
   return (
-    <main className="mx-auto max-w-5xl px-4 py-12 md:px-6 md:py-20">
+    <div className="mx-auto min-w-0 max-w-5xl px-4 py-12 md:px-6 md:py-20">
       <header className="max-w-3xl">
         <p className="text-xs tracking-[0.22em] text-ember uppercase">{copy.eyebrow}</p>
         <h1 className="mt-3 font-serif text-5xl leading-tight md:text-7xl">{copy.title}</h1>
         <p className="mt-5 text-lg text-ink/70">{copy.dek}</p>
       </header>
-      <div className="mt-10">
+      <div className="mt-10 min-w-0">
         <BookingWidget
           types={types}
           locale={locale}
@@ -50,6 +50,6 @@ export default async function BookPage({
           canSave={storageMode() !== "readonly"}
         />
       </div>
-    </main>
+    </div>
   );
 }

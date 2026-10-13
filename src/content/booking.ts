@@ -22,6 +22,7 @@ export type BookingCopy = {
   back: string;
   successTitle: string;
   successBody: string;
+  successBodySaved: string;
   download: string;
   again: string;
   error: string;
@@ -51,6 +52,7 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     back: "Choose another time",
     successTitle: "You’re booked",
     successBody: "Your time is saved. Keep the calendar file below and check your email for the details.",
+    successBodySaved: "Your time is saved. Keep the calendar file below. We’ll write to you soon — the confirmation email did not go out.",
     download: "Add to my calendar",
     again: "Book another time",
     error: "That time could not be booked. Please choose another one.",
@@ -78,6 +80,7 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     back: "Elegir otra hora",
     successTitle: "Tu cita está reservada",
     successBody: "La hora está guardada. Descarga el archivo de calendario y revisa tu email.",
+    successBodySaved: "La hora está guardada. Conserva el archivo de calendario. Te escribiremos pronto: el correo de confirmación no salió.",
     download: "Añadir a mi calendario",
     again: "Reservar otra hora",
     error: "No se pudo reservar esa hora. Elige otra.",
@@ -105,6 +108,7 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     back: "Escolher outra hora",
     successTitle: "A tua marcação está feita",
     successBody: "A hora está guardada. Descarrega o ficheiro de calendário e verifica o teu email.",
+    successBodySaved: "A hora está guardada. Guarda o ficheiro de calendário. Escrevemos-te em breve: o email de confirmação não saiu.",
     download: "Adicionar ao meu calendário",
     again: "Marcar outra hora",
     error: "Não foi possível marcar essa hora. Escolhe outra.",
