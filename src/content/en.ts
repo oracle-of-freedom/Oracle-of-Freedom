@@ -838,12 +838,17 @@ export const en: Copy = {
       "We have a short call (video or WhatsApp) to feel if we're a fit.",
       "You receive a tailored proposal. A {deposit} deposit secures your date. Express delivery is a paid add-on if you need the gallery sooner.",
     ],
-    confirm:
-      "Thank you, beautiful soul — your message has arrived. I'll be in touch within 48 hours. In the meantime, come say hi on Instagram @oracle.of.freedom.",
+    confirmEmail: {
+      subject: "Got your message, {firstName}",
+      subjectPlain: "Got your message",
+      greeting: "Hi {firstName},",
+      greetingPlain: "Hi there,",
+      body: "Thanks for getting in touch. Your message came through, and I'll read it properly and get back to you in the next hours.\n\nWhat happens next:\n- I'll reply with my availability and a few questions about what you have in mind.\n- If it feels like a good fit, we can have a quick call to talk through your ideas and the place.\n- After that, I'll send you a clear quote.\n\nLooking forward to hearing about your vision.\n\nWith love,\nAgota",
+    },
   },
   thankYou: {
     title: "Message received",
-    body: "Thank you, beautiful soul — your message has arrived. I'll be in touch within 48 hours. In the meantime, come say hi on Instagram @oracle.of.freedom.",
+    body: "Thanks for getting in touch. Your message came through and I'll get back to you in the next hours. Looking forward to hearing about your vision.",
     preview:
       "Preview: this inquiry was checked and saved in the response, but email is not configured yet. Add RESEND_API_KEY before launch.",
     again: "Back home",

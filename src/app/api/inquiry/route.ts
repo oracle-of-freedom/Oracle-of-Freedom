@@ -188,7 +188,14 @@ export async function POST(request: Request) {
     const from = process.env.RESEND_FROM_EMAIL || "Oracle of Freedom <onboarding@resend.dev>";
     const to = process.env.INQUIRY_TO_EMAIL || settings.email;
     const resend = new Resend(apiKey);
-    const reply = getCopy(data.language);
+    // Preferred language wins when it maps to a site locale; the form has no PT option, so PT-site visitors get PT.
+    const replyLocale =
+      data.language === "es" ? "es" : data.locale === "pt" ? "pt" : data.language === "en" ? "en" : data.locale === "es" ? "es" : "en";
+    const reply = getCopy(replyLocale);
+    const firstName = data.name.trim().split(/\s+/)[0] || "";
+    const mail = reply.inquire.confirmEmail;
+    const confirmSubject = firstName ? mail.subject.replace("{firstName}", firstName) : mail.subjectPlain;
+    const confirmText = `${firstName ? mail.greeting.replace("{firstName}", firstName) : mail.greetingPlain}\n\n${mail.body}`;
     try {
       const admin = await resend.emails.send({
         from,
@@ -210,8 +217,8 @@ export async function POST(request: Request) {
         from,
         to: data.email,
         replyTo: to,
-        subject: reply.thankYou.title,
-        text: reply.inquire.confirm,
+        subject: confirmSubject,
+        text: confirmText,
       });
       if (confirm.error) {
         console.error("[inquiry] confirm send failed", confirm.error.name, confirm.error.statusCode);
