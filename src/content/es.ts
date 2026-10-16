@@ -797,12 +797,17 @@ export const es: Copy = {
       "Hacemos una llamada corta (vídeo o WhatsApp) para sentir si encajamos.",
       "Recibes una propuesta a medida. Una señal del {deposit} asegura tu fecha. La entrega exprés es un extra de pago si necesitas la galería antes.",
     ],
-    confirm:
-      "Gracias, alma bonita: tu mensaje ha llegado. Te escribo en 48 horas. Mientras tanto, pásate a saludar en Instagram @oracle.of.freedom.",
+    confirmEmail: {
+      subject: "He recibido tu mensaje, {firstName}",
+      subjectPlain: "He recibido tu mensaje",
+      greeting: "Hola, {firstName}:",
+      greetingPlain: "¡Hola!",
+      body: "Gracias por escribirme. Tu mensaje me ha llegado bien; lo leeré con calma y te responderé en las próximas horas.\n\nLo que viene ahora:\n- Te responderé con mi disponibilidad y algunas preguntas sobre lo que tienes en mente.\n- Si encaja bien, podemos hacer una llamada corta para hablar de tus ideas y del lugar.\n- Después te enviaré un presupuesto claro.\n\nTengo muchas ganas de conocer tu visión.\n\nCon amor,\nAgota",
+    },
   },
   thankYou: {
     title: "Mensaje recibido",
-    body: "Gracias, alma bonita: tu mensaje ha llegado. Te escribo en 48 horas. Mientras tanto, pásate a saludar en Instagram @oracle.of.freedom.",
+    body: "Gracias por escribirme. Tu mensaje me ha llegado bien y te responderé en las próximas horas. Tengo muchas ganas de conocer tu visión.",
     preview: "Vista previa: la consulta se ha validado, pero el email aún no está configurado. Añade RESEND_API_KEY antes de publicar.",
     again: "Volver al inicio",
   },

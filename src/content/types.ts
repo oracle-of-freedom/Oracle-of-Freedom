@@ -188,7 +188,7 @@ export type Copy = {
     email: string;
     nextTitle: string;
     next: string[];
-    confirm: string;
+    confirmEmail: { subject: string; subjectPlain: string; greeting: string; greetingPlain: string; body: string };
   };
   thankYou: { title: string; body: string; preview: string; again: string };
   privacy: { title: string; updated: string; sections: { title: string; body: string[] }[] };

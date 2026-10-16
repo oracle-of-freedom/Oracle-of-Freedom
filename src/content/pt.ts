@@ -798,12 +798,17 @@ export const pt: Copy = {
       "Fazemos uma chamada curta (vídeo ou WhatsApp) para sentir se há sintonia.",
       "Recebes uma proposta à medida. Um sinal de {deposit} garante a tua data. A entrega expressa é um extra pago se precisares da galeria mais cedo.",
     ],
-    confirm:
-      "Obrigada, alma bonita: a tua mensagem chegou. Respondo-te em 48 horas. Entretanto, passa pelo Instagram @oracle.of.freedom para dizer olá.",
+    confirmEmail: {
+      subject: "Recebi a tua mensagem, {firstName}",
+      subjectPlain: "Recebi a tua mensagem",
+      greeting: "Olá, {firstName},",
+      greetingPlain: "Olá,",
+      body: "Obrigada por me escreveres. A tua mensagem chegou bem; vou lê-la com calma e respondo-te nas próximas horas.\n\nO que acontece a seguir:\n- Respondo-te com a minha disponibilidade e algumas perguntas sobre o que tens em mente.\n- Se fizer sentido, podemos fazer uma chamada rápida para falar das tuas ideias e do local.\n- Depois envio-te um orçamento claro.\n\nEstou ansiosa por conhecer a tua visão.\n\nCom amor,\nAgota",
+    },
   },
   thankYou: {
     title: "Mensagem recebida",
-    body: "Obrigada, alma bonita: a tua mensagem chegou. Respondo-te em 48 horas. Entretanto, passa pelo Instagram @oracle.of.freedom para dizer olá.",
+    body: "Obrigada por me escreveres. A tua mensagem chegou bem e respondo-te nas próximas horas. Estou ansiosa por conhecer a tua visão.",
     preview: "Pré-visualização: o pedido foi validado, mas o email ainda não está configurado. Adiciona RESEND_API_KEY antes de publicar.",
     again: "Voltar ao início",
   },
