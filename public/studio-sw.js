@@ -37,9 +37,10 @@ self.addEventListener("push", (event) => {
     self.registration.showNotification(title, {
       body,
       icon: "/studio/icon-192.png",
-      badge: "/studio/icon-192.png",
       lang: "es",
       tag,
+      renotify: true,
+      vibrate: [200, 100, 200],
       data: { url: studioPath(payload.url) },
     }),
   );

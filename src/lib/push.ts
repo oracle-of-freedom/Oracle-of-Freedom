@@ -2,7 +2,7 @@ import { sendNotification, setVapidDetails, WebPushError } from "web-push";
 import { readSubscriptions, writeSubscriptions, type StoredPushSubscription } from "@/lib/push-store";
 import type { StudioLang } from "@/lib/studio-locale";
 
-export type StudioNoticeKind = "inquiry" | "consultation" | "appointment";
+export type StudioNoticeKind = "inquiry" | "consultation" | "appointment" | "test";
 
 export type StudioNotice = {
   kind: StudioNoticeKind;
@@ -16,6 +16,7 @@ const titles: Record<StudioNoticeKind, Record<StudioLang, string>> = {
   inquiry: { en: "New request", es: "Solicitud nueva" },
   consultation: { en: "New consultation", es: "Consulta nueva" },
   appointment: { en: "New appointment", es: "Cita nueva" },
+  test: { en: "Test", es: "Prueba" },
 };
 
 function vapid() {
@@ -66,7 +67,10 @@ export async function notifyStudio(notice: StudioNotice) {
         tag: notice.tag,
       });
       try {
-        await sendNotification({ endpoint: subscription.endpoint, keys: subscription.keys }, payload);
+        await sendNotification({ endpoint: subscription.endpoint, keys: subscription.keys }, payload, {
+          urgency: "high",
+          TTL: 60 * 60 * 12,
+        });
       } catch (error) {
         const code = statusCode(error);
         if (code === 404 || code === 410) gone.add(subscription.endpoint);

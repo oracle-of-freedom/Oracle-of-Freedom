@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { logout } from "@/app/admin/actions";
+import { NotificationBell } from "@/components/notification-bell";
 import { NotificationPrompt } from "@/components/notification-prompt";
 import { OfflineBanner } from "@/components/offline-banner";
 import { LanguageToggle } from "@/components/studio-lang";
@@ -70,6 +71,7 @@ export async function AdminHeader({ current, title }: { current: StudioSection; 
         <div className="flex items-center justify-between gap-3 md:hidden">
           <h1 className="min-w-0 truncate font-serif text-2xl leading-none">{title}</h1>
           <div className="flex shrink-0 items-center gap-2">
+            <NotificationBell />
             <LanguageToggle />
             <form action={logout}>
               <button type="submit" className="min-h-11 px-1 text-sm underline underline-offset-4">
@@ -103,7 +105,10 @@ export async function AdminHeader({ current, title }: { current: StudioSection; 
             </nav>
           </div>
           <div className="flex shrink-0 flex-col items-end gap-2">
-            <LanguageToggle />
+            <div className="flex items-center gap-2">
+              <NotificationBell />
+              <LanguageToggle />
+            </div>
             <form action={logout}>
               <button type="submit" className="text-sm underline underline-offset-4">
                 {t.nav.logout}

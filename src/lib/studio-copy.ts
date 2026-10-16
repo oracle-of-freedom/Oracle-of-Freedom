@@ -50,6 +50,16 @@ export function studioCopy(lang: StudioLang) {
         ? "This device allowed notifications, but the studio cannot send them until the server keys are set."
         : "Este dispositivo ya permitió las notificaciones, pero el estudio aún no puede enviarlas hasta configurar las claves del servidor.",
     },
+    bell: {
+      label: en ? "Notifications" : "Notificaciones",
+      empty: en ? "Nothing new." : "Nada nuevo.",
+      inquiry: en ? "New request" : "Solicitud nueva",
+      consultation: en ? "New consultation" : "Consulta nueva",
+      appointment: en ? "New appointment" : "Cita nueva",
+      test: en ? "Send a test to this phone" : "Enviar una prueba a este teléfono",
+      testing: en ? "Sending…" : "Enviando…",
+      testSent: en ? "Sent. Check the top of the phone." : "Enviada. Mira arriba en el teléfono.",
+    },
     offline: en
       ? "Offline. The studio cannot refresh."
       : "Sin conexión. No se puede actualizar el estudio.",
