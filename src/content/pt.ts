@@ -184,7 +184,8 @@ export const pt: Copy = {
     dek: "Fotografia e vídeo para espíritos livres: casais apaixonados, encontros sagrados, almas de festival e os lugares que os acolhem. Sessões na Europa e na América Latina. O lugar muda com a viagem.",
     stayNear: "Reserva enquanto está perto.",
     bookDates: "Reservar estas datas",
-    also: "Também",
+    next: "Seguinte",
+    after: "Depois",
     elsewhere:
       "Tens um evento noutro lugar, fora das locações acima? Contacta-nos o mais cedo possível para verificar a disponibilidade e agendar o teu evento.",
     manifesto:

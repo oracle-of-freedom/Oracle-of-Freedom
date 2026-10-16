@@ -192,7 +192,8 @@ export const en: Copy = {
     dek: "Photo and film for free spirits: couples in love, sacred gatherings, festival souls and the places that hold them. Sessions across Europe and Latin America. The place changes with the journey.",
     stayNear: "Book while she is nearby.",
     bookDates: "Book these dates",
-    also: "Also",
+    next: "Next",
+    after: "After",
     elsewhere:
       "Have an event somewhere else, outside the locations above? Contact us as soon as possible to check availability and schedule your event.",
     manifesto:
