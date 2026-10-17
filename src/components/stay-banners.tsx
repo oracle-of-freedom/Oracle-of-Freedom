@@ -8,7 +8,6 @@ import { getPathname } from "@/i18n/navigation";
 import { settings } from "@/lib/content";
 import { lisbonToday } from "@/lib/pricing";
 import {
-  chipLabel,
   placeDetail,
   placeTitle,
   shortWhen,
@@ -92,7 +91,8 @@ export async function StayBanners({
               place: placeTitle(locale, stay, code),
               from: stay.starts,
               to: stay.ends,
-              label: `${index === 0 ? copy.next : copy.after}: ${chipLabel(locale, stay, code)}`,
+              when: shortWhen(locale, stay.starts, stay.ends),
+              prefix: index === 0 ? copy.next : copy.after,
             }))}
           chipClass={chipClass}
           moreClass={moreClass}

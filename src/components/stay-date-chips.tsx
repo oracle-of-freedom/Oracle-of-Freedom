@@ -5,6 +5,30 @@ import { Link } from "@/i18n/navigation";
 
 const VISIBLE = 3;
 
+type Chip = {
+  key: string;
+  place: string;
+  from: string;
+  to: string;
+  when: string;
+  prefix: string;
+};
+
+function groupsOf(chips: Chip[]) {
+  const groups: Chip[][] = [];
+  for (const chip of chips) {
+    const last = groups[groups.length - 1];
+    if (last && last[0].when === chip.when) last.push(chip);
+    else groups.push([chip]);
+  }
+  return groups;
+}
+
+function labelFor(group: Chip[]) {
+  const places = group.map((chip) => chip.place).join(", ");
+  return `${group[0].prefix}: ${places}, ${group[0].when}`;
+}
+
 export function StayDateChips({
   chips,
   chipClass,
@@ -12,32 +36,37 @@ export function StayDateChips({
   more,
   less,
 }: {
-  chips: { key: string; place: string; from: string; to: string; label: string }[];
+  chips: Chip[];
   chipClass: string;
   moreClass: string;
   more: string;
   less: string;
 }) {
   const [open, setOpen] = useState(false);
-  const folded = chips.length > VISIBLE;
-  const shown = folded && !open ? chips.slice(0, VISIBLE) : chips;
+  const groups = groupsOf(chips);
+  const shown = open ? groups : groups.slice(0, VISIBLE);
+  const canToggle = groups.length > VISIBLE;
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      {shown.map((chip) => (
+      {shown.map((group) => (
         <Link
-          key={chip.key}
+          key={group.map((chip) => chip.key).join("-")}
           href={{
             pathname: "/inquire",
-            query: { place: chip.place, from: chip.from, to: chip.to },
+            query: {
+              place: group.map((chip) => chip.place).join(", "),
+              from: group[0].from,
+              to: group[0].to,
+            },
             hash: "form",
           }}
-          className={chipClass}
+          className={`${chipClass} max-w-full`}
         >
-          {chip.label}
+          {labelFor(group)}
         </Link>
       ))}
-      {folded ? (
+      {canToggle ? (
         <button type="button" className={moreClass} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
           {open ? less : more}
         </button>
