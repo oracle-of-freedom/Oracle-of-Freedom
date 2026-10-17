@@ -108,6 +108,8 @@ export type Copy = {
     bookDates: string;
     next: string;
     after: string;
+    showMore: string;
+    showLess: string;
     elsewhere: string;
     manifesto: string;
     doorsTitle: string;

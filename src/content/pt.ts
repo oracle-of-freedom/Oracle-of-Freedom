@@ -186,6 +186,8 @@ export const pt: Copy = {
     bookDates: "Reservar estas datas",
     next: "Seguinte",
     after: "Depois",
+    showMore: "Ver mais",
+    showLess: "Ver menos",
     elsewhere:
       "Tens um evento noutro lugar, fora das locações acima? Contacta-nos o mais cedo possível para verificar a disponibilidade e agendar o teu evento.",
     manifesto:

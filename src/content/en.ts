@@ -194,6 +194,8 @@ export const en: Copy = {
     bookDates: "Book these dates",
     next: "Next",
     after: "After",
+    showMore: "Show more",
+    showLess: "Show less",
     elsewhere:
       "Have an event somewhere else, outside the locations above? Contact us as soon as possible to check availability and schedule your event.",
     manifesto:

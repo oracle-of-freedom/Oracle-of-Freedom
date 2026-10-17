@@ -1,4 +1,5 @@
 import { Link } from "@/i18n/navigation";
+import { StayDateChips } from "@/components/stay-date-chips";
 import { getCopy } from "@/content";
 import { JsonLd } from "@/components/json-ld";
 import { getSettings } from "@/lib/offers";
@@ -46,6 +47,11 @@ export async function StayBanners({
     : warm
       ? "rounded-full bg-terracotta/10 px-3 py-1 text-sm text-terracotta ring-1 ring-terracotta/30 backdrop-blur-sm"
       : "rounded-full bg-white/45 px-3 py-1 text-sm text-ink shadow-sm backdrop-blur-sm";
+  const moreClass = onPhoto
+    ? "rounded-full border border-white/55 bg-white/10 px-3 py-1 text-sm text-sand backdrop-blur-sm"
+    : warm
+      ? "rounded-full border border-terracotta/40 bg-terracotta/10 px-3 py-1 text-sm text-terracotta"
+      : "rounded-full border border-ink/20 bg-white/45 px-3 py-1 text-sm text-ink";
   const elsewhereClass = onPhoto
     ? "max-w-xl text-sm leading-relaxed text-sand underline decoration-white/40 underline-offset-4"
     : "max-w-xl text-sm leading-relaxed text-ink underline decoration-ink/30 underline-offset-4";
@@ -78,23 +84,21 @@ export async function StayBanners({
         ))}
       </div>
       {later.length > 0 ? (
-        <div className="flex flex-wrap gap-2">
-          {later
+        <StayDateChips
+          chips={later
             .flatMap((stay) => stay.countries.map((code) => ({ stay, code })))
-            .map(({ stay, code }, index) => (
-              <Link
-                key={`${stay.id}-${code}`}
-                href={{
-                  pathname: "/inquire",
-                  query: { place: placeTitle(locale, stay, code), from: stay.starts, to: stay.ends },
-                  hash: "form",
-                }}
-                className={chipClass}
-              >
-                {index === 0 ? copy.next : copy.after}: {chipLabel(locale, stay, code)}
-              </Link>
-            ))}
-        </div>
+            .map(({ stay, code }, index) => ({
+              key: `${stay.id}-${code}`,
+              place: placeTitle(locale, stay, code),
+              from: stay.starts,
+              to: stay.ends,
+              label: `${index === 0 ? copy.next : copy.after}: ${chipLabel(locale, stay, code)}`,
+            }))}
+          chipClass={chipClass}
+          moreClass={moreClass}
+          more={copy.showMore}
+          less={copy.showLess}
+        />
       ) : null}
       {showElsewhere ? (
         <Link href={{ pathname: "/inquire", hash: "form" }} className={elsewhereClass}>

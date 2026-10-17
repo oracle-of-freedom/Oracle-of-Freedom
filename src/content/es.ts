@@ -186,6 +186,8 @@ export const es: Copy = {
     bookDates: "Reservar estas fechas",
     next: "Siguiente",
     after: "Después",
+    showMore: "Ver más",
+    showLess: "Ver menos",
     elsewhere:
       "¿Tienes un evento en otro lugar, fuera de las locaciones de arriba? Contáctanos lo antes posible para verificar disponibilidad y agendar tu evento.",
     manifesto:
