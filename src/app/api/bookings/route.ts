@@ -8,11 +8,9 @@ import type { Locale } from "@/i18n/routing";
 import { slotIsAvailable } from "@/lib/availability";
 import { publicAvailability } from "@/lib/booking-service";
 import { writeBookings } from "@/lib/booking-store";
-import type { Booking } from "@/lib/bookings";
-import { bookingsIcal } from "@/lib/ical";
-import { upsertGoogleEvent } from "@/lib/google-calendar";
+import { acceptanceUrl, type Booking } from "@/lib/bookings";
 import { notifyStudio } from "@/lib/push";
-import { settings, siteUrl } from "@/lib/content";
+import { settings } from "@/lib/content";
 import { rateLimited } from "@/lib/rate-limit";
 
 const schema = z.object({
@@ -34,19 +32,7 @@ async function sendConfirmation(booking: Booking, typeLabel: string, locale: Loc
   const from = process.env.RESEND_FROM_EMAIL || "Oracle of Freedom <onboarding@resend.dev>";
   const to = process.env.INQUIRY_TO_EMAIL || settings.email;
   const copy = bookingCopy[locale];
-  const downloadUrl = `${siteUrl()}/api/bookings/${booking.publicToken}/calendar`;
-  const details = [
-    typeLabel,
-    `${booking.date} · ${booking.start}–${booking.end} (Europe/Lisbon)`,
-    booking.place,
-    "",
-    booking.notes || "",
-    "",
-    `${copy.download}: ${downloadUrl}`,
-  ]
-    .filter((line) => line !== "")
-    .join("\n");
-  const calendar = bookingsIcal([booking], typeLabel);
+  const acceptUrl = acceptanceUrl(locale, booking.publicToken || "");
   const resend = new Resend(apiKey);
   const [admin, attendee] = await Promise.all([
     resend.emails.send({
@@ -60,6 +46,7 @@ async function sendConfirmation(booking: Booking, typeLabel: string, locale: Loc
         `When: ${booking.date} · ${booking.start}–${booking.end}`,
         `Type: ${typeLabel}`,
         `Notes: ${booking.notes || "—"}`,
+        `Acceptance link: ${acceptUrl}`,
       ].join("\n"),
     }),
     resend.emails.send({
@@ -67,13 +54,7 @@ async function sendConfirmation(booking: Booking, typeLabel: string, locale: Loc
       to: booking.contact,
       replyTo: to,
       subject: copy.successTitle,
-      text: `${copy.successBody}\n\n${details}`,
-      attachments: [
-        {
-          filename: "oracle-of-freedom-booking.ics",
-          content: Buffer.from(calendar),
-        },
-      ],
+      text: copy.successBody,
     }),
   ]);
   if (admin.error || attendee.error) {
@@ -115,7 +96,7 @@ export async function POST(request: Request) {
     id: randomUUID(),
     title: `${label} · ${data.name}`,
     kind: available.bookingType.kind,
-    status: "confirmed",
+    status: "hold",
     date: data.date,
     allDay: false,
     start: data.start,
@@ -136,21 +117,6 @@ export async function POST(request: Request) {
     console.error("[booking] storage failed", error);
     return NextResponse.json({ ok: false, error: "storage" }, { status: 503 });
   }
-  let googleAdded = false;
-  try {
-    const synced = await upsertGoogleEvent(available.config, booking);
-    if (synced.googleEventId) {
-      booking = synced;
-      googleAdded = true;
-      await writeBookings([
-        ...available.bookings,
-        booking,
-      ]);
-    }
-  } catch (error) {
-    console.error("[booking] Google event creation failed", error);
-  }
-
   await notifyStudio({
     kind: booking.kind === "meeting" ? "consultation" : "appointment",
     name: data.name,
@@ -158,7 +124,7 @@ export async function POST(request: Request) {
       en: `${available.bookingType.label.en} · ${data.date} ${data.start}`,
       es: `${available.bookingType.label.es} · ${data.date} ${data.start}`,
     },
-    url: "/admin/calendar",
+    url: "/admin/appointments",
     tag: `booking-${booking.id}`,
   });
 
@@ -170,11 +136,10 @@ export async function POST(request: Request) {
   }
 
   revalidatePath("/admin/calendar");
+  revalidatePath("/admin/appointments");
   revalidatePath("/book");
   return NextResponse.json({
     ok: true,
     emailed,
-    googleAdded,
-    calendarUrl: `/api/bookings/${booking.publicToken}/calendar`,
   });
 }

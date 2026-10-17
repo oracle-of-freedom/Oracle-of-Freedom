@@ -52,6 +52,7 @@ export const pathnames = {
   },
   "/journal": "/journal",
   "/journal/[slug]": "/journal/[slug]",
+  "/appointment/[token]": "/appointment/[token]",
   "/inquire": {
     en: "/inquire",
     es: "/contacto",

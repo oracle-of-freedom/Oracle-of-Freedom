@@ -9,7 +9,8 @@ export async function GET(
 ) {
   const { token } = await params;
   const booking = (await readBookings()).find(
-    (item) => item.publicToken === token && item.status !== "cancelled",
+    (item) =>
+      item.publicToken === token && (item.status === "confirmed" || item.status === "done"),
   );
   if (!booking) return new Response("Not found", { status: 404 });
   return icalResponse(

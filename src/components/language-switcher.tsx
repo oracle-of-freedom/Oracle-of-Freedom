@@ -57,7 +57,13 @@ export function LanguageSwitcher({
     <div className="flex items-center gap-1 text-xs tracking-[0.16em]" role="navigation" aria-label="Language">
       {LOCALES.map((item) => {
         const active = item.id === locale;
-        const fallback = pathname === "/journal/[slug]" ? "/journal" : pathname;
+        const appointmentToken = decodeURIComponent(browserPath.split("/").filter(Boolean).at(-1) || "");
+        const fallback =
+          pathname === "/journal/[slug]"
+            ? "/journal"
+            : pathname === "/appointment/[token]"
+              ? { pathname: "/appointment/[token]" as const, params: { token: appointmentToken } }
+              : pathname;
         const href = alternates?.[item.id] ?? fallback;
         return (
           <Link

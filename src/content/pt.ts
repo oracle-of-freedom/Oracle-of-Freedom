@@ -134,7 +134,7 @@ export const pt: Copy = {
     portfolio: "Portefólio",
     about: "Sobre mim",
     journal: "Journal",
-    book: "Marcar",
+    book: "Marcar uma chamada",
     inquire: "Contacto",
   },
   footer: {

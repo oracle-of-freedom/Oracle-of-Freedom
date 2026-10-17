@@ -134,7 +134,7 @@ export const es: Copy = {
     portfolio: "Portfolio",
     about: "Sobre mí",
     journal: "Journal",
-    book: "Reservar",
+    book: "Reservar una llamada",
     inquire: "Contacto",
   },
   footer: {

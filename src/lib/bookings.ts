@@ -1,3 +1,5 @@
+import { siteUrl } from "@/lib/content";
+
 export const BOOKING_KINDS = ["meeting", "session", "event"] as const;
 export const BOOKING_STATUSES = ["hold", "confirmed", "done", "cancelled"] as const;
 
@@ -152,6 +154,11 @@ export function overlaps(a: Booking, b: Booking) {
   if (a.status === "done" || b.status === "done") return false;
   if (a.allDay || b.allDay) return true;
   return a.start < b.end && b.start < a.end;
+}
+
+export function acceptanceUrl(locale: Booking["locale"], token: string) {
+  const prefix = locale === "es" || locale === "pt" ? `/${locale}` : "";
+  return `${siteUrl()}${prefix}/appointment/${token}`;
 }
 
 export function sortBookings(bookings: Booking[]) {

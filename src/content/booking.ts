@@ -27,6 +27,15 @@ export type BookingCopy = {
   again: string;
   error: string;
   rate: string;
+  acceptEyebrow: string;
+  acceptTitle: string;
+  acceptBody: string;
+  acceptButton: string;
+  accepting: string;
+  acceptedTitle: string;
+  acceptedBody: string;
+  acceptClosed: string;
+  acceptMissing: string;
 };
 
 export const bookingCopy: Record<Locale, BookingCopy> = {
@@ -47,12 +56,21 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     note: "Anything Agota should know?",
     notePlaceholder: "A little about your idea…",
     consent: "I agree that my details can be used to arrange this meeting.",
-    submit: "Confirm booking",
+    submit: "Request this time",
     sending: "Booking…",
     back: "Choose another time",
-    successTitle: "You’re booked",
-    successBody: "Your time is saved. Keep the calendar file below and check your email for the details.",
-    successBodySaved: "Your time is saved. Keep the calendar file below. We’ll write to you soon — the confirmation email did not go out.",
+    successTitle: "Request received",
+    successBody: "That time is held for you. Agota will send a link so you can accept it.",
+    successBodySaved: "That time is held for you. Agota will send a link so you can accept it. The notice email did not go out.",
+    acceptEyebrow: "Your appointment",
+    acceptTitle: "Accept this time",
+    acceptBody: "This time is held for you. Accept it to confirm the appointment.",
+    acceptButton: "Accept this appointment",
+    accepting: "Accepting…",
+    acceptedTitle: "You’re confirmed",
+    acceptedBody: "This appointment is confirmed. You can add it to your calendar.",
+    acceptClosed: "This appointment is no longer available.",
+    acceptMissing: "This link does not match an appointment.",
     download: "Add to my calendar",
     again: "Book another time",
     error: "That time could not be booked. Please choose another one.",
@@ -75,12 +93,21 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     note: "¿Hay algo que Agota deba saber?",
     notePlaceholder: "Cuéntame un poco sobre tu idea…",
     consent: "Acepto que mis datos se usen para organizar esta cita.",
-    submit: "Confirmar reserva",
+    submit: "Pedir esta hora",
     sending: "Reservando…",
     back: "Elegir otra hora",
-    successTitle: "Tu cita está reservada",
-    successBody: "La hora está guardada. Descarga el archivo de calendario y revisa tu email.",
-    successBodySaved: "La hora está guardada. Conserva el archivo de calendario. Te escribiremos pronto: el correo de confirmación no salió.",
+    successTitle: "Solicitud recibida",
+    successBody: "Esa hora queda reservada para ti. Agota te enviará un enlace para aceptarla.",
+    successBodySaved: "Esa hora queda reservada para ti. Agota te enviará un enlace para aceptarla. El aviso por email no salió.",
+    acceptEyebrow: "Tu cita",
+    acceptTitle: "Acepta esta hora",
+    acceptBody: "Esta hora está reservada para ti. Acéptala para confirmar la cita.",
+    acceptButton: "Aceptar esta cita",
+    accepting: "Aceptando…",
+    acceptedTitle: "Cita confirmada",
+    acceptedBody: "Esta cita está confirmada. Puedes añadirla a tu calendario.",
+    acceptClosed: "Esta cita ya no está disponible.",
+    acceptMissing: "Este enlace no corresponde a ninguna cita.",
     download: "Añadir a mi calendario",
     again: "Reservar otra hora",
     error: "No se pudo reservar esa hora. Elige otra.",
@@ -103,12 +130,21 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     note: "Há algo que a Agota deva saber?",
     notePlaceholder: "Conta-me um pouco sobre a tua ideia…",
     consent: "Aceito que os meus dados sejam usados para organizar esta marcação.",
-    submit: "Confirmar marcação",
+    submit: "Pedir esta hora",
     sending: "A marcar…",
     back: "Escolher outra hora",
-    successTitle: "A tua marcação está feita",
-    successBody: "A hora está guardada. Descarrega o ficheiro de calendário e verifica o teu email.",
-    successBodySaved: "A hora está guardada. Guarda o ficheiro de calendário. Escrevemos-te em breve: o email de confirmação não saiu.",
+    successTitle: "Pedido recebido",
+    successBody: "Essa hora fica reservada para ti. A Agota envia um link para a aceitares.",
+    successBodySaved: "Essa hora fica reservada para ti. A Agota envia um link para a aceitares. O aviso por email não saiu.",
+    acceptEyebrow: "A tua marcação",
+    acceptTitle: "Aceita esta hora",
+    acceptBody: "Esta hora está reservada para ti. Aceita-a para confirmar a marcação.",
+    acceptButton: "Aceitar esta marcação",
+    accepting: "A aceitar…",
+    acceptedTitle: "Marcação confirmada",
+    acceptedBody: "Esta marcação está confirmada. Podes adicioná-la ao teu calendário.",
+    acceptClosed: "Esta marcação já não está disponível.",
+    acceptMissing: "Este link não corresponde a nenhuma marcação.",
     download: "Adicionar ao meu calendário",
     again: "Marcar outra hora",
     error: "Não foi possível marcar essa hora. Escolhe outra.",

@@ -72,7 +72,6 @@ export default async function LocaleLayout({
     { href: "/portfolio", label: copy.nav.portfolio },
     { href: "/about", label: copy.nav.about },
     { href: "/journal", label: copy.nav.journal },
-    { href: "/book", label: copy.nav.book },
   ];
 
   return (
@@ -86,7 +85,7 @@ export default async function LocaleLayout({
           <SiteHeader
             locale={locale}
             items={items}
-            inquire={{ href: "/inquire", label: copy.nav.inquire }}
+            inquire={{ href: "/book", label: copy.nav.book }}
             menuLabel={copy.a11y.menu}
             closeLabel={copy.a11y.closeMenu}
             homeLabel={copy.a11y.home}

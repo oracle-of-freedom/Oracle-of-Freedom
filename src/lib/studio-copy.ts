@@ -7,6 +7,7 @@ export function studioCopy(lang: StudioLang) {
     nav: {
       today: en ? "Today" : "Hoy",
       inquiries: en ? "Inquiries" : "Solicitudes",
+      appointments: en ? "Visits" : "Citas",
       calendar: en ? "Calendar" : "Agenda",
       presence: en ? "Places" : "Lugares",
       prices: en ? "Prices" : "Precios",
@@ -74,6 +75,22 @@ export function studioCopy(lang: StudioLang) {
       closed: en
         ? "This page stays closed until ADMIN_PASSWORD is added in Vercel and the site is published again."
         : "Esta página sigue cerrada hasta añadir ADMIN_PASSWORD en Vercel y volver a publicar el sitio.",
+    },
+    appointments: {
+      title: en ? "Appointments" : "Citas",
+      intro: en
+        ? "Client requests stay on hold until you send the acceptance link."
+        : "Las solicitudes quedan en espera hasta que envías el enlace de aceptación.",
+      empty: en ? "No client appointments yet." : "Todavía no hay citas de clientes.",
+      hold: en ? "Awaiting acceptance" : "Pendiente de aceptar",
+      confirmed: en ? "Accepted" : "Aceptada",
+      done: en ? "Done" : "Hecha",
+      cancelled: en ? "Cancelled" : "Cancelada",
+      copy: en ? "Copy acceptance link" : "Copiar enlace de aceptación",
+      copied: en ? "Copied" : "Copiado",
+      generate: en ? "Create acceptance link" : "Crear enlace de aceptación",
+      release: en ? "Release this time" : "Liberar esta hora",
+      when: en ? "Lisbon time" : "Hora de Lisboa",
     },
     home: {
       title: en ? "Today" : "Hoy",
