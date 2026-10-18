@@ -266,7 +266,7 @@ export async function googleBusy(
   return result.data?.calendars?.[config.google.calendarId]?.busy || [];
 }
 
-function eventBody(booking: Booking) {
+function eventBody(booking: Booking, meetingUrl?: string) {
   const nextDate = new Date(`${booking.date}T00:00:00Z`);
   nextDate.setUTCDate(nextDate.getUTCDate() + 1);
   const description = [
@@ -284,7 +284,7 @@ function eventBody(booking: Booking) {
   return {
     summary: booking.title,
     description,
-    location: booking.place || undefined,
+    location: meetingUrl || booking.place || undefined,
     status: booking.status === "cancelled" ? "cancelled" : "confirmed",
     start: booking.allDay
       ? { date: booking.date }
@@ -316,7 +316,7 @@ export async function upsertGoogleEvent(config: CalendarConfig, booking: Booking
       : `/calendars/${calendar}/events?sendUpdates=none`,
     {
       method: booking.googleEventId ? "PUT" : "POST",
-      body: JSON.stringify(eventBody(booking)),
+      body: JSON.stringify(eventBody(booking, config.meetingUrl)),
     },
   );
   return result.data?.id ? { ...booking, googleEventId: result.data.id } : booking;

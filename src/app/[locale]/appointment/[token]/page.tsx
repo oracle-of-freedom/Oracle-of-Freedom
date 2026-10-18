@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { AppointmentAccept } from "@/components/appointment-accept";
+import { VisitorWhen } from "@/components/visitor-when";
 import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
+import { lisbonDateTimeToUtc } from "@/lib/availability";
 import { readBookings } from "@/lib/booking-store";
-import { dayLabel } from "@/lib/bookings";
+import { readCalendarConfig } from "@/lib/calendar-config-store";
 
 export const dynamic = "force-dynamic";
 
@@ -27,8 +29,17 @@ export default async function AppointmentPage({
   setRequestLocale(locale);
   if (!/^[A-Za-z0-9_-]{16,100}$/.test(token)) notFound();
   const booking = (await readBookings()).find((item) => item.publicToken === token);
+  const config = await readCalendarConfig();
   const copy = bookingCopy[booking?.locale || locale] || bookingCopy.en;
-  const lang = booking?.locale === "es" ? "es" : "en";
+  const meetingUrl = config.meetingUrl || "";
+  const when =
+    booking && !booking.allDay
+      ? {
+          startsAt: lisbonDateTimeToUtc(booking.date, booking.start).toISOString(),
+          endsAt: lisbonDateTimeToUtc(booking.date, booking.end).toISOString(),
+          locale: booking.locale || locale,
+        }
+      : null;
 
   return (
     <div className="mx-auto min-w-0 max-w-3xl px-4 py-12 md:px-6 md:py-20">
@@ -43,25 +54,40 @@ export default async function AppointmentPage({
         <>
           <h1 className="mt-3 font-serif text-5xl leading-tight">{copy.acceptedTitle}</h1>
           <p className="mt-5 text-lg text-ink/70">{copy.acceptedBody}</p>
-          <p className="mt-6 font-serif text-3xl">
-            {dayLabel(booking.date, lang)} · {booking.start}–{booking.end}
-          </p>
+          {when ? <VisitorWhen startsAt={when.startsAt} endsAt={when.endsAt} locale={when.locale} /> : null}
           <p className="mt-2 text-ink/70">{booking.title}</p>
-          <a className="mt-8 inline-flex h-12 items-center rounded-full bg-terracotta px-6 font-medium text-white" href={`/api/bookings/${token}/calendar`}>
-            {copy.download}
-          </a>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {meetingUrl ? (
+              <a
+                className="inline-flex h-12 items-center rounded-full bg-terracotta px-6 font-medium text-white"
+                href={meetingUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {copy.joinMeeting}
+              </a>
+            ) : null}
+            <a
+              className={`inline-flex h-12 items-center rounded-full px-6 font-medium ${
+                meetingUrl
+                  ? "border border-ink/20 bg-white text-ink"
+                  : "bg-terracotta text-white"
+              }`}
+              href={`/api/bookings/${token}/calendar`}
+            >
+              {copy.download}
+            </a>
+          </div>
         </>
       ) : (
         <>
-          <p className="mt-6 font-serif text-3xl">
-            {dayLabel(booking.date, lang)} · {booking.start}–{booking.end}
-          </p>
+          {when ? <VisitorWhen startsAt={when.startsAt} endsAt={when.endsAt} locale={when.locale} /> : null}
           <p className="mt-2 text-ink/70">
             {booking.title}
             {booking.place ? ` · ${booking.place}` : ""}
           </p>
           <div className="mt-8">
-            <AppointmentAccept token={token} copy={copy} />
+            <AppointmentAccept token={token} copy={copy} meetingUrl={meetingUrl} />
           </div>
         </>
       )}

@@ -41,10 +41,12 @@ function fold(line: string) {
   return parts.map((part, index) => (index === 0 ? part : ` ${part}`)).join("\r\n");
 }
 
-function event(booking: Booking) {
+function event(booking: Booking, meetingUrl?: string) {
+  const location = meetingUrl || booking.place;
   const description = [
     booking.client ? `With: ${booking.client}` : "",
     booking.contact ? `Contact: ${booking.contact}` : "",
+    meetingUrl && booking.place && meetingUrl !== booking.place ? booking.place : "",
     booking.notes,
   ]
     .filter(Boolean)
@@ -64,7 +66,7 @@ function event(booking: Booking) {
     `DTSTAMP:${utc(new Date())}`,
     ...dates,
     `SUMMARY:${escape(booking.title)}`,
-    booking.place ? `LOCATION:${escape(booking.place)}` : "",
+    location ? `LOCATION:${escape(location)}` : "",
     description ? `DESCRIPTION:${escape(description)}` : "",
     `STATUS:${booking.status === "cancelled" ? "CANCELLED" : "CONFIRMED"}`,
     `URL:${siteUrl()}`,
@@ -75,10 +77,14 @@ function event(booking: Booking) {
     .join("\r\n");
 }
 
-export function bookingsIcal(bookings: Booking[], name = "Oracle of Freedom") {
+export function bookingsIcal(
+  bookings: Booking[],
+  name = "Oracle of Freedom",
+  meetingUrl?: string,
+) {
   const events = bookings
     .filter((booking) => booking.status !== "cancelled" && booking.origin !== "ical" && booking.origin !== "google")
-    .map(event);
+    .map((booking) => event(booking, meetingUrl));
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",

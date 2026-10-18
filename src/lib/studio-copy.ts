@@ -192,6 +192,13 @@ export function studioCopy(lang: StudioLang) {
       noStory: en ? "No story written." : "No escribió una historia.",
       whatsappMissing: en ? "WhatsApp · no phone" : "WhatsApp · sin teléfono",
       replied: en ? "Mark replied" : "Marcar respondida",
+      accept: en ? "Accept and create booking link" : "Aceptar y crear enlace de reserva",
+      bookingTitle: en ? "Booking link" : "Enlace de reserva",
+      bookingLink: en ? "Copy booking link" : "Copiar enlace de reserva",
+      bookingCopied: en ? "Copied" : "Copiado",
+      bookingHelp: en
+        ? "Send this link only after you accept the inquiry. It is not linked from the website."
+        : "Envía este enlace solo cuando aceptes la solicitud. No está enlazado desde la web.",
       archive: en ? "Archive" : "Archivar",
       restore: en ? "Move back to new" : "Devolver a nuevas",
       flexible: en ? "Flexible date" : "Fecha flexible",
@@ -399,8 +406,10 @@ export function studioCopy(lang: StudioLang) {
       copied: en ? "Copied" : "Copiado",
       hours: en ? "Hours" : "Horario",
       page: en ? "Booking page" : "Página de reservas",
-      pageHelpBefore: en ? "Choose what can be booked at " : "Elige lo que se puede reservar en ",
-      pageHelpAfter: en ? ". Times are Lisbon time." : ". Las horas son de Lisboa.",
+      pageHelpBefore: en
+        ? "These types are offered on the private booking link you send after accepting an inquiry. "
+        : "Estos tipos se ofrecen en el enlace privado que envías al aceptar una solicitud. ",
+      pageHelpAfter: en ? "Times are saved in Lisbon time." : "Las horas se guardan en la hora de Lisboa.",
       types: en ? "Booking types" : "Tipos de cita",
       visible: en ? "Show" : "Visible",
       remove: en ? "Remove" : "Quitar",
@@ -416,6 +425,10 @@ export function studioCopy(lang: StudioLang) {
       notice: en ? "Minimum notice · hours" : "Aviso mínimo · horas",
       buffer: en ? "Buffer · minutes" : "Margen · minutos",
       usualPlace: en ? "Usual place" : "Lugar habitual",
+      meetingUrl: en ? "Meet or Zoom link" : "Enlace de Meet o Zoom",
+      meetingUrlHelp: en
+        ? "Your personal join link. Guests see it after they confirm the appointment."
+        : "Tu enlace personal. Los invitados lo ven al confirmar la cita.",
       saving: en ? "Saving…" : "Guardando…",
       save: en ? "Save settings" : "Guardar ajustes",
       start: en ? "Start" : "Iniciar",

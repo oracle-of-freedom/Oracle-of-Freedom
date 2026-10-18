@@ -21,6 +21,7 @@ export type Inquiry = {
   packageId?: string;
   packageLabel?: string;
   media?: string;
+  bookingToken?: string;
 };
 
 function optionalText(value: unknown, max: number) {
@@ -66,8 +67,13 @@ export function isInquiry(value: unknown): value is Inquiry {
     typeof item.grade === "string" &&
     optionalText(item.packageId, 80) &&
     optionalText(item.packageLabel, 200) &&
-    optionalText(item.media, 40)
+    optionalText(item.media, 40) &&
+    optionalText(item.bookingToken, 100)
   );
+}
+
+export function isBookingInvite(token: string) {
+  return /^[A-Za-z0-9_-]{16,100}$/.test(token);
 }
 
 export function sortInquiries(inquiries: Inquiry[]) {

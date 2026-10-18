@@ -8,6 +8,13 @@ import type { PublicBookingType } from "@/lib/calendar-config";
 import type { AvailableSlot } from "@/lib/availability";
 import type { Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import {
+  visitorTimeZone,
+  zonedDateKey,
+  zonedDateLabel,
+  zonedTime,
+  zonedZoneName,
+} from "@/lib/visitor-time";
 
 type Result = {
   ok: boolean;
@@ -21,11 +28,13 @@ export function BookingWidget({
   locale,
   copy,
   canSave,
+  invite,
 }: {
   types: PublicBookingType[];
   locale: Locale;
   copy: BookingCopy;
   canSave: boolean;
+  invite: string;
 }) {
   const [typeId, setTypeId] = useState(types[0]?.id || "");
   const [slots, setSlots] = useState<AvailableSlot[]>([]);
@@ -35,11 +44,16 @@ export function BookingWidget({
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<Result | null>(null);
+  const [timeZone, setTimeZone] = useState<string | null>(null);
+
+  useEffect(() => {
+    setTimeZone(visitorTimeZone());
+  }, []);
 
   useEffect(() => {
     if (!typeId) return;
     const controller = new AbortController();
-    fetch(`/api/bookings/availability?type=${encodeURIComponent(typeId)}`, {
+    fetch(`/api/bookings/availability?type=${encodeURIComponent(typeId)}&invite=${encodeURIComponent(invite)}`, {
       signal: controller.signal,
       cache: "no-store",
     })
@@ -49,8 +63,9 @@ export function BookingWidget({
       })
       .then((data) => {
         const next = data.slots || [];
+        const zone = visitorTimeZone();
         setSlots(next);
-        setSelectedDate(next[0]?.date || "");
+        setSelectedDate(next[0] ? zonedDateKey(next[0].startsAt, zone) : "");
       })
       .catch((fetchError) => {
         if ((fetchError as Error).name !== "AbortError") setError(copy.error);
@@ -59,25 +74,23 @@ export function BookingWidget({
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [copy.error, typeId]);
+  }, [copy.error, invite, typeId]);
 
-  const dates = useMemo(
-    () => Array.from(new Set(slots.map((slot) => slot.date))),
-    [slots],
-  );
-  const times = slots.filter((slot) => slot.date === selectedDate);
-  const currentType = types.find((item) => item.id === typeId);
   const dateLocale = locale === "pt" ? "pt-PT" : locale === "es" ? "es-ES" : "en-GB";
-
-  function dateLabel(date: string) {
-    const [year, month, day] = date.split("-").map(Number);
-    return new Intl.DateTimeFormat(dateLocale, {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-      timeZone: "UTC",
-    }).format(new Date(Date.UTC(year, month - 1, day)));
-  }
+  const zone = timeZone || "UTC";
+  const zoneName = timeZone ? zonedZoneName(dateLocale, timeZone) : "";
+  const dates = useMemo(() => {
+    const groups = new Map<string, AvailableSlot>();
+    for (const slot of slots) {
+      const key = zonedDateKey(slot.startsAt, zone);
+      if (!groups.has(key)) groups.set(key, slot);
+    }
+    return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b));
+  }, [slots, zone]);
+  const times = slots
+    .filter((slot) => zonedDateKey(slot.startsAt, zone) === selectedDate)
+    .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
+  const currentType = types.find((item) => item.id === typeId);
 
   async function submit(formData: FormData) {
     if (!selected || !currentType || !canSave) return;
@@ -97,6 +110,7 @@ export function BookingWidget({
         company: formData.get("company"),
         consent: formData.get("consent") === "on",
         locale,
+        invite,
       }),
     });
     const data = (await response.json().catch(() => null)) as Result | null;
@@ -106,7 +120,7 @@ export function BookingWidget({
       if (response.status === 409) {
         setSelected(null);
         const refresh = await fetch(
-          `/api/bookings/availability?type=${encodeURIComponent(typeId)}`,
+          `/api/bookings/availability?type=${encodeURIComponent(typeId)}&invite=${encodeURIComponent(invite)}`,
           { cache: "no-store" },
         );
         if (refresh.ok) {
@@ -188,6 +202,7 @@ export function BookingWidget({
 
       <section className="min-w-0">
         <h2 className="font-serif text-3xl">{copy.chooseTime}</h2>
+        {zoneName ? <p className="mt-2 text-sm text-ink/60">{copy.localTime.replace("{zone}", zoneName)}</p> : null}
         {loading ? <p className="mt-4 text-ink/60">{copy.loading}</p> : null}
         {!loading && dates.length === 0 ? (
           <p className="mt-4 rounded-2xl bg-white/60 p-4 text-ink/70">{copy.unavailable}</p>
@@ -200,7 +215,7 @@ export function BookingWidget({
         {dates.length > 0 ? (
           <>
             <div className="mt-4 flex min-w-0 gap-2 overflow-x-auto pb-2">
-              {dates.map((date) => (
+              {dates.map(([date, slot]) => (
                 <button
                   key={date}
                   type="button"
@@ -216,7 +231,7 @@ export function BookingWidget({
                       : "border-ink/15 bg-white/50",
                   )}
                 >
-                  {dateLabel(date)}
+                  {zonedDateLabel(slot.startsAt, dateLocale, zone)}
                 </button>
               ))}
             </div>
@@ -234,7 +249,7 @@ export function BookingWidget({
                       : "border-ink/15 bg-white/60 hover:border-terracotta",
                   )}
                 >
-                  {slot.start}
+                  {zonedTime(slot.startsAt, dateLocale, zone)}
                 </button>
               ))}
             </div>
@@ -248,7 +263,7 @@ export function BookingWidget({
             <div>
               <h2 className="font-serif text-3xl">{copy.yourDetails}</h2>
               <p className="mt-1 text-sm text-ink/65 capitalize">
-                {dateLabel(selected.date)} · {selected.start}–{selected.end} · Europe/Lisbon
+                {zonedDateLabel(selected.startsAt, dateLocale, zone)} · {zonedTime(selected.startsAt, dateLocale, zone)}–{zonedTime(selected.endsAt, dateLocale, zone)}{zoneName ? ` · ${zoneName}` : ""}
               </p>
             </div>
             <button

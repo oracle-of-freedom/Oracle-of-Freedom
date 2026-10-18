@@ -161,6 +161,12 @@ export function acceptanceUrl(locale: Booking["locale"], token: string) {
   return `${siteUrl()}${prefix}/appointment/${token}`;
 }
 
+export function bookingInviteUrl(language: string, token: string) {
+  const locale = language === "es" || language === "pt" ? language : "en";
+  const prefix = locale === "en" ? "" : `/${locale}`;
+  return `${siteUrl()}${prefix}/book/${token}`;
+}
+
 export function sortBookings(bookings: Booking[]) {
   return [...bookings].sort(
     (a, b) =>

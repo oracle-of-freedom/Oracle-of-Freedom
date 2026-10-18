@@ -69,6 +69,7 @@ export default async function CalendarSettingsPage({
           minimumNoticeHours: config.minimumNoticeHours,
           bufferMinutes: config.bufferMinutes,
           defaultLocation: config.defaultLocation,
+          meetingUrl: config.meetingUrl || "",
         }}
         mode={storageMode()}
         feedUrl={`${siteUrl()}/api/calendar/${config.icalToken}.ics`}

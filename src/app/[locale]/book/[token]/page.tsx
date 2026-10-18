@@ -1,10 +1,11 @@
+import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { BookingWidget } from "@/components/booking-widget";
 import { bookingCopy } from "@/content/booking";
-import { getCopy } from "@/content";
 import type { Locale } from "@/i18n/routing";
+import { isBookingInvite } from "@/lib/inquiries";
+import { readInquiries } from "@/lib/inquiry-store";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
-import { pageMetadata } from "@/lib/seo";
 import { storageMode } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -12,26 +13,26 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: Locale; token: string }>;
 }) {
   const { locale } = await params;
-  const copy = getCopy(locale);
-  return pageMetadata({
-    locale,
-    title: copy.meta.book.title,
-    description: copy.meta.book.description,
-    keywords: copy.meta.book.keywords,
-    hrefForLocale: () => "/book",
-  });
+  const copy = bookingCopy[locale] || bookingCopy.en;
+  return {
+    title: `${copy.title} · Oracle of Freedom`,
+    robots: { index: false, follow: false },
+  };
 }
 
-export default async function BookPage({
+export default async function PrivateBookPage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: Locale; token: string }>;
 }) {
-  const { locale } = await params;
+  const { locale, token } = await params;
   setRequestLocale(locale);
+  if (!isBookingInvite(token)) notFound();
+  const invited = (await readInquiries()).some((item) => item.bookingToken === token);
+  if (!invited) notFound();
   const copy = bookingCopy[locale] || bookingCopy.en;
   const config = await readCalendarConfig();
   const types = config.bookingTypes.filter((item) => item.active);
@@ -48,6 +49,7 @@ export default async function BookPage({
           locale={locale}
           copy={copy}
           canSave={storageMode() !== "readonly"}
+          invite={token}
         />
       </div>
     </div>

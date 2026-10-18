@@ -228,7 +228,6 @@ export function CalendarSettings({
         <div className={cn(phonePane === "hours" ? "mt-4" : "max-md:hidden")}>
         <p className="text-sm text-ink/70">
           {t.settings.pageHelpBefore}
-          <Link href="/book" className="underline underline-offset-4">/book</Link>
           {t.settings.pageHelpAfter}
         </p>
         <form action={action} className="mt-6 grid gap-7">
@@ -465,6 +464,24 @@ export function CalendarSettings({
                 }))
               }
             />
+          </div>
+          <div>
+            <Label htmlFor="meeting-url">{t.settings.meetingUrl}</Label>
+            <Input
+              id="meeting-url"
+              type="url"
+              inputMode="url"
+              placeholder="https://meet.google.com/…"
+              value={settings.meetingUrl || ""}
+              maxLength={500}
+              onChange={(event) =>
+                setSettings((current) => ({
+                  ...current,
+                  meetingUrl: event.target.value,
+                }))
+              }
+            />
+            <p className="mt-2 text-sm text-ink/60">{t.settings.meetingUrlHelp}</p>
           </div>
           <Notice state={state} saved={t.settings.saved} />
           <Button type="submit" disabled={pending || mode === "readonly"} className="w-full sm:w-auto">

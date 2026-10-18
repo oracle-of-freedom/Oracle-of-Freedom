@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { setInquiryStatus } from "@/app/admin/inquiries/actions";
+import { acceptInquiry, setInquiryStatus } from "@/app/admin/inquiries/actions";
+import { CopyAcceptanceLink } from "@/components/copy-acceptance-link";
 import { en } from "@/content/en";
 import { es } from "@/content/es";
 import { AdminHeader } from "@/components/admin-header";
 import { Button } from "@/components/ui/button";
 import { isAdmin } from "@/lib/admin-auth";
 import { readInquiries } from "@/lib/inquiry-store";
+import { bookingInviteUrl } from "@/lib/bookings";
 import { inquiryWhen, studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
 
@@ -76,6 +78,24 @@ export default async function InquiryPage({ params }: { params: Promise<{ id: st
           ) : null}
         </dl>
       </article>
+      <section className="mt-6 rounded-3xl bg-white/80 px-4 py-4">
+        <h2 className="font-serif text-2xl">{t.inquiries.bookingTitle}</h2>
+        <p className="mt-2 text-sm text-ink/65">{t.inquiries.bookingHelp}</p>
+        {inquiry.bookingToken ? (
+          <CopyAcceptanceLink
+            url={bookingInviteUrl(inquiry.language, inquiry.bookingToken)}
+            copyLabel={t.inquiries.bookingLink}
+            copiedLabel={t.inquiries.bookingCopied}
+          />
+        ) : (
+          <form action={acceptInquiry} className="mt-3">
+            <input type="hidden" name="id" value={inquiry.id} />
+            <Button type="submit" className="min-h-12">
+              {t.inquiries.accept}
+            </Button>
+          </form>
+        )}
+      </section>
       <div className="studio-dock border-t border-ink/10 bg-sand/95 px-4 py-3 md:mt-6 md:border-0 md:bg-transparent md:px-0">
         {whatsapp ? (
           <Button asChild className="min-h-12 w-full">

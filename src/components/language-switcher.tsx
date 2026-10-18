@@ -63,7 +63,9 @@ export function LanguageSwitcher({
             ? "/journal"
             : pathname === "/appointment/[token]"
               ? { pathname: "/appointment/[token]" as const, params: { token: appointmentToken } }
-              : pathname;
+              : pathname === "/book/[token]"
+                ? { pathname: "/book/[token]" as const, params: { token: appointmentToken } }
+                : pathname;
         const href = alternates?.[item.id] ?? fallback;
         return (
           <Link

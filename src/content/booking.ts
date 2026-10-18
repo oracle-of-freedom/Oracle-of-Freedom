@@ -8,6 +8,7 @@ export type BookingCopy = {
   dek: string;
   chooseType: string;
   chooseTime: string;
+  localTime: string;
   yourDetails: string;
   duration: string;
   loading: string;
@@ -34,6 +35,7 @@ export type BookingCopy = {
   accepting: string;
   acceptedTitle: string;
   acceptedBody: string;
+  joinMeeting: string;
   acceptClosed: string;
   acceptMissing: string;
 };
@@ -44,9 +46,10 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     metaDescription: "Choose a time to meet photographer and filmmaker Agota Urbikaite.",
     eyebrow: "A moment to meet",
     title: "Book time with Agota",
-    dek: "Choose what you need and pick a free time. Times are shown in Lisbon time.",
+    dek: "Choose what you need and pick a free time. Times follow your time zone.",
     chooseType: "1. Choose a meeting",
     chooseTime: "2. Choose a time",
+    localTime: "Shown in {zone}.",
     yourDetails: "3. Your details",
     duration: "minutes",
     loading: "Looking for free times…",
@@ -69,6 +72,7 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     accepting: "Accepting…",
     acceptedTitle: "You’re confirmed",
     acceptedBody: "This appointment is confirmed. You can add it to your calendar.",
+    joinMeeting: "Join the call",
     acceptClosed: "This appointment is no longer available.",
     acceptMissing: "This link does not match an appointment.",
     download: "Add to my calendar",
@@ -81,9 +85,10 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     metaDescription: "Elige una hora para conocer a la fotógrafa y videógrafa Agota Urbikaite.",
     eyebrow: "Un momento para conocernos",
     title: "Reserva tiempo con Agota",
-    dek: "Elige lo que necesitas y una hora libre. Los horarios se muestran en la hora de Lisboa.",
+    dek: "Elige lo que necesitas y una hora libre. Los horarios siguen tu zona horaria.",
     chooseType: "1. Elige una cita",
     chooseTime: "2. Elige una hora",
+    localTime: "Se muestran en {zone}.",
     yourDetails: "3. Tus datos",
     duration: "minutos",
     loading: "Buscando horas libres…",
@@ -106,6 +111,7 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     accepting: "Aceptando…",
     acceptedTitle: "Cita confirmada",
     acceptedBody: "Esta cita está confirmada. Puedes añadirla a tu calendario.",
+    joinMeeting: "Unirse a la llamada",
     acceptClosed: "Esta cita ya no está disponible.",
     acceptMissing: "Este enlace no corresponde a ninguna cita.",
     download: "Añadir a mi calendario",
@@ -118,9 +124,10 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     metaDescription: "Escolhe uma hora para conhecer a fotógrafa e videógrafa Agota Urbikaite.",
     eyebrow: "Um momento para nos conhecermos",
     title: "Marca tempo com a Agota",
-    dek: "Escolhe o que precisas e uma hora livre. Os horários aparecem na hora de Lisboa.",
+    dek: "Escolhe o que precisas e uma hora livre. Os horários seguem o teu fuso horário.",
     chooseType: "1. Escolhe uma marcação",
     chooseTime: "2. Escolhe uma hora",
+    localTime: "Mostrados em {zone}.",
     yourDetails: "3. Os teus dados",
     duration: "minutos",
     loading: "A procurar horas livres…",
@@ -143,6 +150,7 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     accepting: "A aceitar…",
     acceptedTitle: "Marcação confirmada",
     acceptedBody: "Esta marcação está confirmada. Podes adicioná-la ao teu calendário.",
+    joinMeeting: "Entrar na chamada",
     acceptClosed: "Esta marcação já não está disponível.",
     acceptMissing: "Este link não corresponde a nenhuma marcação.",
     download: "Adicionar ao meu calendário",

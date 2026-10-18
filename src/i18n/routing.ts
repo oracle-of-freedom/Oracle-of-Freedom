@@ -58,11 +58,7 @@ export const pathnames = {
     es: "/contacto",
     pt: "/contacto",
   },
-  "/book": {
-    en: "/book",
-    es: "/reservar",
-    pt: "/reservar",
-  },
+  "/book/[token]": "/book/[token]",
   "/thank-you": {
     en: "/thank-you",
     es: "/gracias",
@@ -96,7 +92,6 @@ export const staticPathnames = [
   "/portfolio",
   "/journal",
   "/inquire",
-  "/book",
   "/thank-you",
   "/privacy",
 ] as const;

@@ -85,7 +85,7 @@ export default async function LocaleLayout({
           <SiteHeader
             locale={locale}
             items={items}
-            inquire={{ href: "/book", label: copy.nav.book }}
+            inquire={{ href: "/inquire", label: copy.nav.inquire }}
             menuLabel={copy.a11y.menu}
             closeLabel={copy.a11y.closeMenu}
             homeLabel={copy.a11y.home}

@@ -42,6 +42,8 @@ export type CalendarConfig = {
   minimumNoticeHours: number;
   bufferMinutes: number;
   defaultLocation: string;
+  /** Personal Google Meet or Zoom join link shown after confirmation. */
+  meetingUrl?: string;
   icalToken: string;
   inboundIcalUrl?: string;
   google?: GoogleConnection;
@@ -99,6 +101,22 @@ export function normalizeInboundIcalUrl(raw: string) {
     (url.hostname === "oracleoffreedom.com" || url.hostname.endsWith(".vercel.app")) &&
     url.pathname.includes("/api/calendar/feed");
   if (ownFeed) return null;
+  return url.toString();
+}
+
+/** Normalize a personal Meet / Zoom (or similar) join link. Empty clears the setting. */
+export function normalizeMeetingUrl(raw: string) {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  let url: URL;
+  try {
+    url = new URL(trimmed);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:" || url.username || url.password) return null;
+  if (url.toString().length > 500) return null;
+  if (isPrivateCalendarHost(url.hostname)) return null;
   return url.toString();
 }
 
@@ -225,6 +243,14 @@ export function parseCalendarConfig(value: unknown): CalendarConfig | null {
     else delete item.inboundIcalUrl;
   } else {
     delete item.inboundIcalUrl;
+  }
+  if (typeof item.meetingUrl === "string") {
+    const meeting = normalizeMeetingUrl(item.meetingUrl);
+    if (meeting) item.meetingUrl = meeting;
+    else if (item.meetingUrl.trim() === "") delete item.meetingUrl;
+    else return null;
+  } else {
+    delete item.meetingUrl;
   }
   return item as CalendarConfig;
 }
