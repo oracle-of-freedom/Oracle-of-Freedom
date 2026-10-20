@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label, Textarea } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { rememberPromoCode, rememberWish } from "@/components/whatsapp-link";
+import { COUNTRY_CODES, countryOptionLabel, internationalPhone } from "@/lib/country-codes";
 
 type FormCopy = Copy["form"];
 
@@ -19,6 +20,7 @@ function schemaFor(copy: FormCopy) {
     .object({
       name: z.string().trim().min(1, copy.errors.required),
       email: z.email(copy.errors.email),
+      country: z.string().optional(),
       phone: z.string().optional(),
       service: z.string().min(1, copy.errors.required),
       date: z.string().optional(),
@@ -50,6 +52,9 @@ function schemaFor(copy: FormCopy) {
       }
       if (multiDay && value.date && value.dateEnd && value.dateEnd < value.date) {
         ctx.addIssue({ code: "custom", path: ["dateEnd"], message: copy.errors.dateOrder });
+      }
+      if (value.phone?.replace(/\D/g, "") && !value.country) {
+        ctx.addIssue({ code: "custom", path: ["country"], message: copy.errors.country });
       }
     });
 }
@@ -98,6 +103,7 @@ export function InquiryForm({
     defaultValues: {
       name: "",
       email: "",
+      country: "",
       phone: "",
       service: presetService(initialService, copy.services),
       date: initialDate || "",
@@ -184,6 +190,8 @@ export function InquiryForm({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...values,
+        country: undefined,
+        phone: internationalPhone(values.country || "", values.phone || ""),
         locale,
         dateEnd: coverageSpan ? values.dateEnd : "",
         people: peopleMode(values.service) === "none" ? "" : values.people,
@@ -357,8 +365,32 @@ export function InquiryForm({
             <FieldError>{error("email")}</FieldError>
           </div>
           <div>
-            <Label htmlFor="phone">{copy.phone}</Label>
-            <Input id="phone" type="tel" autoComplete="tel" {...form.register("phone")} />
+            <Label htmlFor="country">{copy.phone}</Label>
+            <div className="grid gap-2 sm:grid-cols-[minmax(11rem,16rem)_minmax(0,1fr)]">
+              <select
+                id="country"
+                autoComplete="tel-country-code"
+                className="h-12 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+                aria-invalid={Boolean(error("country"))}
+                {...form.register("country")}
+              >
+                <option value="">—</option>
+                {COUNTRY_CODES.map(([iso, dial]) => (
+                  <option key={iso} value={iso}>
+                    {countryOptionLabel(iso, dial, locale)}
+                  </option>
+                ))}
+              </select>
+              <Input
+                id="phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel-national"
+                maxLength={20}
+                {...form.register("phone")}
+              />
+            </div>
+            <FieldError>{error("country")}</FieldError>
           </div>
           <div>
             <Label htmlFor="story">{copy.story}</Label>

@@ -922,6 +922,7 @@ export const es: Copy = {
       date: "Añade una fecha o marca que tu fecha es flexible.",
       dateEnd: "Añade la fecha final o marca que tu fecha es flexible.",
       dateOrder: "La fecha final tiene que ser el mismo día o posterior.",
+      country: "Elige el código de país antes del número.",
     },
     weddingLimit:
       "Solo fotografío celebraciones íntimas de hasta unas 30 personas, para poner todo el corazón en el día. Una boda más grande queda fuera de este trabajo; una sesión de retrato a menudo sí encaja. Puedes enviar la nota: responderé con sinceridad.",

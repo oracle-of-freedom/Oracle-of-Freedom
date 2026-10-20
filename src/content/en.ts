@@ -969,6 +969,7 @@ export const en: Copy = {
       date: "Add a date, or tick that your date is flexible.",
       dateEnd: "Add the end date, or tick that your date is flexible.",
       dateOrder: "The end date needs to be the same day or later.",
+      country: "Choose the country code before the number.",
     },
     weddingLimit:
       "I only photograph intimate celebrations of up to about 30 guests, so I can give the day my full heart. A larger wedding is outside this work — a portrait session often still fits. You're welcome to send the note; I'll answer honestly.",
