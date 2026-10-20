@@ -356,15 +356,7 @@ export async function ServiceView({
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Button asChild variant="light">
                 <Link href={{ pathname: "/inquire", query: { service: copy.inquiry } }}>
-                  {copy.personalizeCta
-                    ? copy.personalizeCta
-                    : copy.inquiry === "place"
-                      ? locale === "en"
-                        ? "Book a 15-min call"
-                        : locale === "es"
-                          ? "Reserva una llamada de 15 min"
-                          : "Marca uma chamada de 15 min"
-                      : common.closingPrimary}
+                  {copy.personalizeCta || (copy.inquiry === "place" ? copy.cta : common.closingPrimary)}
                 </Link>
               </Button>
               <WhatsAppLink
