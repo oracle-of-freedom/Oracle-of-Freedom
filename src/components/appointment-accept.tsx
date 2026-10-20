@@ -46,7 +46,7 @@ export function AppointmentAccept({
             </Button>
           ) : null}
           {calendarUrl ? (
-            <Button asChild variant={joinUrl ? "outline" : "default"}>
+            <Button asChild variant={joinUrl ? "outline" : "primary"}>
               <a href={calendarUrl}>{copy.download}</a>
             </Button>
           ) : null}
