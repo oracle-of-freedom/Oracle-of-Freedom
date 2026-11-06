@@ -2,8 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { PortfolioBrowser } from "@/components/portfolio-browser";
 import { getCopy } from "@/content";
 import type { Locale } from "@/i18n/routing";
-import { gallery } from "@/lib/content";
-import { isPublishedPhoto } from "@/lib/utils";
+import { getFilms, getPortfolioImages } from "@/lib/live-public";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -23,9 +22,7 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
   setRequestLocale(locale);
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
-  const images = gallery.filter(
-    (image) => isPublishedPhoto(image) && (image.pages.includes("portfolio") || image.featured),
-  );
+  const [images, films] = await Promise.all([getPortfolioImages(), getFilms("portfolio")]);
 
   return (
     <article className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
@@ -35,6 +32,7 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
       <div className="mt-10">
         <PortfolioBrowser
           images={images}
+          films={films}
           locale={loc}
           filters={copy.portfolio.filters}
           empty={copy.portfolio.empty}

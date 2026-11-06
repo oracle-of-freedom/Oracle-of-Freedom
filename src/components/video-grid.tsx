@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { readConsent } from "@/components/cookie-banner";
 import { MobileMore } from "@/components/mobile-more";
-import { imageById, videos, type VideoItem } from "@/lib/content";
+import type { Film, VideoItem } from "@/lib/content";
 import type { Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -45,6 +45,7 @@ function posterAlt(video: VideoItem, locale: Locale) {
 }
 
 export function VideoGrid({
+  films,
   locale,
   title,
   note,
@@ -52,6 +53,8 @@ export function VideoGrid({
   tone = "light",
   foldMobile,
 }: {
+  /** The films to show, with their pictures. Load them with getFilms. */
+  films: Film[];
   locale: Locale;
   title?: string;
   note?: string;
@@ -66,7 +69,7 @@ export function VideoGrid({
   const [opened, setOpened] = useState<string[]>([]);
   const words = chrome[locale];
   const captionClass = tone === "night" ? "mt-3 text-sm text-sand/60" : "mt-3 text-sm text-ink/60";
-  const fold = (foldMobile ?? variant === "section") && videos.items.length > 1;
+  const fold = (foldMobile ?? variant === "section") && films.length > 1;
 
   useEffect(() => {
     const sync = () => setConsent(Boolean(readConsent()?.embeds));
@@ -74,6 +77,8 @@ export function VideoGrid({
     window.addEventListener("oof-consent", sync);
     return () => window.removeEventListener("oof-consent", sync);
   }, []);
+
+  if (!films.length) return null;
 
   const grid = ({
     hide,
@@ -85,8 +90,7 @@ export function VideoGrid({
     itemId: (index: number) => string | undefined;
   }) => (
     <div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 xl:grid-cols-4">
-      {videos.items.map((video, index) => {
-        const poster = imageById(video.posterId);
+      {films.map(({ video, poster }, index) => {
         const caption = captionOf(video, locale);
         const alt = posterAlt(video, locale);
         const wide = video.platform === "youtube";
@@ -147,10 +151,10 @@ export function VideoGrid({
     </div>
   );
 
-  const films = (
+  const block = (
     <MobileMore
       enabled={fold}
-      total={videos.items.length}
+      total={films.length}
       visible={1}
       more={words.more}
       less={words.less}
@@ -160,7 +164,7 @@ export function VideoGrid({
     </MobileMore>
   );
 
-  if (variant === "plain") return films;
+  if (variant === "plain") return block;
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
@@ -168,7 +172,7 @@ export function VideoGrid({
       {note ? (
         <p className={cn("mt-3 max-w-2xl text-sm", tone === "night" ? "text-sand/70" : "text-ink/70")}>{note}</p>
       ) : null}
-      <div className={title || note ? "mt-8" : undefined}>{films}</div>
+      <div className={title || note ? "mt-8" : undefined}>{block}</div>
     </section>
   );
 }

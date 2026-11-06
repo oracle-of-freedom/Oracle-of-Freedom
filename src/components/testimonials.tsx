@@ -1,7 +1,7 @@
 "use client";
 
 import { MobileMore } from "@/components/mobile-more";
-import { testimonials, type Testimonial } from "@/lib/content";
+import type { Testimonial } from "@/lib/content";
 import type { Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -12,20 +12,19 @@ const moreCopy = {
 } as const;
 
 export function Testimonials({
-  ids,
+  items: all,
   locale,
   title,
   foldAfter = 4,
 }: {
-  ids: string[];
+  /** The reviews for this page, already chosen and ordered. Load them with getReviews. */
+  items: Testimonial[];
   locale: Locale;
   title: string;
-  /** Show this many real quotes, then a button for the rest. Placeholders are already removed. */
+  /** Show this many real quotes, then a button for the rest. */
   foldAfter?: number;
 }) {
-  const items = ids
-    .map((id) => testimonials.find((item) => item.id === id))
-    .filter((item): item is Testimonial => item != null && item.placeholder === false);
+  const items = all.filter((item) => item.placeholder === false);
 
   if (!items.length) return null;
 

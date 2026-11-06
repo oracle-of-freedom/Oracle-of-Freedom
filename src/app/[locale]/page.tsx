@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { getCopy } from "@/content";
 import { posts } from "@/content/journal";
 import type { Locale } from "@/i18n/routing";
-import { featuredImages, formatEuro, imageById, settings } from "@/lib/content";
+import { formatEuro, imageById, settings } from "@/lib/content";
+import { getFeaturedImages, getReviews } from "@/lib/live-public";
 import { getCatalog } from "@/lib/offers";
 import { openingPrice } from "@/lib/pricing";
 import { pageMetadata } from "@/lib/seo";
@@ -29,7 +30,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
-  const catalog = await getCatalog();
+  const [catalog, featured, reviews] = await Promise.all([
+    getCatalog(),
+    getFeaturedImages(),
+    getReviews("home"),
+  ]);
   const hero = imageById(settings.heroImageId);
   const mobile = imageById(settings.mobileHeroImageId);
   const about = imageById(settings.aboutImageId);
@@ -177,7 +182,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </Link>
         </div>
         <GalleryGrid
-          images={featuredImages()}
+          images={featured}
           locale={loc}
           foldMobile
           labels={{
@@ -191,7 +196,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </section>
 
       <Testimonials
-        ids={["india", "oliwia", "sage", "rewild", "kliq-press", "kliq", "nixie", "bliss-burn", "anael", "couple", "retreat", "artist"]}
+        items={reviews}
         locale={loc}
         title={copy.home.wordsTitle}
         foldAfter={4}
@@ -261,7 +266,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
         <p className="mb-4 text-sm text-ink/60">{copy.home.igNote}</p>
         <div className="grid grid-cols-3 gap-2 md:grid-cols-6">
-          {featuredImages()
+          {featured
             .slice(0, 6)
             .map((image) => (
               <a key={image.id} href={settings.instagramUrl} className="relative aspect-square overflow-hidden rounded-2xl">

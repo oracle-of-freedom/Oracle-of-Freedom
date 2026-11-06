@@ -5,7 +5,8 @@ import { StayBanners } from "@/components/stay-banners";
 import { Testimonials } from "@/components/testimonials";
 import { getCopy } from "@/content";
 import type { Locale } from "@/i18n/routing";
-import { formatEuro, imagesForPage } from "@/lib/content";
+import { formatEuro } from "@/lib/content";
+import { getImagesForPage, getReviews } from "@/lib/live-public";
 import { getCatalog } from "@/lib/offers";
 import { openingPrice } from "@/lib/pricing";
 import { pageMetadata } from "@/lib/seo";
@@ -27,7 +28,11 @@ export default async function PeoplePage({ params }: { params: Promise<{ locale:
   setRequestLocale(locale);
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
-  const catalog = await getCatalog();
+  const [catalog, images, reviews] = await Promise.all([
+    getCatalog(),
+    getImagesForPage("people"),
+    getReviews("people"),
+  ]);
   const portraitsFrom = openingPrice(catalog, "portraits") ?? 175;
   const elopementFrom = openingPrice(catalog, "elopements") ?? 690;
   const doors = [
@@ -65,7 +70,7 @@ export default async function PeoplePage({ params }: { params: Promise<{ locale:
       </section>
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <GalleryGrid
-          images={imagesForPage("people")}
+          images={images}
           locale={loc}
           foldMobile
           mobileVisible={4}
@@ -78,7 +83,7 @@ export default async function PeoplePage({ params }: { params: Promise<{ locale:
           }}
         />
       </section>
-      <Testimonials ids={["india", "oliwia"]} locale={loc} title={copy.people.wordsTitle} foldAfter={4} />
+      <Testimonials items={reviews} locale={loc} title={copy.people.wordsTitle} foldAfter={4} />
     </article>
   );
 }

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { GalleryGrid } from "@/components/gallery";
 import { VideoGrid } from "@/components/video-grid";
-import type { GalleryImage } from "@/lib/content";
+import type { Film, GalleryImage } from "@/lib/content";
 import type { Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +15,7 @@ function matchesPortfolioFilter(image: GalleryImage, filter: string) {
 
 export function PortfolioBrowser({
   images,
+  films,
   locale,
   filters,
   empty,
@@ -22,6 +23,7 @@ export function PortfolioBrowser({
   labels,
 }: {
   images: GalleryImage[];
+  films: Film[];
   locale: Locale;
   filters: { id: string; label: string; soon?: boolean }[];
   empty: string;
@@ -61,7 +63,7 @@ export function PortfolioBrowser({
       )}
       {filter === "film" ? (
         <div className={visible.length ? "mt-10" : undefined}>
-          <VideoGrid locale={locale} variant="plain" />
+          <VideoGrid films={films} locale={locale} variant="plain" />
         </div>
       ) : null}
     </div>

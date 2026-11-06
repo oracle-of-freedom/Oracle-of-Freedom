@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { gallery, imagesForPage, settings, siteUrl } from "@/lib/content";
 import { festivalFilmSpan } from "@/lib/delivery-copy";
 import { applyTokens, buildTokenMap, displayTiming } from "@/lib/delivery";
+import type { ReviewPageId } from "@/lib/live-content";
+import { getFilms, getImagesForPage, getReviews } from "@/lib/live-public";
 import { getSettings } from "@/lib/offers";
 import { mergeCatalog, type LiveSettings, type PricedPackage } from "@/lib/pricing";
 import type { Locale } from "@/i18n/routing";
@@ -50,10 +52,17 @@ export async function ServiceView({
   heroId?: string;
   heroPosition?: string;
 }) {
-  const images = imagesForPage(page).filter((image) => image.id !== "cover-wide");
+  const [images, reviews, filmList, stored] = await Promise.all([
+    getImagesForPage(page).then((list) => list.filter((image) => image.id !== "cover-wide")),
+    getReviews(page as ReviewPageId),
+    group === "festivals" ? getFilms("festivals") : Promise.resolve([]),
+    getSettings(),
+  ]);
+  // The hero stays one of the photos that ship with the site, so new uploads never replace it.
   const hero =
-    (heroId ? gallery.find((image) => image.id === heroId) : undefined) ?? images[0];
-  const stored = await getSettings();
+    (heroId ? gallery.find((image) => image.id === heroId) : undefined) ??
+    imagesForPage(page).find((image) => image.id !== "cover-wide") ??
+    images[0];
   const tokens: Record<string, string> = buildTokenMap(stored.timings);
   const faqTokens = {
     ...tokens,
@@ -301,7 +310,7 @@ export async function ServiceView({
 
         {showVideos && copy.videosTitle ? (
           <div className="bg-night text-sand">
-            <VideoGrid locale={locale} title={copy.videosTitle} note={copy.videosNote || ""} tone="night" />
+            <VideoGrid films={filmList} locale={locale} title={copy.videosTitle} note={copy.videosNote || ""} tone="night" />
           </div>
         ) : null}
 
@@ -322,7 +331,7 @@ export async function ServiceView({
           </ol>
         </section>
 
-        <Testimonials ids={copy.testimonialIds} locale={locale} title={copy.wordsTitle} foldAfter={4} />
+        <Testimonials items={reviews} locale={locale} title={copy.wordsTitle} foldAfter={4} />
 
         <section className="mx-auto max-w-3xl px-4 pb-8 md:px-6">
           <h2 className="font-serif text-4xl">{copy.faqTitle}</h2>

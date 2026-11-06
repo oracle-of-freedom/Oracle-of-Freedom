@@ -5,7 +5,8 @@ import { StayBanners } from "@/components/stay-banners";
 import { VideoGrid } from "@/components/video-grid";
 import { getCopy } from "@/content";
 import type { Locale } from "@/i18n/routing";
-import { formatEuro, imagesForPage, type GalleryImage } from "@/lib/content";
+import { formatEuro, type GalleryImage } from "@/lib/content";
+import { getFilms, getImagesForPage } from "@/lib/live-public";
 import { getCatalog } from "@/lib/offers";
 import { openingPrice } from "@/lib/pricing";
 import { pageMetadata } from "@/lib/seo";
@@ -39,7 +40,11 @@ export default async function ExperiencesPage({ params }: { params: Promise<{ lo
   setRequestLocale(locale);
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
-  const catalog = await getCatalog();
+  const [catalog, images, films] = await Promise.all([
+    getCatalog(),
+    getImagesForPage("experiences"),
+    getFilms("experiences"),
+  ]);
   const retreatFrom = openingPrice(catalog, "retreats") ?? 400;
   const artistFrom = openingPrice(catalog, "festivals") ?? 190;
   const doors: {
@@ -90,7 +95,7 @@ export default async function ExperiencesPage({ params }: { params: Promise<{ lo
       </section>
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <GalleryGrid
-          images={swapExperiencePhotos(imagesForPage("experiences"))}
+          images={swapExperiencePhotos(images)}
           locale={loc}
           foldMobile
           mobileVisible={4}
@@ -103,7 +108,7 @@ export default async function ExperiencesPage({ params }: { params: Promise<{ lo
           }}
         />
         <div className="mt-16">
-          <VideoGrid locale={loc} variant="plain" foldMobile tone="light" />
+          <VideoGrid films={films} locale={loc} variant="plain" foldMobile tone="light" />
         </div>
       </section>
     </article>

@@ -67,6 +67,12 @@ export type VideoItem = {
   label: Record<Locale, string>;
 };
 
+/** A film with the picture shown before it plays. */
+export type Film = {
+  video: VideoItem;
+  poster: { src: string; width: number; height: number };
+};
+
 export const settings = settingsJson;
 export const packages = packagesJson;
 export const gallery = galleryJson.images as GalleryImage[];

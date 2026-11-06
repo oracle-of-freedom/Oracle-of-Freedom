@@ -11,6 +11,7 @@ export function studioCopy(lang: StudioLang) {
       calendar: en ? "Calendar" : "Agenda",
       presence: en ? "Places" : "Lugares",
       prices: en ? "Prices" : "Precios",
+      content: en ? "Content" : "Contenido",
       logout: en ? "Log out" : "Salir",
       menu: en ? "Studio" : "Estudio",
     },
@@ -497,6 +498,186 @@ export function studioCopy(lang: StudioLang) {
       saveInbound: en ? "Save incoming URL" : "Guardar URL de entrada",
       inboundSaved: en ? "Incoming URL saved." : "URL de entrada guardada.",
       newLink: en ? "Create another outgoing link" : "Crear otro enlace de salida",
+    },
+    content: {
+      title: en ? "Content" : "Contenido",
+      intro: en
+        ? "Add reviews, photos and films to the site. Choose the pages they go on, and they appear there within a minute."
+        : "Añade reseñas, fotos y vídeos al sitio. Elige las páginas donde van y aparecen en menos de un minuto.",
+      back: en ? "Back to content" : "Volver a contenido",
+      open: en ? "Open" : "Abrir",
+      readonly: en
+        ? "Vercel Blob is not connected yet, so nothing can be saved here."
+        : "Vercel Blob aún no está conectado, así que aquí no se puede guardar nada.",
+      cards: {
+        reviews: {
+          title: en ? "Reviews" : "Reseñas",
+          body: en
+            ? "Paste a review, say who it is from and what the service was, and pick the pages."
+            : "Pega una reseña, indica de quién es y qué servicio fue, y elige las páginas.",
+        },
+        photos: {
+          title: en ? "Photos" : "Fotos",
+          body: en
+            ? "Upload photos to the homepage, the portfolio and any service gallery."
+            : "Sube fotos a la portada, al portafolio y a cualquier galería de servicio.",
+        },
+        videos: {
+          title: en ? "Films" : "Vídeos",
+          body: en
+            ? "Add a YouTube or Instagram film and choose where it plays."
+            : "Añade un vídeo de YouTube o Instagram y elige dónde se reproduce.",
+        },
+      },
+      pages: {
+        home: en ? "Homepage" : "Portada",
+        people: en ? "People page" : "Página Personas",
+        experiences: en ? "Experiences page" : "Página Experiencias",
+        portfolio: en ? "Portfolio page" : "Página Portafolio",
+        portraits: en ? "Portraits & couples" : "Retratos y parejas",
+        elopements: en ? "Elopements & weddings" : "Elopements y bodas",
+        retreats: en ? "Retreats & gatherings" : "Retiros y encuentros",
+        festivals: en ? "Festivals & artists" : "Festivales y artistas",
+        places: en ? "Places" : "Lugares",
+      } as Record<string, string>,
+      tabs: {
+        portraits: en ? "Portraits & Couples" : "Retratos y parejas",
+        elopements: en ? "Elopements" : "Elopements",
+        retreats: en ? "Retreats & Gatherings" : "Retiros y encuentros",
+        festivals: en ? "Festivals" : "Festivales",
+        djs: en ? "DJs & Music" : "DJs y música",
+        fire: en ? "Fire" : "Fuego",
+        places: en ? "Places" : "Lugares",
+      } as Record<string, string>,
+      selectAll: en ? "Select all" : "Marcar todas",
+      clear: en ? "Clear" : "Quitar todas",
+      otherLanguages: en ? "Spanish and Portuguese (optional)" : "Español y portugués (opcional)",
+      otherLanguagesHelp: en
+        ? "Leave a language empty and the site shows the English there."
+        : "Deja un idioma vacío y el sitio muestra el inglés.",
+      spanish: en ? "Spanish" : "Español",
+      portuguese: en ? "Portuguese" : "Portugués",
+      position: en ? "Where in the list" : "Posición en la lista",
+      positionFirst: en ? "First" : "Primero",
+      positionLast: en ? "After the others" : "Después de las demás",
+      delete: en ? "Delete" : "Borrar",
+      confirmDelete: en ? "Delete this for good?" : "¿Borrar esto para siempre?",
+      cancel: en ? "Cancel" : "Cancelar",
+      edit: en ? "Edit" : "Editar",
+      close: en ? "Close" : "Cerrar",
+      saving: en ? "Saving…" : "Guardando…",
+      onSite: en ? "On the site" : "En el sitio",
+      hidden: en ? "Hidden" : "Oculta",
+      noPages: en ? "No page" : "Ninguna página",
+      reviews: {
+        addTitle: en ? "Add a review" : "Añadir una reseña",
+        editTitle: en ? "Edit this review" : "Editar esta reseña",
+        listTitle: en ? "All reviews" : "Todas las reseñas",
+        empty: en ? "No reviews yet." : "Aún no hay reseñas.",
+        quote: en ? "What they said" : "Lo que dijeron",
+        quoteHelp: en ? "Paste it as they wrote it." : "Pégala tal como la escribieron.",
+        name: en ? "Name and where they are from" : "Nombre y de dónde son",
+        nameHelp: en
+          ? "The first line under the review, for example “Quinton, Ireland”."
+          : "La primera línea bajo la reseña, por ejemplo «Quinton, Irlanda».",
+        service: en ? "Kind of service" : "Tipo de servicio",
+        serviceHelp: en
+          ? "The small line under the name. Tap one, or write your own."
+          : "La línea pequeña bajo el nombre. Toca una o escribe la tuya.",
+        pages: en ? "Show it on" : "Mostrar en",
+        pagesHelp: en ? "Tick every page where this review belongs." : "Marca cada página donde va esta reseña.",
+        first: en ? "Show it before the other reviews" : "Mostrarla antes que las demás reseñas",
+        hide: en ? "Hide this review from the site" : "Ocultar esta reseña del sitio",
+        preview: en ? "How it looks" : "Así se ve",
+        save: en ? "Save review" : "Guardar reseña",
+        add: en ? "Add review" : "Añadir reseña",
+        saved: en ? "Saved. It is on the site within a minute." : "Guardado. Está en el sitio en menos de un minuto.",
+        fromSite: en ? "Already on the site" : "Ya estaba en el sitio",
+        quoteLocked: en
+          ? "The words stay as they are. You can change the name, the service and the pages."
+          : "Las palabras no cambian. Puedes cambiar el nombre, el servicio y las páginas.",
+      },
+      photos: {
+        addTitle: en ? "Add photos" : "Añadir fotos",
+        choose: en ? "Choose photos" : "Elegir fotos",
+        chooseHelp: en
+          ? "JPG, PNG or WebP. They are shrunk on your phone before they upload."
+          : "JPG, PNG o WebP. Se reducen en tu móvil antes de subirlas.",
+        preparing: (done: number, total: number) =>
+          en ? `Uploading ${done} of ${total}…` : `Subiendo ${done} de ${total}…`,
+        ready: (count: number) =>
+          en ? `${count} ${count === 1 ? "photo" : "photos"} ready` : `${count} ${count === 1 ? "foto lista" : "fotos listas"}`,
+        failed: (name: string) => (en ? `${name} did not upload.` : `${name} no se subió.`),
+        remove: en ? "Remove" : "Quitar",
+        pages: en ? "Put them on" : "Ponerlas en",
+        pagesHelp: en ? "Tick every gallery that should show them." : "Marca cada galería donde deben verse.",
+        tabs: en ? "Portfolio filters" : "Filtros del portafolio",
+        tabsHelp: en
+          ? "They always show under All. Tick the other filters too."
+          : "Siempre salen en Todo. Marca también los otros filtros.",
+        alt: en ? "Describe the photo (optional)" : "Describe la foto (opcional)",
+        altHelp: en
+          ? "For people who cannot see it, and for search engines. One short line."
+          : "Para quien no puede verla y para los buscadores. Una línea corta.",
+        positionHelp: en
+          ? "“First” puts them before the older photos on those pages."
+          : "«Primero» las pone antes que las fotos anteriores en esas páginas.",
+        add: en ? "Add to the site" : "Añadir al sitio",
+        added: (count: number) =>
+          en
+            ? `${count} ${count === 1 ? "photo" : "photos"} added. They show within a minute.`
+            : `${count} ${count === 1 ? "foto añadida" : "fotos añadidas"}. Se ven en menos de un minuto.`,
+        listTitle: en ? "Photos you added" : "Fotos que has añadido",
+        empty: en ? "No photos added here yet." : "Aún no has añadido fotos aquí.",
+        editTitle: en ? "Where this photo goes" : "Dónde va esta foto",
+        save: en ? "Save" : "Guardar",
+        saved: en ? "Saved." : "Guardado.",
+      },
+      videos: {
+        addTitle: en ? "Add a film" : "Añadir un vídeo",
+        editTitle: en ? "Edit this film" : "Editar este vídeo",
+        listTitle: en ? "Films you added" : "Vídeos que has añadido",
+        empty: en ? "No films added here yet." : "Aún no has añadido vídeos aquí.",
+        link: en ? "YouTube or Instagram link" : "Enlace de YouTube o Instagram",
+        linkHelp: en
+          ? "Paste the link to the film, a YouTube video or an Instagram reel."
+          : "Pega el enlace del vídeo de YouTube o del reel de Instagram.",
+        caption: en ? "Caption (optional)" : "Pie de foto (opcional)",
+        captionHelp: en ? "A short line under the film." : "Una línea corta bajo el vídeo.",
+        poster: en ? "Cover picture" : "Imagen de portada",
+        posterHelp: en
+          ? "The picture shown before it plays. Needed for Instagram. For YouTube it is taken from the video if you skip it."
+          : "La imagen que se ve antes de reproducir. Hace falta para Instagram. En YouTube se toma del vídeo si no pones ninguna.",
+        posterChoose: en ? "Choose a cover" : "Elegir portada",
+        posterChange: en ? "Change the cover" : "Cambiar la portada",
+        pages: en ? "Play it on" : "Mostrar en",
+        pagesHelp: en ? "Tick every page where this film should play." : "Marca cada página donde debe verse este vídeo.",
+        filmPages: {
+          festivals: en ? "Festivals & artists page" : "Página Festivales y artistas",
+          experiences: en ? "Experiences page" : "Página Experiencias",
+          portfolio: en ? "Portfolio · Film filter" : "Portafolio · filtro Vídeo",
+        } as Record<string, string>,
+        save: en ? "Save film" : "Guardar vídeo",
+        add: en ? "Add film" : "Añadir vídeo",
+        saved: en ? "Saved. It is on the site within a minute." : "Guardado. Está en el sitio en menos de un minuto.",
+      },
+      errors: {
+        quote: en ? "Paste the review first." : "Pega primero la reseña.",
+        pages: en ? "Tick at least one page." : "Marca al menos una página.",
+        missing: en ? "That item is no longer here." : "Eso ya no está aquí.",
+        full: en ? "There is no room for more. Delete an old one." : "No hay espacio para más. Borra una antigua.",
+        link: en
+          ? "That is not a YouTube or Instagram link."
+          : "Ese no es un enlace de YouTube o Instagram.",
+        poster: en
+          ? "Instagram films need a cover picture."
+          : "Los vídeos de Instagram necesitan una imagen de portada.",
+        posterFetch: en
+          ? "The cover could not be taken from YouTube. Choose a cover picture."
+          : "No se pudo tomar la portada de YouTube. Elige una imagen de portada.",
+        photos: en ? "Choose at least one photo first." : "Elige primero al menos una foto.",
+        save: en ? "It could not be saved." : "No se pudo guardar.",
+      },
     },
     errors: {
       password: en ? "The password does not match." : "La contraseña no coincide.",
