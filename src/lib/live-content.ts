@@ -97,6 +97,31 @@ export type LivePhoto = {
   alt: LocalText;
 };
 
+/**
+ * Changes to a photo that ships with the site. The picture itself stays as it is.
+ * It always carries the full placement, so the saved choice replaces the built-in one.
+ */
+export type PhotoTweak = {
+  pages: string[];
+  tabs: string[];
+  /** A language left empty keeps the built-in description. */
+  alt: LocalText;
+  hidden: boolean;
+  first: boolean;
+};
+
+/**
+ * Changes to a film that ships with the site. The link and the cover stay as they are.
+ * It always carries the full placement, so the saved choice replaces the built-in one.
+ */
+export type VideoTweak = {
+  pages: string[];
+  /** A language left empty keeps the built-in caption. */
+  caption: LocalText;
+  hidden: boolean;
+  first: boolean;
+};
+
 export type LiveVideo = {
   id: string;
   createdAt: string;
@@ -116,7 +141,9 @@ export type LiveContent = {
   reviews: LiveReview[];
   reviewTweaks: Record<string, ReviewTweak>;
   photos: LivePhoto[];
+  photoTweaks: Record<string, PhotoTweak>;
   videos: LiveVideo[];
+  videoTweaks: Record<string, VideoTweak>;
 };
 
 export const LIMITS = {
@@ -131,7 +158,7 @@ export const LIMITS = {
 } as const;
 
 export function emptyLiveContent(): LiveContent {
-  return { reviews: [], reviewTweaks: {}, photos: [], videos: [] };
+  return { reviews: [], reviewTweaks: {}, photos: [], photoTweaks: {}, videos: [], videoTweaks: {} };
 }
 
 const idPattern = /^[A-Za-z0-9-]{8,64}$/;
@@ -251,6 +278,41 @@ function parseTweaks(value: unknown): Record<string, ReviewTweak> {
   return out;
 }
 
+function parsePhotoTweaks(value: unknown): Record<string, PhotoTweak> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const out: Record<string, PhotoTweak> = {};
+  for (const [id, raw] of Object.entries(value as Record<string, unknown>)) {
+    if (!/^[a-z0-9-]{2,60}$/.test(id)) continue;
+    if (!raw || typeof raw !== "object") continue;
+    const item = raw as Record<string, unknown>;
+    out[id] = {
+      pages: ids(item.pages, PHOTO_PAGE_IDS),
+      tabs: ids(item.tabs, PORTFOLIO_TAB_IDS),
+      alt: localText(item.alt, LIMITS.alt),
+      hidden: item.hidden === true,
+      first: item.first === true,
+    };
+  }
+  return out;
+}
+
+function parseVideoTweaks(value: unknown): Record<string, VideoTweak> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const out: Record<string, VideoTweak> = {};
+  for (const [id, raw] of Object.entries(value as Record<string, unknown>)) {
+    if (!/^[a-z0-9-]{2,60}$/.test(id)) continue;
+    if (!raw || typeof raw !== "object") continue;
+    const item = raw as Record<string, unknown>;
+    out[id] = {
+      pages: ids(item.pages, VIDEO_PAGE_IDS),
+      caption: localText(item.caption, LIMITS.caption),
+      hidden: item.hidden === true,
+      first: item.first === true,
+    };
+  }
+  return out;
+}
+
 function list<T>(value: unknown, parse: (item: unknown) => T | null, max: number): T[] {
   if (!Array.isArray(value)) return [];
   return value.slice(0, max).map(parse).filter((item): item is T => item !== null);
@@ -263,7 +325,9 @@ export function parseLiveContent(value: unknown): LiveContent {
     reviews: list(item.reviews, parseReview, LIMITS.reviews),
     reviewTweaks: parseTweaks(item.reviewTweaks),
     photos: list(item.photos, parsePhoto, LIMITS.photos),
+    photoTweaks: parsePhotoTweaks(item.photoTweaks),
     videos: list(item.videos, parseVideo, LIMITS.videos),
+    videoTweaks: parseVideoTweaks(item.videoTweaks),
   };
 }
 

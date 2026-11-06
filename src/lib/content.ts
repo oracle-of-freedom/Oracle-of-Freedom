@@ -18,6 +18,8 @@ export type GalleryImage = {
   /** Portfolio tabs that may show this image. When set, "all" is included only if listed. */
   portfolioTabs?: string[];
   featured: boolean;
+  /** True when Agota changed where this photo goes from the studio. */
+  tweaked?: boolean;
   provisional: boolean;
   placeholder: boolean;
   order: number;

@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { useActionState, useRef, useState } from "react";
-import { addPhotos, deletePhoto, savePhoto } from "@/app/admin/content/actions";
-import { DeleteForm, Notice, OtherLanguages, PagePicker } from "@/components/admin-content/controls";
+import { addPhotos, deletePhoto, resetPhoto, savePhoto } from "@/app/admin/content/actions";
+import { CheckRow, DeleteForm, Notice, OtherLanguages, PagePicker } from "@/components/admin-content/controls";
 import { useStudioCopy } from "@/components/studio-lang";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
@@ -12,20 +12,25 @@ import {
   LIMITS,
   PHOTO_PAGE_IDS,
   PORTFOLIO_TAB_IDS,
-  mediaSrc,
   type LocalText,
 } from "@/lib/live-content";
 import type { StorageMode } from "@/lib/pricing";
 
 export type AdminPhoto = {
   id: string;
-  mediaId: string;
-  width: number;
-  height: number;
+  /** Where to load the picture from. */
+  src: string;
+  /** True for a photo that ships with the site. The picture cannot be changed or deleted here. */
+  bundled: boolean;
+  /** True when a photo that ships with the site has been moved from the studio. */
+  tweaked: boolean;
+  hidden: boolean;
   pages: string[];
   tabs: string[];
   first: boolean;
   alt: LocalText;
+  /** The description the site uses when none is written here. */
+  defaultAlt: string;
 };
 
 type Staged = {
@@ -82,11 +87,13 @@ function Details({
   setAlt,
   first,
   idPrefix,
+  placeholder,
 }: {
   alt: LocalText;
   setAlt: (next: LocalText) => void;
   first: boolean;
   idPrefix: string;
+  placeholder?: string;
 }) {
   const t = useStudioCopy();
   return (
@@ -98,6 +105,7 @@ function Details({
           name="altEn"
           maxLength={LIMITS.alt}
           value={alt.en}
+          placeholder={placeholder}
           onChange={(event) => setAlt({ ...alt, en: event.target.value })}
         />
         <p className="mt-2 text-sm text-ink/60">{t.content.photos.altHelp}</p>
@@ -287,23 +295,27 @@ function PhotoCard({ photo, disabled }: { photo: AdminPhoto; disabled: boolean }
   const [pages, setPages] = useState(photo.pages);
   const [tabs, setTabs] = useState(photo.tabs);
   const [alt, setAlt] = useState<LocalText>(photo.alt);
+  const [hidden, setHidden] = useState(photo.hidden);
+  const description = photo.alt.en || photo.defaultAlt;
 
   return (
     <li className="rounded-3xl bg-white p-3 shadow-sm md:p-4">
       <div className="flex gap-3">
         <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-clay/60">
           <Image
-            src={mediaSrc(photo.mediaId)}
-            alt={photo.alt.en}
+            src={photo.src}
+            alt={description}
             fill
-            unoptimized
+            unoptimized={!photo.bundled}
             sizes="96px"
-            className="object-cover"
+            className={`object-cover ${photo.hidden ? "opacity-40" : ""}`}
           />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap gap-1.5 text-xs">
-            {photo.pages.length === 0 ? (
+            {photo.hidden ? (
+              <span className="rounded-full bg-ink px-3 py-1 text-sand">{t.content.hidden}</span>
+            ) : photo.pages.length === 0 ? (
               <span className="rounded-full bg-clay px-3 py-1">{t.content.noPages}</span>
             ) : (
               photo.pages.map((page) => (
@@ -312,8 +324,18 @@ function PhotoCard({ photo, disabled }: { photo: AdminPhoto; disabled: boolean }
                 </span>
               ))
             )}
+            {photo.bundled ? (
+              <span className="rounded-full border border-ink/15 px-3 py-1 text-ink/60">
+                {t.content.photos.fromSite}
+              </span>
+            ) : null}
+            {photo.tweaked ? (
+              <span className="rounded-full border border-terracotta/40 px-3 py-1 text-terracotta-ink">
+                {t.content.photos.changed}
+              </span>
+            ) : null}
           </div>
-          {photo.alt.en ? <p className="mt-2 line-clamp-2 text-sm text-ink/70">{photo.alt.en}</p> : null}
+          {description ? <p className="mt-2 line-clamp-2 text-sm text-ink/70">{description}</p> : null}
           <div className="mt-3 flex flex-wrap gap-2">
             <Button
               type="button"
@@ -332,14 +354,36 @@ function PhotoCard({ photo, disabled }: { photo: AdminPhoto; disabled: boolean }
         <div className="mt-5 space-y-6">
           <form action={action} className="space-y-6">
             <input type="hidden" name="id" value={photo.id} />
+            {photo.bundled ? <input type="hidden" name="bundled" value="1" /> : null}
+            {photo.bundled ? <p className="text-sm text-ink/70">{t.content.photos.siteNote}</p> : null}
             <Placement pages={pages} setPages={setPages} tabs={tabs} setTabs={setTabs} />
-            <Details alt={alt} setAlt={setAlt} first={photo.first} idPrefix={photo.id} />
+            <Details
+              alt={alt}
+              setAlt={setAlt}
+              first={photo.first}
+              idPrefix={photo.id}
+              placeholder={photo.bundled ? photo.defaultAlt : undefined}
+            />
+            {photo.bundled ? (
+              <CheckRow name="hidden" label={t.content.photos.hide} checked={hidden} onChange={setHidden} />
+            ) : null}
             <Notice state={state} saved={t.content.photos.saved} />
             <Button type="submit" disabled={pending || disabled} className="w-full sm:w-auto">
               {pending ? t.content.saving : t.content.photos.save}
             </Button>
           </form>
-          <DeleteForm action={deletePhoto} id={photo.id} />
+          {photo.bundled ? (
+            photo.tweaked ? (
+              <form action={resetPhoto}>
+                <input type="hidden" name="id" value={photo.id} />
+                <Button type="submit" variant="outline" disabled={disabled} className="w-full sm:w-auto">
+                  {t.content.photos.reset}
+                </Button>
+              </form>
+            ) : null
+          ) : (
+            <DeleteForm action={deletePhoto} id={photo.id} />
+          )}
         </div>
       ) : null}
     </li>
@@ -349,16 +393,43 @@ function PhotoCard({ photo, disabled }: { photo: AdminPhoto; disabled: boolean }
 export function PhotosManager({ photos, mode }: { photos: AdminPhoto[]; mode: StorageMode }) {
   const t = useStudioCopy();
   const disabled = mode === "readonly";
+  const [filter, setFilter] = useState("all");
+  const shown = photos.filter((photo) => {
+    if (filter === "all") return true;
+    if (filter === "mine") return !photo.bundled;
+    if (filter === "site") return photo.bundled;
+    if (filter === "hidden") return photo.hidden;
+    return !photo.hidden && photo.pages.includes(filter);
+  });
   return (
     <div className="space-y-10">
       {disabled ? <p className="rounded-2xl bg-clay px-4 py-3 text-sm">{t.content.readonly}</p> : null}
       <Uploader disabled={disabled} />
       <section>
         <h2 className="font-serif text-2xl md:text-3xl">{t.content.photos.listTitle}</h2>
-        {photos.length === 0 ? <p className="mt-4 text-ink/70">{t.content.photos.empty}</p> : null}
+        <div className="mt-4">
+          <Label htmlFor="photo-filter">{t.content.photos.filterLabel}</Label>
+          <select
+            id="photo-filter"
+            value={filter}
+            onChange={(event) => setFilter(event.target.value)}
+            className="h-12 w-full rounded-2xl border border-ink/15 bg-white/70 px-4 text-base"
+          >
+            <option value="all">{t.content.photos.filterAll}</option>
+            <option value="mine">{t.content.photos.filterMine}</option>
+            <option value="site">{t.content.photos.filterSite}</option>
+            <option value="hidden">{t.content.photos.filterHidden}</option>
+            {PHOTO_PAGE_IDS.map((page) => (
+              <option key={page} value={page}>
+                {t.content.pages[page] ?? page}
+              </option>
+            ))}
+          </select>
+        </div>
+        {shown.length === 0 ? <p className="mt-4 text-ink/70">{t.content.photos.empty}</p> : null}
         <ul className="mt-4 space-y-4">
-          {photos.map((photo) => (
-            <PhotoCard key={photo.id} photo={photo} disabled={disabled} />
+          {shown.map((photo) => (
+            <PhotoCard key={`${photo.id}-${photo.tweaked}`} photo={photo} disabled={disabled} />
           ))}
         </ul>
       </section>

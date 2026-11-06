@@ -18,7 +18,7 @@ import {
   type LocalText,
 } from "@/lib/live-content";
 import { readLiveContent, writeLiveContent } from "@/lib/live-content-store";
-import { bundledReviews } from "@/lib/live-public";
+import { bundledFilms, bundledReviews, editableBundledPhotos } from "@/lib/live-public";
 import { deleteMedia, saveMedia } from "@/lib/media-store";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
@@ -185,14 +185,32 @@ export async function savePhoto(_state: ActionState, formData: FormData): Promis
   const t = studioCopy(await studioLang());
   const id = field(formData, "id", 64);
   const pages = picked(formData, "pages", PHOTO_PAGE_IDS);
-  if (pages.length === 0) return { error: t.content.errors.pages };
-  const tabs = picked(formData, "tabs", PORTFOLIO_TAB_IDS);
+  const hidden = checked(formData, "hidden");
+  if (pages.length === 0 && !hidden) return { error: t.content.errors.pages };
+  const tabs = pages.includes("portfolio") ? picked(formData, "tabs", PORTFOLIO_TAB_IDS) : [];
   const alt = localField(formData, "alt", LIMITS.alt);
   const first = formData.get("position") === "first";
+
+  if (formData.get("bundled") === "1") {
+    if (!editableBundledPhotos().some((image) => image.id === id)) return { error: t.content.errors.missing };
+    return change((content) => {
+      content.photoTweaks[id] = { pages, tabs, alt, hidden, first };
+    });
+  }
+
   return change((content) => {
     const photo = content.photos.find((item) => item.id === id);
     if (!photo) return t.content.errors.missing;
     Object.assign(photo, { pages, tabs, alt, first });
+  });
+}
+
+/** Put a photo that ships with the site back to where it was built to go. */
+export async function resetPhoto(formData: FormData) {
+  await guard();
+  const id = field(formData, "id", 64);
+  await change((content) => {
+    delete content.photoTweaks[id];
   });
 }
 
@@ -232,6 +250,19 @@ export async function saveVideo(_state: ActionState, formData: FormData): Promis
   await guard();
   const t = studioCopy(await studioLang());
   const id = field(formData, "id", 64);
+
+  if (formData.get("bundled") === "1") {
+    if (!bundledFilms().some((item) => item.id === id)) return { error: t.content.errors.missing };
+    const filmPages = picked(formData, "pages", VIDEO_PAGE_IDS);
+    const hide = checked(formData, "hidden");
+    if (filmPages.length === 0 && !hide) return { error: t.content.errors.pages };
+    const filmCaption = localField(formData, "caption", LIMITS.caption);
+    const pinned = formData.get("position") === "first";
+    return change((content) => {
+      content.videoTweaks[id] = { pages: filmPages, caption: filmCaption, hidden: hide, first: pinned };
+    });
+  }
+
   const parsed = parseVideoUrl(field(formData, "url", 500));
   if (!parsed) return { error: t.content.errors.link };
   const pages = picked(formData, "pages", VIDEO_PAGE_IDS);
@@ -293,6 +324,15 @@ export async function saveVideo(_state: ActionState, formData: FormData): Promis
   if (result?.error && (uploaded || ownCover)) await deleteMedia(cover.id).catch(() => undefined);
   if (replaced) await deleteMedia(replaced).catch(() => undefined);
   return result;
+}
+
+/** Put a film that ships with the site back to where it was built to go. */
+export async function resetVideo(formData: FormData) {
+  await guard();
+  const id = field(formData, "id", 64);
+  await change((content) => {
+    delete content.videoTweaks[id];
+  });
 }
 
 export async function deleteVideo(formData: FormData) {

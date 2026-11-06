@@ -11,7 +11,7 @@ import { TokenText } from "@/components/token-text";
 import { VideoGrid } from "@/components/video-grid";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
-import { gallery, imagesForPage, settings, siteUrl } from "@/lib/content";
+import { gallery, settings, siteUrl } from "@/lib/content";
 import { festivalFilmSpan } from "@/lib/delivery-copy";
 import { applyTokens, buildTokenMap, displayTiming } from "@/lib/delivery";
 import type { ReviewPageId } from "@/lib/live-content";
@@ -61,7 +61,7 @@ export async function ServiceView({
   // The hero stays one of the photos that ship with the site, so new uploads never replace it.
   const hero =
     (heroId ? gallery.find((image) => image.id === heroId) : undefined) ??
-    imagesForPage(page).find((image) => image.id !== "cover-wide") ??
+    images.find((image) => !image.id.startsWith("live-")) ??
     images[0];
   const tokens: Record<string, string> = buildTokenMap(stored.timings);
   const faqTokens = {

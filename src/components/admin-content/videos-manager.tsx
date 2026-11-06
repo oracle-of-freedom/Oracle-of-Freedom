@@ -2,23 +2,29 @@
 
 import Image from "next/image";
 import { useActionState, useEffect, useState } from "react";
-import { deleteVideo, saveVideo } from "@/app/admin/content/actions";
-import { DeleteForm, Notice, OtherLanguages, PagePicker } from "@/components/admin-content/controls";
+import { deleteVideo, resetVideo, saveVideo } from "@/app/admin/content/actions";
+import { CheckRow, DeleteForm, Notice, OtherLanguages, PagePicker } from "@/components/admin-content/controls";
 import { useStudioCopy } from "@/components/studio-lang";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { prepareImage, uploadImage, type UploadedImage } from "@/lib/client-image";
-import { LIMITS, VIDEO_PAGE_IDS, mediaSrc, parseVideoUrl, type LocalText } from "@/lib/live-content";
+import { LIMITS, VIDEO_PAGE_IDS, parseVideoUrl, type LocalText } from "@/lib/live-content";
 import type { StorageMode } from "@/lib/pricing";
 
 export type AdminVideo = {
   id: string;
   platform: "youtube" | "instagram";
   url: string;
-  posterMediaId: string;
-  posterWidth: number;
-  posterHeight: number;
+  /** Where to load the cover picture from. */
+  posterSrc: string;
+  /** True for a film that ships with the site. Its link and cover cannot be changed or deleted here. */
+  bundled: boolean;
+  /** True when a film that ships with the site has been changed from the studio. */
+  tweaked: boolean;
+  hidden: boolean;
   caption: LocalText;
+  /** The caption the site uses when none is written here. */
+  defaultCaption: string;
   pages: string[];
   first: boolean;
 };
@@ -45,8 +51,10 @@ function VideoForm({
   const [preview, setPreview] = useState("");
   const [busy, setBusy] = useState(false);
   const [coverError, setCoverError] = useState(false);
+  const [hidden, setHidden] = useState(video?.hidden ?? false);
+  const locked = video?.bundled === true;
   const known = parseVideoUrl(url);
-  const shownCover = preview || (video ? mediaSrc(video.posterMediaId) : "");
+  const shownCover = preview || (video ? video.posterSrc : "");
 
   useEffect(() => {
     if (state?.ok) onSaved();
@@ -72,6 +80,8 @@ function VideoForm({
   return (
     <form action={action} className="space-y-6">
       {video ? <input type="hidden" name="id" value={video.id} /> : null}
+      {locked ? <input type="hidden" name="bundled" value="1" /> : null}
+      {locked ? <p className="text-sm text-ink/70">{t.content.videos.siteNote}</p> : null}
       {poster ? (
         <>
           <input type="hidden" name="posterId" value={poster.id} />
@@ -80,6 +90,7 @@ function VideoForm({
         </>
       ) : null}
 
+      {locked ? null : (
       <div>
         <Label htmlFor={`video-url-${video?.id ?? "new"}`}>{t.content.videos.link}</Label>
         <Input
@@ -100,6 +111,7 @@ function VideoForm({
           </p>
         ) : null}
       </div>
+      )}
 
       <div>
         <Label htmlFor={`video-caption-${video?.id ?? "new"}`}>{t.content.videos.caption}</Label>
@@ -108,7 +120,7 @@ function VideoForm({
           name="captionEn"
           maxLength={LIMITS.caption}
           value={caption.en}
-          placeholder="Festival aftermovie"
+          placeholder={locked ? video?.defaultCaption : "Festival aftermovie"}
           onChange={(event) => setCaption({ ...caption, en: event.target.value })}
         />
         <p className="mt-2 text-sm text-ink/60">{t.content.videos.captionHelp}</p>
@@ -123,6 +135,7 @@ function VideoForm({
         </div>
       </div>
 
+      {locked ? null : (
       <div>
         <p className="text-sm font-medium">{t.content.videos.poster}</p>
         <p className="mt-1 text-sm text-ink/60">{t.content.videos.posterHelp}</p>
@@ -158,6 +171,7 @@ function VideoForm({
           </p>
         ) : null}
       </div>
+      )}
 
       <PagePicker
         name="pages"
@@ -182,9 +196,17 @@ function VideoForm({
         </select>
       </div>
 
+      {locked ? (
+        <CheckRow name="hidden" label={t.content.videos.hide} checked={hidden} onChange={setHidden} />
+      ) : null}
+
       <Notice state={state?.error ? state : null} saved="" />
       <div className="flex flex-col gap-3 sm:flex-row">
-        <Button type="submit" disabled={pending || disabled || busy || !known} className="w-full sm:w-auto">
+        <Button
+          type="submit"
+          disabled={pending || disabled || busy || (!locked && !known)}
+          className="w-full sm:w-auto"
+        >
           {pending ? t.content.saving : video ? t.content.videos.save : t.content.videos.add}
         </Button>
         {onCancel ? (
@@ -203,6 +225,14 @@ export function VideosManager({ videos, mode }: { videos: AdminVideo[]; mode: St
   const [formKey, setFormKey] = useState(0);
   const [note, setNote] = useState(false);
   const disabled = mode === "readonly";
+  const [filter, setFilter] = useState("all");
+  const shown = videos.filter((video) => {
+    if (filter === "all") return true;
+    if (filter === "mine") return !video.bundled;
+    if (filter === "site") return video.bundled;
+    if (filter === "hidden") return video.hidden;
+    return !video.hidden && video.pages.includes(filter);
+  });
 
   return (
     <div className="space-y-10">
@@ -229,9 +259,28 @@ export function VideosManager({ videos, mode }: { videos: AdminVideo[]; mode: St
 
       <section>
         <h2 className="font-serif text-2xl md:text-3xl">{t.content.videos.listTitle}</h2>
-        {videos.length === 0 ? <p className="mt-4 text-ink/70">{t.content.videos.empty}</p> : null}
+        <div className="mt-4">
+          <Label htmlFor="film-filter">{t.content.videos.filterLabel}</Label>
+          <select
+            id="film-filter"
+            value={filter}
+            onChange={(event) => setFilter(event.target.value)}
+            className="h-12 w-full rounded-2xl border border-ink/15 bg-white/70 px-4 text-base"
+          >
+            <option value="all">{t.content.videos.filterAll}</option>
+            <option value="mine">{t.content.videos.filterMine}</option>
+            <option value="site">{t.content.videos.filterSite}</option>
+            <option value="hidden">{t.content.videos.filterHidden}</option>
+            {VIDEO_PAGE_IDS.map((page) => (
+              <option key={page} value={page}>
+                {t.content.videos.filmPages[page] ?? page}
+              </option>
+            ))}
+          </select>
+        </div>
+        {shown.length === 0 ? <p className="mt-4 text-ink/70">{t.content.videos.empty}</p> : null}
         <ul className="mt-4 space-y-4">
-          {videos.map((video) => (
+          {shown.map((video) => (
             <li key={video.id} className="rounded-3xl bg-white p-4 shadow-sm md:p-6">
               {editing === video.id ? (
                 <>
@@ -248,16 +297,16 @@ export function VideosManager({ videos, mode }: { videos: AdminVideo[]; mode: St
                   <div className="flex gap-3">
                     <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-clay/60">
                       <Image
-                        src={mediaSrc(video.posterMediaId)}
+                        src={video.posterSrc}
                         alt=""
                         fill
-                        unoptimized
+                        unoptimized={!video.bundled}
                         sizes="96px"
-                        className="object-cover"
+                        className={`object-cover ${video.hidden ? "opacity-40" : ""}`}
                       />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="font-medium break-words">{video.caption.en || video.url}</p>
+                      <p className="font-medium break-words">{video.caption.en || video.defaultCaption || video.url}</p>
                       <a
                         href={video.url}
                         target="_blank"
@@ -267,7 +316,9 @@ export function VideosManager({ videos, mode }: { videos: AdminVideo[]; mode: St
                         {video.platform === "youtube" ? "YouTube" : "Instagram"} · {video.url}
                       </a>
                       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
-                        {video.pages.length === 0 ? (
+                        {video.hidden ? (
+                          <span className="rounded-full bg-ink px-3 py-1 text-sand">{t.content.hidden}</span>
+                        ) : video.pages.length === 0 ? (
                           <span className="rounded-full bg-clay px-3 py-1">{t.content.noPages}</span>
                         ) : (
                           video.pages.map((page) => (
@@ -276,6 +327,16 @@ export function VideosManager({ videos, mode }: { videos: AdminVideo[]; mode: St
                             </span>
                           ))
                         )}
+                        {video.bundled ? (
+                          <span className="rounded-full border border-ink/15 px-3 py-1 text-ink/60">
+                            {t.content.videos.fromSite}
+                          </span>
+                        ) : null}
+                        {video.tweaked ? (
+                          <span className="rounded-full border border-terracotta/40 px-3 py-1 text-terracotta-ink">
+                            {t.content.videos.changed}
+                          </span>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -292,7 +353,23 @@ export function VideosManager({ videos, mode }: { videos: AdminVideo[]; mode: St
                     >
                       {t.content.edit}
                     </Button>
-                    <DeleteForm action={deleteVideo} id={video.id} />
+                    {video.bundled ? (
+                      video.tweaked ? (
+                        <form action={resetVideo}>
+                          <input type="hidden" name="id" value={video.id} />
+                          <Button
+                            type="submit"
+                            variant="outline"
+                            disabled={disabled}
+                            className="min-h-11 w-full sm:w-auto"
+                          >
+                            {t.content.videos.reset}
+                          </Button>
+                        </form>
+                      ) : null
+                    ) : (
+                      <DeleteForm action={deleteVideo} id={video.id} />
+                    )}
                   </div>
                 </>
               )}

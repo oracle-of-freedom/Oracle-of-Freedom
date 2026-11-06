@@ -11,13 +11,19 @@ import {
   type VideoItem,
 } from "@/lib/content";
 import {
+  PHOTO_PAGE_IDS,
+  PORTFOLIO_TAB_IDS,
+  VIDEO_PAGE_IDS,
   emptyLiveContent,
   mediaSrc,
   orderNumber,
+  parseLiveContent,
   pickText,
   resolveText,
   type LiveContent,
   type LivePhoto,
+  type PhotoTweak,
+  type VideoTweak,
   type LiveReview,
   type LiveVideo,
   type ReviewPageId,
@@ -37,7 +43,8 @@ async function loadLiveContent(): Promise<LiveContent> {
 
 const cachedLiveContent = unstable_cache(loadLiveContent, ["live-content"], { tags: ["live-content"] });
 
-export const getLiveContent = cache(async () => cachedLiveContent());
+// A copy cached by an older release may lack newer fields, so it is read through the parser again.
+export const getLiveContent = cache(async () => parseLiveContent(await cachedLiveContent()));
 
 /** Where the reviews that ship with the site appear until Agota moves them. */
 export const DEFAULT_REVIEW_PAGES: Record<ReviewPageId, string[]> = {
@@ -139,9 +146,54 @@ export function livePhotoToImage(photo: LivePhoto): GalleryImage {
   };
 }
 
+const EDITABLE_PAGES: readonly string[] = PHOTO_PAGE_IDS;
+
+/** Photos that ship with the site and can be moved from the studio. The cover and About photos stay put. */
+export function editableBundledPhotos() {
+  return gallery.filter(
+    (image) => isPublishedPhoto(image) && image.id !== "cover-wide" && !image.id.startsWith("about-"),
+  );
+}
+
+/** Where a photo that ships with the site goes now, in the terms the studio uses. */
+export function builtInPlacement(image: GalleryImage) {
+  const pages = PHOTO_PAGE_IDS.filter((page) => {
+    if (page === "portfolio") return image.pages.includes("portfolio") || image.featured;
+    return image.pages.includes(page);
+  });
+  const tabs = PORTFOLIO_TAB_IDS.filter((tab) =>
+    image.portfolioTabs !== undefined
+      ? image.portfolioTabs.includes(tab)
+      : image.categories.includes(tab) || image.category === tab,
+  );
+  return { pages: [...pages], tabs: [...tabs] };
+}
+
+export function applyPhotoTweak(image: GalleryImage, tweak: PhotoTweak | undefined): GalleryImage {
+  if (!tweak) return image;
+  const kept = image.pages.filter((page) => !EDITABLE_PAGES.includes(page));
+  const inPortfolio = tweak.pages.includes("portfolio");
+  return {
+    ...image,
+    tweaked: true,
+    pages: [...kept, ...tweak.pages],
+    featured: tweak.pages.includes("home"),
+    portfolioTabs: inPortfolio ? ["all", ...tweak.tabs] : [],
+    order: tweak.first ? image.order - 1_000_000 : image.order,
+    alt: {
+      en: tweak.alt.en.trim() || image.alt.en,
+      es: tweak.alt.es.trim() || image.alt.es,
+      pt: tweak.alt.pt.trim() || image.alt.pt,
+    },
+  };
+}
+
 export async function getGallery(): Promise<GalleryImage[]> {
   const live = await getLiveContent();
-  return [...gallery, ...live.photos.map(livePhotoToImage)];
+  const older = gallery
+    .filter((image) => !live.photoTweaks[image.id]?.hidden)
+    .map((image) => applyPhotoTweak(image, live.photoTweaks[image.id]));
+  return [...older, ...live.photos.map(livePhotoToImage)];
 }
 
 export async function getImagesForPage(page: string) {
@@ -159,11 +211,21 @@ export async function getFeaturedImages() {
 /** Portfolio photos in the order the page already used: the repo list first, new work after. */
 export async function getPortfolioImages() {
   const shown = (await getGallery()).filter(
-    (image) => isPublishedPhoto(image) && (image.pages.includes("portfolio") || image.featured),
+    (image) =>
+      isPublishedPhoto(image) &&
+      (image.pages.includes("portfolio") || (image.featured && image.tweaked !== true)),
   );
   const added = shown.filter((image) => image.id.startsWith("live-")).sort((a, b) => a.order - b.order);
-  const older = shown.filter((image) => !image.id.startsWith("live-"));
-  return [...added.filter((image) => image.order < 0), ...older, ...added.filter((image) => image.order >= 0)];
+  const bundled = shown.filter((image) => !image.id.startsWith("live-"));
+  // Photos pinned to the front, from the studio, lead in the order they were pinned.
+  const pinned = bundled.filter((image) => image.order < -500_000).sort((a, b) => a.order - b.order);
+  const older = bundled.filter((image) => image.order >= -500_000);
+  return [
+    ...pinned,
+    ...added.filter((image) => image.order < 0),
+    ...older,
+    ...added.filter((image) => image.order >= 0),
+  ];
 }
 
 function liveVideoToFilm(video: LiveVideo): Film {
@@ -190,16 +252,44 @@ function liveVideoToFilm(video: LiveVideo): Film {
 /** The films for a page. The ones that ship with the site show everywhere they did before. */
 export async function getFilms(page: VideoPageId): Promise<Film[]> {
   const live = await getLiveContent();
-  const older: Film[] = videos.items.map((video) => {
-    const poster = imageById(video.posterId);
-    return { video, poster: { src: poster.src, width: poster.width, height: poster.height } };
-  });
+  const bundled = videos.items
+    .filter((video) => {
+      const tweak = live.videoTweaks[video.id];
+      if (!tweak) return true;
+      return !tweak.hidden && tweak.pages.includes(page);
+    })
+    .map((video) => ({ video: applyVideoTweak(video, live.videoTweaks[video.id]), tweak: live.videoTweaks[video.id] }))
+    .map(({ video, tweak }) => {
+      const poster = imageById(video.posterId);
+      return { first: tweak?.first === true, film: { video, poster: { src: poster.src, width: poster.width, height: poster.height } } };
+    });
   const added = live.videos
     .filter((video) => video.pages.includes(page))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return [
     ...added.filter((video) => video.first).map(liveVideoToFilm),
-    ...older,
+    ...bundled.filter((item) => item.first).map((item) => item.film),
+    ...bundled.filter((item) => !item.first).map((item) => item.film),
     ...added.filter((video) => !video.first).map(liveVideoToFilm),
   ];
+}
+
+/** Where the films that ship with the site show until Agota moves them. */
+export const DEFAULT_FILM_PAGES: string[] = [...VIDEO_PAGE_IDS];
+
+/** The films that ship with the site. */
+export function bundledFilms() {
+  return videos.items;
+}
+
+export function applyVideoTweak(video: VideoItem, tweak: VideoTweak | undefined): VideoItem {
+  if (!tweak) return video;
+  return {
+    ...video,
+    label: {
+      en: tweak.caption.en.trim() || video.label.en,
+      es: tweak.caption.es.trim() || video.label.es,
+      pt: tweak.caption.pt.trim() || video.label.pt,
+    },
+  };
 }

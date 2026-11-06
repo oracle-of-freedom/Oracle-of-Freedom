@@ -627,8 +627,20 @@ export function studioCopy(lang: StudioLang) {
           en
             ? `${count} ${count === 1 ? "photo" : "photos"} added. They show within a minute.`
             : `${count} ${count === 1 ? "foto añadida" : "fotos añadidas"}. Se ven en menos de un minuto.`,
-        listTitle: en ? "Photos you added" : "Fotos que has añadido",
-        empty: en ? "No photos added here yet." : "Aún no has añadido fotos aquí.",
+        listTitle: en ? "All photos" : "Todas las fotos",
+        empty: en ? "No photos here." : "No hay fotos aquí.",
+        fromSite: en ? "Already on the site" : "Ya estaba en el sitio",
+        hide: en ? "Hide this photo from the site" : "Ocultar esta foto del sitio",
+        reset: en ? "Put it back as it was" : "Dejarla como estaba",
+        changed: en ? "Changed" : "Cambiada",
+        filterLabel: en ? "Show" : "Mostrar",
+        filterAll: en ? "All photos" : "Todas las fotos",
+        filterMine: en ? "Photos I added" : "Fotos que añadí",
+        filterSite: en ? "Photos already on the site" : "Fotos que ya estaban en el sitio",
+        filterHidden: en ? "Hidden photos" : "Fotos ocultas",
+        siteNote: en
+          ? "The picture stays as it is. You can change where it goes, its description and its place in the list, or hide it."
+          : "La foto no cambia. Puedes cambiar dónde va, su descripción y su posición en la lista, o ocultarla.",
         editTitle: en ? "Where this photo goes" : "Dónde va esta foto",
         save: en ? "Save" : "Guardar",
         saved: en ? "Saved." : "Guardado.",
@@ -636,8 +648,20 @@ export function studioCopy(lang: StudioLang) {
       videos: {
         addTitle: en ? "Add a film" : "Añadir un vídeo",
         editTitle: en ? "Edit this film" : "Editar este vídeo",
-        listTitle: en ? "Films you added" : "Vídeos que has añadido",
-        empty: en ? "No films added here yet." : "Aún no has añadido vídeos aquí.",
+        listTitle: en ? "All films" : "Todos los vídeos",
+        empty: en ? "No films here." : "No hay vídeos aquí.",
+        fromSite: en ? "Already on the site" : "Ya estaba en el sitio",
+        hide: en ? "Hide this film from the site" : "Ocultar este vídeo del sitio",
+        reset: en ? "Put it back as it was" : "Dejarlo como estaba",
+        changed: en ? "Changed" : "Cambiado",
+        filterLabel: en ? "Show" : "Mostrar",
+        filterAll: en ? "All films" : "Todos los vídeos",
+        filterMine: en ? "Films I added" : "Vídeos que añadí",
+        filterSite: en ? "Films already on the site" : "Vídeos que ya estaban en el sitio",
+        filterHidden: en ? "Hidden films" : "Vídeos ocultos",
+        siteNote: en
+          ? "The link and the cover stay as they are. You can change where it plays, its caption and its place in the list, or hide it."
+          : "El enlace y la portada no cambian. Puedes cambiar dónde se reproduce, su pie de foto y su posición en la lista, o ocultarlo.",
         link: en ? "YouTube or Instagram link" : "Enlace de YouTube o Instagram",
         linkHelp: en
           ? "Paste the link to the film, a YouTube video or an Instagram reel."
