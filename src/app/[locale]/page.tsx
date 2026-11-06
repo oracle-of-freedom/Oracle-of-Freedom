@@ -191,7 +191,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </section>
 
       <Testimonials
-        ids={["india", "oliwia", "sage", "rewild", "kliq", "nixie", "bliss-burn", "anael", "couple", "retreat", "artist"]}
+        ids={["india", "oliwia", "sage", "rewild", "kliq-press", "kliq", "nixie", "bliss-burn", "anael", "couple", "retreat", "artist"]}
         locale={loc}
         title={copy.home.wordsTitle}
         foldAfter={4}

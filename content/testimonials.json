@@ -63,7 +63,7 @@
     {
       "id": "kliq",
       "placeholder": false,
-      "name": "Kliq Collective, Ireland",
+      "name": "Quinton, Ireland",
       "shoot": {
         "en": "Event aftermovie",
         "es": "Aftermovie del evento",
@@ -73,6 +73,21 @@
         "en": "Agota did an absolutely unreal job, that aftermovie is magic. Thank you so so much 🫶🏼🫶🏼🫶🏼 this is phenomenal work",
         "es": "Agota hizo un trabajo absolutamente increíble, ese aftermovie es magia. Muchísimas gracias 🫶🏼🫶🏼🫶🏼 este trabajo es fenomenal",
         "pt": "A Agota fez um trabalho absolutamente incrível, aquele aftermovie é magia. Muito, muito obrigado 🫶🏼🫶🏼🫶🏼 este trabalho é fenomenal"
+      }
+    },
+    {
+      "id": "kliq-press",
+      "placeholder": false,
+      "name": "Kliq Collective, Ireland",
+      "shoot": {
+        "en": "DJ press kit and reels pack",
+        "es": "Kit de prensa de DJ y pack de reels",
+        "pt": "Kit de imprensa de DJ e pack de reels"
+      },
+      "quote": {
+        "en": "We had an incredible experience working with Agota. She was organised, professional and attentive throughout the night, capturing fantastic photos and high quality videos of every DJ despite a large lineup. She also captured brilliant crowd shots that really showcased the atmosphere and brought the event to life. The quality of her work speaks for itself. She even went above and beyond by producing aftermovies for us. We couldn't recommend her highly enough!",
+        "es": "Tuvimos una experiencia increíble trabajando con Agota. Fue organizada, profesional y atenta durante toda la noche, capturando fotos fantásticas y vídeos de gran calidad de cada DJ a pesar de una cartelera grande. También capturó tomas brillantes del público que realmente mostraron la atmósfera y dieron vida al evento. La calidad de su trabajo habla por sí sola. Incluso fue más allá produciendo aftermovies para nosotros. ¡No podríamos recomendarla más!",
+        "pt": "Tivemos uma experiência incrível a trabalhar com a Agota. Foi organizada, profissional e atenta durante toda a noite, captando fotos fantásticas e vídeos de alta qualidade de cada DJ apesar de um cartaz grande. Também captou planos brilhantes da multidão que mostraram mesmo a atmosfera e deram vida ao evento. A qualidade do seu trabalho fala por si. Foi ainda mais longe ao produzir aftermovies para nós. Não a poderíamos recomendar mais!"
       }
     },
     {
