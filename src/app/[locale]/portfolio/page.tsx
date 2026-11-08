@@ -29,7 +29,7 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
       <p className="text-xs tracking-[0.22em] text-terracotta-ink uppercase">{copy.nav.portfolio}</p>
       <h1 className="mt-3 max-w-4xl font-serif text-5xl leading-[1.05] md:text-7xl">{copy.portfolio.title}</h1>
       <p className="mt-5 max-w-2xl text-lg text-ink/80">{copy.portfolio.dek}</p>
-      <div className="mt-10">
+      <div className="fx-reveal mt-10">
         <PortfolioBrowser
           images={images}
           films={films}

@@ -101,6 +101,247 @@ body {
   font-weight: 600;
 }
 
+/* --- Visual polish (CSS only, public site) --- */
+:root {
+  --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes oof-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes oof-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes oof-kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes oof-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes oof-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fx-page {
+  animation: oof-fade-in 0.5s ease both;
+}
+
+.fx-enter {
+  animation: oof-fade-up 0.8s var(--fx-ease) both;
+}
+
+.fx-d1 { animation-delay: 80ms; }
+.fx-d2 { animation-delay: 160ms; }
+.fx-d3 { animation-delay: 240ms; }
+.fx-d4 { animation-delay: 320ms; }
+.fx-d5 { animation-delay: 400ms; }
+
+.fx-kenburns {
+  animation: oof-kenburns 18s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.fx-hero-veil {
+  animation: oof-fade-in 1.2s ease both;
+}
+
+.fx-menu-in {
+  animation: oof-menu-in 0.35s var(--fx-ease) both;
+}
+
+.fx-lightbox-in {
+  animation: oof-zoom-in 0.35s var(--fx-ease) both;
+}
+
+dialog.fx-dialog[open]::backdrop {
+  animation: oof-fade-in 0.3s ease both;
+}
+
+/* Scroll reveal: progressive enhancement only. Without animation-timeline
+   support the content is simply shown, never hidden waiting to appear. */
+@supports (animation-timeline: view()) {
+  .fx-reveal {
+    animation: oof-fade-up 0.8s var(--fx-ease) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 25%;
+  }
+}
+
+/* Warm light sweep across an image card on hover/focus. */
+.fx-shine {
+  position: relative;
+}
+
+.fx-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 248, 238, 0.22) 50%, transparent 60%);
+  transform: translateX(-130%);
+  transition: transform 0.9s var(--fx-ease);
+}
+
+.fx-card {
+  transition:
+    transform 0.45s var(--fx-ease),
+    box-shadow 0.45s var(--fx-ease),
+    border-color 0.45s var(--fx-ease),
+    background-color 0.45s var(--fx-ease);
+}
+
+.fx-play {
+  transition:
+    transform 0.45s var(--fx-ease),
+    box-shadow 0.45s var(--fx-ease);
+}
+
+.fx-nav-link {
+  position: relative;
+}
+
+.fx-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--color-terracotta);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s var(--fx-ease);
+}
+
+.fx-nav-link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+.fx-link-line {
+  position: relative;
+  text-decoration: none;
+}
+
+.fx-link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+  transform: scaleX(1);
+  transform-origin: left;
+  transition:
+    opacity 0.35s var(--fx-ease),
+    transform 0.35s var(--fx-ease);
+}
+
+.fx-faq summary {
+  position: relative;
+  padding-right: 2rem;
+  transition: color 0.3s ease;
+}
+
+.fx-faq summary::after {
+  content: "";
+  position: absolute;
+  top: 0.45em;
+  right: 0.25rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  opacity: 0.55;
+  transform: rotate(45deg);
+  transition: transform 0.35s var(--fx-ease);
+}
+
+.fx-faq[open ] summary::after {
+  transform: rotate(225deg);
+}
+
+.fx-faq[open ] > p {
+  animation: oof-fade-up 0.45s var(--fx-ease) both;
+}
+
+.fx-form :is(input, textarea, select) {
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s var(--fx-ease),
+    background-color 0.3s ease;
+}
+
+.fx-form :is(input, textarea, select):focus {
+  border-color: rgba(180, 83, 42, 0.65);
+  box-shadow: 0 0 0 4px rgba(217, 145, 58, 0.18);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fx-shine:hover::after,
+  .fx-shine:focus-visible::after {
+    transform: translateX(130%);
+  }
+
+  .fx-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px -18px rgba(42, 33, 28, 0.35);
+  }
+
+  .fx-nav-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  .fx-link-line:hover::after {
+    opacity: 1;
+  }
+
+  .group:hover .fx-play {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 0 10px rgba(217, 145, 58, 0.22),
+      0 8px 30px rgba(42, 24, 16, 0.28);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

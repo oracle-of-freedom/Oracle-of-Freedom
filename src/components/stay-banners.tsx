@@ -40,7 +40,7 @@ export async function StayBanners({
   const placeClass = warm ? "font-serif text-2xl leading-tight text-terracotta" : "font-serif text-2xl leading-tight";
   const whenClass = warm ? "mt-0.5 text-sm font-medium text-terracotta" : "mt-0.5 text-sm font-medium";
   const buttonClass =
-    "inline-flex shrink-0 items-center rounded-full bg-terracotta px-4 py-2.5 text-sm font-medium text-white";
+    "inline-flex shrink-0 items-center rounded-full bg-terracotta px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#9a4522] hover:shadow-[0_12px_25px_-10px_rgba(140,62,30,0.7)] active:scale-95";
   const chipClass = onPhoto
     ? "rounded-full bg-sand/45 px-3 py-1 text-sm text-ink backdrop-blur-sm"
     : warm

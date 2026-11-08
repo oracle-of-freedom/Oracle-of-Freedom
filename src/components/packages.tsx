@@ -89,7 +89,7 @@ export function PackageCards({
           <article
             key={item.id}
             className={cn(
-              "flex flex-col rounded-3xl border bg-white/50 p-6",
+              "fx-card flex flex-col rounded-3xl border bg-white/50 p-6 hover:border-terracotta/40",
               item.loved ? "border-ember shadow-[0_0_0_1px_#d9913a]" : "border-ink/10",
             )}
           >
@@ -132,7 +132,7 @@ export function PackageCards({
             ) : (
               <Link
                 href={{ pathname: "/inquire", query: { service: item.inquiry, package: item.id } }}
-                className="mt-6 inline-flex text-sm font-medium text-terracotta-ink underline underline-offset-4"
+                className="mt-6 inline-flex text-sm font-medium text-terracotta-ink underline underline-offset-4 transition-all duration-300 hover:translate-x-1 hover:text-terracotta"
               >
                 {cta}
               </Link>

@@ -60,15 +60,15 @@ export default async function PeoplePage({ params }: { params: Promise<{ locale:
       </header>
       <section className="mx-auto grid max-w-6xl gap-4 px-4 md:grid-cols-2 md:px-6">
         {doors.map((door) => (
-          <Link key={door.href} href={door.href} className="rounded-3xl bg-clay/60 p-8 transition-colors hover:bg-clay">
+          <Link key={door.href} href={door.href} className="fx-card group rounded-3xl bg-clay/60 p-8 hover:bg-clay">
             <h2 className="font-serif text-4xl">{door.title}</h2>
             <p className="mt-3 text-ink/80">{door.body}</p>
             <p className="mt-4 text-terracotta-ink">{door.price}</p>
-            <p className="mt-6 text-sm underline underline-offset-4">{copy.common.explore}</p>
+            <p className="mt-6 inline-block text-sm underline underline-offset-4 transition-transform duration-500 group-hover:translate-x-1">{copy.common.explore}</p>
           </Link>
         ))}
       </section>
-      <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
+      <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
         <GalleryGrid
           images={images}
           locale={loc}

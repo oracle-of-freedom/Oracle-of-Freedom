@@ -119,7 +119,7 @@ export async function ServiceView({
           })),
         }}
       />
-      <section className="relative min-h-[78svh]">
+      <section className="relative min-h-[78svh] overflow-hidden">
         {hero ? (
           <Image
             src={hero.src}
@@ -129,19 +129,21 @@ export async function ServiceView({
             sizes="100vw"
             placeholder="blur"
             blurDataURL={hero.blur}
-            className="object-cover"
+            className="fx-kenburns object-cover"
             style={{ objectPosition: heroPosition }}
           />
         ) : null}
-        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/35 to-night/10" />
+        <div className="fx-hero-veil absolute inset-0 bg-gradient-to-t from-night via-night/35 to-night/10" />
         <div className="relative z-10 mx-auto flex min-h-[78svh] max-w-6xl flex-col justify-end px-4 pt-24 pb-12 md:px-6">
-          <p className="text-xs tracking-[0.22em] text-ember uppercase">{copy.eyebrow}</p>
-          <h1 className="mt-3 max-w-4xl font-serif text-4xl leading-[1.05] text-white md:text-6xl">{copy.title}</h1>
+          <p className="fx-enter text-xs tracking-[0.22em] text-ember uppercase">{copy.eyebrow}</p>
+          <h1 className="fx-enter fx-d1 mt-3 max-w-4xl font-serif text-4xl leading-[1.05] text-white md:text-6xl">{copy.title}</h1>
           {copy.subtitle ? (
-            <p className="mt-4 max-w-2xl text-lg text-sand">{applyTokens(copy.subtitle, tokens)}</p>
+            <p className="fx-enter fx-d2 mt-4 max-w-2xl text-lg text-sand">{applyTokens(copy.subtitle, tokens)}</p>
           ) : null}
-          <p className="mt-3 max-w-2xl text-sand/85">{copy.dek}</p>
-          <StayBanners locale={locale} tone="photo" />
+          <p className="fx-enter fx-d2 mt-3 max-w-2xl text-sand/85">{copy.dek}</p>
+          <div className="fx-enter fx-d3">
+            <StayBanners locale={locale} tone="photo" />
+          </div>
           {lead ? (
             <FromPrice
               locale={locale}
@@ -172,11 +174,11 @@ export async function ServiceView({
       </section>
 
       <div className={dark ? "bg-sand text-ink" : undefined}>
-        <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
+        <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
           <h2 className="font-serif text-4xl">{copy.whoTitle}</h2>
           <ul className="mt-6 grid gap-3 md:grid-cols-2">
             {copy.who.map((item) => (
-              <li key={item} className="rounded-2xl bg-clay/50 px-4 py-3">{item}</li>
+              <li key={item} className="fx-card rounded-2xl bg-clay/50 px-4 py-3 hover:bg-clay/70">{item}</li>
             ))}
           </ul>
           {copy.notFor ? <p className="mt-6 max-w-3xl text-ink/80">{copy.notFor}</p> : null}
@@ -184,14 +186,14 @@ export async function ServiceView({
 
         {copy.problem && copy.problemTitle ? (
           <section className="bg-clay/40">
-            <div className="mx-auto max-w-3xl px-4 py-16 md:px-6">
+            <div className="fx-reveal mx-auto max-w-3xl px-4 py-16 md:px-6">
               <h2 className="font-serif text-4xl">{copy.problemTitle}</h2>
               <p className="mt-4 text-lg text-ink/80">{copy.problem}</p>
             </div>
           </section>
         ) : null}
 
-        <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
+        <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
           <PackageSection
             title={copy.packagesTitle}
             locale={locale}
@@ -248,7 +250,7 @@ export async function ServiceView({
         </section>
 
         {copy.where && copy.whereTitle ? (
-          <section className="mx-auto max-w-6xl px-4 py-8 md:px-6">
+          <section className="fx-reveal mx-auto max-w-6xl px-4 py-8 md:px-6">
             <h2 className="font-serif text-4xl">{copy.whereTitle}</h2>
             <StayBanners locale={locale} tone="peach" showElsewhere={false} />
             <p className="mt-4 max-w-3xl text-base leading-snug text-ink/80">{applyTokens(copy.where, tokens)}</p>
@@ -256,14 +258,14 @@ export async function ServiceView({
         ) : null}
 
         {copy.day && copy.dayTitle ? (
-          <section className="mx-auto max-w-3xl px-4 py-8 md:px-6">
+          <section className="fx-reveal mx-auto max-w-3xl px-4 py-8 md:px-6">
             <h2 className="font-serif text-4xl">{copy.dayTitle}</h2>
             <p className="mt-4 font-quote text-2xl leading-snug text-ink/85">{copy.day}</p>
           </section>
         ) : null}
 
         {copy.deliverables && copy.deliverablesTitle ? (
-          <section className="mx-auto max-w-3xl px-4 py-8 md:px-6">
+          <section className="fx-reveal mx-auto max-w-3xl px-4 py-8 md:px-6">
             <h2 className="font-serif text-4xl">{copy.deliverablesTitle}</h2>
             <ul className="mt-4 list-disc space-y-2 pl-5">
               {copy.deliverables.map((item) => (
@@ -275,7 +277,7 @@ export async function ServiceView({
 
         {copy.consent && copy.consentTitle ? (
           <section className="bg-moss text-sand">
-            <div className="mx-auto max-w-3xl px-4 py-16 md:px-6">
+            <div className="fx-reveal mx-auto max-w-3xl px-4 py-16 md:px-6">
               <h2 className="font-serif text-4xl">{copy.consentTitle}</h2>
               {copy.consentIntro ? <p className="mt-4">{copy.consentIntro}</p> : null}
               <ul className="mt-4 space-y-3">
@@ -287,7 +289,7 @@ export async function ServiceView({
           </section>
         ) : null}
 
-        <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
+        <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
           {copy.comingSoon ? (
             <p className="mb-6 rounded-3xl border border-dashed border-terracotta/50 bg-clay/40 p-5 text-sm">
               <span className="font-semibold tracking-[0.14em] text-terracotta-ink uppercase">{common.comingSoon}. </span>
@@ -314,7 +316,7 @@ export async function ServiceView({
           </div>
         ) : null}
 
-        <section className="mx-auto max-w-3xl px-4 py-16 md:px-6">
+        <section className="fx-reveal mx-auto max-w-3xl px-4 py-16 md:px-6">
           <h2 className="font-serif text-4xl">{copy.processTitle}</h2>
           <ol className="mt-8 space-y-6">
             {copy.process.map((step, index) => (
@@ -333,12 +335,12 @@ export async function ServiceView({
 
         <Testimonials items={reviews} locale={locale} title={copy.wordsTitle} foldAfter={4} />
 
-        <section className="mx-auto max-w-3xl px-4 pb-8 md:px-6">
+        <section className="fx-reveal mx-auto max-w-3xl px-4 pb-8 md:px-6">
           <h2 className="font-serif text-4xl">{copy.faqTitle}</h2>
           <div className="mt-6 divide-y divide-ink/10 border-y border-ink/10">
             {copy.faq.map((item) => (
-              <details key={item.q} className="group py-4">
-                <summary className="cursor-pointer list-none font-medium [&::-webkit-details-marker]:hidden">
+              <details key={item.q} className="fx-faq group py-4">
+                <summary className="cursor-pointer list-none font-medium hover:text-terracotta-ink [&::-webkit-details-marker]:hidden">
                   {item.q}
                 </summary>
                 <p className="pt-3 text-ink/80">{applyTokens(item.a, faqTokens)}</p>

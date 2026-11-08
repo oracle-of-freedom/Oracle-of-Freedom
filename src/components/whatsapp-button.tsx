@@ -19,7 +19,7 @@ export function WhatsAppButton({
   return (
     <a
       href={whatsappHref(messageWithPromo(text, codeLabel, code, wishLabel, wish))}
-      className="fixed right-4 bottom-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#1f7a4d] text-white shadow-lg hover:bg-[#18663f] md:right-6 md:bottom-6"
+      className="fixed right-4 bottom-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#1f7a4d] text-white shadow-lg transition-all duration-300 ease-out hover:scale-105 hover:bg-[#18663f] hover:shadow-[0_16px_35px_-10px_rgba(31,122,77,0.7)] active:scale-95 md:right-6 md:bottom-6"
       aria-label={label}
       data-placeholder={settings.whatsappIsPlaceholder ? "true" : undefined}
     >
