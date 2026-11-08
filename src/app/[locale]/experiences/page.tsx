@@ -78,22 +78,22 @@ export default async function ExperiencesPage({ params }: { params: Promise<{ lo
       <section className="mx-auto max-w-6xl px-4 pb-16 md:px-6">
         <div className="grid gap-4 md:grid-cols-2">
           {doors.map((door) => (
-            <Link key={door.href} href={door.href} className="fx-card group rounded-3xl bg-night p-8 text-sand hover:bg-ink">
+            <Link key={door.href} href={door.href} className="fx-action-card group rounded-3xl bg-night p-8 text-sand hover:bg-ink">
               <h2 className="font-serif text-4xl">{door.title}</h2>
               <p className="mt-3 text-sand/80">{door.body}</p>
               <p className="mt-4 text-ember">{door.price}</p>
-              <p className="mt-6 inline-block text-sm underline underline-offset-4 transition-transform duration-500 group-hover:translate-x-1">{copy.common.explore}</p>
+              <p className="fx-cta-link mt-6 text-sm underline underline-offset-4">{copy.common.explore}</p>
             </Link>
           ))}
         </div>
       </section>
       <section className="bg-moss text-sand">
-        <div className="fx-reveal mx-auto max-w-3xl px-4 py-16 md:px-6">
+        <div className="mx-auto max-w-3xl px-4 py-16 md:px-6">
           <h2 className="font-serif text-4xl">{copy.experiences.consentTitle}</h2>
           <p className="mt-4 text-lg">{copy.experiences.consent}</p>
         </div>
       </section>
-      <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
+      <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <GalleryGrid
           images={swapExperiencePhotos(images)}
           locale={loc}

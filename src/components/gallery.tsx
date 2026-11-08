@@ -74,7 +74,7 @@ export function GalleryGrid({
                 id={itemId(index)}
                 type="button"
                 className={cn(
-                  "fx-shine group mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl text-left shadow-sm transition-shadow duration-500 hover:shadow-[0_20px_45px_-18px_rgba(42,33,28,0.4)]",
+                  "group mb-3 block w-full cursor-zoom-in break-inside-avoid overflow-hidden rounded-2xl text-left focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2",
                   hide(index) && hiddenClass,
                 )}
                 onClick={() => setActive(index)}
@@ -87,7 +87,7 @@ export function GalleryGrid({
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   placeholder="blur"
                   blurDataURL={image.blur}
-                  className="h-auto w-full transition duration-700 ease-out group-hover:scale-[1.03] group-hover:brightness-105"
+                  className="h-auto w-full transition-transform duration-500 ease-out group-hover:scale-[1.015]"
                 />
                 <span className="sr-only">{labels.open}</span>
               </button>
