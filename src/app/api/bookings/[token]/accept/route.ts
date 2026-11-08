@@ -22,7 +22,7 @@ async function sendAcceptedEmail(booking: Booking, meetingUrl: string) {
   const lines = [
     copy.acceptedBody,
     "",
-    `${booking.date} · ${booking.start}–${booking.end}`,
+    `${booking.date} · ${booking.start} - ${booking.end}`,
     booking.title,
   ];
   if (meetingUrl) {

@@ -811,19 +811,21 @@ export const es: Copy = {
   thankYou: {
     title: "Mensaje recibido",
     body: "Gracias por escribirme. Tu mensaje me ha llegado bien y te responderé en las próximas horas. Tengo muchas ganas de conocer tu visión.",
-    preview: "Vista previa: la consulta se ha validado, pero el email aún no está configurado. Añade RESEND_API_KEY antes de publicar.",
+    signOff: "Con amor,\nAgota",
+    notSent:
+      "El email de confirmación no ha salido, pero tu mensaje me ha llegado. Si quieres asegurarte, escríbeme a agota@oracleoffreedom.com o mándame un WhatsApp.",
     again: "Volver al inicio",
   },
   privacy: {
     title: "Aviso de privacidad",
-    updated: "Actualizado el 7 de octubre de 2026. Es un aviso breve, no una política legal completa.",
+    updated: "Actualizado el 8 de noviembre de 2026. Es un aviso breve, no una política legal completa.",
     sections: [
       { title: "Quién", body: ["Oracle of Freedom es Agota Urbikaite. Email: agota@oracleoffreedom.com."] },
       {
         title: "Qué recoge el formulario",
         body: [
           "Tu nombre, email, la historia que quieras contar y, si los das, teléfono, fecha, lugar, presupuesto y cómo me encontraste. Me lo envías para que pueda responder sobre una posible colaboración.",
-          "Los mensajes se envían a agota@oracleoffreedom.com a través de Resend cuando ese servicio está configurado. Hasta entonces el formulario funciona, pero no se entrega nada.",
+          "Los mensajes se envían a agota@oracleoffreedom.com a través de Resend, que también te envía una confirmación automática.",
           "Las consultas se conservan solo el tiempo necesario para responder y seguir la conversación, y después se borran.",
         ],
       },
@@ -840,7 +842,7 @@ export const es: Copy = {
           "Una cookie de idioma recuerda EN, ES o PT. Es necesaria para que el sitio se quede en el idioma que elegiste.",
           "Instagram y YouTube se cargan cuando pulsas reproducir en un vídeo. Si eliges solo lo esencial, se quedan como imagen y enlace hasta que pulsas reproducir.",
           "El sitio puede usar Vercel Web Analytics, que no usa cookies de marketing.",
-          "El alojamiento es Vercel. El envío de email, cuando se active, es Resend. Se aplican sus propias condiciones.",
+          "El alojamiento es Vercel. Los emails se envían a través de Resend. Se aplican sus propias condiciones.",
         ],
       },
     ],
@@ -909,7 +911,7 @@ export const es: Copy = {
       other: "Otro",
     },
     language: "Idioma preferido",
-    languages: { en: "English", es: "Español", lt: "Lietuvių" },
+    languages: { en: "English", es: "Español", pt: "Português" },
     consent: "Acepto que me contacten sobre mi consulta.",
     promoCode: "Código promocional",
     promoHint: "Opcional. Si tienes uno, va con tu mensaje.",

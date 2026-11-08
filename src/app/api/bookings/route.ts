@@ -46,9 +46,9 @@ async function sendConfirmation(booking: Booking, typeLabel: string, locale: Loc
       text: [
         `Name: ${booking.client}`,
         `Email: ${booking.contact}`,
-        `When: ${booking.date} · ${booking.start}–${booking.end}`,
+        `When: ${booking.date} · ${booking.start} to ${booking.end}`,
         `Type: ${typeLabel}`,
-        `Notes: ${booking.notes || "—"}`,
+        `Notes: ${booking.notes || "not given"}`,
         `Acceptance link: ${acceptUrl}`,
       ].join("\n"),
     }),
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
   }
 
   const label = available.bookingType.label[data.locale];
-  let booking: Booking = {
+  const booking: Booking = {
     id: randomUUID(),
     title: `${label} · ${data.name}`,
     kind: available.bookingType.kind,

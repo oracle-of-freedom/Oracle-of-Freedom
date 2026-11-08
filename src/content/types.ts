@@ -193,7 +193,7 @@ export type Copy = {
     next: string[];
     confirmEmail: { subject: string; subjectPlain: string; greeting: string; greetingPlain: string; body: string };
   };
-  thankYou: { title: string; body: string; preview: string; again: string };
+  thankYou: { title: string; body: string; signOff: string; notSent: string; again: string };
   privacy: { title: string; updated: string; sections: { title: string; body: string[] }[] };
   form: {
     steps: [string, string, string];

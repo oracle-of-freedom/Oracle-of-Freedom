@@ -32,7 +32,8 @@ const schema = z.object({
   package: z.string().max(80).optional(),
   story: z.string().max(4000).optional(),
   found: z.string().min(1).max(40),
-  language: z.enum(["en", "es", "lt"]),
+  // "lt" still arrives from forms loaded before Lithuanian was removed; it is answered in English.
+  language: z.enum(["en", "es", "pt", "lt"]),
   consent: z.boolean().refine((value) => value),
   promoCode: z.string().max(40).optional(),
   wish: z.string().max(400).optional(),
@@ -40,10 +41,19 @@ const schema = z.object({
   locale: z.string().max(10).optional(),
 });
 
+const NOT_GIVEN = "not given";
+
 function label(map: Record<string, string>, key?: string) {
-  if (!key) return "—";
+  if (!key) return NOT_GIVEN;
   return map[key] || key;
 }
+
+/** Ranges in site labels, such as "€175–300", read as "€175 to 300" in mail; other dashes become commas. */
+function plain(text: string) {
+  return text.replace(/(\d)\s*[–—]\s*(?=[€\d])/g, "$1 to ").replace(/\s*[–—]\s*/g, ", ");
+}
+
+const ownerLanguages: Record<string, string> = { ...en.form.languages, lt: "Lietuvių" };
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
@@ -95,11 +105,11 @@ export async function POST(request: Request) {
       : en.form.budgets[group]?.find((item) => item.value === data.budget)?.label || data.budget;
   const dateLine = data.flexible
     ? multiDay && data.date && dateEnd
-      ? `Flexible (${data.date} – ${dateEnd})`
+      ? `Flexible (${data.date} to ${dateEnd})`
       : "Flexible"
     : multiDay && data.date && dateEnd
-      ? `${data.date} – ${dateEnd}`
-      : data.date || "—";
+      ? `${data.date} to ${dateEnd}`
+      : data.date || NOT_GIVEN;
   const chosen = packageById(data.package);
   const packageId = chosen?.id || "";
   const packageLabel = chosen?.label || "";
@@ -107,31 +117,31 @@ export async function POST(request: Request) {
     `Grade: ${grade}`,
     `Name: ${data.name}`,
     `Email: ${data.email}`,
-    `Phone: ${data.phone || "—"}`,
-    `Service: ${label(en.form.services, data.service)}`,
-    `Package: ${packageLabel || "—"}`,
+    `Phone: ${data.phone || NOT_GIVEN}`,
+    `Service: ${plain(label(en.form.services, data.service))}`,
+    `Package: ${plain(packageLabel) || NOT_GIVEN}`,
     `Media: ${label(en.form.mediaOptions, data.media)}`,
     `Date: ${dateLine}`,
     `Place: ${data.place}`,
-    `People / size: ${people || "—"}`,
-    `Duration: ${data.days || "—"}`,
-    `Place type: ${data.placeType || "—"}`,
-    `Website: ${data.website || "—"}`,
-    `Budget: ${budgetLabel}`,
+    `People / size: ${people || NOT_GIVEN}`,
+    `Duration: ${data.days || NOT_GIVEN}`,
+    `Place type: ${data.placeType || NOT_GIVEN}`,
+    `Website: ${data.website || NOT_GIVEN}`,
+    `Budget: ${plain(budgetLabel)}`,
     ...(data.wish?.trim() ? [`What they want: ${data.wish.trim()}`] : []),
     ...(data.promoCode?.trim() ? [`Promo code: ${data.promoCode.trim()}`] : []),
     `Found via: ${label(en.form.foundOptions, data.found)}`,
-    `Preferred language: ${label(en.form.languages, data.language)}`,
+    `Preferred language: ${label(ownerLanguages, data.language)}`,
     "",
     data.story || "(no story)",
   ];
 
   const when = data.flexible
     ? multiDay && data.date && dateEnd
-      ? `Flexible, ${data.date} – ${dateEnd}`
+      ? `Fecha flexible, del ${data.date} al ${dateEnd}`
       : "Fecha flexible"
     : multiDay && data.date && dateEnd
-      ? `${data.date} – ${dateEnd}`
+      ? `Del ${data.date} al ${dateEnd}`
       : data.date || "Sin fecha";
   const inquiry: Inquiry = {
     id: randomUUID(),
@@ -188,9 +198,7 @@ export async function POST(request: Request) {
     const from = process.env.RESEND_FROM_EMAIL || "Oracle of Freedom <onboarding@resend.dev>";
     const to = process.env.INQUIRY_TO_EMAIL || settings.email;
     const resend = new Resend(apiKey);
-    // Preferred language wins when it maps to a site locale; the form has no PT option, so PT-site visitors get PT.
-    const replyLocale =
-      data.language === "es" ? "es" : data.locale === "pt" ? "pt" : data.language === "en" ? "en" : data.locale === "es" ? "es" : "en";
+    const replyLocale = data.language === "es" || data.language === "pt" ? data.language : "en";
     const reply = getCopy(replyLocale);
     const firstName = data.name.trim().split(/\s+/)[0] || "";
     const mail = reply.inquire.confirmEmail;
@@ -201,7 +209,7 @@ export async function POST(request: Request) {
         from,
         to,
         replyTo: data.email,
-        subject: `[${grade}] ${label(en.form.services, data.service)} — ${data.name}`,
+        subject: `[${grade}] ${plain(label(en.form.services, data.service))} · ${data.name}`,
         text: lines.join("\n"),
       });
       if (admin.error) {

@@ -119,7 +119,7 @@ export function InquiryForm({
       package: initialPackage || "",
       story: "",
       found: "",
-      language: locale === "es" ? "es" : "en",
+      language: locale === "es" || locale === "pt" ? locale : "en",
       consent: false,
       promoCode: "",
       wish: "",

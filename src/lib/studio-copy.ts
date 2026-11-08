@@ -204,6 +204,7 @@ export function studioCopy(lang: StudioLang) {
       restore: en ? "Move back to new" : "Devolver a nuevas",
       flexible: en ? "Flexible date" : "Fecha flexible",
       noDate: en ? "No date" : "Sin fecha",
+      range: (from: string, to: string) => (en ? `${from} to ${to}` : `del ${from} al ${to}`),
       whatsapp: (name: string, service: string) =>
         en
           ? `Hello ${name}, this is Agota from Oracle of Freedom. I read your message about ${service}.`
@@ -777,5 +778,12 @@ export function inquiryWhen(when: string, t: StudioCopy) {
   if (when === "Fecha flexible" || when === "Flexible") return t.inquiries.flexible;
   if (when.startsWith("Flexible, ")) return `${t.inquiries.flexible}, ${when.slice("Flexible, ".length)}`;
   if (when === "Sin fecha") return t.inquiries.noDate;
+  const flexibleRange = /^Fecha flexible, del (.+) al (.+)$/.exec(when);
+  if (flexibleRange) return `${t.inquiries.flexible}, ${t.inquiries.range(flexibleRange[1], flexibleRange[2])}`;
+  const range = /^Del (.+) al (.+)$/.exec(when);
+  if (range) {
+    const text = t.inquiries.range(range[1], range[2]);
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
   return when;
 }

@@ -852,13 +852,14 @@ export const en: Copy = {
   thankYou: {
     title: "Message received",
     body: "Thanks for getting in touch. Your message came through and I'll get back to you in the next hours. Looking forward to hearing about your vision.",
-    preview:
-      "Preview: this inquiry was checked and saved in the response, but email is not configured yet. Add RESEND_API_KEY before launch.",
+    signOff: "With love,\nAgota",
+    notSent:
+      "Your confirmation email didn't go out, but your message reached me. If you want to check, write to agota@oracleoffreedom.com or message me on WhatsApp.",
     again: "Back home",
   },
   privacy: {
     title: "Privacy notice",
-    updated: "Updated 7 October 2026. This is a short notice, not a full legal policy.",
+    updated: "Updated 8 November 2026. This is a short notice, not a full legal policy.",
     sections: [
       {
         title: "Who",
@@ -870,7 +871,7 @@ export const en: Copy = {
         title: "What the inquiry form collects",
         body: [
           "Your name, email, the story you choose to tell, and any optional phone number, date, place, budget and how you found the site. You send it so I can reply about a possible collaboration.",
-          "Messages are emailed to agota@oracleoffreedom.com through Resend when that service is configured. Until then, the form still runs, but nothing is delivered.",
+          "Messages are emailed to agota@oracleoffreedom.com through Resend, which also sends you an automatic confirmation.",
           "Inquiries are kept only as long as needed to reply and follow the conversation, then deleted.",
         ],
       },
@@ -887,7 +888,7 @@ export const en: Copy = {
           "A language cookie remembers EN, ES or PT. That is essential for the site to stay in the language you chose.",
           "Instagram and YouTube load when you press play on a film. If you choose essential only, those films stay as still images and links until you press play.",
           "The site can use Vercel Web Analytics, which does not use marketing cookies.",
-          "Hosting is on Vercel. Email delivery, when switched on, is Resend. Their own privacy terms apply to that processing.",
+          "Hosting is on Vercel. Email is sent through Resend. Their own privacy terms apply to that processing.",
         ],
       },
     ],
@@ -956,7 +957,7 @@ export const en: Copy = {
       other: "Other",
     },
     language: "Preferred language",
-    languages: { en: "English", es: "Español", lt: "Lietuvių" },
+    languages: { en: "English", es: "Español", pt: "Português" },
     consent: "I agree to be contacted about my inquiry.",
     promoCode: "Promo code",
     promoHint: "Optional. If you have one, it goes with your message.",
