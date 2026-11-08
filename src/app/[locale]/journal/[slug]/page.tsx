@@ -69,14 +69,14 @@ export default async function JournalPostPage({
           </Link>
         </Button>
       </div>
-      <aside className="mt-16 border-t border-ink/10 pt-8">
+      <aside className="fx-reveal mt-16 border-t border-ink/10 pt-8">
         <h2 className="font-serif text-3xl">{copy.journal.related}</h2>
         <ul className="mt-4 space-y-3">
           {related.map((item) => (
             <li key={item.id}>
               <Link
                 href={{ pathname: "/journal/[slug]", params: { slug: item.slugs[loc] } }}
-                className="text-terracotta-ink underline underline-offset-4"
+                className="text-terracotta-ink underline underline-offset-4 transition-colors duration-300 hover:text-terracotta"
               >
                 {item.title[loc]}
               </Link>

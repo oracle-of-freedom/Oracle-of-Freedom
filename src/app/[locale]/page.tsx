@@ -82,7 +82,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <>
-      <section className="relative min-h-[100svh]">
+      <section className="relative min-h-[100svh] overflow-hidden">
         <Image
           src={hero.src}
           alt={hero.alt[loc]}
@@ -91,7 +91,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           sizes="100vw"
           placeholder="blur"
           blurDataURL={hero.blur}
-          className="hidden object-cover object-[center_30%] md:block"
+          className="fx-kenburns hidden object-cover object-[center_30%] md:block"
         />
         <Image
           src={mobile.src}
@@ -101,18 +101,22 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           sizes="100vw"
           placeholder="blur"
           blurDataURL={mobile.blur}
-          className="object-cover object-center md:hidden"
+          className="fx-kenburns object-cover object-center md:hidden"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-night/20" />
+        <div className="fx-hero-veil absolute inset-0 bg-gradient-to-t from-night via-night/40 to-night/20" />
         <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-4 pt-28 pb-16 md:px-6">
-          <OmMark className="h-10 w-10" />
-          <p className="mt-4 text-xs tracking-[0.22em] text-ember uppercase">Oracle of Freedom</p>
-          <h1 className="mt-3 max-w-4xl font-serif text-[2.4rem] leading-[1.05] text-white sm:text-5xl md:text-7xl">
+          <div className="fx-enter">
+            <OmMark className="h-10 w-10" />
+            <p className="mt-4 text-xs tracking-[0.22em] text-ember uppercase">Oracle of Freedom</p>
+          </div>
+          <h1 className="fx-enter fx-d1 mt-3 max-w-4xl font-serif text-[2.4rem] leading-[1.05] text-white sm:text-5xl md:text-7xl">
             {copy.home.title}
           </h1>
-          <p className="mt-5 max-w-xl text-lg text-sand/90">{copy.home.dek}</p>
-          <StayBanners locale={loc} tone="photo" />
-          <div className="mt-6 flex flex-wrap gap-3">
+          <p className="fx-enter fx-d2 mt-5 max-w-xl text-lg text-sand/90">{copy.home.dek}</p>
+          <div className="fx-enter fx-d3">
+            <StayBanners locale={loc} tone="photo" />
+          </div>
+          <div className="fx-enter fx-d4 mt-6 flex flex-wrap gap-3">
             <Button asChild variant="light" size="lg">
               <Link href="/inquire">{copy.common.checkAvailability}</Link>
             </Button>
@@ -122,11 +126,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </div>
         </div>
       </section>
-      <section className="mx-auto max-w-6xl px-4 pt-20 pb-8 md:px-6 md:pt-28">
+      <section className="fx-reveal mx-auto max-w-6xl px-4 pt-20 pb-8 md:px-6 md:pt-28">
         <h2 className="font-serif text-4xl md:text-5xl">{copy.home.doorsTitle}</h2>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {doors.map((door) => (
-            <Link key={door.href} href={door.href} className="group relative block aspect-[4/5] overflow-hidden rounded-[2rem]">
+            <Link key={door.href} href={door.href} className="fx-shine group relative block aspect-[4/5] overflow-hidden rounded-[2rem] shadow-sm transition-shadow duration-500 hover:shadow-[0_24px_50px_-20px_rgba(42,33,28,0.45)]">
               <Image
                 src={door.image.src}
                 alt={door.image.alt[loc]}
@@ -134,21 +138,21 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 sizes="(max-width: 768px) 100vw, 33vw"
                 placeholder="blur"
                 blurDataURL={door.image.blur}
-                className="object-cover transition duration-700 group-hover:scale-105"
+                className="object-cover transition duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 group-hover:saturate-[1.05]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-night via-night/20 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-5 text-sand">
+              <div className="absolute inset-0 bg-gradient-to-t from-night via-night/20 to-transparent transition-opacity duration-500 group-hover:opacity-90" />
+              <div className="absolute inset-x-0 bottom-0 z-[2] p-5 text-sand">
                 <h3 className="font-serif text-4xl">{door.title}</h3>
                 <p className="mt-2 text-sm text-sand/85">{door.body}</p>
                 <p className="mt-3 text-sm text-ember">{door.price}</p>
-                <p className="mt-3 text-sm underline underline-offset-4">{door.cta}</p>
+                <p className="mt-3 inline-block text-sm underline underline-offset-4 transition-transform duration-500 group-hover:translate-x-1">{door.cta}</p>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-6 md:py-28">
+      <section className="fx-reveal mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-6 md:py-28">
         <p className="font-quote text-3xl leading-snug text-ink md:text-5xl">{copy.home.manifesto}</p>
         <Image
           src={about.src}
@@ -157,13 +161,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           height={about.height}
           placeholder="blur"
           blurDataURL={about.blur}
-          className="aspect-[4/5] w-full rounded-[2rem] object-cover"
+          className="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-sm transition duration-700 ease-out hover:shadow-[0_20px_45px_-18px_rgba(42,33,28,0.35)] hover:brightness-105"
           sizes="(max-width: 768px) 100vw, 40vw"
         />
       </section>
 
       <section className="mt-16 bg-clay/70">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-3 md:px-6">
+        <div className="fx-reveal mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-3 md:px-6">
           <h2 className="font-serif text-4xl md:col-span-3">{copy.home.howTitle}</h2>
           {copy.home.how.map((item) => (
             <article key={item.title}>
@@ -174,7 +178,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
+      <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
         <div className="mb-8 flex items-end justify-between gap-4">
           <h2 className="font-serif text-4xl">{copy.home.featuredTitle}</h2>
           <Link href="/portfolio" className="text-sm text-terracotta-ink underline underline-offset-4">
@@ -202,13 +206,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         foldAfter={4}
       />
 
-      <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-2 md:px-6">
+      <section className="fx-reveal mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-2 md:px-6">
         <Image
           src={aboutTeaser.src}
           alt={aboutTeaser.alt[loc]}
           width={aboutTeaser.width}
           height={aboutTeaser.height}
-          className="h-auto w-full rounded-[2rem]"
+          className="h-auto w-full rounded-[2rem] shadow-sm transition duration-700 ease-out hover:shadow-[0_20px_45px_-18px_rgba(42,33,28,0.35)] hover:brightness-105"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
         <div>
@@ -219,7 +223,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
+      <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
         <div className="flex items-end justify-between gap-4">
           <div>
             <h2 className="font-serif text-4xl">{copy.home.journalTitle}</h2>
@@ -234,7 +238,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <Link
               key={post.id}
               href={{ pathname: "/journal/[slug]", params: { slug: post.slugs[loc] } }}
-              className="rounded-3xl bg-clay/50 p-6 hover:bg-clay"
+              className="fx-card rounded-3xl bg-clay/50 p-6 hover:bg-clay"
             >
               <h3 className="font-serif text-2xl">{post.title[loc]}</h3>
               <p className="mt-3 text-sm text-ink/75">{post.description[loc]}</p>
@@ -257,7 +261,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
+      <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
         <div className="mb-6 flex items-end justify-between">
           <h2 className="font-serif text-3xl">Instagram</h2>
           <a href={settings.instagramUrl} className="text-sm text-terracotta-ink underline underline-offset-4">
@@ -269,8 +273,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           {featured
             .slice(0, 6)
             .map((image) => (
-              <a key={image.id} href={settings.instagramUrl} className="relative aspect-square overflow-hidden rounded-2xl">
-                <Image src={image.src} alt={image.alt[loc]} fill sizes="16vw" className="object-cover" />
+              <a key={image.id} href={settings.instagramUrl} className="fx-shine group relative aspect-square overflow-hidden rounded-2xl">
+                <Image src={image.src} alt={image.alt[loc]} fill sizes="16vw" className="object-cover transition duration-700 ease-out group-hover:scale-105 group-hover:brightness-110" />
               </a>
             ))}
         </div>

@@ -74,7 +74,7 @@ export function GalleryGrid({
                 id={itemId(index)}
                 type="button"
                 className={cn(
-                  "group mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl text-left",
+                  "fx-shine group mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl text-left shadow-sm transition-shadow duration-500 hover:shadow-[0_20px_45px_-18px_rgba(42,33,28,0.4)]",
                   hide(index) && hiddenClass,
                 )}
                 onClick={() => setActive(index)}
@@ -87,7 +87,7 @@ export function GalleryGrid({
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   placeholder="blur"
                   blurDataURL={image.blur}
-                  className="h-auto w-full transition duration-700 group-hover:scale-[1.02]"
+                  className="h-auto w-full transition duration-700 ease-out group-hover:scale-[1.03] group-hover:brightness-105"
                 />
                 <span className="sr-only">{labels.open}</span>
               </button>
@@ -98,14 +98,14 @@ export function GalleryGrid({
       <dialog
         ref={dialogRef}
         aria-labelledby={titleId}
-        className="m-auto max-h-[100dvh] max-w-[100vw] bg-transparent p-0 backdrop:bg-night/85"
+        className="fx-dialog m-auto max-h-[100dvh] max-w-[100vw] bg-transparent p-0 backdrop:bg-night/85"
         onClose={() => setActive(null)}
         onClick={(event) => {
           if (event.target === dialogRef.current) setActive(null);
         }}
       >
         {current ? (
-          <div className="relative flex max-h-[100dvh] max-w-[100vw] items-center justify-center p-3 md:p-8">
+          <div className="fx-lightbox-in relative flex max-h-[100dvh] max-w-[100vw] items-center justify-center p-3 md:p-8">
             <p id={titleId} className="sr-only">
               {current.alt[locale]}
             </p>
@@ -120,14 +120,14 @@ export function GalleryGrid({
             />
             <button
               type="button"
-              className="absolute top-4 right-4 rounded-full bg-sand px-4 py-2 text-sm text-ink"
+              className="absolute top-4 right-4 rounded-full bg-sand px-4 py-2 text-sm text-ink transition duration-300 hover:scale-105 hover:bg-white"
               onClick={() => setActive(null)}
             >
               {labels.close}
             </button>
             <button
               type="button"
-              className="absolute top-1/2 left-3 -translate-y-1/2 rounded-full bg-sand px-3 py-2 text-sm"
+              className="absolute top-1/2 left-3 -translate-y-1/2 rounded-full bg-sand px-3 py-2 text-sm transition duration-300 hover:scale-105 hover:bg-white"
               onClick={() =>
                 setActive((index) =>
                   index == null ? index : (index - 1 + photos.length) % photos.length,
@@ -138,7 +138,7 @@ export function GalleryGrid({
             </button>
             <button
               type="button"
-              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full bg-sand px-3 py-2 text-sm"
+              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full bg-sand px-3 py-2 text-sm transition duration-300 hover:scale-105 hover:bg-white"
               onClick={() =>
                 setActive((index) => (index == null ? index : (index + 1) % photos.length))
               }

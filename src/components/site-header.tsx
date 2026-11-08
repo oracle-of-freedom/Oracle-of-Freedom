@@ -32,8 +32,8 @@ export function SiteHeader({
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-sand/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 md:h-20 md:px-6">
-        <Link href="/" className="flex items-center gap-2.5 text-ink" aria-label={homeLabel}>
-          <OmMark className="h-9 w-9 shrink-0 md:h-11 md:w-11" />
+        <Link href="/" className="group flex items-center gap-2.5 text-ink" aria-label={homeLabel}>
+          <OmMark className="h-9 w-9 shrink-0 transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105 md:h-11 md:w-11" />
           <span className="font-serif text-lg leading-none md:text-xl">Oracle of Freedom</span>
         </Link>
         <nav className="ml-auto hidden items-center gap-5 lg:flex" aria-label="Main">
@@ -42,7 +42,7 @@ export function SiteHeader({
               key={item.href}
               href={item.href}
               className={cn(
-                "text-sm text-ink/80 hover:text-terracotta-ink",
+                "fx-nav-link text-sm text-ink/80 transition-colors duration-300 hover:text-terracotta-ink",
                 pathname === item.href && "text-terracotta-ink",
               )}
               aria-current={pathname === item.href ? "page" : undefined}
@@ -69,13 +69,13 @@ export function SiteHeader({
         </button>
       </div>
       {open ? (
-        <div id="mobile-menu" className="grain bg-night text-sand lg:hidden">
+        <div id="mobile-menu" className="fx-menu-in grain bg-night text-sand lg:hidden">
           <nav className="relative z-10 flex flex-col gap-1 px-6 py-6" aria-label="Main">
             {items.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="border-b border-white/10 py-3 font-serif text-3xl"
+                className="border-b border-white/10 py-3 font-serif text-3xl transition-colors duration-300 hover:text-ember"
                 onClick={() => setOpen(false)}
               >
                 {item.label}

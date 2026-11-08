@@ -47,8 +47,8 @@ export function PortfolioBrowser({
             aria-selected={filter === item.id}
             onClick={() => setFilter(item.id)}
             className={cn(
-              "shrink-0 rounded-full border px-4 py-2 text-sm",
-              filter === item.id ? "border-terracotta bg-terracotta text-white" : "border-ink/15",
+              "shrink-0 rounded-full border px-4 py-2 text-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-terracotta/60 hover:text-terracotta-ink active:scale-95",
+              filter === item.id ? "border-terracotta bg-terracotta text-white hover:text-white" : "border-ink/15",
             )}
           >
             {item.label}
@@ -57,7 +57,9 @@ export function PortfolioBrowser({
         ))}
       </div>
       {visible.length ? (
-        <GalleryGrid images={visible} locale={locale} labels={labels} />
+        <div key={filter} className="fx-enter">
+          <GalleryGrid images={visible} locale={locale} labels={labels} />
+        </div>
       ) : filter === "film" ? null : (
         <p>{empty}</p>
       )}

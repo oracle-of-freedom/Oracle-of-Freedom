@@ -61,13 +61,13 @@ export function StayDateChips({
             },
             hash: "form",
           }}
-          className={`${chipClass} max-w-full`}
+          className={`${chipClass} max-w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-95`}
         >
           {labelFor(group)}
         </Link>
       ))}
       {canToggle ? (
-        <button type="button" className={moreClass} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+        <button type="button" className={`${moreClass} transition-all duration-300 hover:-translate-y-0.5 active:scale-95`} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
           {open ? less : more}
         </button>
       ) : null}

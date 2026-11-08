@@ -208,7 +208,7 @@ export function InquiryForm({
   const error = (name: keyof Values) => form.formState.errors[name]?.message as string | undefined;
 
   return (
-    <form id="form" onSubmit={form.handleSubmit(onSubmit)} className="scroll-mt-28 rounded-3xl bg-white/60 p-5 md:p-8" noValidate>
+    <form id="form" onSubmit={form.handleSubmit(onSubmit)} className="fx-form scroll-mt-28 rounded-3xl bg-white/60 p-5 shadow-sm md:p-8" noValidate>
       <ol className="mb-8 flex gap-3 text-xs tracking-[0.14em] uppercase" aria-label="Progress">
         {copy.steps.map((label, index) => (
           <li key={label} className={cn(index === step ? "text-terracotta-ink" : "text-ink/40")} aria-current={index === step ? "step" : undefined}>

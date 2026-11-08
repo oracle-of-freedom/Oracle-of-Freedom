@@ -93,7 +93,7 @@ export default async function InquirePage({
           />
         </div>
       </div>
-      <aside className="h-fit rounded-3xl bg-clay/50 p-6 md:sticky md:top-24">
+      <aside className="fx-card fx-reveal h-fit rounded-3xl bg-clay/50 p-6 hover:bg-clay/70 md:sticky md:top-24">
         <h2 className="font-serif text-3xl">{copy.inquire.prefer}</h2>
         <p className="mt-4">
           <WhatsAppLink text={copy.whatsapp.general} codeLabel={copy.form.promoCode} wishLabel={copy.form.wish} className="text-terracotta-ink underline underline-offset-4">

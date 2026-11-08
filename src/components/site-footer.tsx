@@ -27,13 +27,13 @@ export function SiteFooter({
         </div>
         <div className="space-y-2 text-sm text-sand/80">
           <p>
-            <a className="underline decoration-white/30 underline-offset-4 hover:text-white" href={`mailto:${settings.email}`}>
+            <a className="fx-link-line transition-colors duration-300 hover:text-white" href={`mailto:${settings.email}`}>
               {settings.email}
             </a>
           </p>
           <p>
             <a
-              className="underline decoration-white/30 underline-offset-4 hover:text-white"
+              className="fx-link-line transition-colors duration-300 hover:text-white"
               href={settings.instagramUrl}
               rel="noopener noreferrer"
             >
@@ -41,7 +41,7 @@ export function SiteFooter({
             </a>
           </p>
           <p>
-            <a className="underline decoration-white/30 underline-offset-4 hover:text-white" href={whatsappHref(whatsappMessage)}>
+            <a className="fx-link-line transition-colors duration-300 hover:text-white" href={whatsappHref(whatsappMessage)}>
               WhatsApp{" "}
               <span className={isPlaceholder(settings.whatsappDisplay) || settings.whatsappIsPlaceholder ? "placeholder-chip" : undefined}>
                 {settings.whatsappDisplay}
@@ -53,7 +53,7 @@ export function SiteFooter({
             <LanguageSwitcher locale={locale} tone="light" />
           </div>
           <p className="pt-3">
-            <Link href={"/privacy" as StaticPathname} className="underline decoration-white/30 underline-offset-4 hover:text-white">
+            <Link href={"/privacy" as StaticPathname} className="fx-link-line transition-colors duration-300 hover:text-white">
               {privacyLabel}
             </Link>
           </p>
