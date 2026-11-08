@@ -31,7 +31,7 @@ export function Testimonials({
   const words = moreCopy[locale];
 
   return (
-    <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
+    <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
       <h2 className="font-serif text-4xl text-ink">{title}</h2>
       <MobileMore
         enabled={foldAfter != null}
@@ -72,7 +72,7 @@ function RealTestimonial({
 }) {
   const shoot = item.shoot?.[locale];
   return (
-    <figure id={id} className={cn("fx-card min-w-0 rounded-3xl bg-clay/70 p-6 hover:bg-clay/90", className)}>
+    <figure id={id} className={cn("min-w-0 rounded-3xl bg-clay/70 p-6", className)}>
       <blockquote className="font-quote text-xl leading-relaxed text-pretty break-words text-ink sm:text-2xl sm:leading-snug">
         {item.quote[locale]}
       </blockquote>

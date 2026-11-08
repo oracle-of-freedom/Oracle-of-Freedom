@@ -41,7 +41,7 @@ function AtWorkFigure({
         height={image.height}
         placeholder="blur"
         blurDataURL={image.blur}
-        className="h-auto w-full rounded-3xl object-cover shadow-sm transition duration-700 ease-out hover:shadow-[0_20px_45px_-18px_rgba(42,33,28,0.35)] hover:brightness-105"
+        className="h-auto w-full rounded-3xl object-cover"
         sizes={sizes}
       />
       {image.caption?.[locale] ? (
@@ -83,13 +83,13 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           priority
           placeholder="blur"
           blurDataURL={primary.blur}
-          className="w-full rounded-3xl object-cover shadow-sm transition duration-700 ease-out hover:shadow-[0_20px_45px_-18px_rgba(42,33,28,0.35)] hover:brightness-105"
+          className="w-full rounded-3xl object-cover"
           sizes="(max-width: 768px) 100vw, 40vw"
         />
       </header>
 
       <section className="bg-clay/50">
-        <div className="fx-reveal mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-6">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-6">
           <p className="font-quote text-3xl leading-snug md:text-4xl">{copy.about.promise}</p>
           <Image
             src={secondary.src}
@@ -98,17 +98,17 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             height={secondary.height}
             placeholder="blur"
             blurDataURL={secondary.blur}
-            className="w-full rounded-3xl object-cover shadow-sm transition duration-700 ease-out hover:shadow-[0_20px_45px_-18px_rgba(42,33,28,0.35)] hover:brightness-105"
+            className="w-full rounded-3xl object-cover"
             sizes="(max-width: 768px) 100vw, 45vw"
           />
         </div>
       </section>
 
-      <section className="fx-reveal mx-auto max-w-6xl px-4 py-16 md:px-6">
+      <section className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <h2 className="font-serif text-4xl">{copy.about.valuesTitle}</h2>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {copy.about.values.map((value) => (
-            <article key={value.title} className="fx-card rounded-3xl bg-white/50 p-6 hover:border-terracotta/30">
+            <article key={value.title} className="rounded-3xl bg-white/50 p-6">
               <h3 className="font-serif text-2xl">{value.title}</h3>
               <p className="mt-2 text-ink/80">{value.body}</p>
             </article>

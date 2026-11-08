@@ -126,7 +126,7 @@ export function VideoGrid({
               <button
                 type="button"
                 aria-label={words.play}
-                className="group relative block w-full overflow-hidden rounded-3xl text-left shadow-sm transition-shadow duration-500 hover:shadow-[0_20px_45px_-18px_rgba(42,33,28,0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                className="group relative block w-full overflow-hidden rounded-3xl text-left shadow-sm transition-shadow duration-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                 onClick={play}
               >
                 <Poster poster={poster} alt="" wide={wide} />
@@ -138,7 +138,7 @@ export function VideoGrid({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={words.play}
-                className="group relative block overflow-hidden rounded-3xl shadow-sm transition-shadow duration-500 hover:shadow-[0_20px_45px_-18px_rgba(42,33,28,0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                className="group relative block overflow-hidden rounded-3xl shadow-sm transition-shadow duration-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
               >
                 <Poster poster={poster} alt="" wide={wide} />
                 <PlayMark />
@@ -193,7 +193,7 @@ function Poster({
       width={poster.width}
       height={poster.height}
       sizes={wide ? "(max-width: 1152px) 100vw, 1152px" : "(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"}
-      className={cn("w-full bg-night object-cover transition duration-700 ease-out group-hover:scale-[1.03] group-hover:brightness-105", wide ? "aspect-video" : "aspect-[9/16]")}
+      className={cn("w-full bg-night object-cover transition-transform duration-500 ease-out group-hover:scale-[1.015]", wide ? "aspect-video" : "aspect-[9/16]")}
     />
   );
 }

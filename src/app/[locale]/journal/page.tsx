@@ -30,7 +30,7 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
       <p className="mt-5 text-lg text-ink/80">{copy.journal.dek}</p>
       <div className="mt-12 divide-y divide-ink/10 border-y border-ink/10">
         {posts.map((post) => (
-          <article key={post.id} className="fx-reveal py-8">
+          <article key={post.id} className="py-8">
             <time dateTime={post.date} className="text-xs tracking-[0.16em] text-ink/50 uppercase">
               {post.date}
             </time>
@@ -40,7 +40,7 @@ export default async function JournalPage({ params }: { params: Promise<{ locale
             <p className="mt-3 text-ink/75">{post.description[loc]}</p>
             <Link
               href={{ pathname: "/journal/[slug]", params: { slug: post.slugs[loc] } }}
-              className="mt-4 inline-flex text-sm text-terracotta-ink underline underline-offset-4 transition-all duration-300 hover:translate-x-1 hover:text-terracotta"
+              className="fx-cta-link mt-4 text-sm text-terracotta-ink underline underline-offset-4 transition-colors duration-300 hover:text-terracotta"
             >
               {copy.journal.read}
             </Link>
