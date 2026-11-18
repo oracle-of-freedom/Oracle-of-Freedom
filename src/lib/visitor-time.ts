@@ -41,12 +41,12 @@ export function zonedDateLabel(iso: string, dateLocale: string, timeZone: string
   }).format(new Date(iso));
 }
 
-export function zonedZoneName(dateLocale: string, timeZone: string) {
+export function zonedZoneName(dateLocale: string, timeZone: string, at = new Date()) {
   try {
     const parts = new Intl.DateTimeFormat(dateLocale, {
       timeZone,
       timeZoneName: "longGeneric",
-    }).formatToParts(new Date());
+    }).formatToParts(at);
     return parts.find((item) => item.type === "timeZoneName")?.value || timeZone;
   } catch {
     return timeZone;

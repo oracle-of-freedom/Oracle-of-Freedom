@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
+import { guestConfirmedText } from "@/lib/booking-time";
 import { readBookings, writeBookings } from "@/lib/booking-store";
 import type { Booking } from "@/lib/bookings";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
@@ -19,22 +20,13 @@ async function sendAcceptedEmail(booking: Booking, meetingUrl: string) {
   const replyTo = process.env.INQUIRY_TO_EMAIL || settings.email;
   const locale = (booking.locale || "en") as Locale;
   const copy = bookingCopy[locale] || bookingCopy.en;
-  const lines = [
-    copy.acceptedBody,
-    "",
-    `${booking.date} · ${booking.start} - ${booking.end}`,
-    booking.title,
-  ];
-  if (meetingUrl) {
-    lines.push("", `${copy.joinMeeting}: ${meetingUrl}`);
-  }
   const resend = new Resend(apiKey);
   const result = await resend.emails.send({
     from,
     to: booking.contact,
     replyTo,
     subject: copy.acceptedTitle,
-    text: lines.join("\n"),
+    text: guestConfirmedText(booking, meetingUrl),
   });
   if (result.error) {
     console.error("[booking] accept email failed", result.error);
