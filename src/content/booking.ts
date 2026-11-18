@@ -38,6 +38,10 @@ export type BookingCopy = {
   joinMeeting: string;
   acceptClosed: string;
   acceptMissing: string;
+  whenLine: string;
+  studioTimeLine: string;
+  timeTo: string;
+  signOff: string;
 };
 
 export const bookingCopy: Record<Locale, BookingCopy> = {
@@ -79,6 +83,10 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     again: "Book another time",
     error: "That time could not be booked. Please choose another one.",
     rate: "Too many attempts. Please wait a few minutes and try again.",
+    whenLine: "When: {when}",
+    studioTimeLine: "Studio time: {when}",
+    timeTo: "to",
+    signOff: "With love,\nAgota",
   },
   es: {
     metaTitle: "Reserva una llamada · Oracle of Freedom",
@@ -118,6 +126,10 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     again: "Reservar otra hora",
     error: "No se pudo reservar esa hora. Elige otra.",
     rate: "Demasiados intentos. Espera unos minutos y vuelve a probar.",
+    whenLine: "Cuándo: {when}",
+    studioTimeLine: "Hora del estudio: {when}",
+    timeTo: "a",
+    signOff: "Con amor,\nAgota",
   },
   pt: {
     metaTitle: "Marca uma chamada · Oracle of Freedom",
@@ -157,5 +169,9 @@ export const bookingCopy: Record<Locale, BookingCopy> = {
     again: "Marcar outra hora",
     error: "Não foi possível marcar essa hora. Escolhe outra.",
     rate: "Demasiadas tentativas. Espera alguns minutos e tenta novamente.",
+    whenLine: "Quando: {when}",
+    studioTimeLine: "Hora do estúdio: {when}",
+    timeTo: "às",
+    signOff: "Com amor,\nAgota",
   },
 };

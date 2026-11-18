@@ -1,5 +1,7 @@
 import type { Booking } from "@/lib/bookings";
+import { guestScheduleLines, icalGuestSpan } from "@/lib/booking-time";
 import { lisbonDateTimeToUtc } from "@/lib/availability";
+import { CALENDAR_TIME_ZONE } from "@/lib/calendar-config";
 import { siteUrl } from "@/lib/content";
 
 function escape(value: string) {
@@ -41,9 +43,11 @@ function fold(line: string) {
   return parts.map((part, index) => (index === 0 ? part : ` ${part}`)).join("\r\n");
 }
 
-function event(booking: Booking, meetingUrl?: string) {
+function event(booking: Booking, meetingUrl?: string, forGuest = false) {
   const location = meetingUrl || booking.place;
+  const locale = booking.locale === "es" || booking.locale === "pt" ? booking.locale : "en";
   const description = [
+    forGuest ? guestScheduleLines(booking, locale).join("\n") : "",
     booking.client ? `With: ${booking.client}` : "",
     booking.contact ? `Contact: ${booking.contact}` : "",
     meetingUrl && booking.place && meetingUrl !== booking.place ? booking.place : "",
@@ -51,15 +55,18 @@ function event(booking: Booking, meetingUrl?: string) {
   ]
     .filter(Boolean)
     .join("\n");
+  const guestSpan = !booking.allDay && forGuest ? icalGuestSpan(booking) : null;
   const dates = booking.allDay
     ? [
         `DTSTART;VALUE=DATE:${compactDate(booking.date)}`,
         `DTEND;VALUE=DATE:${compactDate(nextDate(booking.date))}`,
       ]
-    : [
-        `DTSTART:${utc(lisbonDateTimeToUtc(booking.date, booking.start))}`,
-        `DTEND:${utc(lisbonDateTimeToUtc(booking.date, booking.end))}`,
-      ];
+    : guestSpan
+      ? [`DTSTART;TZID="${guestSpan.zone}":${guestSpan.start}`, `DTEND;TZID="${guestSpan.zone}":${guestSpan.end}`]
+      : [
+          `DTSTART:${utc(lisbonDateTimeToUtc(booking.date, booking.start))}`,
+          `DTEND:${utc(lisbonDateTimeToUtc(booking.date, booking.end))}`,
+        ];
   return [
     "BEGIN:VEVENT",
     `UID:${escape(booking.id)}@oracleoffreedom.com`,
@@ -81,10 +88,21 @@ export function bookingsIcal(
   bookings: Booking[],
   name = "Oracle of Freedom",
   meetingUrl?: string,
+  options?: { forGuest?: boolean },
 ) {
-  const events = bookings
-    .filter((booking) => booking.status !== "cancelled" && booking.origin !== "ical" && booking.origin !== "google")
-    .map((booking) => event(booking, meetingUrl));
+  const included = bookings.filter(
+    (booking) => booking.status !== "cancelled" && booking.origin !== "ical" && booking.origin !== "google",
+  );
+  const zones = new Map<string, string>();
+  if (options?.forGuest) {
+    for (const booking of included) {
+      if (booking.allDay) continue;
+      const span = icalGuestSpan(booking);
+      if (!zones.has(span.zone)) zones.set(span.zone, span.vtimezone);
+    }
+  }
+  const headerZone = zones.size === 1 ? [...zones.keys()][0] : CALENDAR_TIME_ZONE;
+  const events = included.map((booking) => event(booking, meetingUrl, options?.forGuest));
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
@@ -92,8 +110,9 @@ export function bookingsIcal(
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     fold(`X-WR-CALNAME:${escape(name)}`),
-    "X-WR-TIMEZONE:Europe/Lisbon",
+    `X-WR-TIMEZONE:${headerZone}`,
     "X-PUBLISHED-TTL:PT1H",
+    ...zones.values(),
     ...events,
     "END:VCALENDAR",
     "",

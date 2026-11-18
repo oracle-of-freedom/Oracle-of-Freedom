@@ -6,9 +6,11 @@ import { z } from "zod";
 import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
 import { slotIsAvailable } from "@/lib/availability";
+import { canonicalTimeZone, guestHoldText, studioWhenLines } from "@/lib/booking-time";
 import { publicAvailability } from "@/lib/booking-service";
 import { writeBookings } from "@/lib/booking-store";
 import { acceptanceUrl, type Booking } from "@/lib/bookings";
+import { CALENDAR_TIME_ZONE } from "@/lib/calendar-config";
 import { notifyStudio } from "@/lib/push";
 import { settings } from "@/lib/content";
 import { isBookingInvite } from "@/lib/inquiries";
@@ -27,6 +29,7 @@ const schema = z.object({
   consent: z.literal(true),
   company: z.string().max(200).optional(),
   invite: z.string().regex(/^[A-Za-z0-9_-]{16,100}$/),
+  timeZone: z.string().max(80).optional(),
 });
 
 async function sendConfirmation(booking: Booking, typeLabel: string, locale: Locale) {
@@ -46,7 +49,7 @@ async function sendConfirmation(booking: Booking, typeLabel: string, locale: Loc
       text: [
         `Name: ${booking.client}`,
         `Email: ${booking.contact}`,
-        `When: ${booking.date} · ${booking.start} to ${booking.end}`,
+        ...studioWhenLines(booking),
         `Type: ${typeLabel}`,
         `Notes: ${booking.notes || "not given"}`,
         `Acceptance link: ${acceptUrl}`,
@@ -57,7 +60,7 @@ async function sendConfirmation(booking: Booking, typeLabel: string, locale: Loc
       to: booking.contact,
       replyTo: to,
       subject: copy.successTitle,
-      text: copy.successBody,
+      text: guestHoldText(booking, locale),
     }),
   ]);
   if (admin.error || attendee.error) {
@@ -115,6 +118,7 @@ export async function POST(request: Request) {
     bookingTypeId: data.typeId,
     locale: data.locale,
     publicToken: randomBytes(24).toString("base64url"),
+    timeZone: canonicalTimeZone(data.timeZone) || CALENDAR_TIME_ZONE,
   };
 
   try {

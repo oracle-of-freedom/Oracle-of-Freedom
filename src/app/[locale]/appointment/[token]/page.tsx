@@ -5,6 +5,7 @@ import { VisitorWhen } from "@/components/visitor-when";
 import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
 import { lisbonDateTimeToUtc } from "@/lib/availability";
+import { canonicalTimeZone } from "@/lib/booking-time";
 import { readBookings } from "@/lib/booking-store";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 
@@ -54,7 +55,14 @@ export default async function AppointmentPage({
         <>
           <h1 className="mt-3 font-serif text-5xl leading-tight">{copy.acceptedTitle}</h1>
           <p className="mt-5 text-lg text-ink/70">{copy.acceptedBody}</p>
-          {when ? <VisitorWhen startsAt={when.startsAt} endsAt={when.endsAt} locale={when.locale} /> : null}
+          {when ? (
+            <VisitorWhen
+              startsAt={when.startsAt}
+              endsAt={when.endsAt}
+              locale={when.locale}
+              timeZone={canonicalTimeZone(booking.timeZone)}
+            />
+          ) : null}
           <p className="mt-2 text-ink/70">{booking.title}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             {meetingUrl ? (
@@ -81,7 +89,14 @@ export default async function AppointmentPage({
         </>
       ) : (
         <>
-          {when ? <VisitorWhen startsAt={when.startsAt} endsAt={when.endsAt} locale={when.locale} /> : null}
+          {when ? (
+            <VisitorWhen
+              startsAt={when.startsAt}
+              endsAt={when.endsAt}
+              locale={when.locale}
+              timeZone={canonicalTimeZone(booking.timeZone)}
+            />
+          ) : null}
           <p className="mt-2 text-ink/70">
             {booking.title}
             {booking.place ? ` · ${booking.place}` : ""}

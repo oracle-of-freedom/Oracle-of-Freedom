@@ -25,6 +25,8 @@ export type Booking = {
   locale?: "en" | "es" | "pt";
   publicToken?: string;
   googleEventId?: string;
+  /** IANA zone captured from the guest's browser. date/start/end stay studio wall time. */
+  timeZone?: string;
 };
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -83,7 +85,8 @@ export function isBooking(value: unknown): value is Booking {
     (item.publicToken === undefined ||
       (typeof item.publicToken === "string" && item.publicToken.length <= 100)) &&
     (item.googleEventId === undefined ||
-      (typeof item.googleEventId === "string" && item.googleEventId.length <= 200))
+      (typeof item.googleEventId === "string" && item.googleEventId.length <= 200)) &&
+    (item.timeZone === undefined || (typeof item.timeZone === "string" && item.timeZone.length <= 80))
   );
 }
 

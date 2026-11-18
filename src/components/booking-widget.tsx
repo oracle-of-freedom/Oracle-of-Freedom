@@ -111,6 +111,7 @@ export function BookingWidget({
         consent: formData.get("consent") === "on",
         locale,
         invite,
+        timeZone: visitorTimeZone(),
       }),
     });
     const data = (await response.json().catch(() => null)) as Result | null;

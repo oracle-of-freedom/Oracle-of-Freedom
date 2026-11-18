@@ -70,6 +70,7 @@ export async function saveBooking(_state: ActionState, formData: FormData): Prom
   booking.locale = previous?.locale;
   booking.publicToken = previous?.publicToken;
   booking.googleEventId = previous?.googleEventId;
+  booking.timeZone = previous?.timeZone;
   if (current.length >= 1000 && !current.some((item) => item.id === booking.id)) {
     return { error: t.errors.bookingFull };
   }

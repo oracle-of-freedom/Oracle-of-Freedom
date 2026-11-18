@@ -1,6 +1,7 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
 import type { BusyInterval } from "@/lib/availability";
 import { lisbonDateTimeToUtc, utcToLisbonDateTime } from "@/lib/availability";
+import { canonicalTimeZone, googleTimedBound, parseGoogleDateTime, studioWhenLines } from "@/lib/booking-time";
 import { isBooking, type Booking } from "@/lib/bookings";
 import type { CalendarConfig, GoogleConnection } from "@/lib/calendar-config";
 import { CALENDAR_TIME_ZONE } from "@/lib/calendar-config";
@@ -36,8 +37,8 @@ type GoogleEvent = {
   location?: string;
   transparency?: string;
   eventType?: string;
-  start?: { date?: string; dateTime?: string };
-  end?: { date?: string; dateTime?: string };
+  start?: { date?: string; dateTime?: string; timeZone?: string };
+  end?: { date?: string; dateTime?: string; timeZone?: string };
   extendedProperties?: { private?: { oracleBookingId?: string } };
 };
 
@@ -275,6 +276,7 @@ function eventBody(booking: Booking, meetingUrl?: string) {
       : booking.origin === "google"
         ? ""
         : "Created in Oracle of Freedom Studio",
+    canonicalTimeZone(booking.timeZone) ? studioWhenLines(booking).join("\n") : "",
     booking.client ? `With: ${booking.client}` : "",
     booking.contact ? `Contact: ${booking.contact}` : "",
     booking.notes,
@@ -286,20 +288,12 @@ function eventBody(booking: Booking, meetingUrl?: string) {
     description,
     location: meetingUrl || booking.place || undefined,
     status: booking.status === "cancelled" ? "cancelled" : "confirmed",
-    start: booking.allDay
-      ? { date: booking.date }
-      : {
-          dateTime: lisbonDateTimeToUtc(booking.date, booking.start).toISOString(),
-          timeZone: CALENDAR_TIME_ZONE,
-        },
+    start: booking.allDay ? { date: booking.date } : googleTimedBound(booking.date, booking.start, booking.timeZone),
     end: booking.allDay
       ? {
           date: nextDate.toISOString().slice(0, 10),
         }
-      : {
-          dateTime: lisbonDateTimeToUtc(booking.date, booking.end).toISOString(),
-          timeZone: CALENDAR_TIME_ZONE,
-        },
+      : googleTimedBound(booking.date, booking.end, booking.timeZone),
     extendedProperties: { private: { oracleBookingId: booking.id } },
   };
 }
@@ -335,10 +329,10 @@ export async function deleteGoogleEvent(config: CalendarConfig, booking: Booking
 
 function scheduleFromEvent(event: GoogleEvent) {
   if (event.start?.dateTime) {
-    const start = utcToLisbonDateTime(event.start.dateTime);
+    const start = utcToLisbonDateTime(parseGoogleDateTime(event.start.dateTime, event.start.timeZone));
     let end = "23:59";
     if (event.end?.dateTime) {
-      const finish = utcToLisbonDateTime(event.end.dateTime);
+      const finish = utcToLisbonDateTime(parseGoogleDateTime(event.end.dateTime, event.end.timeZone));
       if (finish.date === start.date && finish.time > start.time) end = finish.time;
     }
     return { date: start.date, allDay: false, start: start.time, end };
