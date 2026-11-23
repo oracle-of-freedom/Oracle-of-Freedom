@@ -2,7 +2,7 @@ import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
 import { lisbonDateTimeToUtc } from "@/lib/availability";
 import type { Booking } from "@/lib/bookings";
-import { CALENDAR_TIME_ZONE } from "@/lib/calendar-config";
+import { CALENDAR_TIME_ZONE, studioTimeZone } from "@/lib/calendar-config";
 import { zonedZoneName } from "@/lib/visitor-time";
 
 const ZONE_ID = /^[A-Za-z0-9_+/-]{1,80}$/;
@@ -29,8 +29,8 @@ export function canonicalTimeZone(value: unknown): string | undefined {
   }
 }
 
-export function bookingTimeZone(booking: { timeZone?: string }) {
-  return canonicalTimeZone(booking.timeZone) || CALENDAR_TIME_ZONE;
+export function bookingTimeZone(booking: { timeZone?: string }, studioZone = CALENDAR_TIME_ZONE) {
+  return canonicalTimeZone(booking.timeZone) || studioTimeZone({ timeZone: studioZone });
 }
 
 function bookingLocale(locale: Booking["locale"] | Locale | undefined): Locale {
@@ -121,15 +121,17 @@ export function formatWhen(
   booking: Pick<Booking, "date" | "start" | "end" | "allDay">,
   timeZone: string,
   locale: Locale,
+  studioZone = CALENDAR_TIME_ZONE,
 ) {
-  const zone = canonicalTimeZone(timeZone) || CALENDAR_TIME_ZONE;
+  const zone = canonicalTimeZone(timeZone) || studioTimeZone({ timeZone: studioZone });
+  const wallZone = studioTimeZone({ timeZone: studioZone });
   const copy = bookingCopy[locale] || bookingCopy.en;
   if (booking.allDay) {
-    const noon = lisbonDateTimeToUtc(booking.date, "12:00");
+    const noon = lisbonDateTimeToUtc(booking.date, "12:00", wallZone);
     return `${longDate(noon, locale, zone)} (${zonedZoneName(dateLocale(locale), zone, noon)})`;
   }
-  const start = lisbonDateTimeToUtc(booking.date, booking.start);
-  const end = lisbonDateTimeToUtc(booking.date, booking.end);
+  const start = lisbonDateTimeToUtc(booking.date, booking.start, wallZone);
+  const end = lisbonDateTimeToUtc(booking.date, booking.end, wallZone);
   const startDate = longDate(start, locale, zone);
   const endDate = longDate(end, locale, zone);
   const range =
@@ -139,43 +141,46 @@ export function formatWhen(
   return `${range} (${zonedZoneName(dateLocale(locale), zone, start)})`;
 }
 
-export function guestScheduleLines(booking: Booking, locale: Locale) {
+export function guestScheduleLines(booking: Booking, locale: Locale, studioZone = CALENDAR_TIME_ZONE) {
   const resolved = bookingLocale(locale);
   const copy = bookingCopy[resolved];
-  const guestZone = bookingTimeZone(booking);
-  const lines = [copy.whenLine.replace("{when}", formatWhen(booking, guestZone, resolved))];
-  if (guestZone !== CALENDAR_TIME_ZONE) {
-    lines.push(`[${copy.studioTimeLine.replace("{when}", formatWhen(booking, CALENDAR_TIME_ZONE, resolved))}]`);
+  const wallZone = studioTimeZone({ timeZone: studioZone });
+  const guestZone = bookingTimeZone(booking, wallZone);
+  const lines = [copy.whenLine.replace("{when}", formatWhen(booking, guestZone, resolved, wallZone))];
+  if (guestZone !== wallZone) {
+    lines.push(`[${copy.studioTimeLine.replace("{when}", formatWhen(booking, wallZone, resolved, wallZone))}]`);
   }
   return lines;
 }
 
-export function guestHoldText(booking: Booking, locale: Locale) {
+export function guestHoldText(booking: Booking, locale: Locale, studioZone = CALENDAR_TIME_ZONE) {
   const resolved = bookingLocale(locale);
   const copy = bookingCopy[resolved];
-  return [copy.successBody, "", ...guestScheduleLines(booking, resolved), "", copy.signOff].join("\n");
+  return [copy.successBody, "", ...guestScheduleLines(booking, resolved, studioZone), "", copy.signOff].join("\n");
 }
 
-export function guestConfirmedText(booking: Booking, meetingUrl: string) {
+export function guestConfirmedText(booking: Booking, meetingUrl: string, studioZone = CALENDAR_TIME_ZONE) {
   const resolved = bookingLocale(booking.locale);
   const copy = bookingCopy[resolved];
-  const lines = [copy.acceptedBody, "", ...guestScheduleLines(booking, resolved), "", booking.title];
+  const lines = [copy.acceptedBody, "", ...guestScheduleLines(booking, resolved, studioZone), "", booking.title];
   if (meetingUrl) lines.push("", `${copy.joinMeeting}: ${meetingUrl}`);
   lines.push("", copy.signOff);
   return lines.join("\n");
 }
 
-export function studioWhenLines(booking: Booking) {
+export function studioWhenLines(booking: Booking, studioZone = CALENDAR_TIME_ZONE) {
+  const wallZone = studioTimeZone({ timeZone: studioZone });
   return [
-    `Guest time: ${formatWhen(booking, bookingTimeZone(booking), "en")}`,
-    `Studio time: ${formatWhen(booking, CALENDAR_TIME_ZONE, "en")}`,
+    `Guest time: ${formatWhen(booking, bookingTimeZone(booking, wallZone), "en", wallZone)}`,
+    `Studio time: ${formatWhen(booking, wallZone, "en", wallZone)}`,
   ];
 }
 
-export function googleTimedBound(date: string, time: string, timeZone?: string) {
-  const instant = lisbonDateTimeToUtc(date, time);
+export function googleTimedBound(date: string, time: string, timeZone?: string, studioZone = CALENDAR_TIME_ZONE) {
+  const wallZone = studioTimeZone({ timeZone: studioZone });
+  const instant = lisbonDateTimeToUtc(date, time, wallZone);
   const guestZone = canonicalTimeZone(timeZone);
-  if (guestZone && guestZone !== CALENDAR_TIME_ZONE) {
+  if (guestZone && guestZone !== wallZone) {
     const wall = wallClock(instant, guestZone);
     return {
       dateTime: `${wall.year}-${wall.month}-${wall.day}T${wall.hour}:${wall.minute}:00`,
@@ -184,7 +189,7 @@ export function googleTimedBound(date: string, time: string, timeZone?: string) 
   }
   return {
     dateTime: instant.toISOString(),
-    timeZone: CALENDAR_TIME_ZONE,
+    timeZone: wallZone,
   };
 }
 
@@ -216,10 +221,14 @@ function vtimezone(zone: string, start: Date, end: Date) {
   return ["BEGIN:VTIMEZONE", `TZID:${zone}`, ...blocks, "END:VTIMEZONE"].join("\r\n");
 }
 
-export function icalGuestSpan(booking: Pick<Booking, "date" | "start" | "end" | "timeZone">) {
-  const zone = bookingTimeZone(booking);
-  const start = lisbonDateTimeToUtc(booking.date, booking.start);
-  const end = lisbonDateTimeToUtc(booking.date, booking.end);
+export function icalGuestSpan(
+  booking: Pick<Booking, "date" | "start" | "end" | "timeZone">,
+  studioZone = CALENDAR_TIME_ZONE,
+) {
+  const wallZone = studioTimeZone({ timeZone: studioZone });
+  const zone = bookingTimeZone(booking, wallZone);
+  const start = lisbonDateTimeToUtc(booking.date, booking.start, wallZone);
+  const end = lisbonDateTimeToUtc(booking.date, booking.end, wallZone);
   return {
     zone,
     start: localStamp(start, zone),

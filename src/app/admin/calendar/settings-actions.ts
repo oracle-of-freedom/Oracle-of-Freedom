@@ -17,7 +17,7 @@ import {
 import { readBookings, writeBookings } from "@/lib/booking-store";
 import { encryptGoogleToken, listGoogleCalendars } from "@/lib/google-calendar";
 import { importInboundIcal } from "@/lib/inbound-ical";
-import { lisbonToday } from "@/lib/pricing";
+import { calendarToday, studioTimeZone } from "@/lib/calendar-config";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
 
@@ -177,12 +177,14 @@ export async function saveInboundIcal(
       const kept = bookings.filter((item) => item.origin !== "ical");
       if (kept.length !== bookings.length) await writeBookings(kept);
     } else {
-      const today = lisbonToday();
+      const zone = studioTimeZone(next);
+      const today = calendarToday(zone);
       const synced = await importInboundIcal(
         normalized,
         bookings,
         addDays(today, -14),
         addDays(today, Math.min(current.daysAhead || 60, 90)),
+        zone,
       );
       if (synced.changed) await writeBookings(synced.bookings);
     }

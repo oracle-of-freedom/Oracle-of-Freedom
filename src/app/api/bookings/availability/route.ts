@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { publicAvailability } from "@/lib/booking-service";
+import { studioTimeZone } from "@/lib/calendar-config";
 import { isBookingInvite } from "@/lib/inquiries";
 import { readInquiries } from "@/lib/inquiry-store";
 
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
   if (!result) return NextResponse.json({ ok: false }, { status: 404 });
   return NextResponse.json({
     ok: true,
-    timeZone: "Europe/Lisbon",
+    timeZone: studioTimeZone(result.config),
     slots: result.slots,
   });
 }

@@ -13,7 +13,7 @@ import {
   readCalendarConfig,
   writeCalendarConfig,
 } from "@/lib/calendar-config-store";
-import { lisbonToday } from "@/lib/pricing";
+import { calendarToday, studioTimeZone } from "@/lib/calendar-config";
 
 function addDays(date: string, days: number) {
   const value = new Date(`${date}T00:00:00Z`);
@@ -55,7 +55,7 @@ export async function GET(request: Request) {
     );
     const connected = { ...config, google: connection };
     await writeCalendarConfig(connected);
-    const today = lisbonToday();
+    const today = calendarToday(studioTimeZone(connected));
     const from = addDays(today, -14);
     const to = addDays(today, Math.min(config.daysAhead || 60, 90));
     try {

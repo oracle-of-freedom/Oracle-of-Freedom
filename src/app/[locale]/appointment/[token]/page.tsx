@@ -7,6 +7,7 @@ import type { Locale } from "@/i18n/routing";
 import { lisbonDateTimeToUtc } from "@/lib/availability";
 import { canonicalTimeZone } from "@/lib/booking-time";
 import { readBookings } from "@/lib/booking-store";
+import { studioTimeZone } from "@/lib/calendar-config";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 
 export const dynamic = "force-dynamic";
@@ -31,13 +32,14 @@ export default async function AppointmentPage({
   if (!/^[A-Za-z0-9_-]{16,100}$/.test(token)) notFound();
   const booking = (await readBookings()).find((item) => item.publicToken === token);
   const config = await readCalendarConfig();
+  const zone = studioTimeZone(config);
   const copy = bookingCopy[booking?.locale || locale] || bookingCopy.en;
   const meetingUrl = config.meetingUrl || "";
   const when =
     booking && !booking.allDay
       ? {
-          startsAt: lisbonDateTimeToUtc(booking.date, booking.start).toISOString(),
-          endsAt: lisbonDateTimeToUtc(booking.date, booking.end).toISOString(),
+          startsAt: lisbonDateTimeToUtc(booking.date, booking.start, zone).toISOString(),
+          endsAt: lisbonDateTimeToUtc(booking.date, booking.end, zone).toISOString(),
           locale: booking.locale || locale,
         }
       : null;

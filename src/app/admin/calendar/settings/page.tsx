@@ -69,6 +69,7 @@ export default async function CalendarSettingsPage({
           minimumNoticeHours: config.minimumNoticeHours,
           bufferMinutes: config.bufferMinutes,
           defaultLocation: config.defaultLocation,
+          timeZone: config.timeZone,
           meetingUrl: config.meetingUrl || "",
         }}
         mode={storageMode()}

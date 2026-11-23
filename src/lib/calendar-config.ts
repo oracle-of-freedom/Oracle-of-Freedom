@@ -4,6 +4,35 @@ import type { Locale } from "@/i18n/routing";
 
 export const CALENDAR_TIME_ZONE = "Europe/Lisbon";
 
+const ZONE_ID = /^[A-Za-z0-9_+/-]{1,80}$/;
+
+function resolveTimeZone(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const zone = value.trim();
+  if (!ZONE_ID.test(zone)) return undefined;
+  try {
+    const canonical = new Intl.DateTimeFormat("en-US", { timeZone: zone }).resolvedOptions().timeZone;
+    return canonical && ZONE_ID.test(canonical) ? canonical : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Resolve a calendar config's studio timezone, falling back to Lisbon. */
+export function studioTimeZone(config?: { timeZone?: string } | null) {
+  return resolveTimeZone(config?.timeZone) || CALENDAR_TIME_ZONE;
+}
+
+/** Today's calendar date (YYYY-MM-DD) in the given IANA timezone. */
+export function calendarToday(timeZone = CALENDAR_TIME_ZONE, now = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: studioTimeZone({ timeZone }),
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(now);
+}
+
 export type LocalizedLabel = Record<Locale, string>;
 
 export type PublicBookingType = {
@@ -42,6 +71,8 @@ export type CalendarConfig = {
   minimumNoticeHours: number;
   bufferMinutes: number;
   defaultLocation: string;
+  /** IANA timezone for private booking hours and studio wall-clock times. */
+  timeZone: string;
   /** Personal Google Meet or Zoom join link shown after confirmation. */
   meetingUrl?: string;
   icalToken: string;
@@ -169,6 +200,7 @@ export function defaultCalendarConfig(): CalendarConfig {
     minimumNoticeHours: 24,
     bufferMinutes: 15,
     defaultLocation: "Video call",
+    timeZone: CALENDAR_TIME_ZONE,
     icalToken: newCalendarToken(),
   };
 }
@@ -251,6 +283,13 @@ export function parseCalendarConfig(value: unknown): CalendarConfig | null {
     else return null;
   } else {
     delete item.meetingUrl;
+  }
+  if (item.timeZone === undefined || item.timeZone === null || item.timeZone === "") {
+    item.timeZone = CALENDAR_TIME_ZONE;
+  } else {
+    const zone = resolveTimeZone(item.timeZone);
+    if (!zone) return null;
+    item.timeZone = zone;
   }
   return item as CalendarConfig;
 }

@@ -411,7 +411,13 @@ export function studioCopy(lang: StudioLang) {
       pageHelpBefore: en
         ? "These types are offered on the private booking link you send after accepting an inquiry. "
         : "Estos tipos se ofrecen en el enlace privado que envías al aceptar una solicitud. ",
-      pageHelpAfter: en ? "Times are saved in Lisbon time." : "Las horas se guardan en la hora de Lisboa.",
+      pageHelpAfter: en
+        ? "Times are saved in the studio timezone below."
+        : "Las horas se guardan en la zona horaria del estudio abajo.",
+      timeZone: en ? "Studio timezone" : "Zona horaria del estudio",
+      timeZoneHelp: en
+        ? "Weekly hours and bookings use this timezone. Guests still see times in their own zone."
+        : "El horario semanal y las citas usan esta zona. Los invitados siguen viendo la hora en la suya.",
       types: en ? "Booking types" : "Tipos de cita",
       visible: en ? "Show" : "Visible",
       remove: en ? "Remove" : "Quitar",

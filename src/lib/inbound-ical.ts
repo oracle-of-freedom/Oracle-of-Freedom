@@ -2,7 +2,12 @@ import { createHash } from "node:crypto";
 import { lookup } from "node:dns/promises";
 import { lisbonDateTimeToUtc, utcToLisbonDateTime } from "@/lib/availability";
 import type { Booking } from "@/lib/bookings";
-import { isPrivateCalendarHost, normalizeInboundIcalUrl } from "@/lib/calendar-config";
+import {
+  CALENDAR_TIME_ZONE,
+  isPrivateCalendarHost,
+  normalizeInboundIcalUrl,
+  studioTimeZone,
+} from "@/lib/calendar-config";
 
 const CACHE_MS = 5 * 60 * 1000;
 const cache = new Map<string, { at: number; text: string }>();
@@ -38,7 +43,7 @@ function wallToUtc(date: string, time: string, timeZone: string) {
   try {
     Intl.DateTimeFormat("en-US", { timeZone: zone });
   } catch {
-    zone = "Europe/Lisbon";
+    zone = CALENDAR_TIME_ZONE;
   }
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: zone,
@@ -67,7 +72,7 @@ function parseStamp(meta: string, value: string) {
   const date = `${match[1]}-${match[2]}-${match[3]}`;
   const time = `${match[4]}:${match[5]}`;
   if (stamp.endsWith("Z")) return { kind: "time" as const, utc: new Date(`${date}T${time}:00Z`) };
-  const zone = /TZID="?([^";:]+)"?/i.exec(meta)?.[1] || "Europe/Lisbon";
+  const zone = /TZID="?([^";:]+)"?/i.exec(meta)?.[1] || CALENDAR_TIME_ZONE;
   return { kind: "time" as const, utc: wallToUtc(date, time, zone) };
 }
 
@@ -216,14 +221,23 @@ function booking(uid: string, title: string, place: string, date: string, allDay
   };
 }
 
-function timedSlices(uid: string, title: string, place: string, startUtc: Date, endUtc: Date, from: string, to: string) {
+function timedSlices(
+  uid: string,
+  title: string,
+  place: string,
+  startUtc: Date,
+  endUtc: Date,
+  from: string,
+  to: string,
+  timeZone: string,
+) {
   const slices: Booking[] = [];
   let cursor = startUtc;
   for (let guard = 0; guard < 8 && cursor < endUtc; guard += 1) {
-    const local = utcToLisbonDateTime(cursor);
-    const midnight = lisbonDateTimeToUtc(addDays(local.date, 1), "00:00");
+    const local = utcToLisbonDateTime(cursor, timeZone);
+    const midnight = lisbonDateTimeToUtc(addDays(local.date, 1), "00:00", timeZone);
     const sliceEnd = new Date(Math.min(midnight.getTime(), endUtc.getTime()));
-    const endLocal = utcToLisbonDateTime(sliceEnd);
+    const endLocal = utcToLisbonDateTime(sliceEnd, timeZone);
     const end = endLocal.date === local.date && endLocal.time > local.time ? endLocal.time : "23:59";
     if (local.date >= from && local.date <= to && end > local.time) {
       slices.push(booking(uid, title, place, local.date, false, local.time, end));
@@ -243,7 +257,7 @@ function exdateSet(value: string) {
   return dates;
 }
 
-function eventBookings(block: string, from: string, to: string) {
+function eventBookings(block: string, from: string, to: string, timeZone: string) {
   const { props, exdates } = readProps(block);
   const status = props.get("STATUS")?.value.toUpperCase();
   const transp = props.get("TRANSP")?.value.toUpperCase();
@@ -277,20 +291,21 @@ function eventBookings(block: string, from: string, to: string) {
 
   const endUtc = end?.kind === "time" ? end.utc : new Date(start.utc.getTime() + 60 * 60_000);
   const duration = Math.max(60_000, endUtc.getTime() - start.utc.getTime());
-  const origin = utcToLisbonDateTime(start.utc);
+  const origin = utcToLisbonDateTime(start.utc, timeZone);
   const dates = occurrenceDates(origin.date, rule, from, to, skipped);
   return dates.flatMap((date) => {
-    const begins = lisbonDateTimeToUtc(date, origin.time);
-    return timedSlices(uid, title, place, begins, new Date(begins.getTime() + duration), from, to);
+    const begins = lisbonDateTimeToUtc(date, origin.time, timeZone);
+    return timedSlices(uid, title, place, begins, new Date(begins.getTime() + duration), from, to, timeZone);
   });
 }
 
-export function bookingsFromIcal(source: string, from: string, to: string) {
+export function bookingsFromIcal(source: string, from: string, to: string, timeZone = CALENDAR_TIME_ZONE) {
+  const zone = studioTimeZone({ timeZone });
   const text = unfold(source);
   const rows: Booking[] = [];
   const seen = new Set<string>();
   for (const match of text.matchAll(/BEGIN:VEVENT\n([\s\S]*?)\nEND:VEVENT/g)) {
-    for (const item of eventBookings(match[1], from, to)) {
+    for (const item of eventBookings(match[1], from, to, zone)) {
       if (seen.has(item.id) || rows.length >= 200) continue;
       seen.add(item.id);
       rows.push(item);
@@ -359,9 +374,15 @@ function sameBooking(left: Booking, right: Booking) {
   );
 }
 
-export async function importInboundIcal(url: string, bookings: Booking[], from: string, to: string) {
+export async function importInboundIcal(
+  url: string,
+  bookings: Booking[],
+  from: string,
+  to: string,
+  timeZone = CALENDAR_TIME_ZONE,
+) {
   const text = await loadIcal(url);
-  const incoming = bookingsFromIcal(text, from, to);
+  const incoming = bookingsFromIcal(text, from, to, timeZone);
   const fresh = new Map(incoming.map((item) => [item.id, item]));
   const complete = incoming.length < 200;
   let changed = false;

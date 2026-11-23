@@ -4,7 +4,7 @@ import { lisbonDateTimeToUtc, utcToLisbonDateTime } from "@/lib/availability";
 import { canonicalTimeZone, googleTimedBound, parseGoogleDateTime, studioWhenLines } from "@/lib/booking-time";
 import { isBooking, type Booking } from "@/lib/bookings";
 import type { CalendarConfig, GoogleConnection } from "@/lib/calendar-config";
-import { CALENDAR_TIME_ZONE } from "@/lib/calendar-config";
+import { studioTimeZone } from "@/lib/calendar-config";
 import { settings } from "@/lib/content";
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
@@ -260,14 +260,16 @@ export async function googleBusy(
     body: JSON.stringify({
       timeMin: from.toISOString(),
       timeMax: to.toISOString(),
-      timeZone: CALENDAR_TIME_ZONE,
+      timeZone: studioTimeZone(config),
       items: [{ id: config.google.calendarId }],
     }),
   });
   return result.data?.calendars?.[config.google.calendarId]?.busy || [];
 }
 
-function eventBody(booking: Booking, meetingUrl?: string) {
+function eventBody(booking: Booking, config: CalendarConfig) {
+  const zone = studioTimeZone(config);
+  const meetingUrl = config.meetingUrl;
   const nextDate = new Date(`${booking.date}T00:00:00Z`);
   nextDate.setUTCDate(nextDate.getUTCDate() + 1);
   const description = [
@@ -276,7 +278,7 @@ function eventBody(booking: Booking, meetingUrl?: string) {
       : booking.origin === "google"
         ? ""
         : "Created in Oracle of Freedom Studio",
-    canonicalTimeZone(booking.timeZone) ? studioWhenLines(booking).join("\n") : "",
+    canonicalTimeZone(booking.timeZone) ? studioWhenLines(booking, zone).join("\n") : "",
     booking.client ? `With: ${booking.client}` : "",
     booking.contact ? `Contact: ${booking.contact}` : "",
     booking.notes,
@@ -288,12 +290,14 @@ function eventBody(booking: Booking, meetingUrl?: string) {
     description,
     location: meetingUrl || booking.place || undefined,
     status: booking.status === "cancelled" ? "cancelled" : "confirmed",
-    start: booking.allDay ? { date: booking.date } : googleTimedBound(booking.date, booking.start, booking.timeZone),
+    start: booking.allDay
+      ? { date: booking.date }
+      : googleTimedBound(booking.date, booking.start, booking.timeZone, zone),
     end: booking.allDay
       ? {
           date: nextDate.toISOString().slice(0, 10),
         }
-      : googleTimedBound(booking.date, booking.end, booking.timeZone),
+      : googleTimedBound(booking.date, booking.end, booking.timeZone, zone),
     extendedProperties: { private: { oracleBookingId: booking.id } },
   };
 }
@@ -310,7 +314,7 @@ export async function upsertGoogleEvent(config: CalendarConfig, booking: Booking
       : `/calendars/${calendar}/events?sendUpdates=none`,
     {
       method: booking.googleEventId ? "PUT" : "POST",
-      body: JSON.stringify(eventBody(booking, config.meetingUrl)),
+      body: JSON.stringify(eventBody(booking, config)),
     },
   );
   return result.data?.id ? { ...booking, googleEventId: result.data.id } : booking;
@@ -327,12 +331,18 @@ export async function deleteGoogleEvent(config: CalendarConfig, booking: Booking
   );
 }
 
-function scheduleFromEvent(event: GoogleEvent) {
+function scheduleFromEvent(event: GoogleEvent, timeZone: string) {
   if (event.start?.dateTime) {
-    const start = utcToLisbonDateTime(parseGoogleDateTime(event.start.dateTime, event.start.timeZone));
+    const start = utcToLisbonDateTime(
+      parseGoogleDateTime(event.start.dateTime, event.start.timeZone),
+      timeZone,
+    );
     let end = "23:59";
     if (event.end?.dateTime) {
-      const finish = utcToLisbonDateTime(parseGoogleDateTime(event.end.dateTime, event.end.timeZone));
+      const finish = utcToLisbonDateTime(
+        parseGoogleDateTime(event.end.dateTime, event.end.timeZone),
+        timeZone,
+      );
       if (finish.date === start.date && finish.time > start.time) end = finish.time;
     }
     return { date: start.date, allDay: false, start: start.time, end };
@@ -343,10 +353,10 @@ function scheduleFromEvent(event: GoogleEvent) {
   return null;
 }
 
-function bookingFromGoogleEvent(event: GoogleEvent): Booking | null {
+function bookingFromGoogleEvent(event: GoogleEvent, timeZone: string): Booking | null {
   if (!event.id || event.status === "cancelled" || event.transparency === "transparent") return null;
   if (event.eventType && SKIP_GOOGLE_EVENT_TYPES.has(event.eventType)) return null;
-  const schedule = scheduleFromEvent(event);
+  const schedule = scheduleFromEvent(event, timeZone);
   if (!schedule) return null;
   const title = (event.summary || "Google Calendar").trim().slice(0, 120);
   if (!title) return null;
@@ -385,6 +395,7 @@ export async function syncLinkedGoogleBookings(
   );
   if (candidates.length === 0) return { bookings, changed: false };
   const access = await accessToken(config);
+  const zone = studioTimeZone(config);
   const calendar = encodeURIComponent(config.google.calendarId);
   let changed = false;
   const updates = new Map<string, Booking>();
@@ -403,7 +414,7 @@ export async function syncLinkedGoogleBookings(
         return;
       }
       const event = result.data;
-      const schedule = event ? scheduleFromEvent(event) : null;
+      const schedule = event ? scheduleFromEvent(event, zone) : null;
       if (!event || !schedule) return;
       const next: Booking = {
         ...booking,
@@ -442,11 +453,17 @@ export async function syncLinkedGoogleBookings(
   };
 }
 
-async function listGoogleWindow(access: string, calendarId: string, from: string, to: string) {
-  const timeMin = lisbonDateTimeToUtc(from, "00:00").toISOString();
+async function listGoogleWindow(
+  access: string,
+  calendarId: string,
+  from: string,
+  to: string,
+  timeZone: string,
+) {
+  const timeMin = lisbonDateTimeToUtc(from, "00:00", timeZone).toISOString();
   const endDay = new Date(`${to}T00:00:00Z`);
   endDay.setUTCDate(endDay.getUTCDate() + 1);
-  const timeMax = lisbonDateTimeToUtc(endDay.toISOString().slice(0, 10), "00:00").toISOString();
+  const timeMax = lisbonDateTimeToUtc(endDay.toISOString().slice(0, 10), "00:00", timeZone).toISOString();
   const items: GoogleEvent[] = [];
   let pageToken = "";
   for (let page = 0; page < 4; page += 1) {
@@ -478,7 +495,8 @@ export async function importGoogleEvents(
 ) {
   if (!config.google || !googleAppFromConfig(config)) return { bookings, changed: false };
   const access = await accessToken(config);
-  const events = await listGoogleWindow(access, config.google.calendarId, from, to);
+  const zone = studioTimeZone(config);
+  const events = await listGoogleWindow(access, config.google.calendarId, from, to, zone);
   let next = bookings;
   let changed = false;
   let added = 0;
@@ -499,7 +517,7 @@ export async function importGoogleEvents(
       continue;
     }
     if (knownEventIds.has(event.id) || added >= 120 || next.length >= 1000) continue;
-    const booking = bookingFromGoogleEvent(event);
+    const booking = bookingFromGoogleEvent(event, zone);
     if (!booking || booking.date < from || booking.date > to || knownIds.has(booking.id)) continue;
     if (next === bookings) next = bookings.slice();
     next.push(booking);

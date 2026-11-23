@@ -10,7 +10,7 @@ import { canonicalTimeZone, guestHoldText, studioWhenLines } from "@/lib/booking
 import { publicAvailability } from "@/lib/booking-service";
 import { writeBookings } from "@/lib/booking-store";
 import { acceptanceUrl, type Booking } from "@/lib/bookings";
-import { CALENDAR_TIME_ZONE } from "@/lib/calendar-config";
+import { studioTimeZone } from "@/lib/calendar-config";
 import { notifyStudio } from "@/lib/push";
 import { settings } from "@/lib/content";
 import { isBookingInvite } from "@/lib/inquiries";
@@ -32,7 +32,12 @@ const schema = z.object({
   timeZone: z.string().max(80).optional(),
 });
 
-async function sendConfirmation(booking: Booking, typeLabel: string, locale: Locale) {
+async function sendConfirmation(
+  booking: Booking,
+  typeLabel: string,
+  locale: Locale,
+  studioZone: string,
+) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return false;
   const from = process.env.RESEND_FROM_EMAIL || "Oracle of Freedom <onboarding@resend.dev>";
@@ -49,7 +54,7 @@ async function sendConfirmation(booking: Booking, typeLabel: string, locale: Loc
       text: [
         `Name: ${booking.client}`,
         `Email: ${booking.contact}`,
-        ...studioWhenLines(booking),
+        ...studioWhenLines(booking, studioZone),
         `Type: ${typeLabel}`,
         `Notes: ${booking.notes || "not given"}`,
         `Acceptance link: ${acceptUrl}`,
@@ -60,7 +65,7 @@ async function sendConfirmation(booking: Booking, typeLabel: string, locale: Loc
       to: booking.contact,
       replyTo: to,
       subject: copy.successTitle,
-      text: guestHoldText(booking, locale),
+      text: guestHoldText(booking, locale, studioZone),
     }),
   ]);
   if (admin.error || attendee.error) {
@@ -100,6 +105,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "unavailable" }, { status: 409 });
   }
 
+  const zone = studioTimeZone(available.config);
   const label = available.bookingType.label[data.locale];
   const booking: Booking = {
     id: randomUUID(),
@@ -118,7 +124,7 @@ export async function POST(request: Request) {
     bookingTypeId: data.typeId,
     locale: data.locale,
     publicToken: randomBytes(24).toString("base64url"),
-    timeZone: canonicalTimeZone(data.timeZone) || CALENDAR_TIME_ZONE,
+    timeZone: canonicalTimeZone(data.timeZone) || zone,
   };
 
   try {
@@ -140,7 +146,7 @@ export async function POST(request: Request) {
 
   let emailed = false;
   try {
-    emailed = await sendConfirmation(booking, label, data.locale);
+    emailed = await sendConfirmation(booking, label, data.locale, zone);
   } catch (error) {
     console.error("[booking] email failed", error);
   }
