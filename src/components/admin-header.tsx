@@ -15,6 +15,7 @@ const sectionIds = [
   { href: "/admin/calendar", id: "calendar" },
   { href: "/admin/prices", id: "prices" },
   { href: "/admin/content", id: "content" },
+  { href: "/admin/proposals", id: "proposals" },
 ] as const;
 
 export type StudioSection = (typeof sectionIds)[number]["id"];
@@ -68,6 +69,14 @@ function TabIcon({ id }: { id: StudioSection }) {
         <rect x="3.5" y="4.5" width="17" height="15" rx="2" />
         <circle cx="9" cy="10" r="1.6" />
         <path d="m4 17 5-4.5 3.5 3 3-2.5L20 17" />
+      </svg>
+    );
+  }
+  if (id === "proposals") {
+    return (
+      <svg {...common}>
+        <path d="M7 4h10v16H7z" />
+        <path d="M9 8h6M9 12h6M9 16h4" />
       </svg>
     );
   }
@@ -144,7 +153,7 @@ export async function AdminHeader({ current, title }: { current: StudioSection; 
         style={{ height: "var(--studio-nav)", paddingBottom: "env(safe-area-inset-bottom)" }}
         aria-label={t.nav.menu}
       >
-        <ul className="grid h-full grid-cols-7">
+        <ul className="grid h-full grid-cols-8">
           {links.map((link) => {
             const active = link.id === current;
             return (

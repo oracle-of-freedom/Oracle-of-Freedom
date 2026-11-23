@@ -67,5 +67,5 @@ export const config = {
   // That rewrite would miss public/ and the request would render as a locale
   // page. Root image names that are not files are mapped in next.config.ts
   // before [locale] is matched.
-  matcher: ["/((?!api|keystatic|admin|_next|_vercel|.*\\..*).*)"],
+  matcher: ["/((?!api|keystatic|admin|p|_next|_vercel|.*\\..*).*)"],
 };

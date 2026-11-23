@@ -12,6 +12,7 @@ export function studioCopy(lang: StudioLang) {
       presence: en ? "Places" : "Lugares",
       prices: en ? "Prices" : "Precios",
       content: en ? "Content" : "Contenido",
+      proposals: en ? "Proposals" : "Propuestas",
       logout: en ? "Log out" : "Salir",
       menu: en ? "Studio" : "Estudio",
     },
@@ -525,6 +526,31 @@ export function studioCopy(lang: StudioLang) {
       saveInbound: en ? "Save incoming URL" : "Guardar URL de entrada",
       inboundSaved: en ? "Incoming URL saved." : "URL de entrada guardada.",
       newLink: en ? "Create another outgoing link" : "Crear otro enlace de salida",
+    },
+    proposals: {
+      title: en ? "Proposals" : "Propuestas",
+      editTitle: en ? "Edit proposal" : "Editar propuesta",
+      intro: en
+        ? "Tailored pitch decks after a call, or once someone has agreed to receive one. Never the first cold email."
+        : "Presentaciones a medida después de una llamada, o cuando alguien ya ha pedido una. Nunca el primer correo en frío.",
+      readonly: en
+        ? "Vercel Blob is not connected yet, so proposals cannot be saved here."
+        : "Vercel Blob aún no está conectado, así que aquí no se pueden guardar propuestas.",
+      storage: {
+        blob: en
+          ? "Saved privately. Public links are not listed on the site."
+          : "Guardado en privado. Los enlaces públicos no aparecen en el sitio.",
+        local: en
+          ? "This computer only until Vercel Blob is connected."
+          : "Solo este ordenador hasta conectar Vercel Blob.",
+      },
+      templatesTitle: en ? "Proposal templates" : "Plantillas de propuesta",
+      editTemplateTitle: en ? "Edit template" : "Editar plantilla",
+      templatesIntro: en
+        ? "A template is only layout, section set and short generic starter copy. Client text lives on each proposal."
+        : "Una plantilla es solo el diseño, las secciones y un texto genérico corto. El texto del cliente vive en cada propuesta.",
+      createTemplate: en ? "Create template" : "Crear plantilla",
+      backToProposals: en ? "Back to proposals" : "Volver a propuestas",
     },
     content: {
       title: en ? "Content" : "Contenido",
