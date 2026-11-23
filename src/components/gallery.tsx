@@ -63,7 +63,9 @@ export function GalleryGrid({
   const titleId = useId();
   const photos = images.filter((image) => isPublishedPhoto(image));
   const visibleCount = mobileVisible ?? layout.mobileVisible;
-  const fold = foldMobile && visibleCount > 0;
+  /** Two rows on large screens, based on the chosen column count. */
+  const desktopVisible = layout.columns * 2;
+  const fold = foldMobile && (visibleCount > 0 || desktopVisible > 0);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -139,15 +141,16 @@ export function GalleryGrid({
         enabled={fold}
         total={photos.length}
         visible={visibleCount || photos.length}
+        desktopVisible={desktopVisible}
         more={words.more}
         less={words.less}
       >
-        {({ hide, hiddenClass, itemId }) => {
+        {({ itemClass, itemId }) => {
           if (layout.style === "spotlight" && photos.length > 0) {
             const [hero, ...rest] = photos;
             return (
               <div className={cn("grid", gap)}>
-                <div id={itemId(0)} className={cn(hide(0) && hiddenClass)}>
+                <div id={itemId(0)} className={itemClass(0)}>
                   {photoButton(hero, 0, undefined, "max-h-[70vh] object-cover")}
                 </div>
                 {rest.length > 0 ? (
@@ -155,11 +158,7 @@ export function GalleryGrid({
                     {rest.map((image, offset) => {
                       const index = offset + 1;
                       return (
-                        <div
-                          key={image.id}
-                          id={itemId(index)}
-                          className={cn(hide(index) && hiddenClass)}
-                        >
+                        <div key={image.id} id={itemId(index)} className={itemClass(index)}>
                           {photoButton(image, index, undefined, "aspect-[4/5] object-cover")}
                         </div>
                       );
@@ -174,7 +173,7 @@ export function GalleryGrid({
             return (
               <div className={cn("grid", gap, gridColumns[layout.columns])}>
                 {photos.map((image, index) => (
-                  <div key={image.id} id={itemId(index)} className={cn(hide(index) && hiddenClass)}>
+                  <div key={image.id} id={itemId(index)} className={itemClass(index)}>
                     {photoButton(image, index, undefined, "aspect-[4/5] object-cover")}
                   </div>
                 ))}
@@ -188,7 +187,7 @@ export function GalleryGrid({
                 <div
                   key={image.id}
                   id={itemId(index)}
-                  className={cn(masonryMargin[layout.gap], "break-inside-avoid", hide(index) && hiddenClass)}
+                  className={cn(masonryMargin[layout.gap], "break-inside-avoid", itemClass(index))}
                 >
                   {photoButton(image, index)}
                 </div>
