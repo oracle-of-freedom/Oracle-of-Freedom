@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { OmMark } from "@/components/om-mark";
+import { ProposalPdfButton } from "@/components/proposals/proposal-pdf-button";
+import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
 import { Button } from "@/components/ui/button";
 import {
   SIGN_OFF,
@@ -10,6 +12,7 @@ import {
   type ProposalSection,
   type ProposalSectionOf,
 } from "@/lib/proposals";
+import { resolveProposalVideo } from "@/lib/proposal-video";
 
 export type ProposalViewMode = "public" | "preview" | "admin";
 
@@ -268,31 +271,25 @@ function renderSection(
           ) : null}
         </section>
       );
-    case "proof":
+    case "proof": {
+      const video = resolveProposalVideo({
+        videoUrl: section.data.videoUrl,
+        videoMediaId: section.data.videoMediaId,
+      });
+      const hasPlaceholderMedia = section.data.images.some((img) =>
+        /EXAMPLE PHOTOS|Agota to supply/i.test(`${img.alt} ${img.caption || ""}`),
+      );
       return (
         <section key={section.id} className="mx-auto max-w-5xl px-5 py-14 md:py-20">
           <SectionHeading>{section.data.heading}</SectionHeading>
-          <PhotoStrip images={section.data.images} />
-          {section.data.videoUrl || section.data.videoMediaId ? (
-            <div className="mt-8 overflow-hidden rounded-3xl bg-night/5 p-4 text-sm text-ink/60">
-              {section.data.videoUrl ? (
-                <p>
-                  Teaser:{" "}
-                  <a className="text-terracotta underline-offset-4 hover:underline" href={section.data.videoUrl}>
-                    {section.data.videoUrl}
-                  </a>
-                </p>
-              ) : null}
-              {section.data.videoMediaId ? (
-                <video
-                  className="mt-3 w-full rounded-2xl"
-                  controls
-                  preload="metadata"
-                  src={`/api/media/${section.data.videoMediaId}`}
-                />
-              ) : null}
-            </div>
-          ) : null}
+          {hasPlaceholderMedia && !video ? (
+            <p className="rounded-3xl border border-dashed border-ember/50 bg-ember/10 px-5 py-8 text-center text-ink/70">
+              [EXAMPLE PHOTOS / VIDEO: Agota to supply]
+            </p>
+          ) : (
+            <PhotoStrip images={section.data.images.filter((img) => imageSrc(img))} />
+          )}
+          <ProposalVideoBlock videoUrl={section.data.videoUrl} videoMediaId={section.data.videoMediaId} />
           <p className="mt-8 text-ink/80">
             You can see my work here:{" "}
             <a
@@ -304,6 +301,7 @@ function renderSection(
           </p>
         </section>
       );
+    }
     case "howIWork":
       return (
         <section key={section.id} className="bg-moss px-5 py-14 text-sand md:py-20">
@@ -456,6 +454,16 @@ function renderSection(
       );
     case "review":
       if (!section.data.quote.trim()) return null;
+      if (/\[REVIEW:/i.test(section.data.quote)) {
+        return (
+          <section key={section.id} className="mx-auto max-w-3xl px-5 py-14 md:py-20">
+            <p className="text-xs tracking-[0.22em] text-ember uppercase">{section.data.heading}</p>
+            <p className="mt-6 rounded-3xl border border-dashed border-ember/50 bg-ember/10 px-5 py-8 text-center text-ink/70">
+              {section.data.quote}
+            </p>
+          </section>
+        );
+      }
       return (
         <section key={section.id} className="mx-auto max-w-3xl px-5 py-14 md:py-20">
           <p className="text-xs tracking-[0.22em] text-ember uppercase">{section.data.heading}</p>
@@ -522,21 +530,28 @@ export function ProposalView({
   proposal,
   mode = "public",
   className,
+  showPdfButton = true,
 }: {
   proposal: Proposal;
   mode?: ProposalViewMode;
   className?: string;
+  showPdfButton?: boolean;
 }) {
   const hidePrices = mode === "preview";
   return (
-    <article className={`bg-sand text-ink ${className || ""}`}>
+    <article className={`proposal-doc bg-sand text-ink ${className || ""}`}>
+      {showPdfButton ? (
+        <div className="proposal-no-print sticky top-0 z-20 flex justify-end gap-2 bg-sand/90 px-4 py-3 backdrop-blur md:px-8">
+          <ProposalPdfButton />
+        </div>
+      ) : null}
       {mode === "admin" ? (
-        <p className="bg-clay/80 px-4 py-2 text-center text-xs tracking-wide text-ink/70 uppercase">
+        <p className="proposal-no-print bg-clay/80 px-4 py-2 text-center text-xs tracking-wide text-ink/70 uppercase">
           Admin preview
         </p>
       ) : null}
       {mode === "preview" ? (
-        <p className="bg-ember/20 px-4 py-2 text-center text-xs tracking-wide text-ink/70 uppercase">
+        <p className="proposal-no-print bg-ember/20 px-4 py-2 text-center text-xs tracking-wide text-ink/70 uppercase">
           Draft preview · prices hidden
         </p>
       ) : null}

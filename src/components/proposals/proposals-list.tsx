@@ -125,6 +125,20 @@ export function ProposalsList({
                     Valid until {proposal.validUntil || "—"} · updated{" "}
                     {new Date(proposal.updatedAt).toLocaleDateString("en-GB")}
                   </p>
+                  <p className="mt-1 text-sm text-ink/55">
+                    {proposal.viewCount || 0}{" "}
+                    {(proposal.viewCount || 0) === 1 ? "open" : "opens"}
+                    {proposal.lastOpenedAt
+                      ? ` · last ${new Date(proposal.lastOpenedAt).toLocaleString("en-GB", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}`
+                      : " · not opened yet"}
+                    {proposal.example ? " · example" : ""}
+                  </p>
                 </Link>
               </li>
             );

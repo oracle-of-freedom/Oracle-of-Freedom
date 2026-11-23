@@ -343,3 +343,65 @@ dialog.fx-dialog[open]::backdrop {
     transform: none !important;
   }
 }
+
+/* Proposal PDF backup: A4, single column, large type. Videos become links. */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+
+  html,
+  body {
+    background: white !important;
+    color: #2a211c !important;
+    font-size: 12pt !important;
+    line-height: 1.45 !important;
+  }
+
+  .proposal-no-print {
+    display: none !important;
+  }
+
+  .proposal-doc {
+    background: white !important;
+  }
+
+  .proposal-doc header,
+  .proposal-doc section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .proposal-doc .grid {
+    display: block !important;
+  }
+
+  .proposal-doc .md\:grid-cols-2,
+  .proposal-doc .md\:grid-cols-3,
+  .proposal-doc .md\:col-span-2 {
+    display: block !important;
+  }
+
+  .proposal-doc img {
+    max-width: 100% !important;
+    height: auto !important;
+    break-inside: avoid;
+  }
+
+  .proposal-video iframe,
+  .proposal-video video {
+    display: none !important;
+  }
+
+  .proposal-video-print-link {
+    display: block !important;
+    margin-top: 0.5rem;
+    font-size: 11pt;
+  }
+
+  .proposal-doc a {
+    color: #b4532a !important;
+    text-decoration: underline;
+  }
+}

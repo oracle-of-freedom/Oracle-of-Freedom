@@ -36,6 +36,8 @@ function asPreviewProposal(template: ProposalTemplate): Proposal {
     updatedAt: stamp,
     proposalDate: todayIsoDate(),
     validUntil: todayIsoDate(),
+    viewCount: 0,
+    lastOpenedAt: "",
     sections: template.sections,
   };
 }
@@ -209,7 +211,7 @@ export function TemplateEditor({ initial }: { initial: ProposalTemplate }) {
           ) : null}
         </div>
         <div className="overflow-hidden rounded-3xl border border-ink/10 bg-sand">
-          <ProposalView proposal={asPreviewProposal(template)} mode="admin" />
+          <ProposalView proposal={asPreviewProposal(template)} mode="admin" showPdfButton={false} />
         </div>
       </div>
     </div>
