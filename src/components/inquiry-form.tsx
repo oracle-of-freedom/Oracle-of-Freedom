@@ -266,7 +266,7 @@ export function InquiryForm({
             <div>
               <Label htmlFor="days">{copy.days}</Label>
               <select id="days" className="h-12 w-full rounded-2xl border border-ink/15 bg-white/70 px-4" {...form.register("days")}>
-                <option value="">—</option>
+                <option value="">-</option>
                 {Object.entries(copy.dayOptions).map(([value, label]) => (
                   <option key={value} value={value}>{label}</option>
                 ))}
@@ -314,7 +314,7 @@ export function InquiryForm({
             <div>
               <Label htmlFor="people">{copy.people}</Label>
               <select id="people" className="h-12 w-full rounded-2xl border border-ink/15 bg-white/70 px-4" {...form.register("people")}>
-                <option value="">—</option>
+                <option value="">-</option>
                 {Object.entries(mode === "event" ? copy.eventOptions : copy.peopleOptions).map(([value, label]) => (
                   <option key={value} value={value}>{label}</option>
                 ))}
@@ -327,7 +327,7 @@ export function InquiryForm({
               <div>
                 <Label htmlFor="placeType">{copy.placeType}</Label>
                 <select id="placeType" className="h-12 w-full rounded-2xl border border-ink/15 bg-white/70 px-4" {...form.register("placeType")}>
-                  <option value="">—</option>
+                  <option value="">-</option>
                   {Object.entries(copy.placeTypes).map(([value, label]) => (
                     <option key={value} value={value}>{label}</option>
                   ))}
@@ -342,7 +342,7 @@ export function InquiryForm({
           <div>
             <Label htmlFor="budget">{copy.budget} *</Label>
             <select id="budget" className="h-12 w-full rounded-2xl border border-ink/15 bg-white/70 px-4" {...form.register("budget")} aria-invalid={Boolean(error("budget"))}>
-              <option value="">—</option>
+              <option value="">-</option>
               {[...copy.budgets[group], { value: BUDGET_UNSURE, label: copy.budgetUnsure }].map((option) => (
                 <option key={option.value} value={option.value}>{option.label}</option>
               ))}
@@ -374,7 +374,7 @@ export function InquiryForm({
                 aria-invalid={Boolean(error("country"))}
                 {...form.register("country")}
               >
-                <option value="">—</option>
+                <option value="">-</option>
                 {COUNTRY_CODES.map(([iso, dial]) => (
                   <option key={iso} value={iso}>
                     {countryOptionLabel(iso, dial, locale)}
@@ -399,7 +399,7 @@ export function InquiryForm({
           <div>
             <Label htmlFor="found">{copy.found} *</Label>
             <select id="found" className="h-12 w-full rounded-2xl border border-ink/15 bg-white/70 px-4" {...form.register("found")} aria-invalid={Boolean(error("found"))}>
-              <option value="">—</option>
+              <option value="">-</option>
               {Object.entries(copy.foundOptions).map(([value, label]) => (
                 <option key={value} value={value}>{label}</option>
               ))}

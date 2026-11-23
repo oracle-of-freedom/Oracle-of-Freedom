@@ -46,7 +46,7 @@ export const posts: JournalPost[] = [
 
 **Ericeira.** A fishing town with black rock, surf and a walkable wild edge. Easy to pair with a forest hour inland if you want two moods in one day.
 
-**Sintra.** Moss, stone and forest weather that changes every hour. Beautiful for a handfasting under trees. Some gardens charge entry and close — ask before you plan the ceremony inside one.
+**Sintra.** Moss, stone and forest weather that changes every hour. Beautiful for a handfasting under trees. Some gardens charge entry and close - ask before you plan the ceremony inside one.
 
 **Alentejo.** Golden grass, cork oaks, long tables. The day feels slow, which suits a dinner under the stars more than a tight timeline.
 
@@ -56,7 +56,7 @@ export const posts: JournalPost[] = [
 
 ## Season and light
 
-May to October is the kind season for barefoot vows, and it books first — often 6 to 12 months ahead. April and late October can be glorious and empty. Winter is for people who like drama, rain plans and fewer crowds. I photograph the hour after sunrise or the hour before sunset. Midday on the coast is bright and flat.
+May to October is the kind season for barefoot vows, and it books first - often 6 to 12 months ahead. April and late October can be glorious and empty. Winter is for people who like drama, rain plans and fewer crowds. I photograph the hour after sunrise or the hour before sunset. Midday on the coast is bright and flat.
 
 ## Symbolic, not a ballroom
 
@@ -64,7 +64,7 @@ Many couples marry legally at home and celebrate here. A friend, a celebrant or 
 
 ## What a simple day costs
 
-A straightforward elopement — place, a few people, food, flowers from the field, and photography — often lands around €1,500–2,500 all in, before travel. Photography starts at €690 for 3–4 hours and €1,100 when the night, the fire and the dancing are part of it (a small wedding, up to about 30 guests). An elopement film starts at €650 and a small-wedding highlight at €875. These figures are starting prices, confirmed in the quote. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.
+A straightforward elopement - place, a few people, food, flowers from the field, and photography - often lands around €1,500–2,500 all in, before travel. Photography starts at €690 for 3–4 hours and €1,100 when the night, the fire and the dancing are part of it (a small wedding, up to about 30 guests). An elopement film starts at €650 and a small-wedding highlight at €875. These figures are starting prices, confirmed in the quote. Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability.
 
 If you do not know the place yet, that is a good place to start. Tell me ocean, forest, plains or mountain and I will answer with somewhere real.`,
       es: `Portugal trata bien a una boda pequeña. La luz se queda baja y dorada durante una hora larga, la costa es salvaje sin quedar lejos, y una ceremonia simbólica puede ocurrir en un acantilado con la gente que de verdad quieres en el círculo.
@@ -93,7 +93,7 @@ Muchas parejas se casan legalmente en su país y lo celebran aquí. Un amigo, un
 
 ## Lo que cuesta un día sencillo
 
-Un elopement sencillo — lugar, pocas personas, comida, flores del campo y fotografía — suele quedar alrededor de 1.500–2.500 € en total, sin viajes. La fotografía empieza en 690 € por 3–4 horas y en 1.100 € cuando la noche, el fuego y el baile forman parte (una boda íntima, hasta unas 30 personas). Una película de elopement empieza en 650 € y un highlight de boda íntima en 875 €. Estas cifras son precios de partida, que se confirman en el presupuesto. Sesiones en Europa y América Latina. Si el evento es en otro lugar, escríbeme pronto para que pueda comprobar mi disponibilidad.
+Un elopement sencillo - lugar, pocas personas, comida, flores del campo y fotografía - suele quedar alrededor de 1.500–2.500 € en total, sin viajes. La fotografía empieza en 690 € por 3–4 horas y en 1.100 € cuando la noche, el fuego y el baile forman parte (una boda íntima, hasta unas 30 personas). Una película de elopement empieza en 650 € y un highlight de boda íntima en 875 €. Estas cifras son precios de partida, que se confirman en el presupuesto. Sesiones en Europa y América Latina. Si el evento es en otro lugar, escríbeme pronto para que pueda comprobar mi disponibilidad.
 
 Si aún no sabéis el lugar, ese es un buen comienzo. Decidme océano, bosque, llanura o montaña y os respondo con un sitio real.`,
       pt: `Portugal trata bem um casamento pequeno. A luz fica baixa e dourada durante uma hora longa, a costa é selvagem sem ficar longe, e uma cerimónia simbólica pode acontecer numa falésia com as pessoas que realmente queres no círculo.
@@ -114,7 +114,7 @@ Si aún no sabéis el lugar, ese es un buen comienzo. Decidme océano, bosque, l
 
 ## Época e luz
 
-De maio a outubro é a época amável para votos descalços, e enche primeiro — muitas vezes com 6 a 12 meses de antecedência. Abril e o fim de outubro podem ser gloriosos e vazios. O inverno é para quem gosta de drama, de um plano para a chuva e de menos gente. Fotografo a hora a seguir ao nascer do sol ou a hora antes do pôr do sol.
+De maio a outubro é a época amável para votos descalços, e enche primeiro - muitas vezes com 6 a 12 meses de antecedência. Abril e o fim de outubro podem ser gloriosos e vazios. O inverno é para quem gosta de drama, de um plano para a chuva e de menos gente. Fotografo a hora a seguir ao nascer do sol ou a hora antes do pôr do sol.
 
 ## Simbólica, não um salão
 
@@ -122,7 +122,7 @@ Muitos casais casam legalmente no seu país e celebram aqui. Um amigo, um celebr
 
 ## O que custa um dia simples
 
-Um elopement simples — local, poucas pessoas, comida, flores do campo e fotografia — costuma ficar à volta de 1.500–2.500 € no total, sem deslocações. A fotografia começa em 690 € por 3–4 horas e em 1.100 € quando a noite, o fogo e a dança fazem parte (um casamento íntimo, até cerca de 30 pessoas). Um filme de elopement começa em 650 € e um highlight de casamento íntimo em 875 €. Estes valores são preços de partida, confirmados no orçamento. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.
+Um elopement simples - local, poucas pessoas, comida, flores do campo e fotografia - costuma ficar à volta de 1.500–2.500 € no total, sem deslocações. A fotografia começa em 690 € por 3–4 horas e em 1.100 € quando a noite, o fogo e a dança fazem parte (um casamento íntimo, até cerca de 30 pessoas). Um filme de elopement começa em 650 € e um highlight de casamento íntimo em 875 €. Estes valores são preços de partida, confirmados no orçamento. Sessões na Europa e na América Latina. Se o evento for noutro lugar, escreve-me cedo para eu poder verificar a minha disponibilidade.
 
 Se ainda não sabem o local, é um bom começo. Digam-me oceano, floresta, planície ou montanha e eu respondo com um sítio real.`,
     },
@@ -156,7 +156,7 @@ Se ainda não sabem o local, é um bom começo. Digam-me oceano, floresta, plan�
 
 ## A shot list that fills dates
 
-**The space.** Arrival, the bed, the window, the mat, the cold-water bucket, the path. Horizontal frames help listings. Check the current image rules on BookRetreats, Retreat Guru, your own site and Airbnb-style pages before the shoot — they change, and they usually want real rooms, not only atmosphere.
+**The space.** Arrival, the bed, the window, the mat, the cold-water bucket, the path. Horizontal frames help listings. Check the current image rules on BookRetreats, Retreat Guru, your own site and Airbnb-style pages before the shoot - they change, and they usually want real rooms, not only atmosphere.
 
 **The practice.** Wide enough to feel the group, close enough to feel one face. Hands, feet, the teacher from the side, never a stiff lineup unless that is truly how you teach.
 
@@ -168,7 +168,7 @@ Se ainda não sabem o local, é um bom começo. Digam-me oceano, floresta, plan�
 
 ## Consent in a sacred room
 
-I join the opening circle and say who I am. We name the no-camera moments before they happen — ceremonies, breathwork peaks, integration shares. A wristband or a simple signal is enough for anyone who wants to stay out of the frame. Nothing goes public until you have seen the selection.
+I join the opening circle and say who I am. We name the no-camera moments before they happen - ceremonies, breathwork peaks, integration shares. A wristband or a simple signal is enough for anyone who wants to stay out of the frame. Nothing goes public until you have seen the selection.
 
 ## Five reels
 
@@ -268,7 +268,7 @@ Um dia de retiro começa em 400 € e é editado no local. Um retiro de três di
 
 **The south-facing coves below town.** Smaller, rockier, good when you want to be close to each other rather than in a landscape. Check the tide. Wet rock is not romantic if someone slips.
 
-**São Lourenço.** A long beach north of town. Morning light is softer. Wind is part of the picture — linen and anything that moves will help.
+**São Lourenço.** A long beach north of town. Morning light is softer. Wind is part of the picture - linen and anything that moves will help.
 
 ## Sintra
 
@@ -326,7 +326,7 @@ Las sesiones de retrato empiezan en 175 €, para una persona, una pareja, una f
 
 **As enseadas a sul da vila.** Mais pequenas, mais rocha, boas quando querem estar perto um do outro. Vejam a maré. Rocha molhada não é romântica se alguém escorrega.
 
-**São Lourenço.** Uma praia comprida a norte. A luz da manhã é mais suave. O vento faz parte da fotografia — linho e tudo o que se mexe ajuda.
+**São Lourenço.** Uma praia comprida a norte. A luz da manhã é mais suave. O vento faz parte da fotografia - linho e tudo o que se mexe ajuda.
 
 ## Sintra
 

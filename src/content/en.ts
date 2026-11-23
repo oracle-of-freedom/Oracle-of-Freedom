@@ -127,7 +127,7 @@ export const en: Copy = {
     close: "Close",
     previous: "Previous",
     next: "Next",
-    photoPlaceholder: "Low-resolution placeholder — to be replaced",
+    photoPlaceholder: "Low-resolution placeholder - to be replaced",
     language: "Language",
   },
   nav: {
@@ -168,14 +168,14 @@ export const en: Copy = {
     priceNote: "From prices in EUR. Weddings, stays and festivals are confirmed with a quote.",
     offer: "Offer",
     saveSeparately: "Save {amount} compared with booking them separately",
-    placeholderTitle: "Placeholder — not a published testimonial",
+    placeholderTitle: "Placeholder - not a published testimonial",
     placeholderBody:
       "Real quotes will replace this once Agota has permission to share them. Nothing here is invented.",
     comingSoon: "Coming soon",
     mostLoved: "most loved",
     closingTitle: "Your story, felt from the inside.",
     closingBody:
-      "Tell me what you're dreaming of — a sunset on the cliffs, a week of breathwork in the hills, a night of fire and drums. I'll tell you honestly how I can help.",
+      "Tell me what you're dreaming of - a sunset on the cliffs, a week of breathwork in the hills, a night of fire and drums. I'll tell you honestly how I can help.",
     closingPrimary: "Check my availability",
     closingSecondary: "or message me on WhatsApp",
     checkAvailability: "Check my availability",
@@ -199,7 +199,7 @@ export const en: Copy = {
     elsewhere:
       "Have an event somewhere else, outside the locations above? Contact us as soon as possible to check availability and schedule your event.",
     manifesto:
-      "I don't stand on the outside looking in. I dance at the edge of the fire, I walk into the sea with you, I sit in the circle. That's where the real moments live — and that's where my camera is.",
+      "I don't stand on the outside looking in. I dance at the edge of the fire, I walk into the sea with you, I sit in the circle. That's where the real moments live - and that's where my camera is.",
     doorsTitle: "Three ways in",
     peopleTitle: "People",
     peopleBody:
@@ -221,7 +221,7 @@ export const en: Copy = {
       },
       {
         title: "Photo + film, one person.",
-        body: "Stills and video from one eye and one heart — less crew, more intimacy.",
+        body: "Stills and video from one eye and one heart - less crew, more intimacy.",
       },
       {
         title: "Consent-first, always.",
@@ -243,7 +243,7 @@ export const en: Copy = {
     paragraphs: [
       "I have been working with photography and video for over 10 years, both professionally and in passion projects. I specialise in capturing pure candid moments and bringing the magic of an event or community to life in still images and video edits.",
       "My style is fluid and organic, it is a delicate balance between opposing energies of action and calm - not just capturing the moment, but being in it; not just around the action but part of it. It’s what gives my work depth and where the sweetest most genuine moments are captured, where the viewer becomes part of it all.",
-      "I'm drawn to people and places with a free spirit — gatherings in the jungle, ceremonies by the river, barefoot vows on the beach, DJs lost in their set, eco-houses built with love. And that's the magic I want to capture.",
+      "I'm drawn to people and places with a free spirit - gatherings in the jungle, ceremonies by the river, barefoot vows on the beach, DJs lost in their set, eco-houses built with love. And that's the magic I want to capture.",
     ],
     promise: "Oracle of Freedom is my promise: to see you as you really are, and to set that moment free.",
     valuesTitle: "What I believe in",
@@ -260,7 +260,7 @@ export const en: Copy = {
   },
   people: {
     title: "People",
-    dek: "Portraits, love stories and intimate boho weddings — photographed with warmth, freedom and zero stiffness.",
+    dek: "Portraits, love stories and intimate boho weddings - photographed with warmth, freedom and zero stiffness.",
     portraitsTitle: "Portrait sessions",
     portraitsBody:
       "One session for individuals, couples, engagement, families and friends. The starting price is shaped around what you want.",
@@ -272,7 +272,7 @@ export const en: Copy = {
   },
   experiences: {
     title: "Experiences",
-    dek: "Retreats, gatherings, festivals, DJs, fire & flow artists and music videos — photographed and filmed from inside the circle.",
+    dek: "Retreats, gatherings, festivals, DJs, fire & flow artists and music videos - photographed and filmed from inside the circle.",
     retreatsTitle: "Retreats & Gatherings",
     retreatsBody: "Photos and reels that help you fill your next retreat.",
     retreatsPrice: "From {price}/day",
@@ -307,7 +307,7 @@ export const en: Copy = {
       "portrait-sessions": {
         name: "Portrait sessions",
         items: [
-          "Individuals, couples, engagement, families, friends — any group",
+          "Individuals, couples, engagement, families, friends - any group",
           "Starts at one hour. Length, edited photos, locations and how many people shape the final price",
           "Gentle guidance, no stiff posing",
           "A private gallery in {artistWeeks}, ready to download and share",
@@ -326,7 +326,7 @@ export const en: Copy = {
         items: [
           "The portrait session and the short film",
           "One person, one afternoon",
-          "Photographs and film in {artistFilmWeeks} — photo+film follows the film timeline",
+          "Photographs and film in {artistFilmWeeks} - photo+film follows the film timeline",
         ],
       },
       "portrait-film-express": {
@@ -334,7 +334,7 @@ export const en: Copy = {
         items: [
           "Rush the couples film",
           "Ready in {expressFilm} instead of {artistFilmWeeks}",
-          "A paid add-on — add it when you book",
+          "A paid add-on - add it when you book",
         ],
       },
       "portrait-combo-express": {
@@ -359,10 +359,10 @@ export const en: Copy = {
     testimonialIds: ["oliwia", "india", "couple", "soul-brand"],
     faqTitle: "Questions",
     faq: [
-      { q: "We're awkward in front of the camera. Is that okay?", a: "Not a problem! Most people are. I don't make you \"pose\" — I give you little prompts, we walk, we laugh, and the real you shows up." },
+      { q: "We're awkward in front of the camera. Is that okay?", a: "Not a problem! Most people are. I don't make you \"pose\" - I give you little prompts, we walk, we laugh, and the real you shows up." },
       { q: "What should we wear?", a: "It depends on the shoot, your ideas, my vision and the end goal. I'll send a short guide after booking." },
-      { q: "What time is best?", a: "Golden hour — the hour after sunrise or before sunset. I'll pick the timing for your date and place." },
-      { q: "What if it rains?", a: "We move the session to another day free of charge, or we embrace the drama of the clouds — your choice." },
+      { q: "What time is best?", a: "Golden hour - the hour after sunrise or before sunset. I'll pick the timing for your date and place." },
+      { q: "What if it rains?", a: "We move the session to another day free of charge, or we embrace the drama of the clouds - your choice." },
       { q: "Can you help plan a surprise proposal?", a: "Yes. I'll help you pick the spot and timing, and hide in plain sight." },
       { q: "Where do you photograph?", a: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability." },
       { q: "How do I book?", a: "Send the inquiry form. A {deposit} deposit secures your date." },
@@ -385,7 +385,7 @@ export const en: Copy = {
       "You want to be present, not directed",
     ],
     notFor:
-      "This is not for you if you're planning a large, traditional wedding — I focus only on small, intimate celebrations, so I can give each one my full heart.",
+      "This is not for you if you're planning a large, traditional wedding - I focus only on small, intimate celebrations, so I can give each one my full heart.",
     packagesTitle: "Collections",
     filmsTitle: "Film",
     addonsTitle: "Add-ons",
@@ -404,7 +404,7 @@ export const en: Copy = {
         badge: "most loved",
         items: [
           "Up to about 30 guests",
-          "5–6 hours, from the ceremony into the night — fire, music, dancing",
+          "5–6 hours, from the ceremony into the night - fire, music, dancing",
           "200+ edited photos",
           "Sneak peek within 48 hours, full gallery in {weeks}",
         ],
@@ -426,7 +426,7 @@ export const en: Copy = {
         items: [
           "Rush an elopement film or a small-wedding highlight",
           "Ready in {expressFilm} instead of {filmWeeks}",
-          "A paid add-on — add it when you book",
+          "A paid add-on - add it when you book",
         ],
       },
       "elopement-drone-stills": {
@@ -449,7 +449,7 @@ export const en: Copy = {
     dayTitle: "What your day could look like",
     day: "Sunrise vows on a wild beach. A walk through the forest with flowers in your hair. A ceremony led by a friend, a shaman or a celebrant. Your people in a circle, drums and laughter. A long table under fairy lights. A fire dance to close the night.",
     comingSoon:
-      "Coming soon: our first full boho elopement story. Until then, these are couple and gathering photographs — not a wedding day.",
+      "Coming soon: our first full boho elopement story. Until then, these are couple and gathering photographs - not a wedding day.",
     processTitle: "How it works",
     process: [
       { title: "Tell me your story", body: "Fill in the form: date, place (or \"no idea yet\"), how many people." },
@@ -462,7 +462,7 @@ export const en: Copy = {
     testimonialIds: ["elopement", "wedding"],
     faqTitle: "Questions",
     faq: [
-      { q: "Do you only photograph small weddings?", a: "Yes — elopements and intimate celebrations up to about 30 guests. That's where my style truly shines." },
+      { q: "Do you only photograph small weddings?", a: "Yes - elopements and intimate celebrations up to about 30 guests. That's where my style truly shines." },
       { q: "Can we have a symbolic ceremony?", a: "Absolutely. Many couples marry legally at home and celebrate here in nature." },
       { q: "We don't know where to elope yet. Can you help?", a: "That's one of my favourite parts. Tell me your vibe (ocean, forest, desert-like plains, mountains) and we'll curate the vision together." },
       { q: "Do you do video too?", a: "Yes. An elopement film and a small-wedding highlight can be booked on their own, but as I am only one person, I'm unable to capture your special moments in both photo and video." },
@@ -489,7 +489,7 @@ export const en: Copy = {
     ],
     problemTitle: "Why it matters",
     problem:
-      "People book retreats on a feeling. Honest images of real transformation — the circle, the silence, the laughter, the food, the landscape — are what make someone press \"book\" on BookRetreats, Retreat Guru or your website.",
+      "People book retreats on a feeling. Honest images of real transformation - the circle, the silence, the laughter, the food, the landscape - are what make someone press \"book\" on BookRetreats, Retreat Guru or your website.",
     packagesTitle: "Packages",
     addonsTitle: "Add-ons",
     addonsNote:
@@ -500,7 +500,7 @@ export const en: Copy = {
         items: [
           "One full day on site (sessions, rituals, meals, in-between moments)",
           "150+ edited photos with a commercial licence for your website, listings and social media",
-          "Selection and editing during the retreat — delivered as soon as it ends",
+          "Selection and editing during the retreat - delivered as soon as it ends",
         ],
       },
       "retreat-journey": {
@@ -521,7 +521,7 @@ export const en: Copy = {
         name: "Drone stills add-on",
         items: [
           "A quiet aerial set added to retreat coverage you're already booking",
-          "The land, the circle from above, the path in — for your next listing",
+          "The land, the circle from above, the path in - for your next listing",
           "We fly when the weather is kind and the airspace allows",
         ],
       },
@@ -546,7 +546,7 @@ export const en: Copy = {
     consent: [
       "I join your opening circle and introduce myself, so people feel safe.",
       "We agree which moments are no-camera (ceremonies, breathwork peaks, integration shares).",
-      "Anyone can opt out — with a simple wristband or signal.",
+      "Anyone can opt out - with a simple wristband or signal.",
       "You approve the selection before anything is published.",
     ],
     processTitle: "How it works",
@@ -561,7 +561,7 @@ export const en: Copy = {
     faqTitle: "Questions",
     faq: [
       { q: "Will a photographer disturb the energy of the group?", a: "Not when they're part of it. I move gently, respect silence and step away when needed." },
-      { q: "Can I use the images for ads and listings?", a: "Yes — a commercial licence is included for your own marketing." },
+      { q: "Can I use the images for ads and listings?", a: "Yes - a commercial licence is included for your own marketing." },
       { q: "Do you also film?", a: "Yes. The 3-day package includes 5 short vertical reels, and for a 1-day retreat you can add 3 reels or drone video." },
       { q: "Do guests need to sign anything?", a: "I'll share a simple consent approach with you before the retreat, and anyone can opt out." },
       { q: "Do you travel abroad?", a: "Sessions across Europe and Latin America. If the event is somewhere else, write soon so I can check my availability." },
@@ -572,13 +572,13 @@ export const en: Copy = {
   festivals: {
     eyebrow: "Festivals, DJs & artists",
     title: "Festival, DJ & fire-show photographer and videographer",
-    dek: "For the people who create the magic — on stage, behind the decks and inside the fire.",
+    dek: "For the people who create the magic - on stage, behind the decks and inside the fire.",
     cta: "Get your content",
     inquiry: "artist",
     whoTitle: "Who it's for",
     who: [
       "DJs & musicians who need press photos, live-set clips and a showreel to get booked",
-      "Fire, flow and performance artists — night portraits, fire and smoke are my speciality",
+      "Fire, flow and performance artists - night portraits, fire and smoke are my speciality",
       "Festivals, stages, workshops and crews wanting official, consent-first content",
       "Bands and artists who want a music video with an organic, cinematic feel",
     ],
@@ -681,7 +681,7 @@ export const en: Copy = {
         name: "Drone hop · same day",
         items: [
           "A same-day hop while I'm already with you for a booked festival day",
-          "Not full-event coverage from the air — a short look at the site, the stage and the land",
+          "Not full-event coverage from the air - a short look at the site, the stage and the land",
           "Weather-dependent, and only where flying is legally allowed",
         ],
       },
@@ -694,13 +694,13 @@ export const en: Copy = {
       { title: "Tell me the vision", body: "Artist, event, date, what you need it for." },
       { title: "Plan", body: "Mood, locations, lighting. Fire shoots need a safe setup and a spotter." },
       { title: "Shoot", body: "I move with the music and the fire." },
-      { title: "Delivery", body: "Selects for socials, then the full gallery and edits. Live-set clips within 48 hours. Photographs within {artistWeeks}. Films within {artistFilmWeeks} — photo and film together take longer than photographs alone. Priority delivery is a sliding-scale add-on, quoted before the {deposit} deposit." },
+      { title: "Delivery", body: "Selects for socials, then the full gallery and edits. Live-set clips within 48 hours. Photographs within {artistWeeks}. Films within {artistFilmWeeks} - photo and film together take longer than photographs alone. Priority delivery is a sliding-scale add-on, quoted before the {deposit} deposit." },
     ],
     wordsTitle: "Kind words",
     testimonialIds: ["rewild", "kliq", "nixie", "bliss-burn", "anael", "sage", "artist"],
     faqTitle: "Questions",
     faq: [
-      { q: "Do you shoot in dark clubs and at night?", a: "Yes, I adapt to the light of each event. Every venue is different, so we'll chat beforehand about what's possible — flash, extra lights or natural light only — and find what feels right for you and the space." },
+      { q: "Do you shoot in dark clubs and at night?", a: "Yes, I adapt to the light of each event. Every venue is different, so we'll chat beforehand about what's possible - flash, extra lights or natural light only - and find what feels right for you and the space." },
       { q: "Can I use the photos for my press kit and streaming platforms?", a: "Yes, promotional use is included." },
       { q: "Do you work with festivals?", a: "Yes, as part of official or partner content teams, always within each festival's photo and consent rules." },
       { q: "Can you film a full music video?", a: "Yes, from concept to final edit. Tell me your idea and budget." },
@@ -722,7 +722,7 @@ export const en: Copy = {
     ],
     problemTitle: "The problem I solve",
     problem:
-      "Your place is beautiful — but your photos are old, generic or taken on a phone, you have no time for social media, and you depend on Booking and Airbnb. I create honest, warm images and reels that show the experience: the morning light, the breakfast from the garden, the board wax and salty hair, the fire at night.",
+      "Your place is beautiful - but your photos are old, generic or taken on a phone, you have no time for social media, and you depend on Booking and Airbnb. I create honest, warm images and reels that show the experience: the morning light, the breakfast from the garden, the board wax and salty hair, the fire at night.",
     packagesTitle: "Packages",
     filmsTitle: "Film",
     combosTitle: "Photo + video",
@@ -801,10 +801,10 @@ export const en: Copy = {
     testimonialIds: ["place"],
     faqTitle: "Questions",
     faq: [
-      { q: "Will you disturb my guests?", a: "No — I plan around your occupancy and always ask before photographing anyone." },
+      { q: "Will you disturb my guests?", a: "No - I plan around your occupancy and always ask before photographing anyone." },
       { q: "Do you provide models?", a: "I can bring friends from my community or work with your willing guests." },
-      { q: "Are the photos right for Booking and Airbnb?", a: "Yes — I deliver a clean, horizontal set that follows platform guidelines, plus a warmer lifestyle set for social media." },
-      { q: "Can we trade a stay for content?", a: "For new partnerships in low season I sometimes offer hybrid collaborations — ask me." },
+      { q: "Are the photos right for Booking and Airbnb?", a: "Yes - I deliver a clean, horizontal set that follows platform guidelines, plus a warmer lifestyle set for social media." },
+      { q: "Can we trade a stay for content?", a: "For new partnerships in low season I sometimes offer hybrid collaborations - ask me." },
     ],
   },
   portfolio: {
@@ -973,7 +973,7 @@ export const en: Copy = {
       country: "Choose the country code before the number.",
     },
     weddingLimit:
-      "I only photograph intimate celebrations of up to about 30 guests, so I can give the day my full heart. A larger wedding is outside this work — a portrait session often still fits. You're welcome to send the note; I'll answer honestly.",
+      "I only photograph intimate celebrations of up to about 30 guests, so I can give the day my full heart. A larger wedding is outside this work - a portrait session often still fits. You're welcome to send the note; I'll answer honestly.",
     fail: "The message didn't send. Write to agota@oracleoffreedom.com and it will still reach me.",
   },
 };

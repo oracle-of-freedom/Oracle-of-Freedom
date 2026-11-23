@@ -124,7 +124,7 @@ export const es: Copy = {
     close: "Cerrar",
     previous: "Anterior",
     next: "Siguiente",
-    photoPlaceholder: "Marcador en baja resolución — se sustituirá",
+    photoPlaceholder: "Marcador en baja resolución - se sustituirá",
     language: "Idioma",
   },
   nav: {
@@ -161,7 +161,7 @@ export const es: Copy = {
     priceNote: "Precios desde, en EUR. Bodas, alojamientos y festivales se confirman con un presupuesto.",
     offer: "Oferta",
     saveSeparately: "Ahorras {amount} frente a reservarlos por separado",
-    placeholderTitle: "Pendiente — no es un testimonio publicado",
+    placeholderTitle: "Pendiente - no es un testimonio publicado",
     placeholderBody: "Las citas reales sustituirán esto cuando Agota tenga permiso para compartirlas. Aquí no hay textos inventados.",
     comingSoon: "Próximamente",
     mostLoved: "la favorita",
@@ -490,7 +490,7 @@ export const es: Copy = {
         name: "Extra de fotos con dron",
         items: [
           "Un conjunto aéreo tranquilo, añadido a la cobertura de retiro que ya estás reservando",
-          "La tierra, el círculo desde arriba, el camino de llegada — para tu próximo anuncio",
+          "La tierra, el círculo desde arriba, el camino de llegada - para tu próximo anuncio",
           "Volamos cuando el tiempo acompaña y el espacio aéreo lo permite",
         ],
       },
@@ -664,7 +664,7 @@ export const es: Copy = {
     testimonialIds: ["rewild", "kliq", "nixie", "bliss-burn", "anael", "sage", "artist"],
     faqTitle: "Preguntas frecuentes",
     faq: [
-      { q: "¿Fotografías en clubs oscuros y de noche?", a: "Sí, me adapto a la luz de cada evento. Cada sala es distinta, así que hablamos antes de lo que se puede hacer — flash, luces extra o solo luz natural — y encontramos lo que encaje contigo y con el espacio." },
+      { q: "¿Fotografías en clubs oscuros y de noche?", a: "Sí, me adapto a la luz de cada evento. Cada sala es distinta, así que hablamos antes de lo que se puede hacer - flash, luces extra o solo luz natural - y encontramos lo que encaje contigo y con el espacio." },
       { q: "¿Puedo usar las fotos en mi press kit y en plataformas de streaming?", a: "Sí, el uso promocional está incluido." },
       { q: "¿Trabajas con festivales?", a: "Sí, dentro de equipos de contenido oficiales o asociados, y siempre respetando las normas de foto y de consentimiento de cada festival." },
       { q: "¿Grabas un videoclip completo?", a: "Sí, del concepto a la edición final. Cuéntame tu idea y tu presupuesto." },
