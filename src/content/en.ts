@@ -819,6 +819,7 @@ export const en: Copy = {
       { id: "djs", label: "DJs & Music" },
       { id: "fire", label: "Fire" },
       { id: "places", label: "Places" },
+      { id: "aerial", label: "Aerial", soon: true },
       { id: "film", label: "Film" },
     ],
     empty: "Nothing in this filter yet.",

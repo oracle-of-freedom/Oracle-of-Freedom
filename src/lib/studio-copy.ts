@@ -607,6 +607,7 @@ export function studioCopy(lang: StudioLang) {
         djs: en ? "DJs & Music" : "DJs y música",
         fire: en ? "Fire" : "Fuego",
         places: en ? "Places" : "Lugares",
+        aerial: en ? "Aerial" : "Aéreo",
       } as Record<string, string>,
       selectAll: en ? "Select all" : "Marcar todas",
       clear: en ? "Clear" : "Quitar todas",

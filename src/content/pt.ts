@@ -779,6 +779,7 @@ export const pt: Copy = {
       { id: "djs", label: "DJs e música" },
       { id: "fire", label: "Fogo" },
       { id: "places", label: "Lugares" },
+      { id: "aerial", label: "Aéreo", soon: true },
       { id: "film", label: "Vídeo" },
     ],
     empty: "Ainda não há nada neste filtro.",

@@ -78,6 +78,7 @@ export const PORTFOLIO_TAB_IDS = [
   "djs",
   "fire",
   "places",
+  "aerial",
 ] as const;
 export type PortfolioTabId = (typeof PORTFOLIO_TAB_IDS)[number];
 
