@@ -29,6 +29,46 @@ export const PHOTO_PAGE_IDS = [
 ] as const;
 export type PhotoPageId = (typeof PHOTO_PAGE_IDS)[number];
 
+/** Pages where Agota can tune the photo gallery look, separate from which photos appear. */
+export const GALLERY_LAYOUT_PAGE_IDS = [
+  "home",
+  "people",
+  "experiences",
+  "portraits",
+  "elopements",
+  "retreats",
+  "festivals",
+  "places",
+] as const;
+export type GalleryLayoutPageId = (typeof GALLERY_LAYOUT_PAGE_IDS)[number];
+
+export const GALLERY_STYLES = ["masonry", "grid", "spotlight"] as const;
+export type GalleryStyle = (typeof GALLERY_STYLES)[number];
+
+export const GALLERY_COLUMNS = [2, 3, 4] as const;
+export type GalleryColumns = (typeof GALLERY_COLUMNS)[number];
+
+export const GALLERY_GAPS = ["snug", "normal", "roomy"] as const;
+export type GalleryGap = (typeof GALLERY_GAPS)[number];
+
+export const GALLERY_MOBILE_VISIBLE = [2, 3, 4, 6, 0] as const;
+export type GalleryMobileVisible = (typeof GALLERY_MOBILE_VISIBLE)[number];
+
+export type GalleryLayout = {
+  style: GalleryStyle;
+  columns: GalleryColumns;
+  gap: GalleryGap;
+  /** Photos shown on phones before “view more”. 0 means show every photo. */
+  mobileVisible: GalleryMobileVisible;
+};
+
+export const DEFAULT_GALLERY_LAYOUT: GalleryLayout = {
+  style: "masonry",
+  columns: 3,
+  gap: "normal",
+  mobileVisible: 3,
+};
+
 /** Portfolio filter tabs a photo can appear under, besides All. */
 export const PORTFOLIO_TAB_IDS = [
   "portraits",
@@ -144,6 +184,8 @@ export type LiveContent = {
   photoTweaks: Record<string, PhotoTweak>;
   videos: LiveVideo[];
   videoTweaks: Record<string, VideoTweak>;
+  /** Per-page gallery presentation. Missing pages use DEFAULT_GALLERY_LAYOUT. */
+  galleryLayouts: Partial<Record<GalleryLayoutPageId, GalleryLayout>>;
 };
 
 export const LIMITS = {
@@ -158,7 +200,54 @@ export const LIMITS = {
 } as const;
 
 export function emptyLiveContent(): LiveContent {
-  return { reviews: [], reviewTweaks: {}, photos: [], photoTweaks: {}, videos: [], videoTweaks: {} };
+  return {
+    reviews: [],
+    reviewTweaks: {},
+    photos: [],
+    photoTweaks: {},
+    videos: [],
+    videoTweaks: {},
+    galleryLayouts: {},
+  };
+}
+
+function parseGalleryLayout(value: unknown): GalleryLayout | null {
+  if (!value || typeof value !== "object") return null;
+  const item = value as Partial<GalleryLayout>;
+  if (
+    !GALLERY_STYLES.includes(item.style as GalleryStyle) ||
+    !GALLERY_COLUMNS.includes(item.columns as GalleryColumns) ||
+    !GALLERY_GAPS.includes(item.gap as GalleryGap) ||
+    !GALLERY_MOBILE_VISIBLE.includes(item.mobileVisible as GalleryMobileVisible)
+  ) {
+    return null;
+  }
+  return {
+    style: item.style as GalleryStyle,
+    columns: item.columns as GalleryColumns,
+    gap: item.gap as GalleryGap,
+    mobileVisible: item.mobileVisible as GalleryMobileVisible,
+  };
+}
+
+function parseGalleryLayouts(value: unknown): LiveContent["galleryLayouts"] {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const out: LiveContent["galleryLayouts"] = {};
+  for (const page of GALLERY_LAYOUT_PAGE_IDS) {
+    const layout = parseGalleryLayout((value as Record<string, unknown>)[page]);
+    if (layout) out[page] = layout;
+  }
+  return out;
+}
+
+export function resolveGalleryLayout(
+  layouts: LiveContent["galleryLayouts"] | undefined,
+  page: string,
+): GalleryLayout {
+  if ((GALLERY_LAYOUT_PAGE_IDS as readonly string[]).includes(page)) {
+    return layouts?.[page as GalleryLayoutPageId] || DEFAULT_GALLERY_LAYOUT;
+  }
+  return DEFAULT_GALLERY_LAYOUT;
 }
 
 const idPattern = /^[A-Za-z0-9-]{8,64}$/;
@@ -328,6 +417,7 @@ export function parseLiveContent(value: unknown): LiveContent {
     photoTweaks: parsePhotoTweaks(item.photoTweaks),
     videos: list(item.videos, parseVideo, LIMITS.videos),
     videoTweaks: parseVideoTweaks(item.videoTweaks),
+    galleryLayouts: parseGalleryLayouts(item.galleryLayouts),
   };
 }
 

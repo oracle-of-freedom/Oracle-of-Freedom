@@ -6,7 +6,7 @@ import { VideoGrid } from "@/components/video-grid";
 import { getCopy } from "@/content";
 import type { Locale } from "@/i18n/routing";
 import { formatEuro, type GalleryImage } from "@/lib/content";
-import { getFilms, getImagesForPage } from "@/lib/live-public";
+import { getFilms, getGalleryLayout, getImagesForPage } from "@/lib/live-public";
 import { getCatalog } from "@/lib/offers";
 import { openingPrice } from "@/lib/pricing";
 import { pageMetadata } from "@/lib/seo";
@@ -40,10 +40,11 @@ export default async function ExperiencesPage({ params }: { params: Promise<{ lo
   setRequestLocale(locale);
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
-  const [catalog, images, films] = await Promise.all([
+  const [catalog, images, films, galleryLayout] = await Promise.all([
     getCatalog(),
     getImagesForPage("experiences"),
     getFilms("experiences"),
+    getGalleryLayout("experiences"),
   ]);
   const retreatFrom = openingPrice(catalog, "retreats") ?? 400;
   const artistFrom = openingPrice(catalog, "festivals") ?? 190;
@@ -98,7 +99,7 @@ export default async function ExperiencesPage({ params }: { params: Promise<{ lo
           images={swapExperiencePhotos(images)}
           locale={loc}
           foldMobile
-          mobileVisible={4}
+          layout={galleryLayout}
           labels={{
             open: copy.a11y.openPhoto,
             close: copy.a11y.close,

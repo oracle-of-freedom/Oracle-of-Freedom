@@ -7,6 +7,12 @@ import type { ActionState } from "@/app/admin/actions";
 import { isAdmin } from "@/lib/admin-auth";
 import { jpegSize } from "@/lib/jpeg";
 import {
+  DEFAULT_GALLERY_LAYOUT,
+  GALLERY_COLUMNS,
+  GALLERY_GAPS,
+  GALLERY_LAYOUT_PAGE_IDS,
+  GALLERY_MOBILE_VISIBLE,
+  GALLERY_STYLES,
   LIMITS,
   PHOTO_PAGE_IDS,
   PORTFOLIO_TAB_IDS,
@@ -14,6 +20,11 @@ import {
   VIDEO_PAGE_IDS,
   isMediaId,
   parseVideoUrl,
+  type GalleryColumns,
+  type GalleryGap,
+  type GalleryLayoutPageId,
+  type GalleryMobileVisible,
+  type GalleryStyle,
   type LiveContent,
   type LocalText,
 } from "@/lib/live-content";
@@ -344,4 +355,52 @@ export async function deleteVideo(formData: FormData) {
     content.videos = content.videos.filter((item) => item.id !== id);
   });
   if (mediaId) await deleteMedia(mediaId).catch(() => undefined);
+}
+
+export async function saveGalleryLayout(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await guard();
+  const t = studioCopy(await studioLang());
+  const page = field(formData, "page", 40) as GalleryLayoutPageId;
+  if (!(GALLERY_LAYOUT_PAGE_IDS as readonly string[]).includes(page)) {
+    return { error: t.content.errors.save };
+  }
+  const style = field(formData, "style", 20) as GalleryStyle;
+  const columns = Number(field(formData, "columns", 2)) as GalleryColumns;
+  const gap = field(formData, "gap", 20) as GalleryGap;
+  const mobileVisible = Number(field(formData, "mobileVisible", 2)) as GalleryMobileVisible;
+  if (
+    !GALLERY_STYLES.includes(style) ||
+    !GALLERY_COLUMNS.includes(columns) ||
+    !GALLERY_GAPS.includes(gap) ||
+    !GALLERY_MOBILE_VISIBLE.includes(mobileVisible)
+  ) {
+    return { error: t.content.errors.save };
+  }
+  return change((content) => {
+    if (!content.galleryLayouts) content.galleryLayouts = {};
+    const layout = { style, columns, gap, mobileVisible };
+    if (
+      layout.style === DEFAULT_GALLERY_LAYOUT.style &&
+      layout.columns === DEFAULT_GALLERY_LAYOUT.columns &&
+      layout.gap === DEFAULT_GALLERY_LAYOUT.gap &&
+      layout.mobileVisible === DEFAULT_GALLERY_LAYOUT.mobileVisible
+    ) {
+      delete content.galleryLayouts[page];
+      return;
+    }
+    content.galleryLayouts[page] = layout;
+  });
+}
+
+export async function resetGalleryLayout(formData: FormData) {
+  await guard();
+  const page = field(formData, "page", 40) as GalleryLayoutPageId;
+  if (!(GALLERY_LAYOUT_PAGE_IDS as readonly string[]).includes(page)) return;
+  await change((content) => {
+    if (!content.galleryLayouts) content.galleryLayouts = {};
+    delete content.galleryLayouts[page];
+  });
 }

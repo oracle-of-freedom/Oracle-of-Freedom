@@ -19,7 +19,9 @@ import {
   orderNumber,
   parseLiveContent,
   pickText,
+  resolveGalleryLayout,
   resolveText,
+  type GalleryLayout,
   type LiveContent,
   type LivePhoto,
   type PhotoTweak,
@@ -200,6 +202,11 @@ export async function getImagesForPage(page: string) {
   return (await getGallery())
     .filter((image) => image.pages.includes(page) && isPublishedPhoto(image))
     .sort((a, b) => a.order - b.order);
+}
+
+export async function getGalleryLayout(page: string): Promise<GalleryLayout> {
+  const live = await getLiveContent();
+  return resolveGalleryLayout(live.galleryLayouts, page);
 }
 
 export async function getFeaturedImages() {

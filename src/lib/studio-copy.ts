@@ -529,8 +529,8 @@ export function studioCopy(lang: StudioLang) {
     content: {
       title: en ? "Content" : "Contenido",
       intro: en
-        ? "Add reviews, photos and films to the site. Choose the pages they go on, and they appear there within a minute."
-        : "Añade reseñas, fotos y vídeos al sitio. Elige las páginas donde van y aparecen en menos de un minuto.",
+        ? "Add reviews, photos and films to the site. Choose the pages they go on, and they appear there within a minute. Gallery layouts control how those photos sit on each page."
+        : "Añade reseñas, fotos y vídeos al sitio. Elige las páginas donde van y aparecen en menos de un minuto. Los diseños de galería controlan cómo se ven las fotos en cada página.",
       back: en ? "Back to content" : "Volver a contenido",
       open: en ? "Open" : "Abrir",
       readonly: en
@@ -555,6 +555,38 @@ export function studioCopy(lang: StudioLang) {
             ? "Add a YouTube or Instagram film and choose where it plays."
             : "Añade un vídeo de YouTube o Instagram y elige dónde se reproduce.",
         },
+        layouts: {
+          title: en ? "Gallery layouts" : "Diseños de galería",
+          body: en
+            ? "After photos are on the right pages, choose how each gallery looks: masonry, grid, or spotlight."
+            : "Cuando las fotos ya están en las páginas correctas, elige cómo se ve cada galería: mosaico, rejilla o destacado.",
+        },
+      },
+      layouts: {
+        title: en ? "Gallery layouts" : "Diseños de galería",
+        intro: en
+          ? "Pick a page, then set the look. This does not move photos between pages."
+          : "Elige una página y luego el aspecto. Esto no mueve fotos de una página a otra.",
+        page: en ? "Page" : "Página",
+        style: en ? "Layout" : "Diseño",
+        styles: {
+          masonry: en ? "Masonry · natural heights" : "Mosaico · alturas naturales",
+          grid: en ? "Even grid · cropped" : "Rejilla pareja · recortadas",
+          spotlight: en ? "Spotlight · first photo large" : "Destacado · primera foto grande",
+        },
+        columns: en ? "Columns on large screens" : "Columnas en pantallas grandes",
+        gap: en ? "Spacing" : "Espacio",
+        gaps: {
+          snug: en ? "Snug" : "Compacto",
+          normal: en ? "Normal" : "Normal",
+          roomy: en ? "Roomy" : "Holgado",
+        },
+        mobile: en ? "Photos on the phone before “view more”" : "Fotos en el móvil antes de «ver más»",
+        mobileAll: en ? "Show all" : "Mostrar todas",
+        save: en ? "Save this page layout" : "Guardar el diseño de esta página",
+        saving: en ? "Saving…" : "Guardando…",
+        saved: en ? "Saved. The page updates within a minute." : "Guardado. La página se actualiza en menos de un minuto.",
+        reset: en ? "Back to default" : "Volver al valor por defecto",
       },
       pages: {
         home: en ? "Homepage" : "Portada",

@@ -18,6 +18,11 @@ export default async function ContentPage() {
     { href: "/admin/content/reviews", ...t.content.cards.reviews, count: live?.reviews.length },
     { href: "/admin/content/photos", ...t.content.cards.photos, count: live?.photos.length },
     { href: "/admin/content/videos", ...t.content.cards.videos, count: live?.videos.length },
+    {
+      href: "/admin/content/layouts",
+      ...t.content.cards.layouts,
+      count: live ? Object.keys(live.galleryLayouts || {}).length || undefined : undefined,
+    },
   ];
 
   return (

@@ -9,7 +9,7 @@ import { getCopy } from "@/content";
 import { posts } from "@/content/journal";
 import type { Locale } from "@/i18n/routing";
 import { formatEuro, imageById, settings } from "@/lib/content";
-import { getFeaturedImages, getReviews } from "@/lib/live-public";
+import { getFeaturedImages, getGalleryLayout, getReviews } from "@/lib/live-public";
 import { getCatalog } from "@/lib/offers";
 import { openingPrice } from "@/lib/pricing";
 import { pageMetadata } from "@/lib/seo";
@@ -30,10 +30,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
-  const [catalog, featured, reviews] = await Promise.all([
+  const [catalog, featured, reviews, galleryLayout] = await Promise.all([
     getCatalog(),
     getFeaturedImages(),
     getReviews("home"),
+    getGalleryLayout("home"),
   ]);
   const hero = imageById(settings.heroImageId);
   const mobile = imageById(settings.mobileHeroImageId);
@@ -189,6 +190,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           images={featured}
           locale={loc}
           foldMobile
+          layout={galleryLayout}
           labels={{
             open: copy.a11y.openPhoto,
             close: copy.a11y.close,
