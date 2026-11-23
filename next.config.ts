@@ -25,6 +25,14 @@ const nextConfig: NextConfig = {
       ],
     };
   },
+  async headers() {
+    return [
+      {
+        source: "/p/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);

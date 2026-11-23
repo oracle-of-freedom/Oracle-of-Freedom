@@ -14,6 +14,8 @@ export default function robots(): MetadataRoute.Robots {
         "/es/gracias",
         "/pt/obrigada",
         "/book",
+        "/p",
+        "/p/",
       ],
     },
     sitemap: `${siteUrl()}/sitemap.xml`,
