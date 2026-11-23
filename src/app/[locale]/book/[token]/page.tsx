@@ -3,8 +3,7 @@ import { setRequestLocale } from "next-intl/server";
 import { BookingWidget } from "@/components/booking-widget";
 import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
-import { isBookingInvite } from "@/lib/inquiries";
-import { readInquiries } from "@/lib/inquiry-store";
+import { inviteAllowsBooking } from "@/lib/booking-invite";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { storageMode } from "@/lib/store";
 
@@ -30,9 +29,7 @@ export default async function PrivateBookPage({
 }) {
   const { locale, token } = await params;
   setRequestLocale(locale);
-  if (!isBookingInvite(token)) notFound();
-  const invited = (await readInquiries()).some((item) => item.bookingToken === token);
-  if (!invited) notFound();
+  if (!(await inviteAllowsBooking(token))) notFound();
   const copy = bookingCopy[locale] || bookingCopy.en;
   const config = await readCalendarConfig();
   const types = config.bookingTypes.filter((item) => item.active);

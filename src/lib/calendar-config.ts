@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto";
+import { randomBytes, timingSafeEqual } from "node:crypto";
 import type { BookingKind } from "@/lib/bookings";
 import type { Locale } from "@/i18n/routing";
 
@@ -75,6 +75,11 @@ export type CalendarConfig = {
   timeZone: string;
   /** Personal Google Meet or Zoom join link shown after confirmation. */
   meetingUrl?: string;
+  /**
+   * Standalone private booking invite (no inquiry required).
+   * Absent or empty means the open link is off.
+   */
+  bookingInviteToken?: string;
   icalToken: string;
   inboundIcalUrl?: string;
   google?: GoogleConnection;
@@ -291,7 +296,31 @@ export function parseCalendarConfig(value: unknown): CalendarConfig | null {
     if (!zone) return null;
     item.timeZone = zone;
   }
+  if (typeof item.bookingInviteToken === "string") {
+    const token = item.bookingInviteToken.trim();
+    if (!token) delete item.bookingInviteToken;
+    else if (!/^[A-Za-z0-9_-]{16,100}$/.test(token)) return null;
+    else item.bookingInviteToken = token;
+  } else {
+    delete item.bookingInviteToken;
+  }
   return item as CalendarConfig;
+}
+
+/** True when the open (no-inquiry) private booking link is active. */
+export function openBookingInviteActive(config: Pick<CalendarConfig, "bookingInviteToken">) {
+  return Boolean(config.bookingInviteToken && /^[A-Za-z0-9_-]{16,100}$/.test(config.bookingInviteToken));
+}
+
+/** True when the token matches the studio's open private booking invite. */
+export function matchesOpenBookingInvite(
+  token: string,
+  config: Pick<CalendarConfig, "bookingInviteToken">,
+) {
+  const expected = config.bookingInviteToken;
+  if (!expected || !/^[A-Za-z0-9_-]{16,100}$/.test(token)) return false;
+  if (token.length !== expected.length) return false;
+  return timingSafeEqual(Buffer.from(token), Buffer.from(expected));
 }
 
 function validGoogleApp(value: unknown): value is GoogleAppSettings {

@@ -3,7 +3,10 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { AdminHeader } from "@/components/admin-header";
 import { CalendarSettings } from "@/components/calendar-settings";
+import { PrivateBookingLink } from "@/components/private-booking-link";
 import { isAdmin } from "@/lib/admin-auth";
+import { bookingInviteUrl } from "@/lib/bookings";
+import { openBookingInviteActive } from "@/lib/calendar-config";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { siteUrl } from "@/lib/content";
 import {
@@ -24,9 +27,14 @@ export default async function CalendarSettingsPage({
   searchParams: Promise<{ google?: string }>;
 }) {
   if (!(await isAdmin())) redirect("/admin/login");
-  const t = studioCopy(await studioLang());
+  const lang = await studioLang();
+  const t = studioCopy(lang);
   const { google: googleResult } = await searchParams;
   const config = await readCalendarConfig();
+  const inviteUrl =
+    openBookingInviteActive(config) && config.bookingInviteToken
+      ? bookingInviteUrl(lang, config.bookingInviteToken)
+      : "";
   const headerList = await headers();
   const host = (headerList.get("x-forwarded-host") || headerList.get("host") || "").split(",")[0].trim();
   const forwardedProto = (headerList.get("x-forwarded-proto") || "").split(",")[0].trim();
@@ -61,6 +69,9 @@ export default async function CalendarSettingsPage({
           {t.settings.viewSite}
         </Link>
       </p>
+      <div className="mt-4 md:mt-8">
+        <PrivateBookingLink url={inviteUrl} mode="settings" />
+      </div>
       <CalendarSettings
         initial={{
           bookingTypes: config.bookingTypes,

@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 import { AdminHeader } from "@/components/admin-header";
 import { CalendarBoard } from "@/components/calendar-board";
+import { PrivateBookingLink } from "@/components/private-booking-link";
 import { isAdmin } from "@/lib/admin-auth";
-import { parseMonth } from "@/lib/bookings";
+import { bookingInviteUrl, parseMonth } from "@/lib/bookings";
 import { readBookings, writeBookings } from "@/lib/booking-store";
-import { calendarToday, studioTimeZone } from "@/lib/calendar-config";
+import { calendarToday, openBookingInviteActive, studioTimeZone } from "@/lib/calendar-config";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { reconcileGoogleBookings } from "@/lib/google-calendar";
 import { importInboundIcal } from "@/lib/inbound-ical";
@@ -20,7 +21,8 @@ export default async function CalendarPage({
   searchParams: Promise<{ month?: string }>;
 }) {
   if (!(await isAdmin())) redirect("/admin/login");
-  const t = studioCopy(await studioLang());
+  const lang = await studioLang();
+  const t = studioCopy(lang);
   const { month: requested } = await searchParams;
   const config = await readCalendarConfig();
   const zone = studioTimeZone(config);
@@ -47,9 +49,17 @@ export default async function CalendarPage({
       console.error("[calendar] inbound iCal sync failed", error);
     }
   }
+  const inviteUrl =
+    openBookingInviteActive(config) && config.bookingInviteToken
+      ? bookingInviteUrl(lang, config.bookingInviteToken)
+      : "";
+
   return (
     <main className="studio-page-dock mx-auto max-w-6xl px-4 py-4 md:py-12">
       <AdminHeader current="calendar" title={t.calendar.title} />
+      <div className="mt-4 md:mt-6">
+        <PrivateBookingLink url={inviteUrl} />
+      </div>
       <CalendarBoard bookings={bookings} today={today} month={month} mode={storageMode()} />
     </main>
   );

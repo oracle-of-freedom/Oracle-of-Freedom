@@ -54,6 +54,7 @@ export async function saveCalendarSettings(
   const candidate = parseCalendarConfig({
     ...(submitted as Partial<CalendarConfig>),
     icalToken: current.icalToken,
+    bookingInviteToken: current.bookingInviteToken,
     google: current.google,
     googleApp: current.googleApp,
   });
@@ -63,6 +64,7 @@ export async function saveCalendarSettings(
     };
   }
   if (current.inboundIcalUrl) candidate.inboundIcalUrl = current.inboundIcalUrl;
+  if (current.bookingInviteToken) candidate.bookingInviteToken = current.bookingInviteToken;
   try {
     await writeCalendarConfig(candidate);
     refresh();
@@ -78,6 +80,22 @@ export async function regenerateIcalToken() {
   await guard();
   const current = await readCalendarConfig();
   await writeCalendarConfig({ ...current, icalToken: newCalendarToken() });
+  refresh();
+}
+
+export async function enableBookingInvite() {
+  await guard();
+  const current = await readCalendarConfig();
+  await writeCalendarConfig({ ...current, bookingInviteToken: newCalendarToken() });
+  refresh();
+}
+
+export async function disableBookingInvite() {
+  await guard();
+  const current = await readCalendarConfig();
+  const next = { ...current };
+  delete next.bookingInviteToken;
+  await writeCalendarConfig(next);
   refresh();
 }
 

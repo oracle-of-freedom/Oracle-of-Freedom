@@ -364,6 +364,16 @@ export function studioCopy(lang: StudioLang) {
       emptyDay: en ? "Nothing this day." : "Nada este día.",
       overlap: en ? "Overlaps another booking." : "Se cruza con otra cita.",
       settings: en ? "Booking settings" : "Ajustes de reservas",
+      inviteTitle: en ? "Private booking link" : "Enlace privado de reserva",
+      inviteHelp: en
+        ? "Send this when someone should book a call without filling the inquiry form. Turn it off anytime."
+        : "Envíalo cuando alguien deba reservar una llamada sin rellenar el formulario. Apágalo cuando quieras.",
+      inviteOff: en ? "No private booking link is active." : "No hay ningún enlace privado activo.",
+      inviteGenerate: en ? "Create private booking link" : "Crear enlace privado de reserva",
+      inviteCopy: en ? "Copy private booking link" : "Copiar enlace privado de reserva",
+      inviteCopied: en ? "Copied" : "Copiado",
+      inviteNew: en ? "Create a new link" : "Crear un enlace nuevo",
+      inviteDisable: en ? "Turn off this link" : "Apagar este enlace",
       editBooking: en ? "Edit booking" : "Editar cita",
       close: en ? "Close" : "Cerrar",
       another: en ? "Create another" : "Crear otra",
@@ -418,6 +428,16 @@ export function studioCopy(lang: StudioLang) {
       timeZoneHelp: en
         ? "Weekly hours and bookings use this timezone. Guests still see times in their own zone."
         : "El horario semanal y las citas usan esta zona. Los invitados siguen viendo la hora en la suya.",
+      inviteTitle: en ? "Private booking link" : "Enlace privado de reserva",
+      inviteHelp: en
+        ? "A shareable booking page for Zoom or Meet calls. No inquiry form needed. Turning it off stops new bookings on that URL."
+        : "Una página de reserva para llamadas de Zoom o Meet. Sin formulario de solicitud. Al apagarlo, esa URL deja de aceptar reservas.",
+      inviteOff: en ? "No private booking link is active." : "No hay ningún enlace privado activo.",
+      inviteGenerate: en ? "Create private booking link" : "Crear enlace privado de reserva",
+      inviteCopy: en ? "Copy link" : "Copiar enlace",
+      inviteCopied: en ? "Copied" : "Copiado",
+      inviteNew: en ? "Create a new link" : "Crear un enlace nuevo",
+      inviteDisable: en ? "Turn off this link" : "Apagar este enlace",
       types: en ? "Booking types" : "Tipos de cita",
       visible: en ? "Show" : "Visible",
       remove: en ? "Remove" : "Quitar",

@@ -13,8 +13,8 @@ import { acceptanceUrl, type Booking } from "@/lib/bookings";
 import { studioTimeZone } from "@/lib/calendar-config";
 import { notifyStudio } from "@/lib/push";
 import { settings } from "@/lib/content";
+import { inviteAllowsBooking } from "@/lib/booking-invite";
 import { isBookingInvite } from "@/lib/inquiries";
-import { readInquiries } from "@/lib/inquiry-store";
 import { rateLimited } from "@/lib/rate-limit";
 
 const schema = z.object({
@@ -90,9 +90,9 @@ export async function POST(request: Request) {
   if (!parsed.success) return NextResponse.json({ ok: false }, { status: 400 });
   const data = parsed.data;
   if (data.company?.trim()) return NextResponse.json({ ok: true, emailed: false });
-  if (!isBookingInvite(data.invite)) return NextResponse.json({ ok: false }, { status: 404 });
-  const invited = (await readInquiries()).some((item) => item.bookingToken === data.invite);
-  if (!invited) return NextResponse.json({ ok: false }, { status: 404 });
+  if (!isBookingInvite(data.invite) || !(await inviteAllowsBooking(data.invite))) {
+    return NextResponse.json({ ok: false }, { status: 404 });
+  }
 
   const available = await publicAvailability(data.typeId);
   if (
