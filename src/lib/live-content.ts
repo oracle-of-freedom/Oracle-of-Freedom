@@ -165,10 +165,13 @@ export type VideoTweak = {
 export type LiveVideo = {
   id: string;
   createdAt: string;
-  platform: "youtube" | "instagram";
+  platform: "youtube" | "instagram" | "file";
+  /** External watch URL, or the studio media URL for uploaded films. */
   url: string;
   youtubeId?: string;
   embedUrl?: string;
+  /** Stored film file for platform "file". */
+  videoMediaId?: string;
   posterMediaId: string;
   posterWidth: number;
   posterHeight: number;
@@ -329,18 +332,24 @@ function parseVideo(value: unknown): LiveVideo | null {
   if (!value || typeof value !== "object") return null;
   const item = value as Record<string, unknown>;
   if (typeof item.id !== "string" || !idPattern.test(item.id) || !isMediaId(item.posterMediaId)) return null;
-  if (item.platform !== "youtube" && item.platform !== "instagram") return null;
+  if (item.platform !== "youtube" && item.platform !== "instagram" && item.platform !== "file") return null;
   const url = text(item.url, 500);
-  if (!url.startsWith("https://")) return null;
   const embedUrl = text(item.embedUrl, 500);
   const youtubeId = text(item.youtubeId, 20);
+  const videoMediaId = isMediaId(item.videoMediaId) ? item.videoMediaId : "";
+  if (item.platform === "file") {
+    if (!videoMediaId) return null;
+  } else if (!url.startsWith("https://")) {
+    return null;
+  }
   return {
     id: item.id,
     createdAt: stamp(item.createdAt),
     platform: item.platform,
-    url,
+    url: item.platform === "file" ? mediaSrc(videoMediaId) : url,
     ...(item.platform === "youtube" && /^[A-Za-z0-9_-]{11}$/.test(youtubeId) ? { youtubeId } : {}),
     ...(item.platform === "instagram" && embedUrl.startsWith("https://www.instagram.com/") ? { embedUrl } : {}),
+    ...(item.platform === "file" ? { videoMediaId } : {}),
     posterMediaId: item.posterMediaId,
     posterWidth: dimension(item.posterWidth) || 1280,
     posterHeight: dimension(item.posterHeight) || 720,

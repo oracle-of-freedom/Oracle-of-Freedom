@@ -5,7 +5,6 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import type { ActionState } from "@/app/admin/actions";
 import { isAdmin } from "@/lib/admin-auth";
-import { jpegSize } from "@/lib/jpeg";
 import {
   DEFAULT_GALLERY_LAYOUT,
   GALLERY_COLUMNS,
@@ -245,11 +244,12 @@ async function youtubeCover(youtubeId: string) {
       });
       if (!response.ok) continue;
       const bytes = Buffer.from(await response.arrayBuffer());
-      const size = jpegSize(bytes);
-      if (!size || bytes.length > 4 * 1024 * 1024) continue;
+      if (bytes.length > 8 * 1024 * 1024) continue;
+      const { compressPhoto } = await import("@/lib/media-compress");
+      const photo = await compressPhoto(bytes);
       const id = randomUUID();
-      await saveMedia(id, bytes);
-      return { id, width: size.width, height: size.height };
+      await saveMedia(id, photo.bytes, photo.contentType);
+      return { id, width: photo.width, height: photo.height };
     } catch {
       continue;
     }
@@ -274,12 +274,11 @@ export async function saveVideo(_state: ActionState, formData: FormData): Promis
     });
   }
 
-  const parsed = parseVideoUrl(field(formData, "url", 500));
-  if (!parsed) return { error: t.content.errors.link };
   const pages = picked(formData, "pages", VIDEO_PAGE_IDS);
   if (pages.length === 0) return { error: t.content.errors.pages };
   const caption = localField(formData, "caption", LIMITS.caption);
   const first = formData.get("position") === "first";
+  const source = field(formData, "source", 20) === "file" ? "file" : "link";
 
   const uploadedId = field(formData, "posterId", 64);
   const uploaded = isMediaId(uploadedId)
@@ -289,6 +288,7 @@ export async function saveVideo(_state: ActionState, formData: FormData): Promis
         height: Number(formData.get("posterHeight")) || 720,
       }
     : null;
+  const videoMediaId = field(formData, "videoMediaId", 64);
 
   const current = await readLiveContent().catch(() => null);
   const existing = id ? current?.videos.find((item) => item.id === id) : undefined;
@@ -299,6 +299,52 @@ export async function saveVideo(_state: ActionState, formData: FormData): Promis
     poster = { id: existing.posterMediaId, width: existing.posterWidth, height: existing.posterHeight };
   }
   let ownCover = false;
+  let replacedVideo = "";
+
+  if (source === "file") {
+    const fileId = isMediaId(videoMediaId)
+      ? videoMediaId
+      : existing?.platform === "file" && existing.videoMediaId
+        ? existing.videoMediaId
+        : "";
+    if (!fileId) return { error: t.content.errors.videoFile };
+    if (!poster) return { error: t.content.errors.poster };
+    const cover = poster;
+    let oldPoster = "";
+    let oldVideo = "";
+    const result = await change((content) => {
+      const found = existing ? content.videos.find((item) => item.id === existing.id) : undefined;
+      if (existing && !found) return t.content.errors.missing;
+      const base = {
+        platform: "file" as const,
+        url: `/api/media/${fileId}`,
+        videoMediaId: fileId,
+        posterMediaId: cover.id,
+        posterWidth: cover.width,
+        posterHeight: cover.height,
+        caption,
+        pages,
+        first,
+      };
+      if (found) {
+        if (found.posterMediaId !== cover.id) oldPoster = found.posterMediaId;
+        if (found.videoMediaId && found.videoMediaId !== fileId) oldVideo = found.videoMediaId;
+        delete found.youtubeId;
+        delete found.embedUrl;
+        Object.assign(found, base);
+        return;
+      }
+      if (content.videos.length >= LIMITS.videos) return t.content.errors.full;
+      content.videos.push({ id: randomUUID(), createdAt: new Date().toISOString(), ...base });
+    });
+    if (result?.error && uploaded) await deleteMedia(cover.id).catch(() => undefined);
+    if (oldPoster) await deleteMedia(oldPoster).catch(() => undefined);
+    if (oldVideo) await deleteMedia(oldVideo).catch(() => undefined);
+    return result;
+  }
+
+  const parsed = parseVideoUrl(field(formData, "url", 500));
+  if (!parsed) return { error: t.content.errors.link };
   if (!poster && parsed.platform === "youtube") {
     poster = await youtubeCover(parsed.youtubeId);
     ownCover = true;
@@ -324,9 +370,12 @@ export async function saveVideo(_state: ActionState, formData: FormData): Promis
     } as const;
     if (found) {
       if (found.posterMediaId !== cover.id) replaced = found.posterMediaId;
+      const previousVideo = found.videoMediaId;
+      delete found.videoMediaId;
       Object.assign(found, base);
       if (parsed.platform === "youtube") delete found.embedUrl;
       else delete found.youtubeId;
+      if (previousVideo) replacedVideo = previousVideo;
       return;
     }
     if (content.videos.length >= LIMITS.videos) return t.content.errors.full;
@@ -334,6 +383,7 @@ export async function saveVideo(_state: ActionState, formData: FormData): Promis
   });
   if (result?.error && (uploaded || ownCover)) await deleteMedia(cover.id).catch(() => undefined);
   if (replaced) await deleteMedia(replaced).catch(() => undefined);
+  if (replacedVideo) await deleteMedia(replacedVideo).catch(() => undefined);
   return result;
 }
 
@@ -349,12 +399,16 @@ export async function resetVideo(formData: FormData) {
 export async function deleteVideo(formData: FormData) {
   await guard();
   const id = field(formData, "id", 64);
-  let mediaId = "";
+  let posterId = "";
+  let videoId = "";
   await change((content) => {
-    mediaId = content.videos.find((item) => item.id === id)?.posterMediaId ?? "";
+    const found = content.videos.find((item) => item.id === id);
+    posterId = found?.posterMediaId ?? "";
+    videoId = found?.videoMediaId ?? "";
     content.videos = content.videos.filter((item) => item.id !== id);
   });
-  if (mediaId) await deleteMedia(mediaId).catch(() => undefined);
+  if (posterId) await deleteMedia(posterId).catch(() => undefined);
+  if (videoId) await deleteMedia(videoId).catch(() => undefined);
 }
 
 export async function saveGalleryLayout(

@@ -8,13 +8,15 @@ import { useStudioCopy } from "@/components/studio-lang";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { prepareImage, uploadImage, type UploadedImage } from "@/lib/client-image";
+import { posterFromVideo, uploadVideo, type UploadedVideo } from "@/lib/client-video";
 import { LIMITS, VIDEO_PAGE_IDS, parseVideoUrl, type LocalText } from "@/lib/live-content";
 import type { StorageMode } from "@/lib/pricing";
 
 export type AdminVideo = {
   id: string;
-  platform: "youtube" | "instagram";
+  platform: "youtube" | "instagram" | "file";
   url: string;
+  videoMediaId?: string;
   /** Where to load the cover picture from. */
   posterSrc: string;
   /** True for a film that ships with the site. Its link and cover cannot be changed or deleted here. */
@@ -44,17 +46,29 @@ function VideoForm({
 }) {
   const t = useStudioCopy();
   const [state, action, pending] = useActionState(saveVideo, null);
-  const [url, setUrl] = useState(video?.url ?? "");
+  const [source, setSource] = useState<"file" | "link">(
+    video ? (video.platform === "file" ? "file" : "link") : "file",
+  );
+  const [url, setUrl] = useState(video?.platform === "file" ? "" : (video?.url ?? ""));
   const [caption, setCaption] = useState<LocalText>(video?.caption ?? blank);
   const [pages, setPages] = useState<string[]>(video?.pages ?? ["portfolio"]);
   const [poster, setPoster] = useState<UploadedImage | null>(null);
+  const [film, setFilm] = useState<UploadedVideo | null>(
+    video?.platform === "file" && video.videoMediaId
+      ? { id: video.videoMediaId, contentType: "video/mp4" }
+      : null,
+  );
   const [preview, setPreview] = useState("");
   const [busy, setBusy] = useState(false);
   const [coverError, setCoverError] = useState(false);
+  const [filmError, setFilmError] = useState(false);
   const [hidden, setHidden] = useState(video?.hidden ?? false);
   const locked = video?.bundled === true;
   const known = parseVideoUrl(url);
   const shownCover = preview || (video ? video.posterSrc : "");
+  const canSave =
+    locked ||
+    (source === "file" ? Boolean(film && (poster || video?.posterSrc)) : Boolean(known));
 
   useEffect(() => {
     if (state?.ok) onSaved();
@@ -77,6 +91,25 @@ function VideoForm({
     }
   }
 
+  async function chooseFilm(file: File | undefined) {
+    if (!file) return;
+    setBusy(true);
+    setFilmError(false);
+    setCoverError(false);
+    try {
+      const still = await posterFromVideo(file);
+      const prepared = await prepareImage(new File([still], "poster.jpg", { type: "image/jpeg" }));
+      setPreview(URL.createObjectURL(prepared.blob));
+      const [cover, uploaded] = await Promise.all([uploadImage(prepared.blob), uploadVideo(file)]);
+      setPoster(cover);
+      setFilm(uploaded);
+    } catch {
+      setFilmError(true);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <form action={action} className="space-y-6">
       {video ? <input type="hidden" name="id" value={video.id} /> : null}
@@ -89,8 +122,72 @@ function VideoForm({
           <input type="hidden" name="posterHeight" value={poster.height} />
         </>
       ) : null}
+      {film ? <input type="hidden" name="videoMediaId" value={film.id} /> : null}
+      {!locked ? <input type="hidden" name="source" value={source} /> : null}
 
       {locked ? null : (
+        <fieldset className="grid gap-3">
+          <legend className="text-sm font-medium">{t.content.videos.source}</legend>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="radio"
+              name="sourceChoice"
+              checked={source === "file"}
+              onChange={() => setSource("file")}
+            />
+            {t.content.videos.sourceFile}
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="radio"
+              name="sourceChoice"
+              checked={source === "link"}
+              onChange={() => setSource("link")}
+            />
+            {t.content.videos.sourceLink}
+          </label>
+        </fieldset>
+      )}
+
+      {locked ? null : source === "file" ? (
+        <div>
+          <p className="text-sm font-medium">{t.content.videos.file}</p>
+          <p className="mt-1 text-sm text-ink/60">{t.content.videos.fileHelp}</p>
+          <label
+            className={`mt-3 inline-flex min-h-12 cursor-pointer items-center rounded-full border border-ink/20 px-5 text-base ${
+              disabled || busy ? "pointer-events-none opacity-50" : ""
+            }`}
+          >
+            {busy
+              ? t.content.videos.fileUploading
+              : film
+                ? t.content.videos.fileChange
+                : t.content.videos.fileChoose}
+            <input
+              type="file"
+              accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov"
+              className="sr-only"
+              disabled={disabled || busy}
+              onChange={(event) => {
+                const input = event.currentTarget;
+                void chooseFilm(input.files?.[0]).finally(() => {
+                  input.value = "";
+                });
+              }}
+            />
+          </label>
+          {film && !busy ? (
+            <p className="mt-2 text-sm text-moss" role="status">
+              {t.content.videos.fileReady}
+            </p>
+          ) : null}
+          {filmError ? (
+            <p className="mt-2 text-sm text-terracotta-ink" role="alert">
+              {t.content.errors.videoUpload}
+            </p>
+          ) : null}
+        </div>
+      ) : (
       <div>
         <Label htmlFor={`video-url-${video?.id ?? "new"}`}>{t.content.videos.link}</Label>
         <Input
@@ -98,7 +195,7 @@ function VideoForm({
           name="url"
           type="url"
           inputMode="url"
-          required
+          required={source === "link"}
           maxLength={500}
           value={url}
           placeholder="https://www.youtube.com/watch?v=…"
@@ -204,7 +301,7 @@ function VideoForm({
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button
           type="submit"
-          disabled={pending || disabled || busy || (!locked && !known)}
+          disabled={pending || disabled || busy || !canSave}
           className="w-full sm:w-auto"
         >
           {pending ? t.content.saving : video ? t.content.videos.save : t.content.videos.add}
@@ -307,14 +404,20 @@ export function VideosManager({ videos, mode }: { videos: AdminVideo[]; mode: St
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="font-medium break-words">{video.caption.en || video.defaultCaption || video.url}</p>
-                      <a
-                        href={video.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-1 block truncate text-sm text-ink/60 underline underline-offset-4"
-                      >
-                        {video.platform === "youtube" ? "YouTube" : "Instagram"} · {video.url}
-                      </a>
+                      {video.platform === "file" ? (
+                        <p className="mt-1 text-sm text-ink/60">
+                          {t.content.videos.sourceFile}
+                        </p>
+                      ) : (
+                        <a
+                          href={video.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-1 block truncate text-sm text-ink/60 underline underline-offset-4"
+                        >
+                          {video.platform === "youtube" ? "YouTube" : "Instagram"} · {video.url}
+                        </a>
+                      )}
                       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
                         {video.hidden ? (
                           <span className="rounded-full bg-ink px-3 py-1 text-sand">{t.content.hidden}</span>

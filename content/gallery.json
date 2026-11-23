@@ -3,8 +3,8 @@
     {
       "id": "cover-wide",
       "src": "/images/portfolio/cover-wide.jpg",
-      "width": 3840,
-      "height": 2161,
+      "width": 2800,
+      "height": 1576,
       "blur": "data:image/jpeg;base64,/9j/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wAARCAAHAAwDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAIF/8QAIhAAAQMDAwUAAAAAAAAAAAAAAgABAwQSIQUREzFBYWKx/8QAFAEBAAAAAAAAAAAAAAAAAAAABP/EABgRAAMBAQAAAAAAAAAAAAAAAAAiMRES/9oADAMBAAIRAxEAPwDP0pqXkMZI3JiDHr5+K5KOKQ74jIRLNu3R+6Ij8tRGrD//2Q==",
       "category": "portraits",
       "categories": [
@@ -20,15 +20,15 @@
       "alt": {
         "en": "Palm fronds silhouetted against the setting sun over water.",
         "es": "Frondas de palmera recortadas contra el sol poniente sobre el agua.",
-        "pt": "Frondes de palmeira em silhueta contra o sol poente sobre a \u00e1gua."
+        "pt": "Frondes de palmeira em silhueta contra o sol poente sobre a água."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "about-portrait",
       "src": "/images/portfolio/about-portrait.jpg",
-      "width": 2560,
-      "height": 3840,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQF/8QAHhAAAgEEAwEAAAAAAAAAAAAAAQIDAAURIhJxseH/xAAVAQEBAAAAAAAAAAAAAAAAAAABAv/EABcRAQEBAQAAAAAAAAAAAAAAAAEAEiH/2gAMAwEAAhEDEQA/AMq73ee7RB5W2iGqrgDv5Sori2k3EBAwVSqjAOTn2lRkey3/2Q==",
       "category": "portraits",
       "categories": [
@@ -51,8 +51,8 @@
     {
       "id": "about-working",
       "src": "/images/portfolio/about-working.jpg",
-      "width": 2560,
-      "height": 3840,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQG/8QAHhAAAgIBBQEAAAAAAAAAAAAAAQIAAwQREhMiUUH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABgRAAMBAQAAAAAAAAAAAAAAAAABAhEx/9oADAMBAAIRAxEAPwCXJynRl4qqzS3TcyAKGA7DX2Jm3zsg2tQbCaeQts+a+xDc5woVaf/Z",
       "category": "portraits",
       "categories": [
@@ -67,16 +67,16 @@
       "order": 2,
       "alt": {
         "en": "Agota in a red jacket holding a camera to her eye.",
-        "es": "Agota con una chaqueta roja y una c\u00e1mara junto al ojo.",
-        "pt": "Agota com um casaco vermelho e uma c\u00e2mara junto ao olho."
+        "es": "Agota con una chaqueta roja y una cámara junto al ojo.",
+        "pt": "Agota com um casaco vermelho e uma câmara junto ao olho."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "about-work-01",
       "src": "/images/portfolio/about-work-01.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gAQTGF2YzYxLjE5LjEwMQD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCe18SXaQxrcW6SNyAc4LelFYU0j/aEAYgDBAFFRqU1ax//2Q==",
       "category": "portraits",
       "categories": [
@@ -91,8 +91,8 @@
       "order": 3,
       "alt": {
         "en": "Agota by a riverbank in a red wrap with blue dreadlocks, holding a camera.",
-        "es": "Agota junto a un r\u00edo con un envoltorio rojo y dreadlocks azules, con una c\u00e1mara.",
-        "pt": "Agota junto a um rio com um envolt\u00f3rio vermelho e dreadlocks azuis, com uma c\u00e2mara."
+        "es": "Agota junto a un río con un envoltorio rojo y dreadlocks azules, con una cámara.",
+        "pt": "Agota junto a um rio com um envoltório vermelho e dreadlocks azuis, com uma câmara."
       },
       "caption": {
         "en": "Bliss Burn, Costa Rica",
@@ -181,8 +181,8 @@
     {
       "id": "festival-01",
       "src": "/images/portfolio/festival-01.jpg",
-      "width": 630,
-      "height": 939,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCpDdBbZVQE5jJPcj04oqq52KAvQsTiismkbLTY/9k=",
       "category": "festivals",
       "categories": [
@@ -194,17 +194,17 @@
       "placeholder": true,
       "order": 10,
       "alt": {
-        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Fotograf\u00eda de festival de Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Fotografía de festival de Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "festival-02",
       "src": "/images/portfolio/festival-02.jpg",
-      "width": 630,
-      "height": 931,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBdKvWtYFFy+VAAGBz+NFZS87M85YAk/hRWLijY/9k=",
       "category": "festivals",
       "categories": [
@@ -216,17 +216,17 @@
       "placeholder": true,
       "order": 11,
       "alt": {
-        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Fotograf\u00eda de festival de Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Fotografía de festival de Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "festival-03",
       "src": "/images/portfolio/festival-03.jpg",
-      "width": 620,
-      "height": 930,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwAjmEUJjWIK+QGZmzRSrGssYVgMZIwPTAormcYt6m6Vtj//2Q==",
       "category": "festivals",
       "categories": [
@@ -238,17 +238,17 @@
       "placeholder": true,
       "order": 12,
       "alt": {
-        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Fotograf\u00eda de festival de Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Fotografía de festival de Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "festival-04",
       "src": "/images/portfolio/festival-04.jpg",
-      "width": 1003,
-      "height": 669,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAIAAwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDOSGFREz7l9aW4kkklJiJ2AbR17UUVnua2tsf/2Q==",
       "category": "festivals",
       "categories": [
@@ -260,17 +260,17 @@
       "placeholder": true,
       "order": 13,
       "alt": {
-        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Fotograf\u00eda de festival de Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Fotografía de festival de Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "festival-05",
       "src": "/images/portfolio/festival-05.jpg",
-      "width": 1003,
-      "height": 669,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAIAAwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDIVI/NChRg9+4pbuSZrhth+VQFHPtRRUMvof/Z",
       "category": "festivals",
       "categories": [
@@ -282,17 +282,17 @@
       "placeholder": true,
       "order": 14,
       "alt": {
-        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Fotograf\u00eda de festival de Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Festival photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Fotografía de festival de Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Fotografia de festival de Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "dj-01",
       "src": "/images/portfolio/dj-01.jpg",
-      "width": 1034,
-      "height": 656,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAIAAwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDnoY5Bkqh45JNNuSDLlBtGBwKKKqyBuyR//9k=",
       "category": "djs",
       "categories": [
@@ -304,17 +304,17 @@
       "placeholder": true,
       "order": 20,
       "alt": {
-        "en": "DJ set photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Set de DJ fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Set de DJ fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "DJ set photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Set de DJ fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Set de DJ fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "dj-02",
       "src": "/images/portfolio/dj-02.jpg",
-      "width": 928,
-      "height": 1392,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDHcuYY7siNgpAC7cAgeooqk11KybCRtA24x2oqr2J5V2P/2Q==",
       "category": "djs",
       "categories": [
@@ -326,17 +326,17 @@
       "placeholder": true,
       "order": 21,
       "alt": {
-        "en": "DJ set photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Set de DJ fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Set de DJ fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "DJ set photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Set de DJ fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Set de DJ fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "dj-03",
       "src": "/images/portfolio/dj-03.jpg",
-      "width": 928,
-      "height": 1349,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDP1KCGNcRNvZuSwHWisZpGbqc0VCjZCb5nc//Z",
       "category": "djs",
       "categories": [
@@ -348,17 +348,17 @@
       "placeholder": true,
       "order": 22,
       "alt": {
-        "en": "DJ set photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Set de DJ fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Set de DJ fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "DJ set photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Set de DJ fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Set de DJ fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "dj-04",
       "src": "/images/portfolio/dj-04.jpg",
-      "width": 1033,
-      "height": 669,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAIAAwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDLS+lEToQo9wOf1qub2RDgswPtRRVRirXG5yva5//Z",
       "category": "djs",
       "categories": [
@@ -370,17 +370,17 @@
       "placeholder": true,
       "order": 23,
       "alt": {
-        "en": "DJ set photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Set de DJ fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Set de DJ fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "DJ set photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Set de DJ fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Set de DJ fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "places-01",
       "src": "/images/portfolio/places-01.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAMAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAX/xAAfEAABBQABBQAAAAAAAAAAAAABAAIDBCEREjEyQZH/xAAUAQEAAAAAAAAAAAAAAAAAAAAC/8QAFxEBAAMAAAAAAAAAAAAAAAAAAAERUf/aAAwDAQACEQMRAD8AV7VGaoYHhzd0uIaOd4+aikSSGMzdIHk3v6xEKjCf/9k=",
       "category": "places",
       "categories": [
@@ -397,16 +397,16 @@
       "order": 49,
       "alt": {
         "en": "Sage-green Range Rover on a gravel shore beside turquoise water, under palm fronds and festoon lights, with coffee and a bottle on a wooden ledge in front.",
-        "es": "Range Rover verde salvia en una orilla de grava junto al agua turquesa, bajo palmeras y luces de guirnalda, con caf\u00e9 y una botella sobre un saliente de madera en primer plano.",
-        "pt": "Range Rover verde-s\u00e1lvia numa margem de gravilha junto a \u00e1gua turquesa, sob palmeiras e luzes de fest\u00e3o, com caf\u00e9 e uma garrafa num parapeito de madeira em primeiro plano."
+        "es": "Range Rover verde salvia en una orilla de grava junto al agua turquesa, bajo palmeras y luces de guirnalda, con café y una botella sobre un saliente de madera en primer plano.",
+        "pt": "Range Rover verde-sálvia numa margem de gravilha junto a água turquesa, sob palmeiras e luzes de festão, com café e uma garrafa num parapeito de madeira em primeiro plano."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "gathering-01",
       "src": "/images/portfolio/gathering-01.jpg",
-      "width": 963,
-      "height": 707,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAJAAwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwA8zzGO51UnkFgSfzqvPI6yEBg3vimdqhf7xpWI5tD/2Q==",
       "category": "retreats",
       "categories": [
@@ -418,17 +418,17 @@
       "placeholder": true,
       "order": 30,
       "alt": {
-        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "gathering-02",
       "src": "/images/portfolio/gathering-02.jpg",
-      "width": 942,
-      "height": 1413,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDOhV1gkfGQeh9D3opkbE283sB/OioUblSaVj//2Q==",
       "category": "retreats",
       "categories": [
@@ -441,17 +441,17 @@
       "placeholder": true,
       "order": 31,
       "alt": {
-        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "gathering-03",
       "src": "/images/portfolio/gathering-03.jpg",
-      "width": 942,
-      "height": 1412,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCp8jRCQOGCgLuHf0yKKooxIYZI47UVnylOR//Z",
       "category": "retreats",
       "categories": [
@@ -464,17 +464,17 @@
       "placeholder": true,
       "order": 32,
       "alt": {
-        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "gathering-04",
       "src": "/images/portfolio/gathering-04.jpg",
-      "width": 962,
-      "height": 687,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAJAAwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCk+ptFrMu2V3jQgRovKnoCP581vS3Cl/llAGOhFcPD/r/zrqo/9Un0qGjWMmf/2Q==",
       "category": "retreats",
       "categories": [
@@ -486,17 +486,17 @@
       "placeholder": true,
       "order": 33,
       "alt": {
-        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "fire-04",
       "src": "/images/portfolio/fire-04.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAMAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAP/xAAfEAABAwMFAAAAAAAAAAAAAAABAAMRAgQFBiFBYrH/xAAVAQEBAAAAAAAAAAAAAAAAAAABAv/EABkRAAMAAwAAAAAAAAAAAAAAAAABEQIDIf/aAAwDAQACEQMRAD8Anmb5y6xQqcchxqOIJJ8RQ1BFrQWWxNHbcojBPtK2SqH/2Q==",
       "category": "fire",
       "categories": [
@@ -515,16 +515,16 @@
       "order": 39,
       "alt": {
         "en": "A fire performer in a gold chainmail veil and crescent headpiece, holding a flaming prop amid smoke and warm firelight.",
-        "es": "Una artista de fuego con velo de malla dorada y tocado de luna creciente, sosteniendo un accesorio en llamas entre humo y luz c\u00e1lida.",
-        "pt": "Uma artista de fogo com v\u00e9u de malha dourada e adere\u00e7o de lua crescente, com uma tocha em chamas entre fumo e luz quente."
+        "es": "Una artista de fuego con velo de malla dorada y tocado de luna creciente, sosteniendo un accesorio en llamas entre humo y luz cálida.",
+        "pt": "Uma artista de fogo com véu de malha dourada e adereço de lua crescente, com uma tocha em chamas entre fumo e luz quente."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "fire-01",
       "src": "/images/portfolio/fire-01.jpg",
-      "width": 932,
-      "height": 1398,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDDgt1aNCWVScg5/nRTYHK25IwSCTzRUu5Wh//Z",
       "category": "fire",
       "categories": [
@@ -536,17 +536,17 @@
       "placeholder": true,
       "order": 40,
       "alt": {
-        "en": "Fire performance photographed at night by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Espect\u00e1culo de fuego fotografiado de noche por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Espet\u00e1culo de fogo fotografado de noite por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Fire performance photographed at night by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Espectáculo de fuego fotografiado de noche por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Espetáculo de fogo fotografado de noite por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "fire-02",
       "src": "/images/portfolio/fire-02.jpg",
-      "width": 934,
-      "height": 1398,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDPaA6fbpc24y7fODuzhf8AGimvcyJoUSDBAPBIyRmikkXJ2P/Z",
       "category": "fire",
       "categories": [
@@ -558,17 +558,17 @@
       "placeholder": true,
       "order": 41,
       "alt": {
-        "en": "Fire performance photographed at night by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Espect\u00e1culo de fuego fotografiado de noche por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Espet\u00e1culo de fogo fotografado de noite por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Fire performance photographed at night by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Espectáculo de fuego fotografiado de noche por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Espetáculo de fogo fotografado de noite por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "fire-03",
       "src": "/images/portfolio/fire-03.jpg",
-      "width": 933,
-      "height": 1398,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCLUrlp9KKzO26PGMjkk+tFM10C1VY4RhSM889RRSimrlVLaH//2Q==",
       "category": "fire",
       "categories": [
@@ -580,17 +580,17 @@
       "placeholder": true,
       "order": 42,
       "alt": {
-        "en": "Fire performance photographed at night by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Espect\u00e1culo de fuego fotografiado de noche por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Espet\u00e1culo de fogo fotografado de noite por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Fire performance photographed at night by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Espectáculo de fuego fotografiado de noche por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Espetáculo de fogo fotografado de noite por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "community-01",
       "src": "/images/portfolio/community-01.jpg",
-      "width": 1026,
-      "height": 619,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAHAAwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCD7StliOJtihsklB8w/Cq7apNM5aObYucYI6+/Siis4pbstn//2Q==",
       "category": "retreats",
       "categories": [
@@ -602,17 +602,17 @@
       "placeholder": true,
       "order": 50,
       "alt": {
-        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "community-02",
       "src": "/images/portfolio/community-02.jpg",
-      "width": 925,
-      "height": 1271,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAkDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCpPHHbwJI+wM/8KrnA+tVfJh/57TflV6S0juL1EkLlVwAAcVc+xW/9w/8AfR/xrO5rY//Z",
       "category": "retreats",
       "categories": [
@@ -624,17 +624,17 @@
       "placeholder": true,
       "order": 51,
       "alt": {
-        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "community-03",
       "src": "/images/portfolio/community-03.jpg",
-      "width": 1027,
-      "height": 624,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAHAAwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCu2tpt2oCjA5xj9M1ZW/VsmZmLZ4wO1FFRyo0u7H//2Q==",
       "category": "retreats",
       "categories": [
@@ -646,17 +646,17 @@
       "placeholder": true,
       "order": 52,
       "alt": {
-        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "community-04",
       "src": "/images/portfolio/community-04.jpg",
-      "width": 925,
-      "height": 1271,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAkDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDLE222dFt9yg4L4P51W8j/AG6dHqd0IiAy/wDfIqr5sn940iro/9k=",
       "category": "retreats",
       "categories": [
@@ -668,17 +668,17 @@
       "placeholder": true,
       "order": 53,
       "alt": {
-        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "concert-01",
       "src": "/images/portfolio/concert-01.jpg",
-      "width": 980,
-      "height": 1393,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDnTbMtmHeJgzHKtjqKKZ58jNguSFHAzRTHa5//2Q==",
       "category": "concerts",
       "categories": [
@@ -691,17 +691,17 @@
       "placeholder": true,
       "order": 60,
       "alt": {
-        "en": "Live music photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Fotograf\u00eda de concierto de Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Fotografia de concerto de Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Live music photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Fotografía de concierto de Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Fotografia de concerto de Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "concert-02",
       "src": "/images/portfolio/concert-02.jpg",
-      "width": 928,
-      "height": 1392,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDD+zpBGjyOwLZBGzofzoqF5XNvsJyN+efpRQB//9k=",
       "category": "concerts",
       "categories": [
@@ -714,17 +714,17 @@
       "placeholder": true,
       "order": 61,
       "alt": {
-        "en": "Live music photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Fotograf\u00eda de concierto de Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Fotografia de concerto de Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Live music photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Fotografía de concierto de Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Fotografia de concerto de Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "concert-03",
       "src": "/images/portfolio/concert-03.jpg",
-      "width": 928,
-      "height": 1392,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDBjRYEV02uzLyOuD6UVCx2rGw6gUVpewtXsf/Z",
       "category": "concerts",
       "categories": [
@@ -737,17 +737,17 @@
       "placeholder": true,
       "order": 62,
       "alt": {
-        "en": "Live music photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Fotograf\u00eda de concierto de Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Fotografia de concerto de Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Live music photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Fotografía de concierto de Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Fotografia de concerto de Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "portrait-05",
       "src": "/images/portfolio/portrait-05.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAMAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAT/xAAgEAACAgEDBQAAAAAAAAAAAAABAgMRAAQFBhIhIkFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/xAAYEQACAwAAAAAAAAAAAAAAAAAAAQIRIf/aAAwDAQACEQMRAD8Ari5JrH3MdTRCNJGVYkvyFVZPw4yA2vKYKPZpCxHq8ZNMUso//9k=",
       "category": "portraits",
       "categories": [
@@ -765,16 +765,16 @@
       "order": 51,
       "alt": {
         "en": "A couple kissing in the ocean at golden hour: she wears long dark braids with gold cuffs and a leopard bikini, he is bald and bearded in matching leopard trunks.",
-        "es": "Una pareja bes\u00e1ndose en el oc\u00e9ano a la hora dorada: ella con trenzas oscuras largas, pu\u00f1os de oro y bikini de leopardo; \u00e9l calvo y con barba, en ba\u00f1ador de leopardo a juego.",
-        "pt": "Um casal a beijar-se no oceano \u00e0 hora dourada: ela com tran\u00e7as escuras longas, punhos de ouro e biqu\u00edni de leopardo; ele careca e de barba, com cal\u00e7\u00f5es de leopardo a condizer."
+        "es": "Una pareja besándose en el océano a la hora dorada: ella con trenzas oscuras largas, puños de oro y bikini de leopardo; él calvo y con barba, en bañador de leopardo a juego.",
+        "pt": "Um casal a beijar-se no oceano à hora dourada: ela com tranças escuras longas, punhos de ouro e biquíni de leopardo; ele careca e de barba, com calções de leopardo a condizer."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "portrait-01",
       "src": "/images/portfolio/portrait-01.jpg",
-      "width": 2561,
-      "height": 3840,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAIE/8QAIBAAAgICAAcAAAAAAAAAAAAAAQIABAMRBRITISIyUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQEAAwEAAAAAAAAAAAAAAAABABEhAv/aAAwDAQACEQMRAD8Avilq+bKg2WXGy+6IBqJqrZn6mbGx5wg15d97+xAGsYzzez//2Q==",
       "category": "portraits",
       "categories": [
@@ -791,16 +791,16 @@
       "order": 70,
       "alt": {
         "en": "Agota laughing on a stone terrace in a white crochet dress, ocean and cliffs behind her.",
-        "es": "Agota riendo en una terraza de piedra, vestido de crochet blanco, con el mar y los acantilados detr\u00e1s.",
-        "pt": "Agota a rir num terra\u00e7o de pedra, vestido de croch\u00e9 branco, com o mar e as fal\u00e9sias atr\u00e1s."
+        "es": "Agota riendo en una terraza de piedra, vestido de crochet blanco, con el mar y los acantilados detrás.",
+        "pt": "Agota a rir num terraço de pedra, vestido de croché branco, com o mar e as falésias atrás."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "portrait-02",
       "src": "/images/portfolio/portrait-02.jpg",
-      "width": 727,
-      "height": 1091,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBtzcC4ssFgSfmPsetFU2meW5dZMNuyScdaKxtY6Xq7n//Z",
       "category": "portraits",
       "categories": [
@@ -812,17 +812,17 @@
       "placeholder": true,
       "order": 71,
       "alt": {
-        "en": "Portrait photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Retrato de Agota Urbikaite. Marcador de posici\u00f3n en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Retrato de Agota Urbikaite. Marcador de posi\u00e7\u00e3o em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Portrait photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Retrato de Agota Urbikaite. Marcador de posición en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Retrato de Agota Urbikaite. Marcador de posição em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "portrait-03",
       "src": "/images/portfolio/portrait-03.jpg",
-      "width": 727,
-      "height": 1089,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwB19PdGcAzEIV+8qjiip4JGLSI3zBR/FzmiskzRq5//2Q==",
       "category": "portraits",
       "categories": [
@@ -835,17 +835,17 @@
       "placeholder": true,
       "order": 72,
       "alt": {
-        "en": "Portrait photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Retrato de Agota Urbikaite. Marcador de posici\u00f3n en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Retrato de Agota Urbikaite. Marcador de posi\u00e7\u00e3o em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Portrait photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Retrato de Agota Urbikaite. Marcador de posición en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Retrato de Agota Urbikaite. Marcador de posição em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "portrait-04",
       "src": "/images/portfolio/portrait-04.jpg",
-      "width": 727,
-      "height": 1091,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAMAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwC+muO12F8oLEHKnkEtxx+tFZYCjXkjCrtLnIxRUXGz/9k=",
       "category": "portraits",
       "categories": [
@@ -857,17 +857,17 @@
       "placeholder": true,
       "order": 73,
       "alt": {
-        "en": "Portrait photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Retrato de Agota Urbikaite. Marcador de posici\u00f3n en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Retrato de Agota Urbikaite. Marcador de posi\u00e7\u00e3o em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Portrait photograph by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Retrato de Agota Urbikaite. Marcador de posición en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Retrato de Agota Urbikaite. Marcador de posição em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
     {
       "id": "portrait-06",
       "src": "/images/portfolio/portrait-06.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQF/8QAFAEBAAAAAAAAAAAAAAAAAAAAAv/aAAwDAQACEAMQAAAAnZ4P/8QAHRAAAgEEAwAAAAAAAAAAAAAAAQIDAAQSMREhkf/aAAgBAQABPwCe4k5hRQuBBG6uGxjQjaDryv/EABcRAAMBAAAAAAAAAAAAAAAAAAABAiH/2gAIAQIBAT8AjUf/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADEmH/2gAIAQMBAT8AsXOeqDP/2Q==",
       "category": "portraits",
       "categories": [
@@ -885,8 +885,8 @@
       "order": 74,
       "alt": {
         "en": "A woman with wet dark hair and closed eyes stands in clear shallow water, wearing a terracotta top, a botanical tattoo along her arm, pine needles in the foreground.",
-        "es": "Una mujer con el pelo oscuro mojado y los ojos cerrados, de pie en agua clara y poco profunda, con un top terracota, un tatuaje bot\u00e1nico en el brazo y agujas de pino en primer plano.",
-        "pt": "Uma mulher com o cabelo escuro molhado e os olhos fechados, de p\u00e9 em \u00e1gua clara e pouco profunda, com um top terracota, uma tatuagem bot\u00e2nica no bra\u00e7o e agulhas de pinheiro em primeiro plano."
+        "es": "Una mujer con el pelo oscuro mojado y los ojos cerrados, de pie en agua clara y poco profunda, con un top terracota, un tatuaje botánico en el brazo y agujas de pino en primer plano.",
+        "pt": "Uma mulher com o cabelo escuro molhado e os olhos fechados, de pé em água clara e pouco profunda, com um top terracota, uma tatuagem botânica no braço e agulhas de pinheiro em primeiro plano."
       },
       "source": "Agota Urbikaite"
     },
@@ -913,15 +913,15 @@
       "alt": {
         "en": "A woman lies in dark shallow water holding white calla lilies, wearing a black lace top, her wet hair spread around her.",
         "es": "Una mujer tumbada en agua oscura y poco profunda sostiene calas blancas, con un top de encaje negro y el pelo mojado extendido a su alrededor.",
-        "pt": "Uma mulher deitada em \u00e1gua escura e pouco profunda segura copos-de-leite brancos, com um top de renda preto e o cabelo molhado espalhado \u00e0 volta."
+        "pt": "Uma mulher deitada em água escura e pouco profunda segura copos-de-leite brancos, com um top de renda preto e o cabelo molhado espalhado à volta."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "portrait-08",
       "src": "/images/portfolio/portrait-08.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAEF/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQP/2gAMAwEAAhADEAAAAMpU3//EAB0QAAIBBAMAAAAAAAAAAAAAAAECAwAEERIygaH/2gAIAQEAAT8AcI8Ak1xtnypwq22AOLADsV//xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oACAECAQE/AH//xAAVEQEBAAAAAAAAAAAAAAAAAAARAP/aAAgBAwEBPwBb/9k=",
       "category": "portraits",
       "categories": [
@@ -938,15 +938,15 @@
       "alt": {
         "en": "A blonde woman in an olive bodysuit stands in profile in a mossy forest, a tattoo sleeve visible along her arm.",
         "es": "Una mujer rubia con un body verde oliva de perfil en un bosque cubierto de musgo, con una manga de tatuajes en el brazo.",
-        "pt": "Uma mulher loura com um body verde-azeitona de perfil numa floresta coberta de musgo, com uma manga de tatuagens no bra\u00e7o."
+        "pt": "Uma mulher loura com um body verde-azeitona de perfil numa floresta coberta de musgo, com uma manga de tatuagens no braço."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "portrait-09",
       "src": "/images/portfolio/portrait-09.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQF/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQP/2gAMAwEAAhADEAAAAM5Ok//EAB0QAAICAQUAAAAAAAAAAAAAAAIRAAEhAwQVgqH/2gAIAQEAAT8ALRAts7ViQtrNUslDu+N7L2f/xAAXEQADAQAAAAAAAAAAAAAAAAAAASEx/9oACAECAQE/AFkP/8QAFREBAQAAAAAAAAAAAAAAAAAAAQD/2gAIAQMBAT8AW//Z",
       "category": "portraits",
       "categories": [
@@ -963,16 +963,16 @@
       "order": 77,
       "alt": {
         "en": "A blonde woman in an olive bodysuit lies on bright green moss and looks toward the camera, tattoos running along her arms.",
-        "es": "Una mujer rubia con un body verde oliva tumbada sobre musgo verde intenso, mirando hacia la c\u00e1mara, con tatuajes a lo largo de los brazos.",
-        "pt": "Uma mulher loura com um body verde-azeitona deitada sobre musgo verde vivo, a olhar para a c\u00e2mara, com tatuagens ao longo dos bra\u00e7os."
+        "es": "Una mujer rubia con un body verde oliva tumbada sobre musgo verde intenso, mirando hacia la cámara, con tatuajes a lo largo de los brazos.",
+        "pt": "Uma mulher loura com um body verde-azeitona deitada sobre musgo verde vivo, a olhar para a câmara, com tatuagens ao longo dos braços."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "elopement-01",
       "src": "/images/portfolio/elopement-01.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUG/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQL/2gAMAwEAAhADEAAAAKzPof/EABsQAQACAgMAAAAAAAAAAAAAAAIBAwASBAVC/9oACAEBAAE/AB3CV8HSCYsR19LLKTVzaqQlBUzn/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAERIf/aAAgBAgEBPwBXT//EABgRAAIDAAAAAAAAAAAAAAAAAAARAQJx/9oACAEDAQE/ALKFh//Z",
       "category": "elopements",
       "categories": [
@@ -991,8 +991,8 @@
       "order": 78,
       "alt": {
         "en": "A couple stands waist-deep in golden-hour waves, eyes closed and foreheads nearly touching: she faces forward in long dark braids with gold cuffs and a leopard bikini, he is bald and bearded in matching trunks.",
-        "es": "Una pareja metida hasta la cintura en las olas a la hora dorada, ojos cerrados y frentes a punto de tocarse: ella de frente, con trenzas oscuras largas, pu\u00f1os de oro y bikini de leopardo; \u00e9l calvo y con barba, en ba\u00f1ador de leopardo a juego.",
-        "pt": "Um casal metido at\u00e9 \u00e0 cintura nas ondas \u00e0 hora dourada, de olhos fechados e testas quase a tocar-se: ela de frente, com tran\u00e7as escuras longas, punhos de ouro e biqu\u00edni de leopardo; ele careca e de barba, com cal\u00e7\u00f5es de leopardo a condizer."
+        "es": "Una pareja metida hasta la cintura en las olas a la hora dorada, ojos cerrados y frentes a punto de tocarse: ella de frente, con trenzas oscuras largas, puños de oro y bikini de leopardo; él calvo y con barba, en bañador de leopardo a juego.",
+        "pt": "Um casal metido até à cintura nas ondas à hora dourada, de olhos fechados e testas quase a tocar-se: ela de frente, com tranças escuras longas, punhos de ouro e biquíni de leopardo; ele careca e de barba, com calções de leopardo a condizer."
       },
       "source": "Agota Urbikaite"
     },
@@ -1109,8 +1109,8 @@
     {
       "id": "closing-wide",
       "src": "/images/portfolio/closing-wide.jpg",
-      "width": 1600,
-      "height": 899,
+      "width": 32,
+      "height": 32,
       "blur": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABcQERQRDhcUEhQaGBcbIjklIh8fIkYyNSk5UkhXVVFIUE5bZoNvW2F8Yk5QcptzfIeLkpSSWG2grJ+OqoOPko3/2wBDARgaGiIeIkMlJUONXlBejY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY3/wAARCAAHAAwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCvezbViYE5Qc47Anmi1luWi3bxtJ+XdycUUVBvtG5//9k=",
       "category": "retreats",
       "categories": [
@@ -1122,9 +1122,9 @@
       "placeholder": true,
       "order": 100,
       "alt": {
-        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio \u2014 replace with the high-resolution original.",
-        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resoluci\u00f3n del portfolio 2026: sustituir por el original en alta.",
-        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolu\u00e7\u00e3o do portef\u00f3lio 2026 \u2014 substituir pelo original em alta resolu\u00e7\u00e3o."
+        "en": "Gathering in nature, photographed by Agota Urbikaite. Low-resolution placeholder from the 2026 portfolio — replace with the high-resolution original.",
+        "es": "Encuentro en la naturaleza, fotografiado por Agota Urbikaite. Marcador en baja resolución del portfolio 2026: sustituir por el original en alta.",
+        "pt": "Encontro na natureza, fotografado por Agota Urbikaite. Marcador em baixa resolução do portefólio 2026 — substituir pelo original em alta resolução."
       },
       "source": "Agota Urbikaite Portfolio 2026 PDF"
     },
@@ -1149,17 +1149,17 @@
       "placeholder": false,
       "order": 101,
       "alt": {
-        "en": "A woman with blonde and black micro-braids holds a neon-red fan that reads \u201cDADDY,\u201d wearing an olive bikini and a patterned wrap among tropical festival foliage.",
-        "es": "Una mujer con microtrenzas rubias y negras sostiene un abanico rojo ne\u00f3n que dice \u201cDADDY\u201d, con bikini verde oliva y un pareo estampado entre follaje tropical de festival.",
-        "pt": "Uma mulher com microtran\u00e7as loiras e pretas segura um leque vermelho n\u00e9on onde se l\u00ea \u201cDADDY\u201d, com biqu\u00edni verde-azeitona e um pareo estampado entre folhagem tropical de festival."
+        "en": "A woman with blonde and black micro-braids holds a neon-red fan that reads “DADDY,” wearing an olive bikini and a patterned wrap among tropical festival foliage.",
+        "es": "Una mujer con microtrenzas rubias y negras sostiene un abanico rojo neón que dice “DADDY”, con bikini verde oliva y un pareo estampado entre follaje tropical de festival.",
+        "pt": "Uma mulher com microtranças loiras e pretas segura um leque vermelho néon onde se lê “DADDY”, com biquíni verde-azeitona e um pareo estampado entre folhagem tropical de festival."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-02",
       "src": "/images/portfolio/experience-02.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAT/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/aAAwDAQACEAMQAAAAjQgp/8QAHRAAAQQCAwAAAAAAAAAAAAAAAQACAxEEMRIiMv/aAAgBAQABPwCLKDIGgEm4rva8dW65uX//xAAYEQADAQEAAAAAAAAAAAAAAAABAhEAIf/aAAgBAgEBPwAhb1bv/8QAGREAAQUAAAAAAAAAAAAAAAAAAAERITGR/9oACAEDAQE/AEimw//Z",
       "category": "festivals",
       "categories": [
@@ -1177,16 +1177,16 @@
       "order": 102,
       "alt": {
         "en": "A shirtless man in sunglasses dances in a brown fabric wrap pulled over his head, golden light on a festival crowd behind him.",
-        "es": "Un hombre sin camisa y con gafas de sol baila con una tela marr\u00f3n a modo de capucha, con luz dorada y p\u00fablico de festival detr\u00e1s.",
-        "pt": "Um homem sem camisa e de \u00f3culos de sol dan\u00e7a com um pano castanho sobre a cabe\u00e7a, com luz dourada e multid\u00e3o de festival atr\u00e1s."
+        "es": "Un hombre sin camisa y con gafas de sol baila con una tela marrón a modo de capucha, con luz dorada y público de festival detrás.",
+        "pt": "Um homem sem camisa e de óculos de sol dança com um pano castanho sobre a cabeça, com luz dourada e multidão de festival atrás."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-03",
       "src": "/images/portfolio/experience-03.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAH/xAAUAQEAAAAAAAAAAAAAAAAAAAAE/9oADAMBAAIQAxAAAAAoav/EABkQAAMBAQEAAAAAAAAAAAAAAAECAxEAEv/aAAgBAQABPwBKicjMSCtoDFm3lmlUCsBnojO//8QAGREAAgMBAAAAAAAAAAAAAAAAAQIAAyGR/9oACAECAQE/AGSsnRyf/8QAFxEBAAMAAAAAAAAAAAAAAAAAAgARMf/aAAgBAwEBPwAmsn//2Q==",
       "category": "festivals",
       "categories": [
@@ -1202,16 +1202,16 @@
       "order": 103,
       "alt": {
         "en": "A blonde woman with green highlights, yellow sunglasses, and a sequined red bikini holds a holographic umbrella at a tropical festival.",
-        "es": "Una mujer rubia con mechas verdes, gafas amarillas y bikini rojo de lentejuelas sostiene un paraguas hologr\u00e1fico en un festival tropical.",
-        "pt": "Uma mulher loura com madeixas verdes, \u00f3culos amarelos e biqu\u00edni vermelho de lantejoulas segura um chap\u00e9u-de-chuva hologr\u00e1fico num festival tropical."
+        "es": "Una mujer rubia con mechas verdes, gafas amarillas y bikini rojo de lentejuelas sostiene un paraguas holográfico en un festival tropical.",
+        "pt": "Uma mulher loura com madeixas verdes, óculos amarelos e biquíni vermelho de lantejoulas segura um chapéu-de-chuva holográfico num festival tropical."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-04",
       "src": "/images/portfolio/experience-04.jpg",
-      "width": 2400,
-      "height": 3546,
+      "width": 1895,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAIF/8QAFAEBAAAAAAAAAAAAAAAAAAAABP/aAAwDAQACEAMQAAAApiDI/8QAHRAAAgIBBQAAAAAAAAAAAAAAAREAAgQDBRMhQv/aAAgBAQABPwDbcw42lXnuwAEhB4fbsAzP/8QAFxEBAAMAAAAAAAAAAAAAAAAAAQACMf/aAAgBAgEBPwBoLs//xAAVEQEBAAAAAAAAAAAAAAAAAAAhAP/aAAgBAwEBPwBL/9k=",
       "category": "festivals",
       "categories": [
@@ -1228,7 +1228,7 @@
       "alt": {
         "en": "A blonde woman dances under fabric canopies with a patterned fan and a pink drink can, in a gold-embroidered bikini and wrap skirt.",
         "es": "Una mujer rubia baila bajo toldos de tela con un abanico estampado y una lata rosa, bikini bordado en oro y falda pareo.",
-        "pt": "Uma mulher loura dan\u00e7a sob toldos de tecido com um leque estampado e uma lata rosa, biqu\u00edni bordado a ouro e saia pareo."
+        "pt": "Uma mulher loura dança sob toldos de tecido com um leque estampado e uma lata rosa, biquíni bordado a ouro e saia pareo."
       },
       "source": "Agota Urbikaite"
     },
@@ -1252,8 +1252,8 @@
       "order": 105,
       "alt": {
         "en": "A man with a teal towel over his shoulders smiles at the camera on a beach at sunset, a crowd behind him.",
-        "es": "Un hombre con una toalla verde azulado sobre los hombros sonr\u00ede a la c\u00e1mara en la playa al atardecer, con gente detr\u00e1s.",
-        "pt": "Um homem com uma toalha verde-azulada sobre os ombros sorri para a c\u00e2mara na praia ao p\u00f4r do sol, com gente atr\u00e1s."
+        "es": "Un hombre con una toalla verde azulado sobre los hombros sonríe a la cámara en la playa al atardecer, con gente detrás.",
+        "pt": "Um homem com uma toalha verde-azulada sobre os ombros sorri para a câmara na praia ao pôr do sol, com gente atrás."
       },
       "source": "Agota Urbikaite"
     },
@@ -1274,16 +1274,16 @@
       "order": 106,
       "alt": {
         "en": "A man in a grey felt hat and orange aviator sunglasses stands in teal water holding a pink fan, with a playful smirk.",
-        "es": "Un hombre con sombrero de fieltro gris y gafas aviador naranjas, en agua verde azulada, sostiene un abanico rosa con una sonrisa p\u00edcara.",
-        "pt": "Um homem de chap\u00e9u de feltro cinzento e \u00f3culos aviador cor de laranja, em \u00e1gua verde-azulada, segura um leque rosa com um sorriso maroto."
+        "es": "Un hombre con sombrero de fieltro gris y gafas aviador naranjas, en agua verde azulada, sostiene un abanico rosa con una sonrisa pícara.",
+        "pt": "Um homem de chapéu de feltro cinzento e óculos aviador cor de laranja, em água verde-azulada, segura um leque rosa com um sorriso maroto."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-07",
       "src": "/images/portfolio/experience-07.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAME/8QAFQEBAQAAAAAAAAAAAAAAAAAAAwT/2gAMAwEAAhADEAAAAKMIaP/EAB8QAAIBAgcAAAAAAAAAAAAAAAECAwAxBBESEzIzcf/aAAgBAQABPwCDYMqtDYc8jY1h5GiSMIB26PQ1f//EABgRAAIDAAAAAAAAAAAAAAAAAAABAhEh/9oACAECAQE/AGo3qP/EABgRAAIDAAAAAAAAAAAAAAAAAAABERIi/9oACAEDAQE/AFaMs//Z",
       "category": "festivals",
       "categories": [
@@ -1300,16 +1300,16 @@
       "order": 107,
       "alt": {
         "en": "A close view of two clasped hands with festival wristbands and glitter nails, a handpan soft in the background.",
-        "es": "Un primer plano de dos manos entrelazadas con pulseras de festival y u\u00f1as con purpurina, un handpan desenfocado detr\u00e1s.",
-        "pt": "Um plano pr\u00f3ximo de duas m\u00e3os dadas com pulseiras de festival e unhas com purpurina, um handpan desfocado atr\u00e1s."
+        "es": "Un primer plano de dos manos entrelazadas con pulseras de festival y uñas con purpurina, un handpan desenfocado detrás.",
+        "pt": "Um plano próximo de duas mãos dadas com pulseiras de festival e unhas com purpurina, um handpan desfocado atrás."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-08",
       "src": "/images/portfolio/experience-08.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAIG/8QAFAEBAAAAAAAAAAAAAAAAAAAAAv/aAAwDAQACEAMQAAAAziBX/8QAGxABAQACAwEAAAAAAAAAAAAAAQIAAwQRQWH/2gAIAQEAAT8A0ceaiFoFUe/nuabZ00+iuf/EABcRAAMBAAAAAAAAAAAAAAAAAAABETH/2gAIAQIBAT8Adun/xAAYEQACAwAAAAAAAAAAAAAAAAAAAREhIv/aAAgBAwEBPwDMKj//2Q==",
       "category": "fire",
       "categories": [
@@ -1328,16 +1328,16 @@
       "order": 108,
       "alt": {
         "en": "A man in a skull headdress and red bandana holds a staff during a firelit night performance.",
-        "es": "Un hombre con tocado de calavera y pa\u00f1uelo rojo sostiene un bast\u00f3n en una performance nocturna a la luz del fuego.",
-        "pt": "Um homem com um adere\u00e7o de caveira e len\u00e7o vermelho segura um cajado numa performance noturna \u00e0 luz do fogo."
+        "es": "Un hombre con tocado de calavera y pañuelo rojo sostiene un bastón en una performance nocturna a la luz del fuego.",
+        "pt": "Um homem com um adereço de caveira e lenço vermelho segura um cajado numa performance noturna à luz do fogo."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-09",
       "src": "/images/portfolio/experience-09.jpg",
-      "width": 2400,
-      "height": 3598,
+      "width": 1868,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQF/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/2gAMAwEAAhADEAAAAIWak//EABsQAQABBQEAAAAAAAAAAAAAAAECAAMREiKx/9oACAEBAAE/AOG2XCZIIkdvMlQV2MpzX//EABcRAAMBAAAAAAAAAAAAAAAAAAABEmH/2gAIAQIBAT8AjWf/xAAXEQADAQAAAAAAAAAAAAAAAAAAAQJh/9oACAEDAQE/AHeH/9k=",
       "category": "retreats",
       "categories": [
@@ -1355,16 +1355,16 @@
       "order": 109,
       "alt": {
         "en": "Two tattooed arms reach into clear shallow water over river rocks, gold bracelets catching the light.",
-        "es": "Dos brazos tatuados se meten en agua clara y poco profunda sobre piedras de r\u00edo, con pulseras de oro.",
-        "pt": "Dois bra\u00e7os tatuados entram em \u00e1gua clara e pouco profunda sobre pedras de rio, com pulseiras de ouro."
+        "es": "Dos brazos tatuados se meten en agua clara y poco profunda sobre piedras de río, con pulseras de oro.",
+        "pt": "Dois braços tatuados entram em água clara e pouco profunda sobre pedras de rio, com pulseiras de ouro."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-10",
       "src": "/images/portfolio/experience-10.jpg",
-      "width": 2400,
-      "height": 3598,
+      "width": 1868,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAMF/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/2gAMAwEAAhADEAAAAMlNN//EABsQAAMAAgMAAAAAAAAAAAAAAAECAwARQVFh/9oACAEBAAE/AJK6yq2tjg9HJsTG/gGf/8QAGBEBAAMBAAAAAAAAAAAAAAAAAQACESH/2gAIAQIBAT8AKDvCf//EABgRAAMBAQAAAAAAAAAAAAAAAAECMQAS/9oACAEDAQE/AGYDmzf/2Q==",
       "category": "retreats",
       "categories": [
@@ -1381,8 +1381,8 @@
       "order": 110,
       "alt": {
         "en": "A woman in profile, eyes closed, holds a red torch ginger flower near her throat, river rocks behind her in golden hour light.",
-        "es": "Una mujer de perfil, ojos cerrados, sostiene una flor de jengibre roja junto a la garganta, con piedras de r\u00edo detr\u00e1s a la hora dorada.",
-        "pt": "Uma mulher de perfil, de olhos fechados, segura uma flor de gengibre vermelha junto \u00e0 garganta, com pedras de rio atr\u00e1s \u00e0 hora dourada."
+        "es": "Una mujer de perfil, ojos cerrados, sostiene una flor de jengibre roja junto a la garganta, con piedras de río detrás a la hora dorada.",
+        "pt": "Uma mulher de perfil, de olhos fechados, segura uma flor de gengibre vermelha junto à garganta, com pedras de rio atrás à hora dourada."
       },
       "source": "Agota Urbikaite"
     },
@@ -1408,16 +1408,16 @@
       "order": 111,
       "alt": {
         "en": "A DJ seen from behind, arms outstretched under a tent at night, a Denon deck in front and the crowd beyond.",
-        "es": "Un DJ de espaldas, brazos abiertos bajo una carpa de noche, con una mesa Denon delante y el p\u00fablico m\u00e1s all\u00e1.",
-        "pt": "Um DJ visto de costas, bra\u00e7os abertos sob uma tenda \u00e0 noite, com uma mesa Denon \u00e0 frente e o p\u00fablico al\u00e9m."
+        "es": "Un DJ de espaldas, brazos abiertos bajo una carpa de noche, con una mesa Denon delante y el público más allá.",
+        "pt": "Um DJ visto de costas, braços abertos sob uma tenda à noite, com uma mesa Denon à frente e o público além."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-12",
       "src": "/images/portfolio/experience-12.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUG/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQP/2gAMAwEAAhADEAAAAJTPpn//xAAbEAACAgMBAAAAAAAAAAAAAAABAgADBBESMf/aAAgBAQABPwDPpx0Gqm6Y6JaM7H0z/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAECEf/aAAgBAgEBPwCYxH//xAAYEQACAwAAAAAAAAAAAAAAAAABAgARMf/aAAgBAwEBPwBiWN5P/9k=",
       "category": "djs",
       "categories": [
@@ -1433,16 +1433,16 @@
       "order": 112,
       "alt": {
         "en": "A woman DJ with wavy hair and headphones stands behind a Pioneer deck, warm orange and red stage lights, a lace tank, tattoos along her arm.",
-        "es": "Una DJ con el pelo ondulado y auriculares detr\u00e1s de una mesa Pioneer, luces de escenario naranja y rojo, top de encaje y tatuajes en el brazo.",
-        "pt": "Uma DJ com cabelo ondulado e auscultadores atr\u00e1s de uma mesa Pioneer, luzes de palco laranja e vermelho, top de renda e tatuagens no bra\u00e7o."
+        "es": "Una DJ con el pelo ondulado y auriculares detrás de una mesa Pioneer, luces de escenario naranja y rojo, top de encaje y tatuajes en el brazo.",
+        "pt": "Uma DJ com cabelo ondulado e auscultadores atrás de uma mesa Pioneer, luzes de palco laranja e vermelho, top de renda e tatuagens no braço."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-13",
       "src": "/images/portfolio/experience-13.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAX/xAAUAQEAAAAAAAAAAAAAAAAAAAAC/9oADAMBAAIQAxAAAACAnkP/xAAcEAEAAgMAAwAAAAAAAAAAAAABAgMABBIRQVH/2gAIAQEAAT8Amza69pK3lAjz6j9Mdq6UOFOQI+M//8QAFxEBAAMAAAAAAAAAAAAAAAAAAQARQf/aAAgBAgEBPwC02f/EABgRAAIDAAAAAAAAAAAAAAAAAAABAhJC/9oACAEDAQE/AKQeT//Z",
       "category": "djs",
       "categories": [
@@ -1459,17 +1459,17 @@
       "placeholder": false,
       "order": 113,
       "alt": {
-        "en": "A blonde DJ in a white jacket that reads \u201cHAPPINESS / GOOD MOOD,\u201d wearing headphones at a Pioneer controller under cyan and amber stage lights.",
-        "es": "Una DJ rubia con una chaqueta blanca que dice \u201cHAPPINESS / GOOD MOOD\u201d y auriculares, en un controlador Pioneer bajo luces cian y \u00e1mbar.",
-        "pt": "Uma DJ loura com um casaco branco onde se l\u00ea \u201cHAPPINESS / GOOD MOOD\u201d e auscultadores, num controlador Pioneer sob luzes ciano e \u00e2mbar."
+        "en": "A blonde DJ in a white jacket that reads “HAPPINESS / GOOD MOOD,” wearing headphones at a Pioneer controller under cyan and amber stage lights.",
+        "es": "Una DJ rubia con una chaqueta blanca que dice “HAPPINESS / GOOD MOOD” y auriculares, en un controlador Pioneer bajo luces cian y ámbar.",
+        "pt": "Uma DJ loura com um casaco branco onde se lê “HAPPINESS / GOOD MOOD” e auscultadores, num controlador Pioneer sob luzes ciano e âmbar."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "experience-14",
       "src": "/images/portfolio/experience-14.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQG/8QAFAEBAAAAAAAAAAAAAAAAAAAAAv/aAAwDAQACEAMQAAAAyyYX/8QAGhAAAgMBAQAAAAAAAAAAAAAAAQIAEkEDIf/aAAgBAQABPwDmECBWrZ4unR6DP//EABcRAAMBAAAAAAAAAAAAAAAAAAACESH/2gAIAQIBAT8AZWyQ/8QAGBEAAgMAAAAAAAAAAAAAAAAAAAEDMVH/2gAIAQMBAT8AUmqj/9k=",
       "category": "djs",
       "categories": [
@@ -1484,9 +1484,9 @@
       "placeholder": false,
       "order": 114,
       "alt": {
-        "en": "A blonde DJ with bangs and black glasses, in a knotted tee that reads \u201cIMMORTAL,\u201d hands in her hair, red and orange light behind a Pioneer deck.",
-        "es": "Una DJ rubia con flequillo y gafas negras, camiseta anudada que dice \u201cIMMORTAL\u201d, las manos en el pelo, luz roja y naranja detr\u00e1s de una mesa Pioneer.",
-        "pt": "Uma DJ loura com franja e \u00f3culos pretos, t-shirt atada onde se l\u00ea \u201cIMMORTAL\u201d, m\u00e3os no cabelo, luz vermelha e laranja atr\u00e1s de uma mesa Pioneer."
+        "en": "A blonde DJ with bangs and black glasses, in a knotted tee that reads “IMMORTAL,” hands in her hair, red and orange light behind a Pioneer deck.",
+        "es": "Una DJ rubia con flequillo y gafas negras, camiseta anudada que dice “IMMORTAL”, las manos en el pelo, luz roja y naranja detrás de una mesa Pioneer.",
+        "pt": "Uma DJ loura com franja e óculos pretos, t-shirt atada onde se lê “IMMORTAL”, mãos no cabelo, luz vermelha e laranja atrás de uma mesa Pioneer."
       },
       "source": "Agota Urbikaite"
     },
@@ -1510,17 +1510,17 @@
       "placeholder": false,
       "order": 115,
       "alt": {
-        "en": "A platinum-blonde DJ with glasses at the CDJs and mixer, a woman in a \u201cGOD\u2019S FAVORITE\u201d tee beside her and a dancer behind, in blue, purple, and orange club light.",
-        "es": "Una DJ rubio platino con gafas en los CDJ y la mesa, a su lado una mujer con una camiseta que dice \u201cGOD\u2019S FAVORITE\u201d y una bailarina detr\u00e1s, con luces azules, moradas y naranjas.",
-        "pt": "Uma DJ loira platinada de \u00f3culos nos CDJs e na mesa, ao lado uma mulher com uma t-shirt onde se l\u00ea \u201cGOD\u2019S FAVORITE\u201d e uma bailarina atr\u00e1s, com luzes azuis, roxas e laranja."
+        "en": "A platinum-blonde DJ with glasses at the CDJs and mixer, a woman in a “GOD’S FAVORITE” tee beside her and a dancer behind, in blue, purple, and orange club light.",
+        "es": "Una DJ rubio platino con gafas en los CDJ y la mesa, a su lado una mujer con una camiseta que dice “GOD’S FAVORITE” y una bailarina detrás, con luces azules, moradas y naranjas.",
+        "pt": "Uma DJ loira platinada de óculos nos CDJs e na mesa, ao lado uma mulher com uma t-shirt onde se lê “GOD’S FAVORITE” e uma bailarina atrás, com luzes azuis, roxas e laranja."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "gathering-05",
       "src": "/images/portfolio/gathering-05.jpg",
-      "width": 2400,
-      "height": 3598,
+      "width": 1868,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQF/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/2gAMAwEAAhADEAAAAJWQmv/EABsQAAIDAAMAAAAAAAAAAAAAAAIDAAERMUFR/9oACAEBAAE/ABBSk3YNAh32tqKEeM6n/8QAFxEBAAMAAAAAAAAAAAAAAAAAAQASMf/aAAgBAgEBPwCo7P/EABgRAAIDAAAAAAAAAAAAAAAAAAABAhEx/9oACAEDAQE/AHOsP//Z",
       "category": "retreats",
       "categories": [
@@ -1534,7 +1534,7 @@
       "alt": {
         "en": "Cupped tattooed hands reach into a clear rocky stream, gold bangles and a wide turquoise cuff catching the light.",
         "es": "Unas manos tatuadas en cuenco se meten en un arroyo claro entre piedras, con pulseras de oro y un brazalete ancho de turquesa.",
-        "pt": "M\u00e3os tatuadas em concha entram num ribeiro claro entre pedras, com pulseiras de ouro e uma pulseira larga de turquesa."
+        "pt": "Mãos tatuadas em concha entram num ribeiro claro entre pedras, com pulseiras de ouro e uma pulseira larga de turquesa."
       },
       "source": "Agota Urbikaite"
     },
@@ -1560,16 +1560,16 @@
       "order": 201,
       "alt": {
         "en": "A woman in a gold chain-mail veil and crescent headdress dances in firelit smoke, tribal-fusion jewelry and tattoos along her arm.",
-        "es": "Una mujer con velo de malla dorada y tocado de luna creciente baila entre humo iluminado por el fuego, con joyer\u00eda tribal-fusi\u00f3n y tatuajes en el brazo.",
-        "pt": "Uma mulher com v\u00e9u de malha dourada e adere\u00e7o de lua crescente dan\u00e7a em fumo iluminado pelo fogo, com joalharia tribal-fusion e tatuagens no bra\u00e7o."
+        "es": "Una mujer con velo de malla dorada y tocado de luna creciente baila entre humo iluminado por el fuego, con joyería tribal-fusión y tatuajes en el brazo.",
+        "pt": "Uma mulher com véu de malha dourada e adereço de lua crescente dança em fumo iluminado pelo fogo, com joalharia tribal-fusion e tatuagens no braço."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "portrait-10",
       "src": "/images/portfolio/portrait-10.jpg",
-      "width": 2400,
-      "height": 3600,
+      "width": 1867,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAME/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQL/2gAMAwEAAhADEAAAAM6aH//EAB8QAAIABQUAAAAAAAAAAAAAAAECAAMEBTERIzNhkf/aAAgBAQABPwCmubylUFvcRIZTVDaThxp3H//EABYRAQEBAAAAAAAAAAAAAAAAAAEAMf/aAAgBAgEBPwAExv/EABURAQEAAAAAAAAAAAAAAAAAAAAB/9oACAEDAQE/AK//2Q==",
       "category": "portraits",
       "categories": [
@@ -1588,16 +1588,16 @@
       "order": 118,
       "alt": {
         "en": "A woman with curly hair and arms raised stands beside a river in a maroon striped set, a green forested hillside behind her.",
-        "es": "Una mujer con el pelo rizado y los brazos en alto junto a un r\u00edo, con un conjunto granate a rayas y una ladera verde arbolada detr\u00e1s.",
-        "pt": "Uma mulher com o cabelo encaracolado e os bra\u00e7os levantados junto a um rio, com um conjunto gren\u00e1 \u00e0s riscas e uma encosta verde arborizada atr\u00e1s."
+        "es": "Una mujer con el pelo rizado y los brazos en alto junto a un río, con un conjunto granate a rayas y una ladera verde arbolada detrás.",
+        "pt": "Uma mulher com o cabelo encaracolado e os braços levantados junto a um rio, com um conjunto grená às riscas e uma encosta verde arborizada atrás."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "dj-06",
       "src": "/images/portfolio/dj-06.jpg",
-      "width": 2133,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAMG/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAH/2gAMAwEAAhADEAAAAMWur//EABcQAQEBAQAAAAAAAAAAAAAAAAIBACP/2gAIAQEAAT8AQpMuS4nf/8QAFhEAAwAAAAAAAAAAAAAAAAAAAAIx/9oACAECAQE/AGp//8QAFhEBAQEAAAAAAAAAAAAAAAAAAQAh/9oACAEDAQE/ADS//9k=",
       "category": "djs",
       "categories": [
@@ -1616,8 +1616,8 @@
       "order": 120,
       "alt": {
         "en": "A young man sings into a microphone on a dark stage, a mic stand in the foreground and purple lettering behind him.",
-        "es": "Un joven canta al micr\u00f3fono en un escenario oscuro, con un pie de micro en primer plano y letras moradas detr\u00e1s.",
-        "pt": "Um jovem canta ao microfone num palco escuro, com um p\u00e9 de micro em primeiro plano e letras roxas atr\u00e1s."
+        "es": "Un joven canta al micrófono en un escenario oscuro, con un pie de micro en primer plano y letras moradas detrás.",
+        "pt": "Um jovem canta ao microfone num palco escuro, com um pé de micro em primeiro plano e letras roxas atrás."
       },
       "source": "Agota Urbikaite"
     },
@@ -1645,7 +1645,7 @@
       "alt": {
         "en": "Close-up of hands on a DJ controller, orange performance pads lit, blue and red club light, one hand lifted above the mixer.",
         "es": "Primer plano de unas manos en un controlador de DJ, con pads naranjas encendidos y luz de club azul y roja; una mano se levanta sobre la mesa.",
-        "pt": "Grande plano de m\u00e3os num controlador de DJ, com pads laranja acesos e luz de clube azul e vermelha; uma m\u00e3o ergue-se sobre a mesa."
+        "pt": "Grande plano de mãos num controlador de DJ, com pads laranja acesos e luz de clube azul e vermelha; uma mão ergue-se sobre a mesa."
       },
       "source": "Agota Urbikaite"
     },
@@ -1673,8 +1673,8 @@
       "order": 122,
       "alt": {
         "en": "A blonde woman lies on the grass laughing as she hugs a large black-and-tan dog, a wooden barrel behind them in the sun.",
-        "es": "Una mujer rubia tumbada en el c\u00e9sped r\u00ede abrazada a un perro grande negro y canela, con un barril de madera detr\u00e1s, al sol.",
-        "pt": "Uma mulher loura deitada na relva ri abra\u00e7ada a um c\u00e3o grande preto e castanho, com um barril de madeira atr\u00e1s, ao sol."
+        "es": "Una mujer rubia tumbada en el césped ríe abrazada a un perro grande negro y canela, con un barril de madera detrás, al sol.",
+        "pt": "Uma mulher loura deitada na relva ri abraçada a um cão grande preto e castanho, com um barril de madeira atrás, ao sol."
       },
       "source": "Agota Urbikaite"
     },
@@ -1703,15 +1703,15 @@
       "alt": {
         "en": "A woman lies on a patterned blanket with her eyes closed and a quartz crystal on her forehead, arms open, a green wristband and a turquoise pendant.",
         "es": "Una mujer tumbada sobre una manta de dibujos, ojos cerrados y un cristal de cuarzo en la frente, brazos abiertos, pulsera verde y colgante de turquesa.",
-        "pt": "Uma mulher deitada numa manta com padr\u00f5es, de olhos fechados e um cristal de quartzo na testa, bra\u00e7os abertos, pulseira verde e pendente de turquesa."
+        "pt": "Uma mulher deitada numa manta com padrões, de olhos fechados e um cristal de quartzo na testa, braços abertos, pulseira verde e pendente de turquesa."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "dj-08",
       "src": "/images/portfolio/dj-08.jpg",
-      "width": 2132,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQG/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAL/2gAMAwEAAhADEAAAAM8hW//EABoQAAMAAwEAAAAAAAAAAAAAAAECAwAREgT/2gAIAQEAAT8A8tmnCjpXhmHJxLPKQ40CdgnWf//EABgRAAIDAAAAAAAAAAAAAAAAAAABEUFR/9oACAECAQE/AHU4f//EABoRAAICAwAAAAAAAAAAAAAAAAEDAFECERL/2gAIAQMBAT8AW3MdauzP/9k=",
       "category": "djs",
       "categories": [
@@ -1730,16 +1730,16 @@
       "order": 124,
       "alt": {
         "en": "A blonde DJ adjusts her headphones behind a crystalline booth in teal light, with a psychedelic backdrop and club lasers.",
-        "es": "Una DJ rubia se ajusta los auriculares detr\u00e1s de una cabina cristalina con luz verde azulada, fondo psicod\u00e9lico y l\u00e1seres de club.",
-        "pt": "Uma DJ loura ajusta os auscultadores atr\u00e1s de uma cabine cristalina com luz verde-azulada, fundo psicad\u00e9lico e lasers de clube."
+        "es": "Una DJ rubia se ajusta los auriculares detrás de una cabina cristalina con luz verde azulada, fondo psicodélico y láseres de club.",
+        "pt": "Uma DJ loura ajusta os auscultadores atrás de uma cabine cristalina com luz verde-azulada, fundo psicadélico e lasers de clube."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "fire-06",
       "src": "/images/portfolio/fire-06.jpg",
-      "width": 2133,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAX/xAAVAQEBAAAAAAAAAAAAAAAAAAABAv/aAAwDAQACEAMQAAAAjgv/xAAdEAACAgEFAAAAAAAAAAAAAAABAgADIQQFERQy/9oACAEBAAE/AFo6VNWqVS5PDgYICQ3umz1rj3P/xAAXEQADAQAAAAAAAAAAAAAAAAAAASFB/9oACAECAQE/AEnbp//EABgRAAIDAAAAAAAAAAAAAAAAAAACEiFx/9oACAEDAQE/AGqOH//Z",
       "category": "fire",
       "categories": [
@@ -1758,16 +1758,16 @@
       "order": 125,
       "alt": {
         "en": "A tattooed fire dancer at night, one arm raised, a long-exposure streak of white-orange flame crossing her torso, smoke behind her.",
-        "es": "Una bailarina de fuego tatuada de noche, un brazo en alto, una estela de larga exposici\u00f3n de llama blanca y naranja cruzando el torso, humo detr\u00e1s.",
-        "pt": "Uma bailarina de fogo tatuada de noite, um bra\u00e7o erguido, um rasto de longa exposi\u00e7\u00e3o de chama branca e laranja a cruzar o tronco, fumo atr\u00e1s."
+        "es": "Una bailarina de fuego tatuada de noche, un brazo en alto, una estela de larga exposición de llama blanca y naranja cruzando el torso, humo detrás.",
+        "pt": "Uma bailarina de fogo tatuada de noite, um braço erguido, um rasto de longa exposição de chama branca e laranja a cruzar o tronco, fumo atrás."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "fire-07",
       "src": "/images/portfolio/fire-07.jpg",
-      "width": 2132,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQF/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAL/2gAMAwEAAhADEAAAAMxeX//EAB8QAAIBAwUBAAAAAAAAAAAAAAECAwAEEQUSISIxMv/aAAgBAQABPwCzciI7LVZGk6t6fmtDVZbVsjlZxhq//8QAFhEBAQEAAAAAAAAAAAAAAAAAARIA/9oACAECAQE/AJpXf//EABYRAQEBAAAAAAAAAAAAAAAAABIAIf/aAAgBAwEBPwBHL//Z",
       "category": "fire",
       "categories": [
@@ -1787,7 +1787,7 @@
       "alt": {
         "en": "A fire performer with an ornate metal headpiece and neck tattoos, swirling orange flames around her under teal stage lights.",
         "es": "Una artista de fuego con un tocado de metal ornamentado y tatuajes en el cuello, llamas naranjas en espiral y luces de escenario verde azulado.",
-        "pt": "Uma artista de fogo com um adere\u00e7o de metal ornamentado e tatuagens no pesco\u00e7o, chamas laranja em espiral e luzes de palco verde-azuladas."
+        "pt": "Uma artista de fogo com um adereço de metal ornamentado e tatuagens no pescoço, chamas laranja em espiral e luzes de palco verde-azuladas."
       },
       "source": "Agota Urbikaite"
     },
@@ -1814,16 +1814,16 @@
       "order": 127,
       "alt": {
         "en": "A fire performer with a wire headpiece raises a flaming prop, teal stage lights and smoke around her, a coin belt at her waist.",
-        "es": "Una artista de fuego con un tocado de alambre levanta un accesorio en llamas, luces de escenario verde azulado y humo, cintur\u00f3n de monedas en la cintura.",
-        "pt": "Uma artista de fogo com um adere\u00e7o de arame ergue um prop em chamas, luzes de palco verde-azuladas e fumo, cinto de moedas na cintura."
+        "es": "Una artista de fuego con un tocado de alambre levanta un accesorio en llamas, luces de escenario verde azulado y humo, cinturón de monedas en la cintura.",
+        "pt": "Uma artista de fogo com um adereço de arame ergue um prop em chamas, luzes de palco verde-azuladas e fumo, cinto de moedas na cintura."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "festival-06",
       "src": "/images/portfolio/festival-06.jpg",
-      "width": 2133,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAME/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/2gAMAwEAAhADEAAAAMSQU//EABwQAAIBBQEAAAAAAAAAAAAAAAECAwAEERIiYf/aAAgBAQABPwCS3KvyeY9UPpYE1OWFwihjq0q5Ff/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQIBAT8Af//EABYRAAMAAAAAAAAAAAAAAAAAAAABMf/aAAgBAwEBPwB0/9k=",
       "category": "festivals",
       "categories": [
@@ -1843,15 +1843,15 @@
       "alt": {
         "en": "Close-up of a woman at an outdoor gathering holding a large frame drum and a beater, eyes closed, in a blue-green patterned top.",
         "es": "Primer plano de una mujer en un encuentro al aire libre con un gran pandero y una baqueta, ojos cerrados, top de dibujos azul y verde.",
-        "pt": "Grande plano de uma mulher num encontro ao ar livre com um grande tambor de aro e uma baqueta, de olhos fechados, top com padr\u00f5es azul e verde."
+        "pt": "Grande plano de uma mulher num encontro ao ar livre com um grande tambor de aro e uma baqueta, de olhos fechados, top com padrões azul e verde."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "gathering-08",
       "src": "/images/portfolio/gathering-08.jpg",
-      "width": 2133,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQF/8QAFAEBAAAAAAAAAAAAAAAAAAAAA//aAAwDAQACEAMQAAAAzVAk/8QAHhAAAgEDBQAAAAAAAAAAAAAAARECAAMEEiIyQZH/2gAIAQEAAT8AtYJBi0e9NOVvjI7YoeOv/8QAGREAAQUAAAAAAAAAAAAAAAAAAAECERJB/9oACAECAQE/AFbbYP/EABcRAQADAAAAAAAAAAAAAAAAABEAEkH/2gAIAQMBAT8AaYz/2Q==",
       "category": "retreats",
       "categories": [
@@ -1871,16 +1871,16 @@
       "order": 129,
       "alt": {
         "en": "A bearded man stands in a river at golden hour with both arms outstretched, wearing a dark tank top.",
-        "es": "Un hombre con barba de pie en un r\u00edo a la hora dorada, los dos brazos abiertos, con una camiseta de tirantes oscura.",
-        "pt": "Um homem de barba de p\u00e9 num rio \u00e0 hora dourada, os dois bra\u00e7os abertos, com uma camisola de al\u00e7as escura."
+        "es": "Un hombre con barba de pie en un río a la hora dorada, los dos brazos abiertos, con una camiseta de tirantes oscura.",
+        "pt": "Um homem de barba de pé num rio à hora dourada, os dois braços abertos, com uma camisola de alças escura."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "gathering-09",
       "src": "/images/portfolio/gathering-09.jpg",
-      "width": 2133,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAME/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/2gAMAwEAAhADEAAAALsib//EAB4QAAIBAwUAAAAAAAAAAAAAAAECAwAREwQSIzFh/9oACAEBAAE/ADqMTyiCPjCDaT5TRrgTslb2Nf/EABcRAQEBAQAAAAAAAAAAAAAAAAECAAP/2gAIAQIBAT8AvhKjv//EABgRAQADAQAAAAAAAAAAAAAAAAEAAgMx/9oACAEDAQE/AKbIIB2f/9k=",
       "category": "retreats",
       "categories": [
@@ -1900,16 +1900,16 @@
       "order": 130,
       "alt": {
         "en": "A musician outdoors plays a wooden flute beside a djembe, a maraca in the other hand, smoke drifting past.",
-        "es": "Un m\u00fasico al aire libre toca una flauta de madera junto a un djembe, con una maraca en la otra mano y humo alrededor.",
-        "pt": "Um m\u00fasico ao ar livre toca uma flauta de madeira ao lado de um djembe, com uma maraca na outra m\u00e3o e fumo \u00e0 volta."
+        "es": "Un músico al aire libre toca una flauta de madera junto a un djembe, con una maraca en la otra mano y humo alrededor.",
+        "pt": "Um músico ao ar livre toca uma flauta de madeira ao lado de um djembe, com uma maraca na outra mão e fumo à volta."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "gathering-10",
       "src": "/images/portfolio/gathering-10.jpg",
-      "width": 2133,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAT/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//aAAwDAQACEAMQAAAAiVhX/8QAHxAAAgAFBQAAAAAAAAAAAAAAAQIAAwQREyEiQYGx/9oACAEBAAE/AKdXFO5w8ENf2Jjthp1vo43dmP/EABURAQEAAAAAAAAAAAAAAAAAAAAS/9oACAECAQE/AKf/xAAWEQADAAAAAAAAAAAAAAAAAAAAERL/2gAIAQMBAT8Aln//2Q==",
       "category": "retreats",
       "categories": [
@@ -1929,16 +1929,16 @@
       "order": 131,
       "alt": {
         "en": "A woman leans back in an ecstatic dance, holding a large frame drum, wearing a bright patterned top and a coin belt.",
-        "es": "Una mujer se inclina hacia atr\u00e1s en una danza ext\u00e1tica, con un gran pandero, un top de dibujos vivos y un cintur\u00f3n de monedas.",
-        "pt": "Uma mulher inclina-se para tr\u00e1s numa dan\u00e7a ext\u00e1tica, com um grande tambor de aro, um top de padr\u00f5es vivos e um cinto de moedas."
+        "es": "Una mujer se inclina hacia atrás en una danza extática, con un gran pandero, un top de dibujos vivos y un cinturón de monedas.",
+        "pt": "Uma mulher inclina-se para trás numa dança extática, com um grande tambor de aro, um top de padrões vivos e um cinto de moedas."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "gathering-11",
       "src": "/images/portfolio/gathering-11.jpg",
-      "width": 2133,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAIE/8QAFAEBAAAAAAAAAAAAAAAAAAAAA//aAAwDAQACEAMQAAAAwKE3/8QAHRAAAgEEAwAAAAAAAAAAAAAAAQIDAAQREhMhof/aAAgBAQABPwBYV2dZMniQMND2Wooq3M0qjDCMt5X/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAgBAgEBPwCv/8QAFREBAQAAAAAAAAAAAAAAAAAAAAH/2gAIAQMBAT8Aj//Z",
       "category": "retreats",
       "categories": [
@@ -1966,8 +1966,8 @@
     {
       "id": "gathering-12",
       "src": "/images/portfolio/gathering-12.jpg",
-      "width": 3200,
-      "height": 2133,
+      "width": 2800,
+      "height": 1866,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAFAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAT/xAAVAQEBAAAAAAAAAAAAAAAAAAABAv/aAAwDAQACEAMQAAAAnBH/xAAZEAACAwEAAAAAAAAAAAAAAAACEQADElH/2gAIAQEAAT8AO8sm2+uf/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAgBAgEBPwB//8QAFhEBAQEAAAAAAAAAAAAAAAAAAQAh/9oACAEDAQE/ADQv/9k=",
       "category": "retreats",
       "categories": [
@@ -1988,15 +1988,15 @@
       "alt": {
         "en": "A man in a grey bucket hat and orange-lensed sunglasses stands chest-deep in teal water, holding a pink fan.",
         "es": "Un hombre con un sombrero de cubo gris y gafas de lentes naranjas, metido hasta el pecho en agua verde azulada, con un abanico rosa.",
-        "pt": "Um homem com um chap\u00e9u de balde cinzento e \u00f3culos de lentes laranja, metido at\u00e9 ao peito em \u00e1gua verde-azulada, com um leque rosa."
+        "pt": "Um homem com um chapéu de balde cinzento e óculos de lentes laranja, metido até ao peito em água verde-azulada, com um leque rosa."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "festival-07",
       "src": "/images/portfolio/festival-07.jpg",
-      "width": 2133,
-      "height": 3200,
+      "width": 1866,
+      "height": 2800,
       "blur": "data:image/jpeg;base64,/9j/2wBDABISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////2wBDARISEhITEhQWFhQcHhseHCkmIiImKT4sMCwwLD5eO0U7O0U7XlNlUk1SZVOWdmhodpatkYqRrdK8vNL/+///////wgARCAAMAAgDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAQF/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQL/2gAMAwEAAhADEAAAAMVEL//EAB0QAAEEAgMAAAAAAAAAAAAAAAEAAgMTESEEFTH/2gAIAQEAAT8AL8wFtB9xZtdhyzGWW6IX/8QAFREBAQAAAAAAAAAAAAAAAAAAABH/2gAIAQIBAT8Aj//EABcRAAMBAAAAAAAAAAAAAAAAAAACEVH/2gAIAQMBAT8Aq4f/2Q==",
       "category": "festivals",
       "categories": [
@@ -2016,15 +2016,15 @@
       "alt": {
         "en": "A man in a straw hat and animal-print shirt leans on a wooden booth window framed by glowing blue moon phases and purple curtains, fairy lights below.",
         "es": "Un hombre con sombrero de paja y camisa de estampado animal se apoya en la ventana de una caseta de madera enmarcada por fases lunares azules y cortinas moradas, con luces de hadas debajo.",
-        "pt": "Um homem com chap\u00e9u de palha e camisa de estampa animal apoia-se na janela de uma cabine de madeira emoldurada por fases da lua azuis e cortinas roxas, com luzes de fada por baixo."
+        "pt": "Um homem com chapéu de palha e camisa de estampa animal apoia-se na janela de uma cabine de madeira emoldurada por fases da lua azuis e cortinas roxas, com luzes de fada por baixo."
       },
       "source": "Agota Urbikaite"
     },
     {
       "id": "portrait-11",
       "src": "/images/portfolio/portrait-11.jpg",
-      "width": 3200,
-      "height": 2133,
+      "width": 2800,
+      "height": 1866,
       "blur": "data:image/jpeg;base64,/9j/2wBDABIMDRANCxIQDhAUExIVGywdGxgYGzYnKSAsQDlEQz85Pj1HUGZXR0thTT0+WXlaYWltcnNyRVV9hnxvhWZwcm7/2wBDARMUFBsXGzQdHTRuST5Jbm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm7/wgARCAAFAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAX/xAAUAQEAAAAAAAAAAAAAAAAAAAAB/9oADAMBAAIQAxAAAAGaE//EABYQAAMAAAAAAAAAAAAAAAAAAAECIv/aAAgBAQABBQINP//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQMBAT8Bf//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQIBAT8Bf//EABUQAQEAAAAAAAAAAAAAAAAAAAAx/9oACAEBAAY/Ao//xAAWEAEBAQAAAAAAAAAAAAAAAAABEQD/2gAIAQEAAT8hqqFu/9oADAMBAAIAAwAAABAD/8QAFREBAQAAAAAAAAAAAAAAAAAAAAH/2gAIAQMBAT8Qr//EABURAQEAAAAAAAAAAAAAAAAAAAAB/9oACAECAQE/EI//xAAYEAACAwAAAAAAAAAAAAAAAAAAAREhUf/aAAgBAQABPxBUpCW8P//Z",
       "category": "portraits",
       "categories": [
@@ -2042,7 +2042,7 @@
       "alt": {
         "en": "A woman with a long braid looks over her shoulder in dark bubbling water at night, wearing an olive bikini top.",
         "es": "Una mujer con una trenza larga mira por encima del hombro en agua oscura y burbujeante de noche, con un top de bikini verde oliva.",
-        "pt": "Uma mulher com uma tran\u00e7a longa olha por cima do ombro em \u00e1gua escura e borbulhante \u00e0 noite, com um top de biqu\u00edni verde-azeitona."
+        "pt": "Uma mulher com uma trança longa olha por cima do ombro em água escura e borbulhante à noite, com um top de biquíni verde-azeitona."
       },
       "source": "Agota Urbikaite"
     },
@@ -2067,8 +2067,8 @@
       "order": 142,
       "alt": {
         "en": "A person seen from behind in a grey bucket hat trimmed with green leaves and purple and pink wildflowers, wearing a patterned blue shirt, sunbeams through misty trees.",
-        "es": "Una persona de espaldas con un sombrero de cubo gris adornado con hojas verdes y flores silvestres moradas y rosas, camisa azul de dibujos, y rayos de sol entre \u00e1rboles con niebla.",
-        "pt": "Uma pessoa vista de costas com um chap\u00e9u de balde cinzento enfeitado com folhas verdes e flores silvestres roxas e rosa, camisa azul com padr\u00f5es, e raios de sol entre \u00e1rvores enevoadas."
+        "es": "Una persona de espaldas con un sombrero de cubo gris adornado con hojas verdes y flores silvestres moradas y rosas, camisa azul de dibujos, y rayos de sol entre árboles con niebla.",
+        "pt": "Uma pessoa vista de costas com um chapéu de balde cinzento enfeitado com folhas verdes e flores silvestres roxas e rosa, camisa azul com padrões, e raios de sol entre árvores enevoadas."
       },
       "source": "Agota Urbikaite"
     },
@@ -2092,9 +2092,9 @@
       "placeholder": false,
       "order": 138,
       "alt": {
-        "en": "A young woman in a mustard-yellow bikini sits on dark ocean rocks at golden hour, a tan baseball cap worn backwards that reads \u201cIsland Slack,\u201d a puka shell necklace and a tattoo on her arm.",
-        "es": "Una mujer joven con bikini mostaza sentada en rocas oscuras del oc\u00e9ano a la hora dorada, gorra de b\u00e9isbol beige al rev\u00e9s donde se lee \u201cIsland Slack\u201d, collar de conchas puka y un tatuaje en el brazo.",
-        "pt": "Uma jovem com biqu\u00edni mostarda sentada em rochas escuras do oceano \u00e0 hora dourada, bon\u00e9 de basebol bege ao contr\u00e1rio onde se l\u00ea \u201cIsland Slack\u201d, colar de conchas puka e uma tatuagem no bra\u00e7o."
+        "en": "A young woman in a mustard-yellow bikini sits on dark ocean rocks at golden hour, a tan baseball cap worn backwards that reads “Island Slack,” a puka shell necklace and a tattoo on her arm.",
+        "es": "Una mujer joven con bikini mostaza sentada en rocas oscuras del océano a la hora dorada, gorra de béisbol beige al revés donde se lee “Island Slack”, collar de conchas puka y un tatuaje en el brazo.",
+        "pt": "Uma jovem com biquíni mostarda sentada em rochas escuras do oceano à hora dourada, boné de basebol bege ao contrário onde se lê “Island Slack”, colar de conchas puka e uma tatuagem no braço."
       },
       "source": "Agota Urbikaite"
     },
@@ -2120,9 +2120,9 @@
       "placeholder": false,
       "order": 139,
       "alt": {
-        "en": "A man with dark wavy hair, a mustache and goatee, and yellow-tint sunglasses stands at an outdoor DJ booth in a green Batman sleeveless tee, shot through the crowd, a wooden \u201cREC\u201d sign glowing blue.",
-        "es": "Un hombre con el pelo oscuro ondulado, bigote y perilla, y gafas de lentes amarillos, en una cabina de DJ al aire libre con una camiseta sin mangas verde de Batman, visto a trav\u00e9s del p\u00fablico, un cartel de madera \u201cREC\u201d con luz azul.",
-        "pt": "Um homem com cabelo escuro ondulado, bigode e pera, e \u00f3culos de lentes amarelas, numa cabine de DJ ao ar livre com uma t-shirt sem mangas verde do Batman, visto atrav\u00e9s da multid\u00e3o, um letreiro de madeira \u201cREC\u201d com luz azul."
+        "en": "A man with dark wavy hair, a mustache and goatee, and yellow-tint sunglasses stands at an outdoor DJ booth in a green Batman sleeveless tee, shot through the crowd, a wooden “REC” sign glowing blue.",
+        "es": "Un hombre con el pelo oscuro ondulado, bigote y perilla, y gafas de lentes amarillos, en una cabina de DJ al aire libre con una camiseta sin mangas verde de Batman, visto a través del público, un cartel de madera “REC” con luz azul.",
+        "pt": "Um homem com cabelo escuro ondulado, bigode e pera, e óculos de lentes amarelas, numa cabine de DJ ao ar livre com uma t-shirt sem mangas verde do Batman, visto através da multidão, um letreiro de madeira “REC” com luz azul."
       },
       "source": "Agota Urbikaite"
     },
@@ -2147,8 +2147,8 @@
       "order": 140,
       "alt": {
         "en": "Close-up of a smiling man in round gold-rim mirrored teal sunglasses, cheek glitter, a silver chain and a busy patterned shirt, festival lights soft behind him.",
-        "es": "Primer plano de un hombre sonriente con gafas redondas de montura dorada y lentes espejo verde azulado, purpurina en la mejilla, cadena de plata y camisa de dibujos densos, luces de festival desenfocadas detr\u00e1s.",
-        "pt": "Grande plano de um homem a sorrir com \u00f3culos redondos de arma\u00e7\u00e3o dourada e lentes espelhadas verde-azuladas, purpurina na face, corrente de prata e camisa de padr\u00f5es densos, luzes de festival desfocadas atr\u00e1s."
+        "es": "Primer plano de un hombre sonriente con gafas redondas de montura dorada y lentes espejo verde azulado, purpurina en la mejilla, cadena de plata y camisa de dibujos densos, luces de festival desenfocadas detrás.",
+        "pt": "Grande plano de um homem a sorrir com óculos redondos de armação dourada e lentes espelhadas verde-azuladas, purpurina na face, corrente de prata e camisa de padrões densos, luzes de festival desfocadas atrás."
       },
       "source": "Agota Urbikaite"
     },
@@ -2171,9 +2171,9 @@
       "placeholder": false,
       "order": 141,
       "alt": {
-        "en": "An outdoor festival group under a wooden sign that reads \u201cREWILD,\u201d warm sun through the trees: a smiling woman in a red headpiece and white sunglasses, a shirtless man with a spine tattoo, and a man in an olive baseball cap.",
-        "es": "Un grupo de festival al aire libre bajo un cartel de madera que dice \u201cREWILD\u201d, sol c\u00e1lido entre los \u00e1rboles: una mujer sonriente con tocado rojo y gafas blancas, un hombre sin camisa con un tatuaje en la columna y un hombre con gorra de b\u00e9isbol verde oliva.",
-        "pt": "Um grupo de festival ao ar livre sob um letreiro de madeira onde se l\u00ea \u201cREWILD\u201d, sol quente entre as \u00e1rvores: uma mulher a sorrir com um adere\u00e7o vermelho na cabe\u00e7a e \u00f3culos brancos, um homem sem camisa com uma tatuagem na coluna e um homem com bon\u00e9 de basebol verde-azeitona."
+        "en": "An outdoor festival group under a wooden sign that reads “REWILD,” warm sun through the trees: a smiling woman in a red headpiece and white sunglasses, a shirtless man with a spine tattoo, and a man in an olive baseball cap.",
+        "es": "Un grupo de festival al aire libre bajo un cartel de madera que dice “REWILD”, sol cálido entre los árboles: una mujer sonriente con tocado rojo y gafas blancas, un hombre sin camisa con un tatuaje en la columna y un hombre con gorra de béisbol verde oliva.",
+        "pt": "Um grupo de festival ao ar livre sob um letreiro de madeira onde se lê “REWILD”, sol quente entre as árvores: uma mulher a sorrir com um adereço vermelho na cabeça e óculos brancos, um homem sem camisa com uma tatuagem na coluna e um homem com boné de basebol verde-azeitona."
       },
       "source": "Agota Urbikaite"
     },
@@ -2201,7 +2201,7 @@
       "alt": {
         "en": "Two women seen from behind sit on a hay bale under a tent strung with colorful bunting: one with a blonde braid and a spiral armlet, the other with dark reddish hair, a backless patterned top, and a sun tattoo on her upper back.",
         "es": "Dos mujeres de espaldas sentadas sobre una bala de heno bajo una carpa con banderines de colores: una con trenza rubia y un brazalete en espiral, la otra con el pelo rojizo oscuro, un top de espalda descubierta con dibujos y un tatuaje de sol en la parte alta de la espalda.",
-        "pt": "Duas mulheres vistas de costas sentadas numa bala de feno sob uma tenda com bandeirinhas coloridas: uma com uma tran\u00e7a loira e uma bra\u00e7adeira em espiral, a outra com cabelo ruivo-escuro, um top de costas abertas com padr\u00f5es e uma tatuagem de sol no alto das costas."
+        "pt": "Duas mulheres vistas de costas sentadas numa bala de feno sob uma tenda com bandeirinhas coloridas: uma com uma trança loira e uma braçadeira em espiral, a outra com cabelo ruivo-escuro, um top de costas abertas com padrões e uma tatuagem de sol no alto das costas."
       },
       "source": "Agota Urbikaite"
     },
@@ -2229,8 +2229,8 @@
       "order": 144,
       "alt": {
         "en": "A person sits in meditation on a dark ocean rock at golden hour, an orange-red bandana over their hair, a black crop top, framed by out-of-focus green leaves.",
-        "es": "Una persona sentada en meditaci\u00f3n sobre una roca oscura del oc\u00e9ano a la hora dorada, con un pa\u00f1uelo naranja y rojo en el pelo, un top negro corto, enmarcada por hojas verdes desenfocadas.",
-        "pt": "Uma pessoa sentada em medita\u00e7\u00e3o numa rocha escura do oceano \u00e0 hora dourada, com um len\u00e7o laranja e vermelho no cabelo, um top preto curto, enquadrada por folhas verdes desfocadas."
+        "es": "Una persona sentada en meditación sobre una roca oscura del océano a la hora dorada, con un pañuelo naranja y rojo en el pelo, un top negro corto, enmarcada por hojas verdes desenfocadas.",
+        "pt": "Uma pessoa sentada em meditação numa rocha escura do oceano à hora dourada, com um lenço laranja e vermelho no cabelo, um top preto curto, enquadrada por folhas verdes desfocadas."
       },
       "source": "Agota Urbikaite"
     }

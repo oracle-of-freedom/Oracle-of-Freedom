@@ -552,8 +552,8 @@ export function studioCopy(lang: StudioLang) {
         videos: {
           title: en ? "Films" : "Vídeos",
           body: en
-            ? "Add a YouTube or Instagram film and choose where it plays."
-            : "Añade un vídeo de YouTube o Instagram y elige dónde se reproduce.",
+            ? "Upload a film from your computer, or paste a YouTube or Instagram link, and choose where it plays."
+            : "Sube un vídeo desde tu ordenador, o pega un enlace de YouTube o Instagram, y elige dónde se reproduce.",
         },
         layouts: {
           title: en ? "Gallery layouts" : "Diseños de galería",
@@ -721,6 +721,17 @@ export function studioCopy(lang: StudioLang) {
         siteNote: en
           ? "The link and the cover stay as they are. You can change where it plays, its caption and its place in the list, or hide it."
           : "El enlace y la portada no cambian. Puedes cambiar dónde se reproduce, su pie de foto y su posición en la lista, o ocultarlo.",
+        source: en ? "How to add it" : "Cómo añadirlo",
+        sourceFile: en ? "Upload a film file" : "Subir un archivo de vídeo",
+        sourceLink: en ? "YouTube or Instagram link" : "Enlace de YouTube o Instagram",
+        file: en ? "Film file" : "Archivo de vídeo",
+        fileHelp: en
+          ? "MP4 or WebM, up to about 200 MB. The studio compresses it automatically when it can."
+          : "MP4 o WebM, hasta unos 200 MB. El estudio lo comprime solo cuando puede.",
+        fileChoose: en ? "Choose a film" : "Elegir un vídeo",
+        fileChange: en ? "Choose another film" : "Elegir otro vídeo",
+        fileUploading: en ? "Compressing and uploading…" : "Comprimiendo y subiendo…",
+        fileReady: en ? "Film ready." : "Vídeo listo.",
         link: en ? "YouTube or Instagram link" : "Enlace de YouTube o Instagram",
         linkHelp: en
           ? "Paste the link to the film, a YouTube video or an Instagram reel."
@@ -729,8 +740,8 @@ export function studioCopy(lang: StudioLang) {
         captionHelp: en ? "A short line under the film." : "Una línea corta bajo el vídeo.",
         poster: en ? "Cover picture" : "Imagen de portada",
         posterHelp: en
-          ? "The picture shown before it plays. Needed for Instagram. For YouTube it is taken from the video if you skip it."
-          : "La imagen que se ve antes de reproducir. Hace falta para Instagram. En YouTube se toma del vídeo si no pones ninguna.",
+          ? "The picture shown before it plays. Taken from the film when you upload one. Needed for Instagram links. For YouTube it is taken from the video if you skip it."
+          : "La imagen que se ve antes de reproducir. Se toma del vídeo si lo subes. Hace falta para Instagram. En YouTube se toma del vídeo si no pones ninguna.",
         posterChoose: en ? "Choose a cover" : "Elegir portada",
         posterChange: en ? "Change the cover" : "Cambiar la portada",
         pages: en ? "Play it on" : "Mostrar en",
@@ -758,6 +769,12 @@ export function studioCopy(lang: StudioLang) {
         posterFetch: en
           ? "The cover could not be taken from YouTube. Choose a cover picture."
           : "No se pudo tomar la portada de YouTube. Elige una imagen de portada.",
+        videoFile: en
+          ? "Choose a film file first."
+          : "Elige primero un archivo de vídeo.",
+        videoUpload: en
+          ? "The film could not be uploaded. Try a smaller MP4."
+          : "No se pudo subir el vídeo. Prueba un MP4 más pequeño.",
         photos: en ? "Choose at least one photo first." : "Elige primero al menos una foto.",
         save: en ? "It could not be saved." : "No se pudo guardar.",
       },

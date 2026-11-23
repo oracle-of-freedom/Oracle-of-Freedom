@@ -3,8 +3,9 @@
 export type PreparedImage = { blob: Blob; width: number; height: number; blur: string };
 export type UploadedImage = { id: string; width: number; height: number };
 
-const MAX_EDGE = 2800;
-const MAX_BYTES = 3.8 * 1024 * 1024;
+/** Keep the original large enough for the server to compress well. */
+const MAX_EDGE = 4200;
+const MAX_BYTES = 12 * 1024 * 1024;
 
 function toBlob(canvas: HTMLCanvasElement, quality: number) {
   return new Promise<Blob>((resolve, reject) => {
@@ -12,7 +13,7 @@ function toBlob(canvas: HTMLCanvasElement, quality: number) {
   });
 }
 
-/** Turn any photo into a JPEG of at most 2800 px, with the camera's rotation applied and a tiny blur preview. */
+/** Turn any photo into a JPEG the studio can upload. The server compresses it again for the site. */
 export async function prepareImage(file: File): Promise<PreparedImage> {
   const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
   try {
@@ -28,10 +29,10 @@ export async function prepareImage(file: File): Promise<PreparedImage> {
     context.fillRect(0, 0, width, height);
     context.drawImage(bitmap, 0, 0, width, height);
 
-    let quality = 0.86;
+    let quality = 0.92;
     let blob = await toBlob(canvas, quality);
-    while (blob.size > MAX_BYTES && quality > 0.5) {
-      quality -= 0.1;
+    while (blob.size > MAX_BYTES && quality > 0.6) {
+      quality -= 0.08;
       blob = await toBlob(canvas, quality);
     }
     if (blob.size > MAX_BYTES) throw new Error("size");

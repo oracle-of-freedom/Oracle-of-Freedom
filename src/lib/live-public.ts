@@ -236,12 +236,14 @@ export async function getPortfolioImages() {
 }
 
 function liveVideoToFilm(video: LiveVideo): Film {
+  const hosted = video.platform === "file" && video.videoMediaId;
   const item: VideoItem = {
     id: `live-${video.id}`,
     platform: video.platform,
-    url: video.url,
+    url: hosted ? mediaSrc(video.videoMediaId!) : video.url,
     ...(video.youtubeId ? { youtubeId: video.youtubeId } : {}),
     ...(video.embedUrl ? { embedUrl: video.embedUrl } : {}),
+    ...(hosted ? { videoMediaId: video.videoMediaId } : {}),
     posterId: `live-${video.posterMediaId}`,
     verify: false,
     label: {

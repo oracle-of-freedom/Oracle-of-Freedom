@@ -26,6 +26,7 @@ export default async function VideosPage() {
       id: video.id,
       platform: video.platform,
       url: video.url,
+      videoMediaId: video.videoMediaId,
       posterSrc: mediaSrc(video.posterMediaId),
       bundled: false,
       tweaked: false,
