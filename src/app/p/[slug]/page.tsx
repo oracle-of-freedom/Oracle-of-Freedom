@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProposalExpired } from "@/components/proposals/proposal-expired";
 import { ProposalView } from "@/components/proposals/proposal-view";
+import { ProposalViewBeacon } from "@/components/proposals/proposal-view-beacon";
 import { isAdmin } from "@/lib/admin-auth";
 import { archiveIfExpired, getProposalBySlug } from "@/lib/proposal-store";
 import { effectiveStatus } from "@/lib/proposals";
@@ -39,7 +40,6 @@ export default async function PublicProposalPage({ params, searchParams }: PageP
       proposal = await archiveIfExpired(proposal);
       return <ProposalExpired clientName={proposal.clientName} />;
     }
-    // Admin can still open archived/expired for reference, with a banner via admin mode.
     return <ProposalView proposal={proposal} mode="admin" />;
   }
 
@@ -54,6 +54,11 @@ export default async function PublicProposalPage({ params, searchParams }: PageP
     notFound();
   }
 
-  // Live
-  return <ProposalView proposal={proposal} mode="public" />;
+  // Live public open — count after render; beacon skips when admin cookie is present.
+  return (
+    <>
+      <ProposalViewBeacon slug={proposal.slug} enabled={!admin} />
+      <ProposalView proposal={proposal} mode="public" />
+    </>
+  );
 }

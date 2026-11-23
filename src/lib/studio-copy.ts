@@ -551,6 +551,10 @@ export function studioCopy(lang: StudioLang) {
         : "Una plantilla es solo el diseño, las secciones y un texto genérico corto. El texto del cliente vive en cada propuesta.",
       createTemplate: en ? "Create template" : "Crear plantilla",
       backToProposals: en ? "Back to proposals" : "Volver a propuestas",
+      opens: en ? "Opens" : "Aperturas",
+      lastOpened: en ? "Last opened" : "Última apertura",
+      downloadPdf: en ? "Download PDF" : "Descargar PDF",
+      example: en ? "Example" : "Ejemplo",
     },
     content: {
       title: en ? "Content" : "Contenido",

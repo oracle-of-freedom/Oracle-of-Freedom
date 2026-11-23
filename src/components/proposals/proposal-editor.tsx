@@ -10,6 +10,7 @@ import {
   setStatusAction,
   type ActionState,
 } from "@/app/admin/proposals/actions";
+import { ProposalPdfButton } from "@/components/proposals/proposal-pdf-button";
 import { ProposalView } from "@/components/proposals/proposal-view";
 import { blankSection, SectionFields } from "@/components/proposals/section-fields";
 import { Button } from "@/components/ui/button";
@@ -115,6 +116,13 @@ export function ProposalEditor({
         >
           {status}
         </span>
+        <span className="text-sm text-ink/60">
+          {proposal.viewCount || 0} {(proposal.viewCount || 0) === 1 ? "open" : "opens"}
+          {proposal.lastOpenedAt
+            ? ` · last ${new Date(proposal.lastOpenedAt).toLocaleString("en-GB")}`
+            : " · not opened yet"}
+        </span>
+        <ProposalPdfButton />
       </div>
 
       <div className="rounded-3xl bg-white/70 p-4 md:p-6">
@@ -470,7 +478,7 @@ export function ProposalEditor({
             }`}
           >
             <div className={previewMode === "phone" ? "max-h-[80vh] overflow-y-auto" : ""}>
-              <ProposalView proposal={proposal} mode="admin" />
+              <ProposalView proposal={proposal} mode="admin" showPdfButton={false} />
             </div>
           </div>
         </div>

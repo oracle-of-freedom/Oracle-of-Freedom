@@ -231,6 +231,12 @@ export type Proposal = {
   updatedAt: string;
   proposalDate: string;
   validUntil: string;
+  /** Public live opens only. Admin and preview hits are ignored. */
+  viewCount: number;
+  /** ISO timestamp of the last counted public open. Empty until first view. */
+  lastOpenedAt: string;
+  /** Seeded example proposal (Norte Nosara). */
+  example?: boolean;
   sections: ProposalSection[];
 };
 
@@ -732,6 +738,9 @@ export function parseProposal(raw: unknown): Proposal | null {
     updatedAt: asString(record.updatedAt, 40) || new Date(0).toISOString(),
     proposalDate: asString(record.proposalDate, 32) || todayIsoDate(),
     validUntil: asString(record.validUntil, 32),
+    viewCount: Math.max(0, Math.floor(asNumber(record.viewCount, 0))),
+    lastOpenedAt: asString(record.lastOpenedAt, 40),
+    example: asBool(record.example, false) || undefined,
     sections,
   };
 }

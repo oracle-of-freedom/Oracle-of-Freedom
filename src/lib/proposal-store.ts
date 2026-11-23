@@ -2,6 +2,10 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { builtinTemplates } from "@/lib/proposal-defaults";
 import {
+  NORTE_NOSARA_EXAMPLE_ID,
+  norteNosaraExample,
+} from "@/lib/proposal-norte-nosara";
+import {
   addDaysIso,
   buildSlug,
   cloneSections,
@@ -77,6 +81,14 @@ function asProposals(value: unknown): Proposal[] {
   return raw.map(parseProposal).filter((p): p is Proposal => Boolean(p));
 }
 
+function mergeExamples(saved: Proposal[]): Proposal[] {
+  const example = norteNosaraExample();
+  const existing = saved.find((p) => p.id === NORTE_NOSARA_EXAMPLE_ID);
+  if (!existing) return [example, ...saved];
+  // Keep Agota's edits / view stats; refresh only if the seed was never saved.
+  return saved;
+}
+
 function mergeBuiltins(saved: ProposalTemplate[]): ProposalTemplate[] {
   const builtins = builtinTemplates();
   const byId = new Map(saved.map((t) => [t.id, t]));
@@ -111,9 +123,9 @@ export async function writeTemplates(templates: ProposalTemplate[]) {
 
 export async function readProposals(): Promise<Proposal[]> {
   const mode = storageMode();
-  if (mode === "readonly") return [];
+  if (mode === "readonly") return mergeExamples([]);
   const raw = mode === "blob" ? await readJsonBlob(PROPOSALS_BLOB) : await readJsonLocal(PROPOSALS_LOCAL);
-  return asProposals(raw).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  return mergeExamples(asProposals(raw)).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
 export async function writeProposals(proposals: Proposal[]) {
@@ -218,6 +230,8 @@ export async function createProposalFromTemplate(templateId: string, clientName 
     updatedAt: stamp,
     proposalDate,
     validUntil: addDaysIso(proposalDate, 30),
+    viewCount: 0,
+    lastOpenedAt: "",
     sections,
   };
   list.unshift(proposal);
@@ -233,11 +247,16 @@ export async function saveProposal(proposal: Proposal) {
     ...proposal,
     clientName: coverName,
     updatedAt: stamp,
+    viewCount: proposal.viewCount || 0,
+    lastOpenedAt: proposal.lastOpenedAt || "",
   };
   const index = list.findIndex((p) => p.id === next.id);
   if (index >= 0) {
-    // Keep slug stable unless empty.
-    next.slug = list[index]!.slug || next.slug;
+    const existing = list[index]!;
+    // Keep slug and open stats stable across editor saves.
+    next.slug = existing.slug || next.slug;
+    next.viewCount = existing.viewCount || 0;
+    next.lastOpenedAt = existing.lastOpenedAt || "";
     list[index] = next;
   } else {
     list.unshift(next);
@@ -288,6 +307,9 @@ export async function duplicateProposal(id: string, clientName: string) {
     updatedAt: stamp,
     proposalDate,
     validUntil: addDaysIso(proposalDate, 30),
+    viewCount: 0,
+    lastOpenedAt: "",
+    example: undefined,
     sections,
   };
   list.unshift(copy);
@@ -308,4 +330,24 @@ export async function archiveIfExpired(proposal: Proposal) {
   if (proposal.status === "archived") return proposal;
   proposal.status = "archived";
   return saveProposal(proposal);
+}
+
+/**
+ * Count a public open of a live proposal. Skips drafts, expired, archived,
+ * and callers that already decided this hit should not count (admin / preview).
+ */
+export async function recordProposalView(slug: string) {
+  const list = await readProposals();
+  const index = list.findIndex((p) => p.slug === slug);
+  if (index < 0) return null;
+  const proposal = list[index]!;
+  if (effectiveStatus(proposal) !== "live") return proposal;
+  const next: Proposal = {
+    ...proposal,
+    viewCount: (proposal.viewCount || 0) + 1,
+    lastOpenedAt: new Date().toISOString(),
+  };
+  list[index] = next;
+  await writeProposals(list);
+  return next;
 }
