@@ -19,7 +19,9 @@ import {
   orderNumber,
   parseLiveContent,
   pickText,
+  resolveGalleryLayout,
   resolveText,
+  type GalleryLayout,
   type LiveContent,
   type LivePhoto,
   type PhotoTweak,
@@ -202,6 +204,11 @@ export async function getImagesForPage(page: string) {
     .sort((a, b) => a.order - b.order);
 }
 
+export async function getGalleryLayout(page: string): Promise<GalleryLayout> {
+  const live = await getLiveContent();
+  return resolveGalleryLayout(live.galleryLayouts, page);
+}
+
 export async function getFeaturedImages() {
   return (await getGallery())
     .filter((image) => image.featured && image.pages.includes("home") && isPublishedPhoto(image))
@@ -229,12 +236,14 @@ export async function getPortfolioImages() {
 }
 
 function liveVideoToFilm(video: LiveVideo): Film {
+  const hosted = video.platform === "file" && video.videoMediaId;
   const item: VideoItem = {
     id: `live-${video.id}`,
     platform: video.platform,
-    url: video.url,
+    url: hosted ? mediaSrc(video.videoMediaId!) : video.url,
     ...(video.youtubeId ? { youtubeId: video.youtubeId } : {}),
     ...(video.embedUrl ? { embedUrl: video.embedUrl } : {}),
+    ...(hosted ? { videoMediaId: video.videoMediaId } : {}),
     posterId: `live-${video.posterMediaId}`,
     verify: false,
     label: {

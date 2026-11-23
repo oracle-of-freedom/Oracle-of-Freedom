@@ -15,7 +15,7 @@ import { gallery, settings, siteUrl } from "@/lib/content";
 import { festivalFilmSpan } from "@/lib/delivery-copy";
 import { applyTokens, buildTokenMap, displayTiming } from "@/lib/delivery";
 import type { ReviewPageId } from "@/lib/live-content";
-import { getFilms, getImagesForPage, getReviews } from "@/lib/live-public";
+import { getFilms, getGalleryLayout, getImagesForPage, getReviews } from "@/lib/live-public";
 import { getSettings } from "@/lib/offers";
 import { mergeCatalog, type LiveSettings, type PricedPackage } from "@/lib/pricing";
 import type { Locale } from "@/i18n/routing";
@@ -52,11 +52,12 @@ export async function ServiceView({
   heroId?: string;
   heroPosition?: string;
 }) {
-  const [images, reviews, filmList, stored] = await Promise.all([
+  const [images, reviews, filmList, stored, galleryLayout] = await Promise.all([
     getImagesForPage(page).then((list) => list.filter((image) => image.id !== "cover-wide")),
     getReviews(page as ReviewPageId),
     group === "festivals" ? getFilms("festivals") : Promise.resolve([]),
     getSettings(),
+    getGalleryLayout(page),
   ]);
   // The hero stays one of the photos that ship with the site, so new uploads never replace it.
   const hero =
@@ -302,6 +303,7 @@ export async function ServiceView({
             images={images}
             locale={locale}
             foldMobile
+            layout={galleryLayout}
             labels={{
               open: a11y.openPhoto,
               close: a11y.close,

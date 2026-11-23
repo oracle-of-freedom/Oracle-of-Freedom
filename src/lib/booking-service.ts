@@ -4,11 +4,11 @@ import {
   type BusyInterval,
 } from "@/lib/availability";
 import { readBookings, writeBookings } from "@/lib/booking-store";
+import { calendarToday, studioTimeZone } from "@/lib/calendar-config";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { activeBookingType } from "@/lib/availability";
 import { googleBusy, reconcileGoogleBookings } from "@/lib/google-calendar";
 import { importInboundIcal } from "@/lib/inbound-ical";
-import { lisbonToday } from "@/lib/pricing";
 
 function addDays(date: string, days: number) {
   const value = new Date(`${date}T00:00:00Z`);
@@ -20,7 +20,8 @@ export async function publicAvailability(typeId: string) {
   const config = await readCalendarConfig();
   const bookingType = activeBookingType(config, typeId);
   if (!bookingType) return null;
-  const today = lisbonToday();
+  const zone = studioTimeZone(config);
+  const today = calendarToday(zone);
   const to = addDays(today, Math.min(config.daysAhead, 35));
   let bookings = await readBookings();
 
@@ -34,7 +35,7 @@ export async function publicAvailability(typeId: string) {
 
   if (config.inboundIcalUrl) {
     try {
-      const inbound = await importInboundIcal(config.inboundIcalUrl, bookings, today, to);
+      const inbound = await importInboundIcal(config.inboundIcalUrl, bookings, today, to, zone);
       bookings = inbound.bookings;
       if (inbound.changed) await writeBookings(bookings);
     } catch (error) {
@@ -46,8 +47,8 @@ export async function publicAvailability(typeId: string) {
   try {
     externalBusy = await googleBusy(
       config,
-      lisbonDateTimeToUtc(today, "00:00"),
-      lisbonDateTimeToUtc(addDays(to, 1), "00:00"),
+      lisbonDateTimeToUtc(today, "00:00", zone),
+      lisbonDateTimeToUtc(addDays(to, 1), "00:00", zone),
     );
   } catch (error) {
     console.error("[calendar] Google availability failed", error);

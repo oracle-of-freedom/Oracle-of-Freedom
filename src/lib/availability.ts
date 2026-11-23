@@ -1,4 +1,9 @@
-import { CALENDAR_TIME_ZONE, type CalendarConfig, type PublicBookingType } from "@/lib/calendar-config";
+import {
+  CALENDAR_TIME_ZONE,
+  studioTimeZone,
+  type CalendarConfig,
+  type PublicBookingType,
+} from "@/lib/calendar-config";
 import type { Booking } from "@/lib/bookings";
 
 export type BusyInterval = { start: string; end: string };
@@ -10,9 +15,9 @@ export type AvailableSlot = {
   endsAt: string;
 };
 
-function partsInLisbon(date: Date) {
+function partsInZone(date: Date, timeZone: string) {
   const parts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: CALENDAR_TIME_ZONE,
+    timeZone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -33,13 +38,14 @@ function partsInLisbon(date: Date) {
   };
 }
 
-export function lisbonDateTimeToUtc(date: string, time: string) {
+export function lisbonDateTimeToUtc(date: string, time: string, timeZone = CALENDAR_TIME_ZONE) {
+  const zone = studioTimeZone({ timeZone });
   const [year, month, day] = date.split("-").map(Number);
   const [hour, minute] = time.split(":").map(Number);
   const desired = Date.UTC(year, month - 1, day, hour, minute, 0);
   let candidate = new Date(desired);
   for (let pass = 0; pass < 3; pass += 1) {
-    const local = partsInLisbon(candidate);
+    const local = partsInZone(candidate, zone);
     const represented = Date.UTC(
       local.year,
       local.month - 1,
@@ -53,9 +59,9 @@ export function lisbonDateTimeToUtc(date: string, time: string) {
   return candidate;
 }
 
-export function utcToLisbonDateTime(value: string | Date) {
+export function utcToLisbonDateTime(value: string | Date, timeZone = CALENDAR_TIME_ZONE) {
   const date = typeof value === "string" ? new Date(value) : value;
-  const local = partsInLisbon(date);
+  const local = partsInZone(date, studioTimeZone({ timeZone }));
   return {
     date: `${local.year}-${String(local.month).padStart(2, "0")}-${String(local.day).padStart(2, "0")}`,
     time: `${String(local.hour).padStart(2, "0")}:${String(local.minute).padStart(2, "0")}`,
@@ -118,6 +124,7 @@ export function buildAvailability({
   now?: Date;
   limitDays?: number;
 }): AvailableSlot[] {
+  const zone = studioTimeZone(config);
   const lastOffset = Math.min(config.daysAhead, Math.max(1, limitDays));
   const earliest = now.getTime() + config.minimumNoticeHours * 60 * 60_000;
   const bookingBusy = bookings
@@ -125,13 +132,13 @@ export function buildAvailability({
     .map((item) => {
       if (item.allDay) {
         return interval(
-          lisbonDateTimeToUtc(item.date, "00:00"),
-          lisbonDateTimeToUtc(addDays(item.date, 1), "00:00"),
+          lisbonDateTimeToUtc(item.date, "00:00", zone),
+          lisbonDateTimeToUtc(addDays(item.date, 1), "00:00", zone),
         );
       }
       return interval(
-        lisbonDateTimeToUtc(item.date, item.start),
-        lisbonDateTimeToUtc(item.date, item.end),
+        lisbonDateTimeToUtc(item.date, item.start, zone),
+        lisbonDateTimeToUtc(item.date, item.end, zone),
       );
     });
   const googleBusy = externalBusy
@@ -154,8 +161,8 @@ export function buildAvailability({
     ) {
       const start = asTime(cursor);
       const end = asTime(cursor + bookingType.durationMinutes);
-      const startsAt = lisbonDateTimeToUtc(date, start);
-      const endsAt = lisbonDateTimeToUtc(date, end);
+      const startsAt = lisbonDateTimeToUtc(date, start, zone);
+      const endsAt = lisbonDateTimeToUtc(date, end, zone);
       if (startsAt.getTime() < earliest) continue;
       if (collides(interval(startsAt, endsAt), busy, config.bufferMinutes)) continue;
       slots.push({

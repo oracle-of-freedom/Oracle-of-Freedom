@@ -6,6 +6,7 @@ import type { Locale } from "@/i18n/routing";
 import { guestConfirmedText } from "@/lib/booking-time";
 import { readBookings, writeBookings } from "@/lib/booking-store";
 import type { Booking } from "@/lib/bookings";
+import { studioTimeZone } from "@/lib/calendar-config";
 import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { settings } from "@/lib/content";
 import { upsertGoogleEvent } from "@/lib/google-calendar";
@@ -13,7 +14,7 @@ import { rateLimited } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
-async function sendAcceptedEmail(booking: Booking, meetingUrl: string) {
+async function sendAcceptedEmail(booking: Booking, meetingUrl: string, studioZone: string) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
   const from = process.env.RESEND_FROM_EMAIL || "Oracle of Freedom <onboarding@resend.dev>";
@@ -26,7 +27,7 @@ async function sendAcceptedEmail(booking: Booking, meetingUrl: string) {
     to: booking.contact,
     replyTo,
     subject: copy.acceptedTitle,
-    text: guestConfirmedText(booking, meetingUrl),
+    text: guestConfirmedText(booking, meetingUrl, studioZone),
   });
   if (result.error) {
     console.error("[booking] accept email failed", result.error);
@@ -53,6 +54,7 @@ export async function POST(
 
   const config = await readCalendarConfig();
   const meetingUrl = config.meetingUrl || "";
+  const zone = studioTimeZone(config);
 
   if (booking.status === "confirmed" || booking.status === "done") {
     return NextResponse.json({
@@ -80,7 +82,7 @@ export async function POST(
     console.error("[booking] accept calendar sync failed", error);
   }
   try {
-    await sendAcceptedEmail(confirmed, meetingUrl);
+    await sendAcceptedEmail(confirmed, meetingUrl, zone);
   } catch (error) {
     console.error("[booking] accept email failed", error);
   }

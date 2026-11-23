@@ -22,10 +22,15 @@ export async function calendarFeed(token: string) {
   if (!token || !tokensMatch(token, config.icalToken)) {
     return new Response("Not found", { status: 404 });
   }
-  return new Response(bookingsIcal(await readBookings(), "Oracle of Freedom"), {
-    headers: {
-      "content-type": "text/calendar; charset=utf-8",
-      "cache-control": "public, max-age=300",
+  return new Response(
+    bookingsIcal(await readBookings(), "Oracle of Freedom", undefined, {
+      timeZone: config.timeZone,
+    }),
+    {
+      headers: {
+        "content-type": "text/calendar; charset=utf-8",
+        "cache-control": "public, max-age=300",
+      },
     },
-  });
+  );
 }

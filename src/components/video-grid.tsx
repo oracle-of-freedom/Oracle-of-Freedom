@@ -93,12 +93,15 @@ export function VideoGrid({
       {films.map(({ video, poster }, index) => {
         const caption = captionOf(video, locale);
         const alt = posterAlt(video, locale);
-        const wide = video.platform === "youtube";
-        const embedSrc = wide
-          ? video.youtubeId
-            ? `https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1`
-            : ""
-          : video.embedUrl;
+        const hosted = video.platform === "file";
+        const wide = video.platform === "youtube" || hosted;
+        const embedSrc = hosted
+          ? ""
+          : wide
+            ? video.youtubeId
+              ? `https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1`
+              : ""
+            : video.embedUrl;
         const canEmbed = Boolean(embedSrc);
         const playing = canEmbed && active === video.id && (consent || opened.includes(video.id));
         const play = () => {
@@ -112,7 +115,18 @@ export function VideoGrid({
             id={itemId(index)}
             className={cn(wide && "sm:col-span-2 xl:col-span-4", hide(index) && hiddenClass)}
           >
-            {playing ? (
+            {hosted ? (
+              <video
+                controls
+                playsInline
+                preload="metadata"
+                poster={poster.src}
+                className="aspect-video w-full rounded-3xl bg-night object-cover shadow-sm"
+                aria-label={alt}
+              >
+                <source src={video.url} />
+              </video>
+            ) : playing ? (
               <iframe
                 title={alt}
                 src={embedSrc}

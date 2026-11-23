@@ -364,6 +364,16 @@ export function studioCopy(lang: StudioLang) {
       emptyDay: en ? "Nothing this day." : "Nada este día.",
       overlap: en ? "Overlaps another booking." : "Se cruza con otra cita.",
       settings: en ? "Booking settings" : "Ajustes de reservas",
+      inviteTitle: en ? "Private booking link" : "Enlace privado de reserva",
+      inviteHelp: en
+        ? "Send this when someone should book a call without filling the inquiry form. Turn it off anytime."
+        : "Envíalo cuando alguien deba reservar una llamada sin rellenar el formulario. Apágalo cuando quieras.",
+      inviteOff: en ? "No private booking link is active." : "No hay ningún enlace privado activo.",
+      inviteGenerate: en ? "Create private booking link" : "Crear enlace privado de reserva",
+      inviteCopy: en ? "Copy private booking link" : "Copiar enlace privado de reserva",
+      inviteCopied: en ? "Copied" : "Copiado",
+      inviteNew: en ? "Create a new link" : "Crear un enlace nuevo",
+      inviteDisable: en ? "Turn off this link" : "Apagar este enlace",
       editBooking: en ? "Edit booking" : "Editar cita",
       close: en ? "Close" : "Cerrar",
       another: en ? "Create another" : "Crear otra",
@@ -411,7 +421,23 @@ export function studioCopy(lang: StudioLang) {
       pageHelpBefore: en
         ? "These types are offered on the private booking link you send after accepting an inquiry. "
         : "Estos tipos se ofrecen en el enlace privado que envías al aceptar una solicitud. ",
-      pageHelpAfter: en ? "Times are saved in Lisbon time." : "Las horas se guardan en la hora de Lisboa.",
+      pageHelpAfter: en
+        ? "Times are saved in the studio timezone below."
+        : "Las horas se guardan en la zona horaria del estudio abajo.",
+      timeZone: en ? "Studio timezone" : "Zona horaria del estudio",
+      timeZoneHelp: en
+        ? "Weekly hours and bookings use this timezone. Guests still see times in their own zone."
+        : "El horario semanal y las citas usan esta zona. Los invitados siguen viendo la hora en la suya.",
+      inviteTitle: en ? "Private booking link" : "Enlace privado de reserva",
+      inviteHelp: en
+        ? "A shareable booking page for Zoom or Meet calls. No inquiry form needed. Turning it off stops new bookings on that URL."
+        : "Una página de reserva para llamadas de Zoom o Meet. Sin formulario de solicitud. Al apagarlo, esa URL deja de aceptar reservas.",
+      inviteOff: en ? "No private booking link is active." : "No hay ningún enlace privado activo.",
+      inviteGenerate: en ? "Create private booking link" : "Crear enlace privado de reserva",
+      inviteCopy: en ? "Copy link" : "Copiar enlace",
+      inviteCopied: en ? "Copied" : "Copiado",
+      inviteNew: en ? "Create a new link" : "Crear un enlace nuevo",
+      inviteDisable: en ? "Turn off this link" : "Apagar este enlace",
       types: en ? "Booking types" : "Tipos de cita",
       visible: en ? "Show" : "Visible",
       remove: en ? "Remove" : "Quitar",
@@ -503,8 +529,8 @@ export function studioCopy(lang: StudioLang) {
     content: {
       title: en ? "Content" : "Contenido",
       intro: en
-        ? "Add reviews, photos and films to the site. Choose the pages they go on, and they appear there within a minute."
-        : "Añade reseñas, fotos y vídeos al sitio. Elige las páginas donde van y aparecen en menos de un minuto.",
+        ? "Add reviews, photos and films to the site. Choose the pages they go on, and they appear there within a minute. Gallery layouts control how those photos sit on each page."
+        : "Añade reseñas, fotos y vídeos al sitio. Elige las páginas donde van y aparecen en menos de un minuto. Los diseños de galería controlan cómo se ven las fotos en cada página.",
       back: en ? "Back to content" : "Volver a contenido",
       open: en ? "Open" : "Abrir",
       readonly: en
@@ -526,9 +552,41 @@ export function studioCopy(lang: StudioLang) {
         videos: {
           title: en ? "Films" : "Vídeos",
           body: en
-            ? "Add a YouTube or Instagram film and choose where it plays."
-            : "Añade un vídeo de YouTube o Instagram y elige dónde se reproduce.",
+            ? "Upload a film from your computer, or paste a YouTube or Instagram link, and choose where it plays."
+            : "Sube un vídeo desde tu ordenador, o pega un enlace de YouTube o Instagram, y elige dónde se reproduce.",
         },
+        layouts: {
+          title: en ? "Gallery layouts" : "Diseños de galería",
+          body: en
+            ? "After photos are on the right pages, choose how each gallery looks: masonry, grid, or spotlight."
+            : "Cuando las fotos ya están en las páginas correctas, elige cómo se ve cada galería: mosaico, rejilla o destacado.",
+        },
+      },
+      layouts: {
+        title: en ? "Gallery layouts" : "Diseños de galería",
+        intro: en
+          ? "Pick a page, then set the look. This does not move photos between pages."
+          : "Elige una página y luego el aspecto. Esto no mueve fotos de una página a otra.",
+        page: en ? "Page" : "Página",
+        style: en ? "Layout" : "Diseño",
+        styles: {
+          masonry: en ? "Masonry · natural heights" : "Mosaico · alturas naturales",
+          grid: en ? "Even grid · cropped" : "Rejilla pareja · recortadas",
+          spotlight: en ? "Spotlight · first photo large" : "Destacado · primera foto grande",
+        },
+        columns: en ? "Columns on large screens" : "Columnas en pantallas grandes",
+        gap: en ? "Spacing" : "Espacio",
+        gaps: {
+          snug: en ? "Snug" : "Compacto",
+          normal: en ? "Normal" : "Normal",
+          roomy: en ? "Roomy" : "Holgado",
+        },
+        mobile: en ? "Photos on the phone before “view more”" : "Fotos en el móvil antes de «ver más»",
+        mobileAll: en ? "Show all" : "Mostrar todas",
+        save: en ? "Save this page layout" : "Guardar el diseño de esta página",
+        saving: en ? "Saving…" : "Guardando…",
+        saved: en ? "Saved. The page updates within a minute." : "Guardado. La página se actualiza en menos de un minuto.",
+        reset: en ? "Back to default" : "Volver al valor por defecto",
       },
       pages: {
         home: en ? "Homepage" : "Portada",
@@ -549,6 +607,7 @@ export function studioCopy(lang: StudioLang) {
         djs: en ? "DJs & Music" : "DJs y música",
         fire: en ? "Fire" : "Fuego",
         places: en ? "Places" : "Lugares",
+        aerial: en ? "Aerial" : "Aéreo",
       } as Record<string, string>,
       selectAll: en ? "Select all" : "Marcar todas",
       clear: en ? "Clear" : "Quitar todas",
@@ -663,6 +722,17 @@ export function studioCopy(lang: StudioLang) {
         siteNote: en
           ? "The link and the cover stay as they are. You can change where it plays, its caption and its place in the list, or hide it."
           : "El enlace y la portada no cambian. Puedes cambiar dónde se reproduce, su pie de foto y su posición en la lista, o ocultarlo.",
+        source: en ? "How to add it" : "Cómo añadirlo",
+        sourceFile: en ? "Upload a film file" : "Subir un archivo de vídeo",
+        sourceLink: en ? "YouTube or Instagram link" : "Enlace de YouTube o Instagram",
+        file: en ? "Film file" : "Archivo de vídeo",
+        fileHelp: en
+          ? "MP4 or WebM, up to about 200 MB. The studio compresses it automatically when it can."
+          : "MP4 o WebM, hasta unos 200 MB. El estudio lo comprime solo cuando puede.",
+        fileChoose: en ? "Choose a film" : "Elegir un vídeo",
+        fileChange: en ? "Choose another film" : "Elegir otro vídeo",
+        fileUploading: en ? "Compressing and uploading…" : "Comprimiendo y subiendo…",
+        fileReady: en ? "Film ready." : "Vídeo listo.",
         link: en ? "YouTube or Instagram link" : "Enlace de YouTube o Instagram",
         linkHelp: en
           ? "Paste the link to the film, a YouTube video or an Instagram reel."
@@ -671,8 +741,8 @@ export function studioCopy(lang: StudioLang) {
         captionHelp: en ? "A short line under the film." : "Una línea corta bajo el vídeo.",
         poster: en ? "Cover picture" : "Imagen de portada",
         posterHelp: en
-          ? "The picture shown before it plays. Needed for Instagram. For YouTube it is taken from the video if you skip it."
-          : "La imagen que se ve antes de reproducir. Hace falta para Instagram. En YouTube se toma del vídeo si no pones ninguna.",
+          ? "The picture shown before it plays. Taken from the film when you upload one. Needed for Instagram links. For YouTube it is taken from the video if you skip it."
+          : "La imagen que se ve antes de reproducir. Se toma del vídeo si lo subes. Hace falta para Instagram. En YouTube se toma del vídeo si no pones ninguna.",
         posterChoose: en ? "Choose a cover" : "Elegir portada",
         posterChange: en ? "Change the cover" : "Cambiar la portada",
         pages: en ? "Play it on" : "Mostrar en",
@@ -700,6 +770,12 @@ export function studioCopy(lang: StudioLang) {
         posterFetch: en
           ? "The cover could not be taken from YouTube. Choose a cover picture."
           : "No se pudo tomar la portada de YouTube. Elige una imagen de portada.",
+        videoFile: en
+          ? "Choose a film file first."
+          : "Elige primero un archivo de vídeo.",
+        videoUpload: en
+          ? "The film could not be uploaded. Try a smaller MP4."
+          : "No se pudo subir el vídeo. Prueba un MP4 más pequeño.",
         photos: en ? "Choose at least one photo first." : "Elige primero al menos una foto.",
         save: en ? "It could not be saved." : "No se pudo guardar.",
       },

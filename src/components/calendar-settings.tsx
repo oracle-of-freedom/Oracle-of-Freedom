@@ -14,15 +14,26 @@ import {
 import type { ActionState } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
-import type {
-  CalendarConfig,
-  PublicBookingType,
+import {
+  CALENDAR_TIME_ZONE,
+  type CalendarConfig,
+  type PublicBookingType,
 } from "@/lib/calendar-config";
 import type { GoogleCalendarOption } from "@/lib/google-calendar";
 import type { StorageMode } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
-type PublicSettings = Omit<CalendarConfig, "google" | "icalToken">;
+type PublicSettings = Omit<CalendarConfig, "google" | "icalToken" | "googleApp">;
+
+function timeZoneOptions(current: string) {
+  const supported =
+    typeof Intl !== "undefined" && "supportedValuesOf" in Intl
+      ? (Intl.supportedValuesOf("timeZone") as string[])
+      : [CALENDAR_TIME_ZONE, "UTC", "Europe/Madrid", "Europe/London", "America/New_York"];
+  const zones = new Set(supported);
+  if (current) zones.add(current);
+  return [...zones].sort((a, b) => a.localeCompare(b));
+}
 
 const dayKeys = ["1", "2", "3", "4", "5", "6", "0"] as const;
 
@@ -450,6 +461,27 @@ export function CalendarSettings({
                 }
               />
             </div>
+          </div>
+          <div>
+            <Label htmlFor="studio-timezone">{t.settings.timeZone}</Label>
+            <select
+              id="studio-timezone"
+              value={settings.timeZone || CALENDAR_TIME_ZONE}
+              onChange={(event) =>
+                setSettings((current) => ({
+                  ...current,
+                  timeZone: event.target.value,
+                }))
+              }
+              className="h-12 w-full rounded-2xl border border-ink/15 bg-white/70 px-4"
+            >
+              {timeZoneOptions(settings.timeZone || CALENDAR_TIME_ZONE).map((zone) => (
+                <option key={zone} value={zone}>
+                  {zone}
+                </option>
+              ))}
+            </select>
+            <p className="mt-2 text-sm text-ink/60">{t.settings.timeZoneHelp}</p>
           </div>
           <div>
             <Label htmlFor="default-location">{t.settings.usualPlace}</Label>

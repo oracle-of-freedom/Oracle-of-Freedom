@@ -6,7 +6,7 @@ import { Testimonials } from "@/components/testimonials";
 import { getCopy } from "@/content";
 import type { Locale } from "@/i18n/routing";
 import { formatEuro } from "@/lib/content";
-import { getImagesForPage, getReviews } from "@/lib/live-public";
+import { getGalleryLayout, getImagesForPage, getReviews } from "@/lib/live-public";
 import { getCatalog } from "@/lib/offers";
 import { openingPrice } from "@/lib/pricing";
 import { pageMetadata } from "@/lib/seo";
@@ -28,10 +28,11 @@ export default async function PeoplePage({ params }: { params: Promise<{ locale:
   setRequestLocale(locale);
   const loc = (locale === "es" || locale === "pt" ? locale : "en") as Locale;
   const copy = getCopy(locale);
-  const [catalog, images, reviews] = await Promise.all([
+  const [catalog, images, reviews, galleryLayout] = await Promise.all([
     getCatalog(),
     getImagesForPage("people"),
     getReviews("people"),
+    getGalleryLayout("people"),
   ]);
   const portraitsFrom = openingPrice(catalog, "portraits") ?? 175;
   const elopementFrom = openingPrice(catalog, "elopements") ?? 690;
@@ -73,7 +74,7 @@ export default async function PeoplePage({ params }: { params: Promise<{ locale:
           images={images}
           locale={loc}
           foldMobile
-          mobileVisible={4}
+          layout={galleryLayout}
           labels={{
             open: copy.a11y.openPhoto,
             close: copy.a11y.close,

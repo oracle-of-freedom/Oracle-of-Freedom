@@ -17,7 +17,7 @@ import {
 import { readBookings, writeBookings } from "@/lib/booking-store";
 import { encryptGoogleToken, listGoogleCalendars } from "@/lib/google-calendar";
 import { importInboundIcal } from "@/lib/inbound-ical";
-import { lisbonToday } from "@/lib/pricing";
+import { calendarToday, studioTimeZone } from "@/lib/calendar-config";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
 
@@ -54,6 +54,7 @@ export async function saveCalendarSettings(
   const candidate = parseCalendarConfig({
     ...(submitted as Partial<CalendarConfig>),
     icalToken: current.icalToken,
+    bookingInviteToken: current.bookingInviteToken,
     google: current.google,
     googleApp: current.googleApp,
   });
@@ -63,6 +64,7 @@ export async function saveCalendarSettings(
     };
   }
   if (current.inboundIcalUrl) candidate.inboundIcalUrl = current.inboundIcalUrl;
+  if (current.bookingInviteToken) candidate.bookingInviteToken = current.bookingInviteToken;
   try {
     await writeCalendarConfig(candidate);
     refresh();
@@ -78,6 +80,22 @@ export async function regenerateIcalToken() {
   await guard();
   const current = await readCalendarConfig();
   await writeCalendarConfig({ ...current, icalToken: newCalendarToken() });
+  refresh();
+}
+
+export async function enableBookingInvite() {
+  await guard();
+  const current = await readCalendarConfig();
+  await writeCalendarConfig({ ...current, bookingInviteToken: newCalendarToken() });
+  refresh();
+}
+
+export async function disableBookingInvite() {
+  await guard();
+  const current = await readCalendarConfig();
+  const next = { ...current };
+  delete next.bookingInviteToken;
+  await writeCalendarConfig(next);
   refresh();
 }
 
@@ -177,12 +195,14 @@ export async function saveInboundIcal(
       const kept = bookings.filter((item) => item.origin !== "ical");
       if (kept.length !== bookings.length) await writeBookings(kept);
     } else {
-      const today = lisbonToday();
+      const zone = studioTimeZone(next);
+      const today = calendarToday(zone);
       const synced = await importInboundIcal(
         normalized,
         bookings,
         addDays(today, -14),
         addDays(today, Math.min(current.daysAhead || 60, 90)),
+        zone,
       );
       if (synced.changed) await writeBookings(synced.bookings);
     }

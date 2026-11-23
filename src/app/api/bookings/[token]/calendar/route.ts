@@ -16,7 +16,10 @@ export async function GET(
   if (!booking) return new Response("Not found", { status: 404 });
   const config = await readCalendarConfig();
   return icalResponse(
-    bookingsIcal([booking], booking.title, config.meetingUrl, { forGuest: true }),
+    bookingsIcal([booking], booking.title, config.meetingUrl, {
+      forGuest: true,
+      timeZone: config.timeZone,
+    }),
     "oracle-of-freedom-booking.ics",
   );
 }
