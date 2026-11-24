@@ -311,7 +311,6 @@ export function PercentSlider({
   label,
   hint,
   value,
-  defaultValue,
   onChange,
   onReset,
 }: {
