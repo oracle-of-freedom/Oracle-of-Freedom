@@ -15,9 +15,18 @@ export const SECTION_TYPES = [
   "terms",
   "review",
   "nextStep",
+  "signOff",
   "text",
   "photos",
 ] as const;
+
+export const SECTION_LAYOUTS = ["stack", "text", "textPhoto", "twoColumn"] as const;
+export type SectionLayout = (typeof SECTION_LAYOUTS)[number];
+
+export const HEADING_EMPHASIS = ["default", "large", "xl"] as const;
+export type HeadingEmphasis = (typeof HEADING_EMPHASIS)[number];
+
+export type PriceLine = { id: string; label: string; price: string };
 
 export type SectionType = (typeof SECTION_TYPES)[number];
 
@@ -58,12 +67,16 @@ export type HowIWorkStep = {
   id: string;
   title: string;
   body: string;
+  /** When false, hide body even if set. Default true for old records. */
+  showBody?: boolean;
 };
 
 export type PlanScene = {
   id: string;
   title: string;
   body: string;
+  /** When false, hide body even if set. Default true for old records. */
+  showBody?: boolean;
 };
 
 export type CoverData = {
@@ -121,7 +134,11 @@ export type DeliverablesData = {
   heading: string;
   cards: DeliverableCard[];
   outOfScope: string;
+  /** Default "Out of scope". */
+  outOfScopeLabel?: string;
   usage: string;
+  /** Default "Usage". */
+  usageLabel?: string;
 };
 
 export type AddonData = {
@@ -130,6 +147,7 @@ export type AddonData = {
   body: string;
   priceUsd: number;
   note: string;
+  priceLines?: PriceLine[];
 };
 
 export type InvestmentData = {
@@ -138,6 +156,10 @@ export type InvestmentData = {
   packagePriceUsd: number;
   currencyNote: string;
   offerNote: string;
+  /** Night panel copy (accommodation). */
+  sideNote?: string;
+  /** Short line in offer panel. */
+  keyTerms?: string;
   depositPercent: number;
   normalRatesLine: string;
   compareRows: { id: string; label: string; amount: string; struck?: boolean }[];
@@ -167,6 +189,11 @@ export type NextStepData = {
   closingLine: string;
 };
 
+export type SignOffData = {
+  /** Optional line above the fixed With Love sign-off. */
+  intro: string;
+};
+
 export type TextBlockData = {
   heading: string;
   body: string;
@@ -191,6 +218,7 @@ export type SectionDataMap = {
   terms: TermsData;
   review: ReviewData;
   nextStep: NextStepData;
+  signOff: SignOffData;
   text: TextBlockData;
   photos: PhotosBlockData;
 };
@@ -201,6 +229,10 @@ export type ProposalSection = {
     type: K;
     enabled: boolean;
     data: SectionDataMap[K];
+    layout?: SectionLayout;
+    headingEmphasis?: HeadingEmphasis;
+    /** Extra images on any section; hidden when empty. */
+    images?: ProposalImage[];
   };
 }[SectionType];
 
@@ -448,6 +480,112 @@ function asImages(value: unknown): ProposalImage[] {
   return value.map(asImage).filter((img): img is ProposalImage => Boolean(img));
 }
 
+function parseCommonSectionFields(record: Record<string, unknown>) {
+  const layoutRaw = asString(record.layout, 20);
+  const layout = (SECTION_LAYOUTS as readonly string[]).includes(layoutRaw)
+    ? (layoutRaw as SectionLayout)
+    : undefined;
+  const headingEmphasisRaw = asString(record.headingEmphasis, 20);
+  const headingEmphasis = (HEADING_EMPHASIS as readonly string[]).includes(headingEmphasisRaw)
+    ? (headingEmphasisRaw as HeadingEmphasis)
+    : undefined;
+  const images = asImages(record.images);
+  return {
+    ...(layout ? { layout } : {}),
+    ...(headingEmphasis ? { headingEmphasis } : {}),
+    ...(images.length ? { images } : {}),
+  };
+}
+
+function parseTitleBodyStep(raw: unknown): HowIWorkStep {
+  const s = (raw || {}) as Record<string, unknown>;
+  const body = asString(s.body, 1200);
+  const showBody = typeof s.showBody === "boolean" ? s.showBody : undefined;
+  return {
+    id: asString(s.id, 64) || newId("step"),
+    title: asString(s.title, 160),
+    body,
+    ...(showBody !== undefined ? { showBody } : {}),
+  };
+}
+
+function parsePlanScene(raw: unknown): PlanScene {
+  const s = (raw || {}) as Record<string, unknown>;
+  const body = asString(s.body, 1200);
+  const showBody = typeof s.showBody === "boolean" ? s.showBody : undefined;
+  return {
+    id: asString(s.id, 64) || newId("scene"),
+    title: asString(s.title, 160),
+    body,
+    ...(showBody !== undefined ? { showBody } : {}),
+  };
+}
+
+function parsePriceLines(value: unknown): PriceLine[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const lines = value
+    .map((line) => {
+      const l = (line || {}) as Record<string, unknown>;
+      const label = asString(l.label, 160);
+      const price = asString(l.price, 80);
+      if (!label && !price) return null;
+      return {
+        id: asString(l.id, 64) || newId("price"),
+        label,
+        price,
+      };
+    })
+    .filter((line): line is PriceLine => Boolean(line));
+  return lines.length ? lines : undefined;
+}
+
+export function defaultLayoutFor(type: SectionType): SectionLayout {
+  const map: Record<SectionType, SectionLayout> = {
+    cover: "stack",
+    welcome: "text",
+    noticed: "twoColumn",
+    divider: "stack",
+    plan: "twoColumn",
+    proof: "stack",
+    howIWork: "twoColumn",
+    deliverables: "twoColumn",
+    addon: "text",
+    investment: "twoColumn",
+    terms: "twoColumn",
+    review: "text",
+    nextStep: "text",
+    signOff: "text",
+    text: "text",
+    photos: "stack",
+  };
+  return map[type];
+}
+
+export function resolveLayout(section: ProposalSection): SectionLayout {
+  return section.layout || defaultLayoutFor(section.type);
+}
+
+export function resolveHeadingEmphasis(section: ProposalSection): HeadingEmphasis {
+  return section.headingEmphasis || "default";
+}
+
+export function sceneShowsBody(scene: { body: string; showBody?: boolean }) {
+  if (scene.showBody === false) return false;
+  return Boolean(scene.body?.trim());
+}
+
+export function addonPriceLines(data: AddonData): PriceLine[] {
+  if (data.priceLines?.length) return data.priceLines;
+  const lines: PriceLine[] = [];
+  if (data.priceUsd > 0) lines.push({ id: "legacy-price", label: "Package", price: `US$${data.priceUsd}` });
+  return lines;
+}
+
+export function ensureSignOffSection(sections: ProposalSection[]): ProposalSection[] {
+  if (sections.some((s) => s.type === "signOff")) return sections;
+  return [...sections, { id: newId("sec"), type: "signOff", enabled: true, data: { intro: "" } }];
+}
+
 function parseSection(raw: unknown): ProposalSection | null {
   if (!raw || typeof raw !== "object") return null;
   const record = raw as Record<string, unknown>;
@@ -455,6 +593,7 @@ function parseSection(raw: unknown): ProposalSection | null {
   if (!(SECTION_TYPES as readonly string[]).includes(type)) return null;
   const id = asString(record.id, 64) || newId("sec");
   const enabled = asBool(record.enabled, true);
+  const common = parseCommonSectionFields(record);
   const data = (record.data && typeof record.data === "object" ? record.data : {}) as Record<string, unknown>;
 
   switch (type) {
@@ -463,6 +602,7 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           clientName: asString(data.clientName, 120),
           kicker: asString(data.kicker, 160),
@@ -474,12 +614,13 @@ function parseSection(raw: unknown): ProposalSection | null {
         },
       };
     case "welcome":
-      return { id, type, enabled, data: { body: asString(data.body, 4000) } };
+      return { id, type, enabled, ...common, data: { body: asString(data.body, 4000) } };
     case "noticed":
       return {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 120) || "What we noticed",
           opportunity: asString(data.opportunity, 800),
@@ -501,6 +642,7 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: { line: asString(data.line, 400), image: asImage(data.image) },
       };
     case "plan":
@@ -508,6 +650,7 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 120) || "The plan",
           intro: asString(data.intro, 2000),
@@ -516,16 +659,7 @@ function parseSection(raw: unknown): ProposalSection | null {
           showDates: asBool(data.showDates, true),
           dayFlow: asString(data.dayFlow, 2000),
           consent: asString(data.consent, 1200),
-          scenes: Array.isArray(data.scenes)
-            ? data.scenes.map((scene) => {
-                const s = (scene || {}) as Record<string, unknown>;
-                return {
-                  id: asString(s.id, 64) || newId("scene"),
-                  title: asString(s.title, 160),
-                  body: asString(s.body, 1200),
-                };
-              })
-            : [],
+          scenes: Array.isArray(data.scenes) ? data.scenes.map(parsePlanScene) : [],
         },
       };
     case "proof":
@@ -533,6 +667,7 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 120) || "Proof",
           images: asImages(data.images),
@@ -546,19 +681,11 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 120) || "How I work",
           kicker: asString(data.kicker, 120),
-          steps: Array.isArray(data.steps)
-            ? data.steps.map((step) => {
-                const s = (step || {}) as Record<string, unknown>;
-                return {
-                  id: asString(s.id, 64) || newId("step"),
-                  title: asString(s.title, 160),
-                  body: asString(s.body, 1200),
-                };
-              })
-            : [],
+          steps: Array.isArray(data.steps) ? data.steps.map(parseTitleBodyStep) : [],
         },
       };
     case "deliverables":
@@ -566,6 +693,7 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 160) || "What's included",
           cards: Array.isArray(data.cards)
@@ -586,7 +714,9 @@ function parseSection(raw: unknown): ProposalSection | null {
               })
             : [],
           outOfScope: asString(data.outOfScope, 1200),
+          ...(asString(data.outOfScopeLabel, 80) ? { outOfScopeLabel: asString(data.outOfScopeLabel, 80) } : {}),
           usage: asString(data.usage, 1200),
+          ...(asString(data.usageLabel, 80) ? { usageLabel: asString(data.usageLabel, 80) } : {}),
         },
       };
     case "addon":
@@ -594,12 +724,14 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 120) || "Optional add-on",
           title: asString(data.title, 160),
           body: asString(data.body, 1200),
           priceUsd: asNumber(data.priceUsd, 0),
           note: asString(data.note, 400),
+          ...(parsePriceLines(data.priceLines) ? { priceLines: parsePriceLines(data.priceLines) } : {}),
         },
       };
     case "investment":
@@ -607,12 +739,15 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 120) || "Investment",
           clientLabel: asString(data.clientLabel, 120),
           packagePriceUsd: asNumber(data.packagePriceUsd, 0),
           currencyNote: asString(data.currencyNote, 80) || "USD",
           offerNote: asString(data.offerNote, 800),
+          ...(asString(data.sideNote, 1200) ? { sideNote: asString(data.sideNote, 1200) } : {}),
+          ...(asString(data.keyTerms, 400) ? { keyTerms: asString(data.keyTerms, 400) } : {}),
           depositPercent: asNumber(data.depositPercent, 50),
           normalRatesLine: asString(data.normalRatesLine, 400),
           compareRows: Array.isArray(data.compareRows)
@@ -633,6 +768,7 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 120) || "Terms",
           items: Array.isArray(data.items)
@@ -645,6 +781,7 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 120) || "A word from a recent client",
           quote: asString(data.quote, 2000),
@@ -659,6 +796,7 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 120) || "Next step",
           body: asString(data.body, 2000),
@@ -668,11 +806,20 @@ function parseSection(raw: unknown): ProposalSection | null {
           closingLine: asString(data.closingLine, 400),
         },
       };
+    case "signOff":
+      return {
+        id,
+        type,
+        enabled,
+        ...common,
+        data: { intro: asString(data.intro, 400) },
+      };
     case "text":
       return {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 160),
           body: asString(data.body, 4000),
@@ -683,6 +830,7 @@ function parseSection(raw: unknown): ProposalSection | null {
         id,
         type,
         enabled,
+        ...common,
         data: {
           heading: asString(data.heading, 160),
           images: asImages(data.images),
@@ -710,7 +858,7 @@ export function parseTemplate(raw: unknown): ProposalTemplate | null {
     createdAt: asString(record.createdAt, 40) || new Date(0).toISOString(),
     updatedAt: asString(record.updatedAt, 40) || new Date(0).toISOString(),
     builtin: asBool(record.builtin, false) || undefined,
-    sections,
+    sections: ensureSignOffSection(sections),
   };
 }
 
@@ -741,7 +889,7 @@ export function parseProposal(raw: unknown): Proposal | null {
     viewCount: Math.max(0, Math.floor(asNumber(record.viewCount, 0))),
     lastOpenedAt: asString(record.lastOpenedAt, 40),
     example: asBool(record.example, false) || undefined,
-    sections,
+    sections: ensureSignOffSection(sections),
   };
 }
 
@@ -765,6 +913,7 @@ export function sectionLabel(type: SectionType) {
     terms: "Terms",
     review: "Review",
     nextStep: "Next step",
+    signOff: "Sign-off",
     text: "Text block",
     photos: "Photo strip",
   };
