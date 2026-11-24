@@ -1,9 +1,10 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, MouseEvent, ReactNode } from "react";
 import Image from "next/image";
 import { OmMark } from "@/components/om-mark";
 import { ProposalPdfButton } from "@/components/proposals/proposal-pdf-button";
 import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
 import {
+  cardLayoutVars,
   resolveProposalDesign,
   sectionTitleVisible,
   type DesignAlign,
@@ -104,29 +105,54 @@ function designVars(
 
 function sectionStyle(section: ProposalSection, index: number): CSSProperties {
   const design = section.design;
+  const mobile = section.mobile;
   const style: Record<string, string> = {
     ...(sectionMobileStyle(section, index) as Record<string, string>),
+    // Phone / stacked default: fit content (no empty card bottoms).
+    "--card-align-m": "start",
+    "--card-min-height-m": "0",
+    "--card-height-m": "auto",
   };
-  if (!design) return style;
-  if (design.padding) style.padding = design.padding;
-  if (design.marginTop) style.marginTop = design.marginTop;
-  if (design.offsetX && design.offsetX !== "0") style.marginLeft = design.offsetX;
-  if (design.align) style.textAlign = design.align;
-  if (design.columns) {
+  Object.assign(style, cardLayoutVars(design));
+  Object.assign(
+    style,
+    cardLayoutVars(
+      {
+        cardHeight: mobile?.cardHeight,
+        cardHeightValue: mobile?.cardHeightValue,
+        cardPadding: mobile?.cardPadding,
+        cardTextSize: mobile?.cardTextSize,
+        gap: mobile?.gap,
+        columns: mobile?.columns,
+      },
+      { phone: true },
+    ),
+  );
+  if (!design && !mobile) return style;
+  if (design?.padding) style.padding = design.padding;
+  if (design?.marginTop) style.marginTop = design.marginTop;
+  if (design?.offsetX && design.offsetX !== "0") style.marginLeft = design.offsetX;
+  if (design?.align) style.textAlign = design.align;
+  if (design?.columns) {
     style["--block-columns"] = design.columns;
     if (section.type === "plan") style["--plan-columns"] = design.columns;
     if (section.type === "investment") style["--investment-columns"] = design.columns;
   }
-  if (design.gap) {
+  if (design?.gap) {
     style["--block-gap"] = design.gap;
     if (section.type === "plan") style["--plan-gap"] = design.gap;
     if (section.type === "investment") style["--investment-gap"] = design.gap;
   }
-  if (section.type === "investment" && design.cardOffsetTop) {
+  if (mobile?.columns) {
+    style["--block-columns-m"] = mobile.columns;
+    if (section.type === "plan") style["--plan-columns-m"] = mobile.columns;
+  }
+  if (mobile?.gap) style["--block-gap-m"] = mobile.gap;
+  if (section.type === "investment" && design?.cardOffsetTop) {
     style["--card-offset"] = design.cardOffsetTop;
   }
-  if (section.type === "nextStep" && design.marginTop) style["--next-step-gap"] = design.marginTop;
-  if (section.type === "signOff" && design.marginTop) style["--signoff-gap"] = design.marginTop;
+  if (section.type === "nextStep" && design?.marginTop) style["--next-step-gap"] = design.marginTop;
+  if (section.type === "signOff" && design?.marginTop) style["--signoff-gap"] = design.marginTop;
   return style;
 }
 
@@ -200,10 +226,12 @@ function Cover({
   section,
   index,
   imageSide,
+  onSelect,
 }: {
   section: ProposalSectionOf<"cover">;
   index: number;
   imageSide?: "behind" | "top";
+  onSelect?: (id: string) => void;
 }) {
   const { data } = section;
   const src = imageSrc(data.heroImage);
@@ -213,12 +241,19 @@ function Cover({
   const style: CSSProperties = {
     ...(src && !useCroppedPhoto ? { backgroundImage: `url("${src}")` } : {}),
     ...sectionStyle(section, index),
+    cursor: onSelect ? "pointer" : undefined,
   };
   const phoneClass = sectionPhoneClass(section);
   const topClass = imageSide === "top" ? "is-phone-top" : "";
   const imageHidden = imagePhoneHiddenClass(data.heroImage);
   return (
-    <header className={`proposal-hero ${phoneClass} ${topClass}`.trim()} style={style}>
+    <header
+      id={`proposal-section-${section.id}`}
+      data-section-id={section.id}
+      className={`proposal-hero ${phoneClass} ${topClass}`.trim()}
+      style={style}
+      onClick={onSelect ? () => onSelect(section.id) : undefined}
+    >
       {useCroppedPhoto && src ? (
         <div className={`proposal-hero-media ${imageHidden}`.trim()} aria-hidden="true">
           <Image
@@ -382,6 +417,7 @@ function renderSection(
     hidePrices: boolean;
     design: ResolvedProposalDesign;
     onChooseReview?: () => void;
+    onSelectSection?: (id: string) => void;
     index: number;
     coverImageSide?: "behind" | "top";
   },
@@ -391,6 +427,18 @@ function renderSection(
   const breakClass = PAGE_BREAK_TYPES.has(section.type) ? "proposal-break" : "";
   const phoneClass = sectionPhoneClass(section);
   const shell = `proposal-section proposal-section-${section.type} ${breakClass} ${phoneClass}`.trim();
+  const sectionProps = {
+    id: `proposal-section-${section.id}`,
+    "data-section-id": section.id,
+    onClick: options.onSelectSection
+      ? (event: MouseEvent) => {
+          const target = event.target as HTMLElement;
+          if (target.closest("a,button,input,textarea,select")) return;
+          options.onSelectSection?.(section.id);
+        }
+      : undefined,
+    style: { ...style, cursor: options.onSelectSection ? "pointer" : undefined },
+  };
 
   switch (section.type) {
     case "cover":
@@ -400,12 +448,13 @@ function renderSection(
           section={section}
           index={options.index}
           imageSide={options.coverImageSide}
+          onSelect={options.onSelectSection}
         />
       );
     case "welcome":
       if (!section.data.body.trim() && !(section.images ?? []).some((img) => imageSrc(img))) return null;
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <div className="proposal-intro">
             <Paragraphs text={section.data.body} />
           </div>
@@ -414,7 +463,7 @@ function renderSection(
       );
     case "noticed":
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           <div className="proposal-why">
             {section.data.cards.map((card) => (
@@ -433,7 +482,7 @@ function renderSection(
     case "divider": {
       const src = imageSrc(section.data.image);
       return (
-        <section key={section.id} className={`proposal-divider ${phoneClass}`.trim()} style={style}>
+        <section key={section.id} className={`proposal-divider ${phoneClass}`.trim()} {...sectionProps}>
           {src ? (
             <Image
               src={src}
@@ -451,7 +500,7 @@ function renderSection(
     }
     case "plan":
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           {section.data.intro.trim() ? (
             <div className="proposal-intro">
@@ -491,7 +540,7 @@ function renderSection(
         videoMediaId: section.data.videoMediaId,
       });
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           <ProofGrid images={section.data.images} />
           <PortfolioLine line={section.data.portfolioLine} />
@@ -512,7 +561,7 @@ function renderSection(
     }
     case "howIWork":
       return (
-        <section key={section.id} className={`${shell} proposal-how`} style={style}>
+        <section key={section.id} className={`${shell} proposal-how`} {...sectionProps}>
           {section.data.kicker.trim() ? <p className="proposal-kicker">{section.data.kicker}</p> : null}
           <Title section={section}>{section.data.heading}</Title>
           <ol className="proposal-steps">
@@ -528,7 +577,7 @@ function renderSection(
       );
     case "deliverables":
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           <div className="proposal-del">
             {section.data.cards.map((card) => (
@@ -560,7 +609,7 @@ function renderSection(
     case "addon": {
       const lines = addonPriceLines(section.data);
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           {section.data.title.trim() ? <h3 className="proposal-addon-title">{section.data.title}</h3> : null}
           {section.data.body.trim() ? (
@@ -590,7 +639,7 @@ function renderSection(
     case "investment": {
       if (options.hidePrices) {
         return (
-          <section key={section.id} className={shell} style={style}>
+          <section key={section.id} className={shell} {...sectionProps}>
             <Title section={section}>{section.data.heading}</Title>
             <div className="proposal-inv">
               <p className="proposal-inv-hidden">The package price is shown on the live link once Agota is ready to send it.</p>
@@ -601,7 +650,7 @@ function renderSection(
       }
       const deposit = depositAmount(section.data.packagePriceUsd, section.data.depositPercent);
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           <div className="proposal-inv">
             <div className="proposal-inv-body">
@@ -636,7 +685,7 @@ function renderSection(
     }
     case "terms":
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           <Dots items={section.data.items} />
           <ExtraPhotos section={section} />
@@ -657,7 +706,7 @@ function renderSection(
       if (!slots.length) {
         if (options.onChooseReview && isReviewPlaceholder(section.data.quote)) {
           return (
-            <section key={section.id} className={`${shell} proposal-no-print`} style={style}>
+            <section key={section.id} className={`${shell} proposal-no-print`} {...sectionProps}>
               <Title section={section}>{section.data.heading}</Title>
               <div className="proposal-review-ph">
                 <button
@@ -674,7 +723,7 @@ function renderSection(
         return null;
       }
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           <div
             className={
@@ -691,7 +740,7 @@ function renderSection(
     case "nextStep": {
       const position = section.design?.buttonPosition || options.design.buttonPosition;
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           <div className="proposal-next">
             {section.data.body.trim() ? <Paragraphs text={section.data.body} /> : null}
@@ -713,7 +762,7 @@ function renderSection(
     }
     case "signOff":
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <SignOffBlock
             intro={section.data.intro}
             align={section.design?.signOffAlign || options.design.signOffAlign}
@@ -722,7 +771,7 @@ function renderSection(
       );
     case "text":
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           <div className="proposal-intro">
             <Paragraphs text={section.data.body} />
@@ -733,7 +782,7 @@ function renderSection(
     case "photos":
       if (!section.data.images.length && !section.data.heading.trim()) return null;
       return (
-        <section key={section.id} className={shell} style={style}>
+        <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
           <ProofGrid images={section.data.images} />
         </section>
@@ -749,6 +798,7 @@ export function ProposalView({
   className,
   showPdfButton = true,
   onChooseReview,
+  onSelectSection,
 }: {
   proposal: Proposal;
   mode?: ProposalViewMode;
@@ -756,6 +806,8 @@ export function ProposalView({
   showPdfButton?: boolean;
   /** Admin editor only: open the review section picker from the live preview. */
   onChooseReview?: () => void;
+  /** Admin editor only: select a section when the preview is clicked. */
+  onSelectSection?: (id: string) => void;
 }) {
   const hidePrices = mode === "preview";
   const design = resolveProposalDesign(proposal.design);
@@ -780,6 +832,7 @@ export function ProposalView({
           index,
           coverImageSide: proposal.design?.mobile?.cover?.imageSide,
           onChooseReview: mode === "admin" ? onChooseReview : undefined,
+          onSelectSection: mode === "admin" ? onSelectSection : undefined,
         }),
       )}
     </article>

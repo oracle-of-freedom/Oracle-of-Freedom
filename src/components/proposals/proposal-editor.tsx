@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useMemo, useRef, useState } from "react";
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import {
   deleteProposalAction,
   duplicateProposalAction,
@@ -87,6 +87,8 @@ function ProposalEditorInner({
   const [copied, setCopied] = useState<"live" | "preview" | null>(null);
   const [state, action, pending] = useActionState(saveProposalAction, null as ActionState);
   const reviewSelectRef = useRef<HTMLSelectElement>(null);
+  const previewScrollRef = useRef<HTMLDivElement>(null);
+  const skipPreviewScroll = useRef(false);
 
   const selected = proposal.sections.find((s) => s.id === selectedId) || proposal.sections[0];
   const warnings = useMemo(() => proposalWarnings(proposal), [proposal]);
@@ -97,6 +99,17 @@ function ProposalEditorInner({
   const deposit = investment
     ? depositAmount(investment.data.packagePriceUsd, investment.data.depositPercent)
     : 0;
+
+  useEffect(() => {
+    if (!selectedId || skipPreviewScroll.current) {
+      skipPreviewScroll.current = false;
+      return;
+    }
+    const root = previewScrollRef.current;
+    if (!root) return;
+    const el = root.querySelector(`#proposal-section-${CSS.escape(selectedId)}`);
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [selectedId]);
 
   function updateSection(next: typeof selected) {
     if (!next) return;
@@ -139,252 +152,245 @@ function ProposalEditorInner({
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-ink/10 bg-white/70 px-4 py-3">
-        <div>
-          <p className="text-xs tracking-[0.2em] text-ember uppercase">Edit for</p>
-          <p className="mt-1 text-sm text-ink/65">
+    <div className="flex min-h-0 flex-1 flex-col lg:h-full lg:overflow-hidden">
+      <div className="shrink-0 space-y-3 border-b border-ink/10 px-1 pb-4 lg:max-h-[38vh] lg:overflow-y-auto">
+        <div className="flex flex-wrap items-center gap-3">
+          <Link href="/admin/proposals" className="text-sm underline underline-offset-4">
+            Back to proposals
+          </Link>
+          <span
+            className={`rounded-full px-3 py-1 text-xs tracking-wide uppercase ${
+              status === "live"
+                ? "bg-moss text-sand"
+                : status === "draft"
+                  ? "bg-clay text-ink"
+                  : status === "expired"
+                    ? "bg-ember/30 text-ink"
+                    : "bg-ink/10 text-ink/70"
+            }`}
+          >
+            {status}
+          </span>
+          <span className="text-sm text-ink/60">
+            {proposal.viewCount || 0} {(proposal.viewCount || 0) === 1 ? "open" : "opens"}
+            {proposal.lastOpenedAt
+              ? ` · last ${new Date(proposal.lastOpenedAt).toLocaleString("en-GB")}`
+              : " · not opened yet"}
+          </span>
+          <ProposalPdfButton />
+          <p className="text-sm text-ink/55">
             {isPhone
-              ? "Phone changes apply under 768px only. Desktop stays as it is."
-              : "Desktop is the default. Switch to Phone to set phone-only overrides."}
+              ? "Phone edits apply under 768px only."
+              : "Desktop is the default. Use the preview toggle for Phone."}
           </p>
         </div>
-        <EditorViewportToggle />
-      </div>
-      <div className="flex flex-wrap items-center gap-3">
-        <Link href="/admin/proposals" className="text-sm underline underline-offset-4">
-          Back to proposals
-        </Link>
-        <span
-          className={`rounded-full px-3 py-1 text-xs tracking-wide uppercase ${
-            status === "live"
-              ? "bg-moss text-sand"
-              : status === "draft"
-                ? "bg-clay text-ink"
-                : status === "expired"
-                  ? "bg-ember/30 text-ink"
-                  : "bg-ink/10 text-ink/70"
-          }`}
-        >
-          {status}
-        </span>
-        <span className="text-sm text-ink/60">
-          {proposal.viewCount || 0} {(proposal.viewCount || 0) === 1 ? "open" : "opens"}
-          {proposal.lastOpenedAt
-            ? ` · last ${new Date(proposal.lastOpenedAt).toLocaleString("en-GB")}`
-            : " · not opened yet"}
-        </span>
-        <ProposalPdfButton />
-      </div>
 
-      <div className="rounded-3xl bg-white/70 p-4 md:p-6">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <Label>Client name</Label>
-            <Input
-              value={proposal.clientName}
-              onChange={(e) => {
-                const clientName = e.target.value;
-                setProposal((prev) => {
-                  const sections = prev.sections.map((s) => {
-                    if (s.type === "cover") {
-                      const previousKicker = `Prepared for ${prev.clientName}`;
-                      const keepCustom =
-                        s.data.kicker.trim() !== "" &&
-                        s.data.kicker !== previousKicker &&
-                        s.data.kicker !== "Prepared for [Client name]";
-                      return {
-                        ...s,
-                        data: {
-                          ...s.data,
-                          clientName,
-                          kicker: keepCustom
-                            ? s.data.kicker
-                            : s.data.kicker.trim()
-                              ? `Prepared for ${clientName}`
-                              : "",
-                        },
-                      };
-                    }
-                    if (s.type === "investment") {
-                      return { ...s, data: { ...s.data, clientLabel: `For ${clientName}` } };
-                    }
-                    return s;
+        <div className="rounded-3xl bg-white/70 p-4 md:p-5">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <Label>Client name</Label>
+              <Input
+                value={proposal.clientName}
+                onChange={(e) => {
+                  const clientName = e.target.value;
+                  setProposal((prev) => {
+                    const sections = prev.sections.map((s) => {
+                      if (s.type === "cover") {
+                        const previousKicker = `Prepared for ${prev.clientName}`;
+                        const keepCustom =
+                          s.data.kicker.trim() !== "" &&
+                          s.data.kicker !== previousKicker &&
+                          s.data.kicker !== "Prepared for [Client name]";
+                        return {
+                          ...s,
+                          data: {
+                            ...s.data,
+                            clientName,
+                            kicker: keepCustom
+                              ? s.data.kicker
+                              : s.data.kicker.trim()
+                                ? `Prepared for ${clientName}`
+                                : "",
+                          },
+                        };
+                      }
+                      if (s.type === "investment") {
+                        return { ...s, data: { ...s.data, clientLabel: `For ${clientName}` } };
+                      }
+                      return s;
+                    });
+                    return { ...prev, clientName, sections };
                   });
-                  return { ...prev, clientName, sections };
-                });
-              }}
-            />
-          </div>
-          <div>
-            <Label>Project title</Label>
-            <Input
-              value={proposal.projectTitle}
-              onChange={(e) => setProposal((prev) => ({ ...prev, projectTitle: e.target.value }))}
-            />
-          </div>
-          <div>
-            <Label>Proposal date</Label>
-            <Input
-              type="date"
-              value={proposal.proposalDate}
-              onChange={(e) => {
-                const proposalDate = e.target.value;
-                setProposal((prev) => {
-                  const sections = prev.sections.map((s) =>
-                    s.type === "cover" ? { ...s, data: { ...s.data, proposalDate } } : s,
-                  );
-                  return { ...prev, proposalDate, sections };
-                });
-              }}
-            />
-          </div>
-          <div>
-            <Label>Offer valid until</Label>
-            <Input
-              type="date"
-              value={proposal.validUntil}
-              onChange={(e) => setProposal((prev) => ({ ...prev, validUntil: e.target.value }))}
-            />
-          </div>
-        </div>
-        {investment ? (
-          <p className="mt-4 text-sm text-ink/60">
-            Deposit auto-calc: {investment.data.depositPercent}% = ${deposit || "0"}
-          </p>
-        ) : null}
-        <div className="mt-4 flex flex-wrap gap-2">
-          <form action={action}>
-            <input type="hidden" name="proposalJson" value={JSON.stringify(proposal)} />
-            <Button type="submit" disabled={pending}>
-              {pending ? "Saving…" : "Save proposal"}
-            </Button>
-          </form>
-          {proposal.status === "draft" ? (
-            <form action={setStatusAction}>
-              <input type="hidden" name="id" value={proposal.id} />
-              <input type="hidden" name="status" value="live" />
-              <Button type="submit" variant="moss">
-                Make live
-              </Button>
-            </form>
-          ) : null}
-          {proposal.status === "live" ? (
-            <form action={setStatusAction}>
-              <input type="hidden" name="id" value={proposal.id} />
-              <input type="hidden" name="status" value="draft" />
-              <Button type="submit" variant="outline">
-                Back to draft
-              </Button>
-            </form>
-          ) : null}
-          {(status === "expired" || proposal.status === "archived") && (
-            <form action={reopenAction} className="flex flex-wrap items-end gap-2">
-              <input type="hidden" name="id" value={proposal.id} />
+                }}
+              />
+            </div>
+            <div>
+              <Label>Project title</Label>
+              <Input
+                value={proposal.projectTitle}
+                onChange={(e) => setProposal((prev) => ({ ...prev, projectTitle: e.target.value }))}
+              />
+            </div>
+            <div>
+              <Label>Proposal date</Label>
               <Input
                 type="date"
-                name="validUntil"
-                defaultValue={proposal.validUntil}
-                className="w-auto"
-                required
+                value={proposal.proposalDate}
+                onChange={(e) => {
+                  const proposalDate = e.target.value;
+                  setProposal((prev) => {
+                    const sections = prev.sections.map((s) =>
+                      s.type === "cover" ? { ...s, data: { ...s.data, proposalDate } } : s,
+                    );
+                    return { ...prev, proposalDate, sections };
+                  });
+                }}
               />
-              <Button type="submit" variant="moss">
-                Reopen with new date
+            </div>
+            <div>
+              <Label>Offer valid until</Label>
+              <Input
+                type="date"
+                value={proposal.validUntil}
+                onChange={(e) => setProposal((prev) => ({ ...prev, validUntil: e.target.value }))}
+              />
+            </div>
+          </div>
+          {investment ? (
+            <p className="mt-3 text-sm text-ink/60">
+              Deposit auto-calc: {investment.data.depositPercent}% = ${deposit || "0"}
+            </p>
+          ) : null}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <form action={action}>
+              <input type="hidden" name="proposalJson" value={JSON.stringify(proposal)} />
+              <Button type="submit" disabled={pending}>
+                {pending ? "Saving…" : "Save proposal"}
               </Button>
             </form>
-          )}
-          <form action={setStatusAction}>
-            <input type="hidden" name="id" value={proposal.id} />
-            <input type="hidden" name="status" value="archived" />
-            <Button type="submit" variant="outline">
-              Archive
-            </Button>
-          </form>
-          <form action={duplicateProposalAction} className="flex flex-wrap items-end gap-2">
-            <input type="hidden" name="id" value={proposal.id} />
-            <Input name="clientName" placeholder="New client name" className="w-40" required />
-            <Button type="submit" variant="outline">
-              Duplicate for client
-            </Button>
-          </form>
-          <form action={saveProposalAsTemplateAction} className="flex flex-wrap items-end gap-2">
-            <input type="hidden" name="id" value={proposal.id} />
-            <Input name="name" placeholder="Template name" className="w-48" defaultValue={`${proposal.clientName} template`} />
-            <Button type="submit" variant="outline">
-              Save as template
-            </Button>
-          </form>
-          <form action={deleteProposalAction}>
-            <input type="hidden" name="id" value={proposal.id} />
-            <Button type="submit" variant="outline">
-              Delete
-            </Button>
-          </form>
+            {proposal.status === "draft" ? (
+              <form action={setStatusAction}>
+                <input type="hidden" name="id" value={proposal.id} />
+                <input type="hidden" name="status" value="live" />
+                <Button type="submit" variant="moss">
+                  Make live
+                </Button>
+              </form>
+            ) : null}
+            {proposal.status === "live" ? (
+              <form action={setStatusAction}>
+                <input type="hidden" name="id" value={proposal.id} />
+                <input type="hidden" name="status" value="draft" />
+                <Button type="submit" variant="outline">
+                  Back to draft
+                </Button>
+              </form>
+            ) : null}
+            {(status === "expired" || proposal.status === "archived") && (
+              <form action={reopenAction} className="flex flex-wrap items-end gap-2">
+                <input type="hidden" name="id" value={proposal.id} />
+                <Input
+                  type="date"
+                  name="validUntil"
+                  defaultValue={proposal.validUntil}
+                  className="w-auto"
+                  required
+                />
+                <Button type="submit" variant="moss">
+                  Reopen with new date
+                </Button>
+              </form>
+            )}
+            <form action={setStatusAction}>
+              <input type="hidden" name="id" value={proposal.id} />
+              <input type="hidden" name="status" value="archived" />
+              <Button type="submit" variant="outline">
+                Archive
+              </Button>
+            </form>
+            <form action={duplicateProposalAction} className="flex flex-wrap items-end gap-2">
+              <input type="hidden" name="id" value={proposal.id} />
+              <Input name="clientName" placeholder="New client name" className="w-40" required />
+              <Button type="submit" variant="outline">
+                Duplicate for client
+              </Button>
+            </form>
+            <form action={saveProposalAsTemplateAction} className="flex flex-wrap items-end gap-2">
+              <input type="hidden" name="id" value={proposal.id} />
+              <Input
+                name="name"
+                placeholder="Template name"
+                className="w-48"
+                defaultValue={`${proposal.clientName} template`}
+              />
+              <Button type="submit" variant="outline">
+                Save as template
+              </Button>
+            </form>
+            <form action={deleteProposalAction}>
+              <input type="hidden" name="id" value={proposal.id} />
+              <Button type="submit" variant="outline">
+                Delete
+              </Button>
+            </form>
+          </div>
+          {state?.ok === false ? <p className="mt-3 text-sm text-terracotta-ink">{state.error}</p> : null}
+          {state?.ok === true ? <p className="mt-3 text-sm text-moss">{state.message || "Saved."}</p> : null}
         </div>
-        {state?.ok === false ? <p className="mt-3 text-sm text-terracotta-ink">{state.error}</p> : null}
-        {state?.ok === true ? <p className="mt-3 text-sm text-moss">{state.message || "Saved."}</p> : null}
-      </div>
 
-      <div className="rounded-3xl bg-white/70 p-4 md:p-6">
-        <p className="text-xs tracking-[0.2em] text-ember uppercase">Links</p>
-        <div className="mt-3 grid gap-3 md:grid-cols-2">
-          <div>
-            <p className="text-sm text-ink/60">Private live link</p>
-            <p className="mt-1 break-all text-sm">{liveLink}</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <Button type="button" size="sm" variant="outline" onClick={() => copy("live")}>
-                {copied === "live" ? "Copied" : "Copy link"}
-              </Button>
-              <Button type="button" size="sm" variant="outline" asChild>
-                <a href={liveLink} target="_blank" rel="noreferrer">
-                  Open
-                </a>
-              </Button>
+        <details className="rounded-3xl bg-white/70 p-4">
+          <summary className="cursor-pointer text-xs tracking-[0.2em] text-ember uppercase">
+            Links & hints
+          </summary>
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            <div>
+              <p className="text-sm text-ink/60">Private live link</p>
+              <p className="mt-1 break-all text-sm">{liveLink}</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Button type="button" size="sm" variant="outline" onClick={() => copy("live")}>
+                  {copied === "live" ? "Copied" : "Copy link"}
+                </Button>
+                <Button type="button" size="sm" variant="outline" asChild>
+                  <a href={liveLink} target="_blank" rel="noreferrer">
+                    Open
+                  </a>
+                </Button>
+              </div>
+            </div>
+            <div>
+              <p className="text-sm text-ink/60">Draft preview (no prices) · token-gated</p>
+              <p className="mt-1 break-all text-sm">{draftPreview}</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Button type="button" size="sm" variant="outline" onClick={() => copy("preview")}>
+                  {copied === "preview" ? "Copied" : "Copy preview"}
+                </Button>
+                <Button type="button" size="sm" variant="outline" asChild>
+                  <a href={draftPreview} target="_blank" rel="noreferrer">
+                    Open preview
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
-          <div>
-            <p className="text-sm text-ink/60">
-              Draft preview (no prices) · token-gated
-            </p>
-            <p className="mt-1 break-all text-sm">{draftPreview}</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <Button type="button" size="sm" variant="outline" onClick={() => copy("preview")}>
-                {copied === "preview" ? "Copied" : "Copy preview"}
-              </Button>
-              <Button type="button" size="sm" variant="outline" asChild>
-                <a href={draftPreview} target="_blank" rel="noreferrer">
-                  Open preview
-                </a>
-              </Button>
-            </div>
-          </div>
-        </div>
-        <p className="mt-3 text-xs text-ink/50">
-          Admin session also opens any draft at the live URL with full prices. Public visitors need the
-          preview token for drafts, and never see prices there.
-        </p>
-      </div>
-
-      <div className="rounded-3xl border border-ember/30 bg-ember/10 p-4 md:p-5">
-        <p className="text-xs tracking-[0.2em] text-ember uppercase">Editor hints</p>
-        <ul className="mt-3 space-y-1 text-sm text-ink/75">
-          {hints.map((hint) => (
-            <li key={hint}>· {hint}</li>
-          ))}
-        </ul>
-        {warnings.length ? (
-          <ul className="mt-4 space-y-1 text-sm text-terracotta-ink">
-            {warnings.map((w) => (
-              <li key={w.id}>⚠ {w.message}</li>
+          <ul className="mt-4 space-y-1 text-sm text-ink/75">
+            {hints.map((hint) => (
+              <li key={hint}>· {hint}</li>
             ))}
           </ul>
-        ) : (
-          <p className="mt-4 text-sm text-moss">No structural warnings right now.</p>
-        )}
+          {warnings.length ? (
+            <ul className="mt-3 space-y-1 text-sm text-terracotta-ink">
+              {warnings.map((w) => (
+                <li key={w.id}>⚠ {w.message}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-3 text-sm text-moss">No structural warnings right now.</p>
+          )}
+        </details>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
-        <div className="space-y-4">
+      <div className="grid min-h-0 flex-1 gap-4 pt-4 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-0 lg:overflow-hidden">
+        <aside className="min-h-0 space-y-4 lg:overflow-y-auto lg:pr-4">
           <div className="rounded-3xl bg-white/70 p-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-xs tracking-[0.2em] text-ember uppercase">Design</p>
@@ -560,35 +566,41 @@ function ProposalEditorInner({
               </div>
             </div>
           ) : null}
-        </div>
+        </aside>
 
-        <div className="rounded-3xl bg-white/70 p-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex min-h-0 flex-col rounded-3xl bg-white/70 p-4 lg:overflow-hidden lg:rounded-none lg:border-l lg:border-ink/10 lg:pl-4">
+          <div className="flex shrink-0 flex-wrap items-center justify-between gap-3">
             <p className="text-xs tracking-[0.2em] text-ember uppercase">
               Live preview · {viewport}
             </p>
             <EditorViewportToggle />
           </div>
           <div
-            className={`mt-4 overflow-hidden rounded-2xl border border-ink/10 bg-sand ${
-              isPhone ? "mx-auto max-w-[390px]" : ""
+            ref={previewScrollRef}
+            className={`mt-4 min-h-0 flex-1 overflow-y-auto rounded-2xl border border-ink/10 bg-sand ${
+              isPhone ? "mx-auto w-full max-w-[390px]" : ""
             }`}
           >
-            <div className={isPhone ? "max-h-[80vh] overflow-y-auto" : ""}>
-              <ProposalView
-                proposal={proposal}
-                mode="admin"
-                showPdfButton={false}
-                onChooseReview={() => {
-                  const reviewSection = proposal.sections.find((s) => s.type === "review");
-                  if (reviewSection) setSelectedId(reviewSection.id);
-                  requestAnimationFrame(() => {
-                    reviewSelectRef.current?.focus();
-                    reviewSelectRef.current?.showPicker?.();
-                  });
-                }}
-              />
-            </div>
+            <ProposalView
+              proposal={proposal}
+              mode="admin"
+              showPdfButton={false}
+              onSelectSection={(id) => {
+                skipPreviewScroll.current = true;
+                setSelectedId(id);
+              }}
+              onChooseReview={() => {
+                const reviewSection = proposal.sections.find((s) => s.type === "review");
+                if (reviewSection) {
+                  skipPreviewScroll.current = true;
+                  setSelectedId(reviewSection.id);
+                }
+                requestAnimationFrame(() => {
+                  reviewSelectRef.current?.focus();
+                  reviewSelectRef.current?.showPicker?.();
+                });
+              }}
+            />
           </div>
         </div>
       </div>

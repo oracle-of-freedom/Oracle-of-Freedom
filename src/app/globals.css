@@ -587,7 +587,8 @@ dialog.fx-dialog[open]::backdrop {
 
 .proposal-why {
   grid-template-columns: var(--block-columns, 1fr 1fr);
-  gap: var(--block-gap, 2mm);
+  gap: var(--card-gap, var(--block-gap, 2mm));
+  align-items: var(--card-align, stretch);
   margin-bottom: 2.2mm;
 }
 
@@ -595,8 +596,11 @@ dialog.fx-dialog[open]::backdrop {
   background: #fbf6ef;
   border-radius: 10px;
   border-left: 3px solid var(--amber);
-  padding: 2.3mm 3.4mm;
+  padding: var(--card-padding, 2.3mm 3.4mm);
   min-width: 0;
+  min-height: var(--card-min-height, 0);
+  height: var(--card-height, auto);
+  font-size: var(--card-text-size, inherit);
 }
 
 .proposal-card.is-wide { grid-column: 1 / -1; }
@@ -743,17 +747,21 @@ dialog.fx-dialog[open]::backdrop {
 
 .proposal-del {
   grid-template-columns: var(--block-columns, 1fr 1fr 1fr);
-  gap: var(--block-gap, 4mm);
+  gap: var(--card-gap, var(--block-gap, 4mm));
+  align-items: var(--card-align, stretch);
   margin-bottom: 5mm;
 }
 
 .proposal-dcard {
   background: #fbf6ef;
   border-radius: 12px;
-  padding: 5.5mm 4.5mm 8mm;
+  padding: var(--card-padding, 5.5mm 4.5mm 8mm);
   border-top: 4px solid var(--terra);
-  min-height: 48mm;
+  /* Fit content by default. Equal-height rows still stretch via --card-align. */
+  min-height: var(--card-min-height, 0);
+  height: var(--card-height, auto);
   min-width: 0;
+  font-size: var(--card-text-size, inherit);
 }
 
 .proposal-dcard.is-ember { border-top-color: var(--amber); }
@@ -781,15 +789,19 @@ dialog.fx-dialog[open]::backdrop {
 
 .proposal-prices {
   grid-template-columns: var(--block-columns, 1fr 1fr);
-  gap: var(--block-gap, 5mm);
+  gap: var(--card-gap, var(--block-gap, 5mm));
+  align-items: var(--card-align, stretch);
   margin: 1mm 0 3.5mm;
 }
 
 .proposal-pricebox {
   background: #fbf6ef;
   border-radius: 12px;
-  padding: 8mm 4mm;
+  padding: var(--card-padding, 8mm 4mm);
   text-align: center;
+  min-height: var(--card-min-height, 0);
+  height: var(--card-height, auto);
+  font-size: var(--card-text-size, inherit);
 }
 
 .proposal-pl { margin: 0 0 1.5mm; font-size: 12.5pt; }
@@ -828,7 +840,8 @@ dialog.fx-dialog[open]::backdrop {
 .proposal-review-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 5mm;
+  gap: var(--card-gap, 5mm);
+  align-items: var(--card-align, stretch);
 }
 
 .proposal-review-grid.is-pair {
@@ -839,7 +852,10 @@ dialog.fx-dialog[open]::backdrop {
   background: #fbf6ef;
   border-radius: 12px;
   border-left: 3px solid var(--amber);
-  padding: 5mm 4.5mm 6mm;
+  padding: var(--card-padding, 5mm 4.5mm 6mm);
+  min-height: var(--card-min-height, 0);
+  height: var(--card-height, auto);
+  font-size: var(--card-text-size, inherit);
   min-width: 0;
 }
 
@@ -1073,8 +1089,25 @@ dialog.fx-dialog[open]::backdrop {
   .proposal-proof-grid {
     grid-template-columns: var(--proof-columns-m, 1fr);
   }
+  .proposal-why,
+  .proposal-del,
+  .proposal-prices,
+  .proposal-review-grid {
+    align-items: var(--card-align-m, start);
+    gap: var(--card-gap-m, var(--card-gap, var(--block-gap-m, var(--block-gap, 4mm))));
+    grid-template-columns: var(--block-columns-m, 1fr);
+  }
   .proposal-review-grid.is-pair {
-    grid-template-columns: var(--review-columns-m, 1fr);
+    grid-template-columns: var(--review-columns-m, var(--block-columns-m, 1fr));
+  }
+  .proposal-dcard,
+  .proposal-pricebox,
+  .proposal-card,
+  .proposal-review-card {
+    min-height: var(--card-min-height-m, 0);
+    height: var(--card-height-m, auto);
+    padding: var(--card-padding-m, var(--card-padding, revert-layer));
+    font-size: var(--card-text-size-m, var(--card-text-size, inherit));
   }
   .proposal-cropped {
     object-position: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));
@@ -1168,8 +1201,25 @@ dialog.fx-dialog[open]::backdrop {
   .proposal-proof-grid {
     grid-template-columns: var(--proof-columns-m, 1fr);
   }
+  .proposal-why,
+  .proposal-del,
+  .proposal-prices,
+  .proposal-review-grid {
+    align-items: var(--card-align-m, start);
+    gap: var(--card-gap-m, var(--card-gap, var(--block-gap-m, var(--block-gap, 4mm))));
+    grid-template-columns: var(--block-columns-m, 1fr);
+  }
   .proposal-review-grid.is-pair {
-    grid-template-columns: var(--review-columns-m, 1fr);
+    grid-template-columns: var(--review-columns-m, var(--block-columns-m, 1fr));
+  }
+  .proposal-dcard,
+  .proposal-pricebox,
+  .proposal-card,
+  .proposal-review-card {
+    min-height: var(--card-min-height-m, 0);
+    height: var(--card-height-m, auto);
+    padding: var(--card-padding-m, var(--card-padding, revert-layer));
+    font-size: var(--card-text-size-m, var(--card-text-size, inherit));
   }
   .proposal-cropped {
     object-position: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));

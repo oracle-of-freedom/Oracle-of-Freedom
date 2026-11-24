@@ -85,6 +85,15 @@ export type SectionMobile = {
   marginBottom?: string;
   headingSize?: TextScale | string;
   bodySize?: TextScale | string;
+  /** Card grid columns on phone, e.g. 1fr or 1fr 1fr. */
+  columns?: string;
+  /** Gap between cards on phone. */
+  gap?: string;
+  /** Card height: auto / equal / fixed. */
+  cardHeight?: "auto" | "equal" | "fixed";
+  cardHeightValue?: string;
+  cardPadding?: "compact" | "normal" | "roomy" | string;
+  cardTextSize?: string;
 };
 
 export type ProposalDesignWithMobile = {
@@ -251,11 +260,31 @@ export function parseSectionMobile(value: unknown): SectionMobile | undefined {
   const marginBottom = asCss(record.marginBottom);
   const headingSize = asScaleOrCss(record.headingSize);
   const bodySize = asScaleOrCss(record.bodySize);
+  const columns = asCss(record.columns, 60);
+  const gap = asCss(record.gap);
+  const cardHeight =
+    record.cardHeight === "auto" || record.cardHeight === "equal" || record.cardHeight === "fixed"
+      ? record.cardHeight
+      : undefined;
+  const cardHeightValue = asCss(record.cardHeightValue);
+  const cardPadding =
+    record.cardPadding === "compact" ||
+    record.cardPadding === "normal" ||
+    record.cardPadding === "roomy"
+      ? record.cardPadding
+      : asCss(record.cardPadding) || undefined;
+  const cardTextSize = asScaleOrCss(record.cardTextSize);
   if (order != null) mobile.order = order;
   if (marginTop) mobile.marginTop = marginTop;
   if (marginBottom) mobile.marginBottom = marginBottom;
   if (headingSize) mobile.headingSize = headingSize;
   if (bodySize) mobile.bodySize = bodySize;
+  if (columns) mobile.columns = columns;
+  if (gap) mobile.gap = gap;
+  if (cardHeight) mobile.cardHeight = cardHeight;
+  if (cardHeightValue) mobile.cardHeightValue = cardHeightValue;
+  if (cardPadding) mobile.cardPadding = cardPadding;
+  if (cardTextSize) mobile.cardTextSize = cardTextSize;
   return Object.keys(mobile).length ? mobile : undefined;
 }
 

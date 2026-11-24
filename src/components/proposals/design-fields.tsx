@@ -5,6 +5,8 @@ import { ImageCropControl } from "@/components/proposals/image-crop-control";
 import { Input, Label } from "@/components/ui/input";
 import {
   resolveProposalDesign,
+  type CardHeightMode,
+  type CardPaddingPreset,
   type DesignAlign,
   type ProposalDesign,
   type ResolvedCoverDesign,
@@ -448,6 +450,126 @@ export function ProposalDesignFields({
   );
 }
 
+const CARD_SECTION_TYPES = new Set([
+  "noticed",
+  "deliverables",
+  "addon",
+  "review",
+  "howIWork",
+]);
+
+export function sectionHasCardLayout(type: ProposalSection["type"]) {
+  return CARD_SECTION_TYPES.has(type);
+}
+
+type CardLayoutValue = Pick<
+  SectionDesign,
+  "cardHeight" | "cardHeightValue" | "cardPadding" | "cardTextSize" | "gap" | "columns"
+>;
+
+export function CardLayoutFields({
+  value,
+  onChange,
+  phone = false,
+}: {
+  value: CardLayoutValue;
+  onChange: (partial: CardLayoutValue) => void;
+  phone?: boolean;
+}) {
+  const heightMode = value.cardHeight || (phone ? "auto" : "equal");
+  const padding = value.cardPadding || "normal";
+  const textSize = value.cardTextSize || "normal";
+
+  return (
+    <div className="grid gap-3 rounded-2xl border border-ink/10 bg-white/40 p-3">
+      <p className="text-xs tracking-[0.18em] text-ember uppercase">
+        Cards{phone ? " · phone" : ""}
+      </p>
+      <Field
+        label="Card height"
+        hint={
+          phone
+            ? "Auto fits content (default on phone). Equal stretches a row. Fixed uses a number."
+            : "Equal keeps a row the same height. Auto fits each card. Fixed uses a number."
+        }
+      >
+        <select
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          value={heightMode}
+          onChange={(e) => {
+            const cardHeight = e.target.value as CardHeightMode;
+            onChange({
+              cardHeight: phone && cardHeight === "auto" ? undefined : cardHeight,
+              cardHeightValue: cardHeight === "fixed" ? value.cardHeightValue || "48mm" : undefined,
+            });
+          }}
+        >
+          <option value="auto">Auto (fit content)</option>
+          <option value="equal">Equal height in row</option>
+          <option value="fixed">Fixed</option>
+        </select>
+      </Field>
+      {heightMode === "fixed" ? (
+        <TextControl
+          label="Fixed height"
+          hint="mm or px, for example 48mm"
+          value={value.cardHeightValue || ""}
+          onChange={(cardHeightValue) =>
+            onChange({ cardHeightValue: cardHeightValue.trim() || undefined })
+          }
+        />
+      ) : null}
+      <Field label="Card padding">
+        <select
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          value={typeof padding === "string" && ["compact", "normal", "roomy"].includes(padding) ? padding : "normal"}
+          onChange={(e) => {
+            const next = e.target.value as CardPaddingPreset;
+            onChange({ cardPadding: next === "normal" ? undefined : next });
+          }}
+        >
+          <option value="compact">Compact</option>
+          <option value="normal">Normal</option>
+          <option value="roomy">Roomy</option>
+        </select>
+      </Field>
+      <Field label="Columns">
+        <select
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          value={value.columns || ""}
+          onChange={(e) => onChange({ columns: e.target.value || undefined })}
+        >
+          <option value="">{phone ? "Desktop default" : "Section default"}</option>
+          <option value="1fr">1</option>
+          <option value="1fr 1fr">2</option>
+          {!phone ? <option value="1fr 1fr 1fr">3</option> : null}
+        </select>
+      </Field>
+      <TextControl
+        label="Gap between cards"
+        hint="CSS length. Leave blank for the Awake default."
+        value={value.gap || ""}
+        placeholder="Default"
+        onChange={(gap) => onChange({ gap: gap.trim() || undefined })}
+      />
+      <Field label="Text size inside cards">
+        <select
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          value={textSize}
+          onChange={(e) => {
+            const next = e.target.value;
+            onChange({ cardTextSize: next === "normal" ? undefined : next });
+          }}
+        >
+          <option value="normal">Normal</option>
+          <option value="small">Small</option>
+          <option value="large">Large</option>
+        </select>
+      </Field>
+    </div>
+  );
+}
+
 export function SectionDesignFields({
   section,
   onChange,
@@ -484,6 +606,9 @@ export function SectionDesignFields({
       <TextControl label="Padding" hint="CSS shorthand, for example 4.5mm 14mm 0" value={design.padding || ""} onChange={(padding) => patch({ padding: padding || undefined })} />
       <TextControl label="Space above" hint="CSS length" value={design.marginTop || ""} onChange={(marginTop) => patch({ marginTop: marginTop || undefined })} />
       <TextControl label="Column gap" value={design.gap || ""} onChange={(gap) => patch({ gap: gap || undefined })} />
+      {sectionHasCardLayout(section.type) ? (
+        <CardLayoutFields value={design} onChange={(partial) => patch(partial)} />
+      ) : null}
       {section.type === "investment" ? (
         <TextControl
           label="Orange card top offset"

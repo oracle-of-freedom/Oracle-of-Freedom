@@ -14,6 +14,10 @@ import {
 
 export type DesignAlign = "left" | "center" | "right";
 
+/** Card grid height behaviour. Auto fits content; equal stretches a row; fixed uses cardHeightValue. */
+export type CardHeightMode = "auto" | "equal" | "fixed";
+export type CardPaddingPreset = "compact" | "normal" | "roomy";
+
 export type CoverDesign = {
   /** Hero height. Default `70mm`. */
   heroHeight?: string;
@@ -82,6 +86,17 @@ export type SectionDesign = {
   buttonPosition?: DesignAlign;
   /** Sign-off alignment on the sign-off section. */
   signOffAlign?: DesignAlign;
+  /**
+   * Card height in grids (deliverables, prices, why, reviews).
+   * Default equal on desktop rows; stacked / phone defaults to auto (fit content).
+   */
+  cardHeight?: CardHeightMode;
+  /** Used when cardHeight is fixed. CSS length such as 48mm or 120px. */
+  cardHeightValue?: string;
+  /** Card inner padding preset or CSS shorthand. */
+  cardPadding?: CardPaddingPreset | string;
+  /** Text size inside cards: small / normal / large or a CSS size. */
+  cardTextSize?: string;
 };
 
 export type ResolvedCoverDesign = {
@@ -213,6 +228,65 @@ export function parseProposalDesign(value: unknown): ProposalDesign | undefined 
   return Object.keys(design).length ? design : undefined;
 }
 
+function asCardHeight(value: unknown): CardHeightMode | undefined {
+  return value === "auto" || value === "equal" || value === "fixed" ? value : undefined;
+}
+
+function asCardPadding(value: unknown): CardPaddingPreset | string | undefined {
+  if (value === "compact" || value === "normal" || value === "roomy") return value;
+  return asCss(value) || undefined;
+}
+
+export function cardPaddingToCss(padding: CardPaddingPreset | string | undefined, fallback: string) {
+  if (!padding || padding === "normal") return fallback;
+  if (padding === "compact") return "3mm 3.5mm 4mm";
+  if (padding === "roomy") return "7mm 5.5mm 9mm";
+  return asCss(padding) || fallback;
+}
+
+export function cardTextSizeToCss(size: string | undefined) {
+  if (!size || size === "normal") return undefined;
+  if (size === "small") return "11pt";
+  if (size === "large") return "14pt";
+  return asCss(size, 40) || undefined;
+}
+
+/** Map card height mode to CSS custom properties for a section. */
+export function cardLayoutVars(
+  design?: Pick<SectionDesign, "cardHeight" | "cardHeightValue" | "cardPadding" | "cardTextSize" | "gap" | "columns"> | null,
+  opts?: { phone?: boolean; paddingFallback?: string },
+): Record<string, string> {
+  if (!design) return {};
+  const suffix = opts?.phone ? "-m" : "";
+  const style: Record<string, string> = {};
+  const mode = design.cardHeight;
+  if (mode === "auto") {
+    style[`--card-align${suffix}`] = "start";
+    style[`--card-min-height${suffix}`] = "0";
+    style[`--card-height${suffix}`] = "auto";
+  } else if (mode === "equal") {
+    style[`--card-align${suffix}`] = "stretch";
+    style[`--card-min-height${suffix}`] = "0";
+    style[`--card-height${suffix}`] = "auto";
+  } else if (mode === "fixed") {
+    const value = asCss(design.cardHeightValue) || "48mm";
+    style[`--card-align${suffix}`] = "stretch";
+    style[`--card-min-height${suffix}`] = value;
+    style[`--card-height${suffix}`] = value;
+  }
+  if (design.cardPadding) {
+    style[`--card-padding${suffix}`] = cardPaddingToCss(
+      design.cardPadding,
+      opts?.paddingFallback || "5.5mm 4.5mm 8mm",
+    );
+  }
+  const text = cardTextSizeToCss(design.cardTextSize);
+  if (text) style[`--card-text-size${suffix}`] = text;
+  if (design.gap) style[`--card-gap${suffix}`] = design.gap;
+  if (design.columns) style[`--block-columns${suffix}`] = design.columns;
+  return style;
+}
+
 export function parseSectionDesign(value: unknown): SectionDesign | undefined {
   if (!value || typeof value !== "object") return undefined;
   const record = value as Record<string, unknown>;
@@ -230,6 +304,13 @@ export function parseSectionDesign(value: unknown): SectionDesign | undefined {
   const cardOffsetTop = asCss(record.cardOffsetTop);
   const buttonPosition = asAlign(record.buttonPosition);
   const signOffAlign = asAlign(record.signOffAlign);
+  const cardHeight = asCardHeight(record.cardHeight);
+  const cardHeightValue = asCss(record.cardHeightValue);
+  const cardPadding = asCardPadding(record.cardPadding);
+  const cardTextSize =
+    typeof record.cardTextSize === "string" && record.cardTextSize.trim()
+      ? record.cardTextSize.trim().slice(0, 40)
+      : undefined;
   if (padding) design.padding = padding;
   if (marginTop) design.marginTop = marginTop;
   if (columns) design.columns = columns;
@@ -239,6 +320,10 @@ export function parseSectionDesign(value: unknown): SectionDesign | undefined {
   if (cardOffsetTop) design.cardOffsetTop = cardOffsetTop;
   if (buttonPosition) design.buttonPosition = buttonPosition;
   if (signOffAlign) design.signOffAlign = signOffAlign;
+  if (cardHeight) design.cardHeight = cardHeight;
+  if (cardHeightValue) design.cardHeightValue = cardHeightValue;
+  if (cardPadding) design.cardPadding = cardPadding;
+  if (cardTextSize && !/[{};<>]/.test(cardTextSize)) design.cardTextSize = cardTextSize;
   return Object.keys(design).length ? design : undefined;
 }
 
