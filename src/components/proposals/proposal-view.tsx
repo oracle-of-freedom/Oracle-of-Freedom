@@ -47,12 +47,12 @@ function SectionHeading({
   emphasis?: HeadingEmphasis;
 }) {
   return (
-    <div className="mb-8 flex items-center gap-4">
-      <h2 className={`shrink-0 font-serif text-terracotta ${headingEmphasisClass(emphasis)}`}>
+    <div className="mb-8 flex min-w-0 items-center gap-4">
+      <h2 className={`min-w-0 font-serif text-balance text-terracotta ${headingEmphasisClass(emphasis)}`}>
         {children}
       </h2>
       <span
-        className="h-px min-w-12 flex-1 bg-gradient-to-r from-clay to-transparent"
+        className="hidden h-px min-w-12 flex-1 bg-gradient-to-r from-clay to-transparent sm:block"
         aria-hidden="true"
       />
     </div>
