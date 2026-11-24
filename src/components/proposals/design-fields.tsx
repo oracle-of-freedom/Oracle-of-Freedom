@@ -2,12 +2,21 @@
 
 import { PhoneBadge, useEditorViewport } from "@/components/proposals/editor-viewport";
 import { ImageCropControl } from "@/components/proposals/image-crop-control";
-import { Input, Label } from "@/components/ui/input";
+import {
+  AdvancedCssDetails,
+  AlignButtons,
+  ChoiceButtons,
+  ControlField,
+  PaddingSlider,
+  PercentSlider,
+  SizeSlider,
+  ToggleControl,
+} from "@/components/proposals/visual-controls";
+import { Input } from "@/components/ui/input";
 import {
   resolveProposalDesign,
   type CardHeightMode,
   type CardPaddingPreset,
-  type DesignAlign,
   type ProposalDesign,
   type ResolvedCoverDesign,
   type ResolvedProposalDesign,
@@ -20,78 +29,11 @@ import {
   type ProposalDesignMobile,
   type ReviewPhoneLayout,
 } from "@/lib/proposal-mobile";
+import { columnsToCss, countGridColumns } from "@/lib/proposal-visual-units";
 import { imageSrc, type ProposalImage, type ProposalSection } from "@/lib/proposals";
 
-function Field({
-  label,
-  hint,
-  children,
-  badge,
-}: {
-  label: string;
-  hint?: string;
-  children: React.ReactNode;
-  badge?: React.ReactNode;
-}) {
-  return (
-    <div>
-      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
-        <Label className="mb-0">{label}</Label>
-        {badge}
-      </div>
-      {children}
-      {hint ? <p className="mt-1 text-xs text-ink/50">{hint}</p> : null}
-    </div>
-  );
-}
-
-function TextControl({
-  label,
-  hint,
-  value,
-  onChange,
-  badge,
-  placeholder,
-}: {
-  label: string;
-  hint?: string;
-  value: string;
-  onChange: (value: string) => void;
-  badge?: React.ReactNode;
-  placeholder?: string;
-}) {
-  return (
-    <Field label={label} hint={hint} badge={badge}>
-      <Input value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
-    </Field>
-  );
-}
-
-function AlignControl({
-  label,
-  value,
-  onChange,
-  badge,
-}: {
-  label: string;
-  value: DesignAlign;
-  onChange: (value: DesignAlign) => void;
-  badge?: React.ReactNode;
-}) {
-  return (
-    <Field label={label} badge={badge}>
-      <select
-        className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-        value={value}
-        onChange={(e) => onChange(e.target.value as DesignAlign)}
-      >
-        <option value="left">Left</option>
-        <option value="center">Center</option>
-        <option value="right">Right</option>
-      </select>
-    </Field>
-  );
-}
+const PLAN_TWO = ".79fr 1.21fr";
+const INVESTMENT_TWO = "1.15fr 1fr";
 
 function PhoneDesignFields({
   design,
@@ -108,6 +50,7 @@ function PhoneDesignFields({
   const cover = mobile.cover || {};
   const active = hasDesignMobileSettings(design);
   const coverPhoto = heroImage || null;
+  const desktop = resolveProposalDesign(design);
 
   function patchMobile(partial: ProposalDesignMobile) {
     const nextMobile: ProposalDesignMobile = { ...mobile, ...partial };
@@ -130,9 +73,7 @@ function PhoneDesignFields({
     });
   }
 
-  function resetKey(
-    key: keyof ProposalDesignMobile,
-  ) {
+  function resetKey(key: keyof ProposalDesignMobile) {
     patchMobile({ [key]: undefined } as ProposalDesignMobile);
   }
 
@@ -144,7 +85,7 @@ function PhoneDesignFields({
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-xs text-ink/55">
-          Phone values apply under 768px. Leave a field blank to keep the desktop value. PDF always uses desktop.
+          Phone values apply on small screens only. Reset a field to keep the desktop look. PDF always uses desktop.
         </p>
         <PhoneBadge
           active={active}
@@ -160,12 +101,17 @@ function PhoneDesignFields({
         />
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextControl
+        <SizeSlider
           label="Header height"
-          hint="Desktop default 70mm"
           value={cover.heroHeight || ""}
-          placeholder="Uses desktop"
-          onChange={(heroHeight) => patchCover({ heroHeight: heroHeight.trim() || undefined })}
+          defaultValue={desktop.cover.heroHeight}
+          min={120}
+          max={600}
+          step={4}
+          unit="px"
+          optional
+          emptyMeansDefault
+          onChange={(heroHeight) => patchCover({ heroHeight })}
           badge={
             <PhoneBadge
               active={Boolean(cover.heroHeight)}
@@ -173,12 +119,17 @@ function PhoneDesignFields({
             />
           }
         />
-        <TextControl
-          label="Title size"
-          hint="For example 24pt"
+        <SizeSlider
+          label="Cover title size"
           value={cover.titleSize || ""}
-          placeholder="Uses desktop"
-          onChange={(titleSize) => patchCover({ titleSize: titleSize.trim() || undefined })}
+          defaultValue="32"
+          min={14}
+          max={48}
+          step={1}
+          unit="px"
+          optional
+          emptyMeansDefault
+          onChange={(titleSize) => patchCover({ titleSize })}
           badge={
             <PhoneBadge
               active={Boolean(cover.titleSize)}
@@ -186,11 +137,17 @@ function PhoneDesignFields({
             />
           }
         />
-        <TextControl
+        <SizeSlider
           label="Logo size"
           value={cover.logoSize || ""}
-          placeholder="Uses desktop"
-          onChange={(logoSize) => patchCover({ logoSize: logoSize.trim() || undefined })}
+          defaultValue={desktop.cover.logoSize}
+          min={24}
+          max={96}
+          step={2}
+          unit="px"
+          optional
+          emptyMeansDefault
+          onChange={(logoSize) => patchCover({ logoSize })}
           badge={
             <PhoneBadge
               active={Boolean(cover.logoSize)}
@@ -198,11 +155,17 @@ function PhoneDesignFields({
             />
           }
         />
-        <TextControl
+        <SizeSlider
           label="Date size"
           value={cover.dateSize || ""}
-          placeholder="Uses desktop"
-          onChange={(dateSize) => patchCover({ dateSize: dateSize.trim() || undefined })}
+          defaultValue={desktop.cover.dateSize}
+          min={6}
+          max={24}
+          step={1}
+          unit="pt"
+          optional
+          emptyMeansDefault
+          onChange={(dateSize) => patchCover({ dateSize })}
           badge={
             <PhoneBadge
               active={Boolean(cover.dateSize)}
@@ -210,7 +173,7 @@ function PhoneDesignFields({
             />
           }
         />
-        <AlignControl
+        <AlignButtons
           label="Text alignment"
           value={cover.textAlign || "left"}
           onChange={(textAlign) => patchCover({ textAlign })}
@@ -221,28 +184,23 @@ function PhoneDesignFields({
             />
           }
         />
-        <Field
-          label="Image side"
-          hint="Behind text (current) or stacked on top"
+        <ChoiceButtons
+          label="Photo placement"
+          value={cover.imageSide || "behind"}
+          onChange={(imageSide) =>
+            patchCover({ imageSide: imageSide === "behind" ? undefined : imageSide })
+          }
           badge={
             <PhoneBadge
               active={Boolean(cover.imageSide)}
               onReset={cover.imageSide ? () => resetCoverKey("imageSide") : undefined}
             />
           }
-        >
-          <select
-            className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-            value={cover.imageSide || "behind"}
-            onChange={(e) => {
-              const value = e.target.value as "behind" | "top";
-              patchCover({ imageSide: value === "behind" ? undefined : value });
-            }}
-          >
-            <option value="behind">Behind text (desktop)</option>
-            <option value="top">On top of text</option>
-          </select>
-        </Field>
+          options={[
+            { value: "behind", label: "Behind text" },
+            { value: "top", label: "Above text" },
+          ]}
+        />
       </div>
       {onHeroImageChange && coverPhoto && imageSrc(coverPhoto) ? (
         <ImageCropControl
@@ -257,104 +215,104 @@ function PhoneDesignFields({
         </p>
       )}
       <div className="grid gap-3 sm:grid-cols-2">
-        <Field
+        <ChoiceButtons
           label="Photo grid columns"
+          value={String(mobile.proofColumns || "") as "" | "1" | "2"}
+          onChange={(value) =>
+            patchMobile({
+              proofColumns: value === "1" || value === "2" ? (Number(value) as 1 | 2) : undefined,
+            })
+          }
           badge={
             <PhoneBadge
               active={Boolean(mobile.proofColumns)}
               onReset={mobile.proofColumns ? () => resetKey("proofColumns") : undefined}
             />
           }
-        >
-          <select
-            className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-            value={mobile.proofColumns || ""}
-            onChange={(e) => {
-              const value = e.target.value;
-              patchMobile({
-                proofColumns: value === "1" || value === "2" ? (Number(value) as 1 | 2) : undefined,
-              });
-            }}
-          >
-            <option value="">Desktop default</option>
-            <option value="1">1 column</option>
-            <option value="2">2 columns</option>
-          </select>
-        </Field>
-        <Field
-          label="Plan / package columns"
+          options={[
+            { value: "", label: "Desktop" },
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+          ]}
+        />
+        <ChoiceButtons
+          label="Plan columns"
+          value={
+            mobile.planColumns
+              ? String(countGridColumns(mobile.planColumns) as 1 | 2)
+              : ""
+          }
+          onChange={(value) =>
+            patchMobile({
+              planColumns: value === "1" || value === "2" ? columnsToCss(Number(value) as 1 | 2) : undefined,
+            })
+          }
           badge={
             <PhoneBadge
               active={Boolean(mobile.planColumns)}
               onReset={mobile.planColumns ? () => resetKey("planColumns") : undefined}
             />
           }
-        >
-          <select
-            className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-            value={mobile.planColumns || ""}
-            onChange={(e) => {
-              const value = e.target.value;
-              patchMobile({ planColumns: value || undefined });
-            }}
-          >
-            <option value="">Desktop default</option>
-            <option value="1fr">1 column</option>
-            <option value="1fr 1fr">2 columns</option>
-          </select>
-        </Field>
-        <Field
+          options={[
+            { value: "", label: "Desktop" },
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+          ]}
+        />
+        <ChoiceButtons
           label="Investment columns"
+          value={
+            mobile.investmentColumns
+              ? String(countGridColumns(mobile.investmentColumns) as 1 | 2)
+              : ""
+          }
+          onChange={(value) =>
+            patchMobile({
+              investmentColumns:
+                value === "1" || value === "2" ? columnsToCss(Number(value) as 1 | 2) : undefined,
+            })
+          }
           badge={
             <PhoneBadge
               active={Boolean(mobile.investmentColumns)}
               onReset={mobile.investmentColumns ? () => resetKey("investmentColumns") : undefined}
             />
           }
-        >
-          <select
-            className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-            value={mobile.investmentColumns || ""}
-            onChange={(e) => {
-              const value = e.target.value;
-              patchMobile({ investmentColumns: value || undefined });
-            }}
-          >
-            <option value="">Desktop default</option>
-            <option value="1fr">1 column</option>
-            <option value="1fr 1fr">2 columns</option>
-          </select>
-        </Field>
-        <Field
+          options={[
+            { value: "", label: "Desktop" },
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+          ]}
+        />
+        <ChoiceButtons
           label="Reviews"
+          value={(mobile.reviewLayout || "") as "" | ReviewPhoneLayout}
+          onChange={(reviewLayout) =>
+            patchMobile({ reviewLayout: (reviewLayout || undefined) as ReviewPhoneLayout | undefined })
+          }
           badge={
             <PhoneBadge
               active={Boolean(mobile.reviewLayout)}
               onReset={mobile.reviewLayout ? () => resetKey("reviewLayout") : undefined}
             />
           }
-        >
-          <select
-            className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-            value={mobile.reviewLayout || ""}
-            onChange={(e) => {
-              const value = e.target.value as ReviewPhoneLayout | "";
-              patchMobile({ reviewLayout: value || undefined });
-            }}
-          >
-            <option value="">Desktop default</option>
-            <option value="stack">Stacked</option>
-            <option value="side">Side by side</option>
-          </select>
-        </Field>
-        <TextControl
+          options={[
+            { value: "", label: "Desktop" },
+            { value: "stack", label: "Stacked" },
+            { value: "side", label: "Side by side" },
+          ]}
+        />
+        <SizeSlider
           label="Section title size"
-          hint="Default 25px on phone. Desktop stays 16.5pt."
           value={mobile.sectionTitleSize || ""}
-          placeholder="25px"
-          onChange={(sectionTitleSize) =>
-            patchMobile({ sectionTitleSize: sectionTitleSize.trim() || undefined })
-          }
+          defaultValue="25px"
+          min={14}
+          max={48}
+          step={1}
+          unit="px"
+          optional
+          emptyMeansDefault
+          onChange={(sectionTitleSize) => patchMobile({ sectionTitleSize })}
           badge={
             <PhoneBadge
               active={Boolean(mobile.sectionTitleSize)}
@@ -362,12 +320,17 @@ function PhoneDesignFields({
             />
           }
         />
-        <TextControl
+        <SizeSlider
           label="Space above sign-off"
-          hint="Space between Reply and With Love. Default 32px on phone."
           value={mobile.signOffGap || ""}
-          placeholder="32px"
-          onChange={(signOffGap) => patchMobile({ signOffGap: signOffGap.trim() || undefined })}
+          defaultValue="32px"
+          min={0}
+          max={80}
+          step={1}
+          unit="px"
+          optional
+          emptyMeansDefault
+          onChange={(signOffGap) => patchMobile({ signOffGap })}
           badge={
             <PhoneBadge
               active={Boolean(mobile.signOffGap)}
@@ -419,17 +382,59 @@ export function ProposalDesignFields({
 
   const stops = value.cover.gradientStops;
   const coverPhoto = heroImage || null;
+  const planCols = countGridColumns(value.planColumns);
+  const investmentCols = countGridColumns(value.investmentColumns);
 
   return (
     <div className="grid gap-4">
       <p className="text-xs text-ink/55">
-        Lengths use mm or px. Column tracks use fr, for example .79fr 1.21fr. Empty values fall back to the Awake-style defaults when you reset.
+        Drag the sliders or tap the buttons. The live preview updates as you go. Reset restores the Awake default for that field.
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextControl label="Header height" hint="Default 70mm" value={value.cover.heroHeight} onChange={(heroHeight) => patchCover({ heroHeight })} />
-        <TextControl label="Logo size" hint="Default 46px" value={value.cover.logoSize} onChange={(logoSize) => patchCover({ logoSize })} />
-        <TextControl label="Date size" hint="Default 8pt, smaller than the subtitle" value={value.cover.dateSize} onChange={(dateSize) => patchCover({ dateSize })} />
-        <TextControl label="Date offset" hint="Default 2.8mm, pulls the date lower" value={value.cover.dateOffset} onChange={(dateOffset) => patchCover({ dateOffset })} />
+        <SizeSlider
+          label="Header height"
+          value={value.cover.heroHeight}
+          defaultValue="70mm"
+          min={120}
+          max={600}
+          step={4}
+          unit="px"
+          onChange={(heroHeight) => patchCover({ heroHeight: heroHeight || "70mm" })}
+          onReset={() => patchCover({ heroHeight: "70mm" })}
+        />
+        <SizeSlider
+          label="Logo size"
+          value={value.cover.logoSize}
+          defaultValue="46px"
+          min={24}
+          max={96}
+          step={2}
+          unit="px"
+          onChange={(logoSize) => patchCover({ logoSize: logoSize || "46px" })}
+          onReset={() => patchCover({ logoSize: "46px" })}
+        />
+        <SizeSlider
+          label="Date size"
+          value={value.cover.dateSize}
+          defaultValue="8pt"
+          min={6}
+          max={24}
+          step={1}
+          unit="pt"
+          onChange={(dateSize) => patchCover({ dateSize: dateSize || "8pt" })}
+          onReset={() => patchCover({ dateSize: "8pt" })}
+        />
+        <SizeSlider
+          label="Space above the date"
+          value={value.cover.dateOffset}
+          defaultValue="2.8mm"
+          min={0}
+          max={40}
+          step={1}
+          unit="px"
+          onChange={(dateOffset) => patchCover({ dateOffset: dateOffset || "2.8mm" })}
+          onReset={() => patchCover({ dateOffset: "2.8mm" })}
+        />
       </div>
       {onHeroImageChange && coverPhoto && imageSrc(coverPhoto) ? (
         <ImageCropControl
@@ -445,34 +450,133 @@ export function ProposalDesignFields({
       )}
       <div className="grid gap-3 sm:grid-cols-3">
         {([0, 1, 2] as const).map((index) => (
-          <Field key={index} label={`Gradient stop ${index + 1} (%)`} hint={index === 0 ? "Default 42 / 52 / 64" : undefined}>
-            <Input
-              type="number"
-              min={0}
-              max={100}
-              value={stops[index]}
-              onChange={(e) => {
-                const next = [...stops] as [number, number, number];
-                const parsed = Number(e.target.value);
-                next[index] = Number.isFinite(parsed) ? parsed : stops[index];
-                patchCover({ gradientStops: next });
-              }}
-            />
-          </Field>
+          <PercentSlider
+            key={index}
+            label={`Gradient fade ${index + 1}`}
+            hint={index === 0 ? "Where the dark fade meets the photo" : undefined}
+            value={stops[index]}
+            defaultValue={([42, 52, 64] as const)[index]}
+            onChange={(amount) => {
+              const next = [...stops] as [number, number, number];
+              next[index] = amount;
+              patchCover({ gradientStops: next });
+            }}
+            onReset={() => {
+              const next = [...stops] as [number, number, number];
+              next[index] = ([42, 52, 64] as const)[index];
+              patchCover({ gradientStops: next });
+            }}
+          />
         ))}
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextControl label="Plan columns" hint="Default .79fr 1.21fr" value={value.planColumns} onChange={(planColumns) => patch({ planColumns })} />
-        <TextControl label="Plan gap" hint="Default 5mm" value={value.planGap} onChange={(planGap) => patch({ planGap })} />
-        <TextControl label="Olive box padding" hint="Default 4.5mm 5mm 6.7mm" value={value.planLeadPadding} onChange={(planLeadPadding) => patch({ planLeadPadding })} />
-        <TextControl label="Investment columns" hint="Default 1.15fr 1fr" value={value.investmentColumns} onChange={(investmentColumns) => patch({ investmentColumns })} />
-        <TextControl label="Investment gap" hint="Default 6mm" value={value.investmentGap} onChange={(investmentGap) => patch({ investmentGap })} />
-        <TextControl label="Orange card top offset" hint="Default 0. The title stays outside the panel." value={value.cardOffsetTop} onChange={(cardOffsetTop) => patch({ cardOffsetTop })} />
-        <TextControl label="Space above Next step" hint="Default 9.5mm" value={value.nextStepGap} onChange={(nextStepGap) => patch({ nextStepGap })} />
-        <TextControl label="Space above the button" hint="Default 8.5mm" value={value.ctaGap} onChange={(ctaGap) => patch({ ctaGap })} />
-        <TextControl label="Space above the sign-off" hint="Default 7.5mm" value={value.signOffGap} onChange={(signOffGap) => patch({ signOffGap })} />
-        <AlignControl label="Button position" value={value.buttonPosition} onChange={(buttonPosition) => patch({ buttonPosition })} />
-        <AlignControl label="Sign-off alignment" value={value.signOffAlign} onChange={(signOffAlign) => patch({ signOffAlign })} />
+        <ChoiceButtons
+          label="Plan columns"
+          value={String(planCols === 3 ? 2 : planCols) as "1" | "2"}
+          onChange={(cols) =>
+            patch({ planColumns: columnsToCss(Number(cols) as 1 | 2, PLAN_TWO) })
+          }
+          options={[
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+          ]}
+        />
+        <SizeSlider
+          label="Space between plan boxes"
+          value={value.planGap}
+          defaultValue="5mm"
+          min={0}
+          max={64}
+          step={1}
+          unit="px"
+          onChange={(planGap) => patch({ planGap: planGap || "5mm" })}
+          onReset={() => patch({ planGap: "5mm" })}
+        />
+        <PaddingSlider
+          label="Space inside the olive box"
+          value={value.planLeadPadding}
+          defaultValue="4.5mm 5mm 6.7mm"
+          onChange={(planLeadPadding) =>
+            patch({ planLeadPadding: planLeadPadding || "4.5mm 5mm 6.7mm" })
+          }
+        />
+        <ChoiceButtons
+          label="Investment columns"
+          value={String(investmentCols === 3 ? 2 : investmentCols) as "1" | "2"}
+          onChange={(cols) =>
+            patch({ investmentColumns: columnsToCss(Number(cols) as 1 | 2, INVESTMENT_TWO) })
+          }
+          options={[
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+          ]}
+        />
+        <SizeSlider
+          label="Space between investment boxes"
+          value={value.investmentGap}
+          defaultValue="6mm"
+          min={0}
+          max={64}
+          step={1}
+          unit="px"
+          onChange={(investmentGap) => patch({ investmentGap: investmentGap || "6mm" })}
+          onReset={() => patch({ investmentGap: "6mm" })}
+        />
+        <SizeSlider
+          label="Orange card top offset"
+          hint="Keeps the title outside the orange panel"
+          value={value.cardOffsetTop}
+          defaultValue="0"
+          min={0}
+          max={120}
+          step={2}
+          unit="px"
+          onChange={(cardOffsetTop) => patch({ cardOffsetTop: cardOffsetTop || "0" })}
+          onReset={() => patch({ cardOffsetTop: "0" })}
+        />
+        <SizeSlider
+          label="Space above Next step"
+          value={value.nextStepGap}
+          defaultValue="9.5mm"
+          min={0}
+          max={80}
+          step={1}
+          unit="px"
+          onChange={(nextStepGap) => patch({ nextStepGap: nextStepGap || "9.5mm" })}
+          onReset={() => patch({ nextStepGap: "9.5mm" })}
+        />
+        <SizeSlider
+          label="Space above the button"
+          value={value.ctaGap}
+          defaultValue="8.5mm"
+          min={0}
+          max={80}
+          step={1}
+          unit="px"
+          onChange={(ctaGap) => patch({ ctaGap: ctaGap || "8.5mm" })}
+          onReset={() => patch({ ctaGap: "8.5mm" })}
+        />
+        <SizeSlider
+          label="Space above the sign-off"
+          value={value.signOffGap}
+          defaultValue="7.5mm"
+          min={0}
+          max={80}
+          step={1}
+          unit="px"
+          onChange={(signOffGap) => patch({ signOffGap: signOffGap || "7.5mm" })}
+          onReset={() => patch({ signOffGap: "7.5mm" })}
+        />
+        <AlignButtons
+          label="Button position"
+          value={value.buttonPosition}
+          onChange={(buttonPosition) => patch({ buttonPosition })}
+        />
+        <AlignButtons
+          label="Sign-off alignment"
+          value={value.signOffAlign}
+          onChange={(signOffAlign) => patch({ signOffAlign })}
+        />
       </div>
     </div>
   );
@@ -505,95 +609,108 @@ export function CardLayoutFields({
   phone?: boolean;
 }) {
   const heightMode = value.cardHeight || (phone ? "auto" : "equal");
-  const padding = value.cardPadding || "normal";
+  const padding =
+    typeof value.cardPadding === "string" &&
+    ["compact", "normal", "roomy"].includes(value.cardPadding)
+      ? value.cardPadding
+      : "normal";
   const textSize = value.cardTextSize || "normal";
+  const colCount = value.columns ? countGridColumns(value.columns) : ("" as const);
 
   return (
     <div className="grid gap-3 rounded-2xl border border-ink/10 bg-white/40 p-3">
       <p className="text-xs tracking-[0.18em] text-ember uppercase">
         Cards{phone ? " · phone" : ""}
       </p>
-      <Field
+      <ChoiceButtons
         label="Card height"
         hint={
           phone
             ? "Auto fits content (default on phone). Equal stretches a row. Fixed uses a number."
             : "Equal keeps a row the same height. Auto fits each card. Fixed uses a number."
         }
-      >
-        <select
-          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-          value={heightMode}
-          onChange={(e) => {
-            const cardHeight = e.target.value as CardHeightMode;
-            onChange({
-              cardHeight: phone && cardHeight === "auto" ? undefined : cardHeight,
-              cardHeightValue: cardHeight === "fixed" ? value.cardHeightValue || "48mm" : undefined,
-            });
-          }}
-        >
-          <option value="auto">Auto (fit content)</option>
-          <option value="equal">Equal height in row</option>
-          <option value="fixed">Fixed</option>
-        </select>
-      </Field>
+        value={heightMode}
+        onChange={(next) => {
+          const cardHeight = next as CardHeightMode;
+          onChange({
+            cardHeight: phone && cardHeight === "auto" ? undefined : cardHeight,
+            cardHeightValue: cardHeight === "fixed" ? value.cardHeightValue || "48mm" : undefined,
+          });
+        }}
+        options={[
+          { value: "auto", label: "Auto" },
+          { value: "equal", label: "Equal" },
+          { value: "fixed", label: "Fixed" },
+        ]}
+      />
       {heightMode === "fixed" ? (
-        <TextControl
+        <SizeSlider
           label="Fixed height"
-          hint="mm or px, for example 48mm"
           value={value.cardHeightValue || ""}
+          defaultValue="48mm"
+          min={24}
+          max={200}
+          step={1}
+          unit="px"
+          optional
+          emptyMeansDefault
           onChange={(cardHeightValue) =>
-            onChange({ cardHeightValue: cardHeightValue.trim() || undefined })
+            onChange({ cardHeightValue: cardHeightValue || undefined })
           }
         />
       ) : null}
-      <Field label="Card padding">
-        <select
-          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-          value={typeof padding === "string" && ["compact", "normal", "roomy"].includes(padding) ? padding : "normal"}
-          onChange={(e) => {
-            const next = e.target.value as CardPaddingPreset;
-            onChange({ cardPadding: next === "normal" ? undefined : next });
-          }}
-        >
-          <option value="compact">Compact</option>
-          <option value="normal">Normal</option>
-          <option value="roomy">Roomy</option>
-        </select>
-      </Field>
-      <Field label="Columns">
-        <select
-          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-          value={value.columns || ""}
-          onChange={(e) => onChange({ columns: e.target.value || undefined })}
-        >
-          <option value="">{phone ? "Desktop default" : "Section default"}</option>
-          <option value="1fr">1</option>
-          <option value="1fr 1fr">2</option>
-          {!phone ? <option value="1fr 1fr 1fr">3</option> : null}
-        </select>
-      </Field>
-      <TextControl
-        label="Gap between cards"
-        hint="CSS length. Leave blank for the Awake default."
-        value={value.gap || ""}
-        placeholder="Default"
-        onChange={(gap) => onChange({ gap: gap.trim() || undefined })}
+      <ChoiceButtons
+        label="Card padding"
+        value={padding}
+        onChange={(next) => {
+          const preset = next as CardPaddingPreset;
+          onChange({ cardPadding: preset === "normal" ? undefined : preset });
+        }}
+        options={[
+          { value: "compact", label: "Compact" },
+          { value: "normal", label: "Normal" },
+          { value: "roomy", label: "Roomy" },
+        ]}
       />
-      <Field label="Text size inside cards">
-        <select
-          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-          value={textSize}
-          onChange={(e) => {
-            const next = e.target.value;
-            onChange({ cardTextSize: next === "normal" ? undefined : next });
-          }}
-        >
-          <option value="normal">Normal</option>
-          <option value="small">Small</option>
-          <option value="large">Large</option>
-        </select>
-      </Field>
+      <ChoiceButtons
+        label="Columns"
+        value={colCount === "" ? "" : String(colCount)}
+        onChange={(next) => {
+          if (!next) {
+            onChange({ columns: undefined });
+            return;
+          }
+          onChange({ columns: columnsToCss(Number(next) as 1 | 2 | 3) });
+        }}
+        options={[
+          { value: "", label: phone ? "Desktop" : "Default" },
+          { value: "1", label: "1" },
+          { value: "2", label: "2" },
+          ...(phone ? [] : [{ value: "3", label: "3" }]),
+        ]}
+      />
+      <SizeSlider
+        label="Gap between cards"
+        value={value.gap || ""}
+        defaultValue="16px"
+        min={0}
+        max={64}
+        step={1}
+        unit="px"
+        optional
+        emptyMeansDefault
+        onChange={(gap) => onChange({ gap: gap || undefined })}
+      />
+      <ChoiceButtons
+        label="Text size inside cards"
+        value={textSize}
+        onChange={(next) => onChange({ cardTextSize: next === "normal" ? undefined : next })}
+        options={[
+          { value: "normal", label: "Normal" },
+          { value: "small", label: "Small" },
+          { value: "large", label: "Large" },
+        ]}
+      />
     </div>
   );
 }
@@ -606,7 +723,8 @@ export function SectionDesignFields({
   onChange: (section: ProposalSection) => void;
 }) {
   const design = section.design || {};
-  const titleMode = design.titleStyle === "hidden" || design.showTitle === false ? "hidden" : "standard";
+  const titleVisible = !(design.titleStyle === "hidden" || design.showTitle === false);
+  const colCount = design.columns ? countGridColumns(design.columns) : ("" as const);
 
   function patch(partial: SectionDesign) {
     onChange({ ...section, design: { ...design, ...partial } } as ProposalSection);
@@ -615,50 +733,135 @@ export function SectionDesignFields({
   return (
     <div className="grid gap-3 rounded-2xl border border-ink/10 bg-white/50 p-4">
       <p className="text-xs tracking-[0.2em] text-ember uppercase">This block</p>
-      <Field label="Section title" hint="Standard matches the other titles. Hidden removes it. Copy stays.">
-        <select
-          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-          value={titleMode}
-          onChange={(e) => {
-            const hidden = e.target.value === "hidden";
-            patch({ titleStyle: hidden ? "hidden" : "standard", showTitle: !hidden });
-          }}
-        >
-          <option value="standard">Standard</option>
-          <option value="hidden">Hidden</option>
-        </select>
-      </Field>
-      <TextControl label="Box width / columns" hint="CSS grid tracks for this block. Leave blank to use the proposal default." value={design.columns || ""} onChange={(columns) => patch({ columns: columns || undefined })} />
-      <AlignControl label="Horizontal alignment" value={design.align || "left"} onChange={(align) => patch({ align })} />
-      <TextControl label="Horizontal offset" hint="CSS length, default 0" value={design.offsetX || ""} onChange={(offsetX) => patch({ offsetX: offsetX || undefined })} />
-      <TextControl label="Padding" hint="CSS shorthand, for example 4.5mm 14mm 0" value={design.padding || ""} onChange={(padding) => patch({ padding: padding || undefined })} />
-      <TextControl label="Space above" hint="CSS length" value={design.marginTop || ""} onChange={(marginTop) => patch({ marginTop: marginTop || undefined })} />
-      <TextControl label="Column gap" value={design.gap || ""} onChange={(gap) => patch({ gap: gap || undefined })} />
+      <ToggleControl
+        label="Show section title"
+        hint="When off, the title is hidden but the copy stays."
+        checked={titleVisible}
+        onLabel="Shown"
+        offLabel="Hidden"
+        onChange={(shown) =>
+          patch({ titleStyle: shown ? "standard" : "hidden", showTitle: shown })
+        }
+      />
+      <ChoiceButtons
+        label="Columns"
+        value={colCount === "" ? "" : String(colCount)}
+        onChange={(value) => {
+          if (!value) {
+            patch({ columns: undefined });
+            return;
+          }
+          patch({ columns: columnsToCss(Number(value) as 1 | 2 | 3) });
+        }}
+        options={[
+          { value: "", label: "Default" },
+          { value: "1", label: "1" },
+          { value: "2", label: "2" },
+          { value: "3", label: "3" },
+        ]}
+      />
+      <AlignButtons
+        label="Horizontal alignment"
+        value={design.align || "left"}
+        onChange={(align) => patch({ align })}
+      />
+      <SizeSlider
+        label="Nudge sideways"
+        value={design.offsetX || ""}
+        defaultValue="0"
+        min={-80}
+        max={80}
+        step={2}
+        unit="px"
+        optional
+        emptyMeansDefault
+        onChange={(offsetX) => patch({ offsetX })}
+      />
+      <PaddingSlider
+        label="Space inside box"
+        value={design.padding || ""}
+        defaultValue="0"
+        optional
+        onChange={(padding) => patch({ padding })}
+      />
+      <SizeSlider
+        label="Space above"
+        value={design.marginTop || ""}
+        defaultValue="0"
+        min={0}
+        max={80}
+        step={1}
+        unit="px"
+        optional
+        emptyMeansDefault
+        onChange={(marginTop) => patch({ marginTop })}
+      />
+      <SizeSlider
+        label="Space between boxes"
+        value={design.gap || ""}
+        defaultValue="16px"
+        min={0}
+        max={64}
+        step={1}
+        unit="px"
+        optional
+        emptyMeansDefault
+        onChange={(gap) => patch({ gap })}
+      />
       {sectionHasCardLayout(section.type) ? (
         <CardLayoutFields value={design} onChange={(partial) => patch(partial)} />
       ) : null}
       {section.type === "investment" ? (
-        <TextControl
+        <SizeSlider
           label="Orange card top offset"
-          hint="Default for Awake style is 0: title outside, card fills the right of the panel."
           value={design.cardOffsetTop || ""}
-          onChange={(cardOffsetTop) => patch({ cardOffsetTop: cardOffsetTop || undefined })}
+          defaultValue="0"
+          min={0}
+          max={120}
+          step={2}
+          unit="px"
+          optional
+          emptyMeansDefault
+          onChange={(cardOffsetTop) => patch({ cardOffsetTop })}
         />
       ) : null}
       {section.type === "nextStep" ? (
-        <AlignControl
+        <AlignButtons
           label="Button position"
           value={design.buttonPosition || "left"}
           onChange={(buttonPosition) => patch({ buttonPosition })}
         />
       ) : null}
       {section.type === "signOff" ? (
-        <AlignControl
+        <AlignButtons
           label="Sign-off alignment"
           value={design.signOffAlign || "left"}
           onChange={(signOffAlign) => patch({ signOffAlign })}
         />
       ) : null}
+      <AdvancedCssDetails>
+        <ControlField label="Columns (raw)">
+          <Input
+            value={design.columns || ""}
+            placeholder="Leave blank for default"
+            onChange={(e) => patch({ columns: e.target.value.trim() || undefined })}
+          />
+        </ControlField>
+        <ControlField label="Padding (raw)">
+          <Input
+            value={design.padding || ""}
+            placeholder="Leave blank for default"
+            onChange={(e) => patch({ padding: e.target.value.trim() || undefined })}
+          />
+        </ControlField>
+        <ControlField label="Gap (raw)">
+          <Input
+            value={design.gap || ""}
+            placeholder="Leave blank for default"
+            onChange={(e) => patch({ gap: e.target.value.trim() || undefined })}
+          />
+        </ControlField>
+      </AdvancedCssDetails>
     </div>
   );
 }
