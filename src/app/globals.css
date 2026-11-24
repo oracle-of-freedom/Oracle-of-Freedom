@@ -1094,7 +1094,12 @@ dialog.fx-dialog[open]::backdrop {
     margin-bottom: var(--section-mb-m, unset);
   }
   .proposal-section .proposal-title {
-    font-size: var(--section-heading-m, inherit);
+    /* Phone default ~25px; per-section --section-heading-m wins when set. */
+    font-size: var(--section-heading-m, var(--section-title-m, 25px));
+  }
+  .proposal-section-signOff {
+    /* Clear space between Reply CTA and “With Love” on phone only. */
+    margin-top: var(--signoff-gap-m, 32px);
   }
   .proposal-section .proposal-intro,
   .proposal-section .proposal-follow,
@@ -1184,7 +1189,10 @@ dialog.fx-dialog[open]::backdrop {
     margin-bottom: var(--section-mb-m, unset);
   }
   .proposal-section .proposal-title {
-    font-size: var(--section-heading-m, inherit);
+    font-size: var(--section-heading-m, var(--section-title-m, 25px));
+  }
+  .proposal-section-signOff {
+    margin-top: var(--signoff-gap-m, 32px);
   }
   .is-phone-hidden {
     display: none !important;
@@ -1220,6 +1228,18 @@ dialog.fx-dialog[open]::backdrop {
     order: unset !important;
     margin-top: revert-layer;
     margin-bottom: revert-layer;
+  }
+  .proposal-section-signOff {
+    margin-top: var(--signoff-gap, 7.5mm) !important;
+  }
+  .proposal-section .proposal-title {
+    font-size: 16.5pt;
+  }
+  .proposal-section .proposal-title.is-large {
+    font-size: 22pt;
+  }
+  .proposal-section .proposal-title.is-xl {
+    font-size: 26pt;
   }
   .is-phone-hidden {
     display: revert !important;

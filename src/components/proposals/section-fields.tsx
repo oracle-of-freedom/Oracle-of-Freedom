@@ -370,7 +370,10 @@ function SectionPhoneFields({
           placeholder="Uses desktop"
         />
       </Field>
-      <Field label="Heading size">
+      <Field
+        label="Section title size"
+        hint="Overrides the phone Design default (25px) for this section only."
+      >
         <select
           className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
           value={(mobile.headingSize as TextScale | undefined) || "normal"}
@@ -379,7 +382,7 @@ function SectionPhoneFields({
             patch({ headingSize: value === "normal" ? undefined : value });
           }}
         >
-          <option value="normal">Normal (desktop)</option>
+          <option value="normal">Phone default</option>
           <option value="small">Small</option>
           <option value="large">Large</option>
         </select>
