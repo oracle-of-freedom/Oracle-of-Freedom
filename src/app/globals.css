@@ -1106,8 +1106,20 @@ dialog.fx-dialog[open]::backdrop {
   .proposal-review-card {
     min-height: var(--card-min-height-m, 0);
     height: var(--card-height-m, auto);
-    padding: var(--card-padding-m, var(--card-padding, revert-layer));
     font-size: var(--card-text-size-m, var(--card-text-size, inherit));
+  }
+  /* Explicit defaults — revert-layer collapsed padding to 0 when unset. */
+  .proposal-card {
+    padding: var(--card-padding-m, var(--card-padding, 2.3mm 3.4mm));
+  }
+  .proposal-dcard {
+    padding: var(--card-padding-m, var(--card-padding, 5.5mm 4.5mm 8mm));
+  }
+  .proposal-pricebox {
+    padding: var(--card-padding-m, var(--card-padding, 8mm 4mm));
+  }
+  .proposal-review-card {
+    padding: var(--card-padding-m, var(--card-padding, 5mm 4.5mm 6mm));
   }
   .proposal-cropped {
     object-position: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));
@@ -1218,8 +1230,19 @@ dialog.fx-dialog[open]::backdrop {
   .proposal-review-card {
     min-height: var(--card-min-height-m, 0);
     height: var(--card-height-m, auto);
-    padding: var(--card-padding-m, var(--card-padding, revert-layer));
     font-size: var(--card-text-size-m, var(--card-text-size, inherit));
+  }
+  .proposal-card {
+    padding: var(--card-padding-m, var(--card-padding, 2.3mm 3.4mm));
+  }
+  .proposal-dcard {
+    padding: var(--card-padding-m, var(--card-padding, 5.5mm 4.5mm 8mm));
+  }
+  .proposal-pricebox {
+    padding: var(--card-padding-m, var(--card-padding, 8mm 4mm));
+  }
+  .proposal-review-card {
+    padding: var(--card-padding-m, var(--card-padding, 5mm 4.5mm 6mm));
   }
   .proposal-cropped {
     object-position: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));
