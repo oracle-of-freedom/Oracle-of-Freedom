@@ -310,6 +310,7 @@ export function SectionFields({
               </Field>
               <Textarea
                 value={scene.body}
+                placeholder="Optional line under the title"
                 onChange={(e) => {
                   const scenes = section.data.scenes.map((s, i) =>
                     i === index ? { ...s, body: e.target.value } : s,
@@ -341,6 +342,26 @@ export function SectionFields({
           >
             Add scene
           </Button>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="accent-terracotta"
+              checked={Boolean(section.data.showImage)}
+              onChange={(e) => patch({ ...section.data, showImage: e.target.checked })}
+            />
+            Show a photograph beside the list
+          </label>
+          <ImageFields
+            label="Photograph"
+            image={section.data.image ?? null}
+            onChange={(image) =>
+              patch({
+                ...section.data,
+                image,
+                showImage: image && (image.mediaId || image.src) ? true : section.data.showImage,
+              })
+            }
+          />
           <Field label="Day flow">
             <Textarea
               value={section.data.dayFlow}
@@ -483,7 +504,14 @@ export function SectionFields({
               />
             </div>
           ))}
-          <Field label="Out of scope">
+          <Field label="Line label" hint="Bold label on the page. Leave blank to use Out of scope.">
+            <Input
+              value={section.data.noteLabel || ""}
+              placeholder="Out of scope"
+              onChange={(e) => patch({ ...section.data, noteLabel: e.target.value })}
+            />
+          </Field>
+          <Field label="Line">
             <Textarea
               value={section.data.outOfScope}
               onChange={(e) => patch({ ...section.data, outOfScope: e.target.value })}
@@ -512,6 +540,12 @@ export function SectionFields({
           <Field label="Body">
             <Textarea value={section.data.body} onChange={(e) => patch({ ...section.data, body: e.target.value })} />
           </Field>
+          <Field label="Price label" hint="For example, 1 reel. Leave blank for a single unlabelled price.">
+            <Input
+              value={section.data.priceLabel || ""}
+              onChange={(e) => patch({ ...section.data, priceLabel: e.target.value })}
+            />
+          </Field>
           <Field label="Price (USD)">
             <Input
               type="number"
@@ -519,7 +553,20 @@ export function SectionFields({
               onChange={(e) => patch({ ...section.data, priceUsd: Number(e.target.value) || 0 })}
             />
           </Field>
-          <Field label="Note">
+          <Field label="Second price label" hint="For example, 3 reels. Leave blank to hide the second price.">
+            <Input
+              value={section.data.bundleLabel || ""}
+              onChange={(e) => patch({ ...section.data, bundleLabel: e.target.value })}
+            />
+          </Field>
+          <Field label="Second price (USD)">
+            <Input
+              type="number"
+              value={section.data.bundlePriceUsd || ""}
+              onChange={(e) => patch({ ...section.data, bundlePriceUsd: Number(e.target.value) || 0 })}
+            />
+          </Field>
+          <Field label="Note" hint="Its own line under the prices. For example, Booked only when needed.">
             <Input value={section.data.note} onChange={(e) => patch({ ...section.data, note: e.target.value })} />
           </Field>
         </div>
@@ -559,10 +606,16 @@ export function SectionFields({
               onChange={(e) => patch({ ...section.data, depositPercent: Number(e.target.value) || 0 })}
             />
           </Field>
-          <Field label="Offer note">
+          <Field label="Offer note" hint="Short key terms in the coloured price box.">
             <Textarea
               value={section.data.offerNote}
               onChange={(e) => patch({ ...section.data, offerNote: e.target.value })}
+            />
+          </Field>
+          <Field label="Stay and meals" hint="Shown on the dark panel beside the price. One or two lines.">
+            <Textarea
+              value={section.data.asideNote || ""}
+              onChange={(e) => patch({ ...section.data, asideNote: e.target.value })}
             />
           </Field>
           <Field label="Booked separately line">

@@ -99,6 +99,11 @@ function formatMoney(amount: number) {
   }).format(amount);
 }
 
+function formatUsd(amount: number) {
+  if (!Number.isFinite(amount) || amount <= 0) return "";
+  return `US$${new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(amount)}`;
+}
+
 function formatDisplayDate(iso: string) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso;
   const d = new Date(`${iso}T12:00:00.000Z`);
@@ -176,6 +181,77 @@ function SignOff() {
   );
 }
 
+function PlanPhoto({ image }: { image: ProposalImage | null | undefined }) {
+  const src = imageSrc(image);
+  if (!src || !image) {
+    return (
+      <div
+        className="proposal-plan-placeholder flex min-h-72 items-end rounded-3xl bg-gradient-to-br from-clay via-[#f6efe4] to-ember/25 p-6 md:min-h-[32rem]"
+        aria-hidden="true"
+      >
+        <p className="text-xs tracking-[0.22em] text-ink/40 uppercase">Photograph</p>
+      </div>
+    );
+  }
+  return (
+    <figure>
+      <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-night/10">
+        <Image
+          src={src}
+          alt={image.alt || ""}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 40vw"
+          unoptimized={src.startsWith("/api/media/")}
+        />
+      </div>
+      {image.caption ? (
+        <figcaption className="mt-2 text-center text-xs tracking-wide text-ink/55">{image.caption}</figcaption>
+      ) : null}
+    </figure>
+  );
+}
+
+function AddonPrices({
+  data,
+  hidePrices,
+}: {
+  data: ProposalSectionOf<"addon">["data"];
+  hidePrices: boolean;
+}) {
+  const lines: string[] = [];
+  if (!hidePrices && data.priceUsd > 0) {
+    const label = data.priceLabel?.trim();
+    lines.push(label ? `${label}: ${formatUsd(data.priceUsd)}` : formatMoney(data.priceUsd));
+  }
+  if (!hidePrices && (data.bundlePriceUsd || 0) > 0) {
+    const label = data.bundleLabel?.trim();
+    const amount = formatUsd(data.bundlePriceUsd || 0);
+    lines.push(label ? `${label}: ${amount}` : amount);
+  }
+  const note = data.note.trim();
+  const noteHasPrice = /[$]|usd/i.test(note);
+  const showNote = Boolean(note) && !(hidePrices && noteHasPrice);
+  const priceClass =
+    lines.length >= 2 ? "font-serif text-2xl text-ink md:text-3xl" : "font-serif text-3xl text-ink";
+
+  return (
+    <>
+      {hidePrices ? <p className="mt-4 text-sm text-ink/55">Price shared when the offer is live.</p> : null}
+      {lines.length > 0 ? (
+        <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-10 sm:gap-y-2">
+          {lines.map((line) => (
+            <p key={line} className={priceClass}>
+              {line}
+            </p>
+          ))}
+        </div>
+      ) : null}
+      {showNote ? <p className="mt-4 text-base text-ink/75">{note}</p> : null}
+    </>
+  );
+}
+
 function renderSection(
   section: ProposalSection,
   proposal: Proposal,
@@ -239,7 +315,12 @@ function renderSection(
         </section>
       );
     }
-    case "plan":
+    case "plan": {
+      const showPhoto = Boolean(section.data.showImage) || Boolean(imageSrc(section.data.image));
+      const compact = section.data.scenes.every((scene) => !scene.body.trim());
+      const listClass = compact
+        ? `grid content-start ${showPhoto ? "" : "mt-10 sm:grid-cols-2 sm:gap-x-8"}`
+        : `grid gap-5 ${showPhoto ? "" : "mt-10 md:grid-cols-2"}`;
       return (
         <section key={section.id} className="mx-auto max-w-5xl px-5 py-14 md:py-20">
           <SectionHeading>{section.data.heading}</SectionHeading>
@@ -252,17 +333,31 @@ function renderSection(
               <p className="mt-2 font-serif text-2xl text-ink">{section.data.datesBody}</p>
             </div>
           ) : null}
-          <ol className="mt-10 grid gap-5 md:grid-cols-2">
-            {section.data.scenes.map((scene, index) => (
-              <li key={scene.id} className="rounded-3xl bg-white/60 p-5 md:p-6">
-                <p className="text-xs tracking-[0.2em] text-ink/45 uppercase">
-                  {String(index + 1).padStart(2, "0")}
-                </p>
-                <h3 className="mt-2 font-serif text-2xl text-terracotta">{scene.title}</h3>
-                <p className="mt-3 whitespace-pre-wrap text-ink/80">{scene.body}</p>
-              </li>
-            ))}
-          </ol>
+          <div className={showPhoto ? "mt-8 grid items-start gap-8 md:grid-cols-2" : ""}>
+            <ol className={listClass}>
+              {section.data.scenes.map((scene, index) => {
+                const number = String(index + 1).padStart(2, "0");
+                if (compact) {
+                  return (
+                    <li key={scene.id} className="flex items-baseline gap-4 border-b border-ink/10 py-3.5">
+                      <span className="w-8 shrink-0 text-xs tracking-[0.18em] text-ember">{number}</span>
+                      <h3 className="font-serif text-xl text-terracotta md:text-2xl">{scene.title}</h3>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={scene.id} className="rounded-3xl bg-white/60 p-5 md:p-6">
+                    <p className="text-xs tracking-[0.2em] text-ink/45 uppercase">{number}</p>
+                    <h3 className="mt-2 font-serif text-2xl text-terracotta">{scene.title}</h3>
+                    {scene.body.trim() ? (
+                      <p className="mt-3 whitespace-pre-wrap text-ink/80">{scene.body}</p>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ol>
+            {showPhoto ? <PlanPhoto image={section.data.image} /> : null}
+          </div>
           {section.data.dayFlow ? (
             <p className="mt-8 max-w-2xl whitespace-pre-wrap text-ink/75">{section.data.dayFlow}</p>
           ) : null}
@@ -271,6 +366,7 @@ function renderSection(
           ) : null}
         </section>
       );
+    }
     case "proof": {
       const video = resolveProposalVideo({
         videoUrl: section.data.videoUrl,
@@ -351,7 +447,7 @@ function renderSection(
           </div>
           {section.data.outOfScope ? (
             <p className="mt-8 max-w-2xl text-sm text-ink/65">
-              <span className="font-medium text-ink">Out of scope. </span>
+              <span className="font-medium text-ink">{section.data.noteLabel?.trim() || "Out of scope"}. </span>
               {section.data.outOfScope}
             </p>
           ) : null}
@@ -364,25 +460,16 @@ function renderSection(
         </section>
       );
     case "addon":
-      if (options.hidePrices) {
-        return (
-          <section key={section.id} className="mx-auto max-w-3xl px-5 py-10">
-            <p className="text-xs tracking-[0.2em] text-ember uppercase">{section.data.heading}</p>
-            <h3 className="mt-2 font-serif text-3xl text-terracotta">{section.data.title}</h3>
-            <p className="mt-3 text-ink/75">{section.data.body}</p>
-            <p className="mt-2 text-sm text-ink/55">Price shared when the offer is live.</p>
-          </section>
-        );
-      }
       return (
-        <section key={section.id} className="mx-auto max-w-3xl px-5 py-10">
-          <p className="text-xs tracking-[0.2em] text-ember uppercase">{section.data.heading}</p>
-          <h3 className="mt-2 font-serif text-3xl text-terracotta">{section.data.title}</h3>
-          <p className="mt-3 text-ink/75">{section.data.body}</p>
-          {section.data.priceUsd > 0 ? (
-            <p className="mt-4 font-serif text-3xl text-ink">{formatMoney(section.data.priceUsd)}</p>
+        <section key={section.id} className="mx-auto max-w-3xl px-5 py-10 md:py-14">
+          <h2 className="font-serif text-3xl text-terracotta md:text-4xl">{section.data.heading}</h2>
+          {section.data.title ? (
+            <h3 className="mt-2 font-serif text-3xl text-ink">{section.data.title}</h3>
           ) : null}
-          {section.data.note ? <p className="mt-2 text-sm text-ink/55">{section.data.note}</p> : null}
+          {section.data.body ? (
+            <p className="mt-4 whitespace-pre-wrap text-ink/80">{section.data.body}</p>
+          ) : null}
+          <AddonPrices data={section.data} hidePrices={options.hidePrices} />
         </section>
       );
     case "investment": {
@@ -404,7 +491,7 @@ function renderSection(
       return (
         <section key={section.id} className="px-5 py-14 md:py-20">
           <div className="mx-auto grid max-w-5xl gap-6 rounded-3xl bg-night p-6 text-sand md:grid-cols-2 md:p-10">
-            <div className="order-2 md:order-1">
+            <div className="order-2 flex flex-col justify-center md:order-1">
               <h2 className="font-serif text-3xl text-sand/90">{section.data.heading}</h2>
               <ul className="mt-8 space-y-0">
                 {section.data.compareRows.map((row) => (
@@ -420,20 +507,25 @@ function renderSection(
               {section.data.normalRatesLine ? (
                 <p className="mt-6 text-sm text-sand/55">{section.data.normalRatesLine}</p>
               ) : null}
+              {section.data.asideNote ? (
+                <p className="mt-6 max-w-md text-base leading-relaxed text-sand/85">{section.data.asideNote}</p>
+              ) : null}
             </div>
-            <div className="order-1 flex items-center justify-center md:order-2">
-              <div className="w-full rounded-3xl bg-gradient-to-br from-terracotta to-ember px-6 py-10 text-center text-white shadow-lg md:px-8">
+            <div className="order-1 flex md:order-2">
+              <div className="flex h-full w-full flex-col items-center justify-center rounded-3xl bg-gradient-to-br from-terracotta to-ember px-6 py-8 text-center text-white shadow-lg md:px-8 md:py-10">
                 <p className="text-xs tracking-[0.22em] uppercase">{section.data.clientLabel}</p>
                 <p className="mt-4 font-serif text-5xl md:text-6xl">
                   {formatMoney(section.data.packagePriceUsd)}
                 </p>
                 <p className="mt-2 text-sm text-white/85">{section.data.currencyNote}</p>
-                {section.data.offerNote ? (
-                  <p className="mx-auto mt-5 max-w-sm text-sm text-white/90">{section.data.offerNote}</p>
-                ) : null}
-                <p className="mt-6 text-sm text-white/90">
+                <p className="mt-6 text-base text-white/95">
                   Deposit {section.data.depositPercent}% · {formatMoney(deposit)}
                 </p>
+                {section.data.offerNote ? (
+                  <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-white/90">
+                    {section.data.offerNote}
+                  </p>
+                ) : null}
               </div>
             </div>
           </div>
@@ -442,14 +534,9 @@ function renderSection(
     }
     case "terms":
       return (
-        <section key={section.id} className="mx-auto max-w-5xl px-5 py-10 md:py-14">
-          <div className="grid gap-10 md:grid-cols-2 md:items-start">
-            <div>
-              <SectionHeading>{section.data.heading}</SectionHeading>
-              <EmberList items={section.data.items} />
-            </div>
-            <SignOff />
-          </div>
+        <section key={section.id} className="mx-auto max-w-3xl px-5 py-10 md:py-14">
+          <SectionHeading>{section.data.heading}</SectionHeading>
+          <EmberList items={section.data.items} />
         </section>
       );
     case "review":
@@ -479,7 +566,7 @@ function renderSection(
       );
     case "nextStep":
       return (
-        <section key={section.id} className="mx-auto max-w-3xl px-5 py-16 md:py-24">
+        <section key={section.id} className="mx-auto max-w-3xl px-5 py-14 md:py-16">
           <SectionHeading>{section.data.heading}</SectionHeading>
           <p className="whitespace-pre-wrap text-lg text-ink/80">{section.data.body}</p>
           <p className="mt-6 text-sm tracking-wide text-ink/60 uppercase">
@@ -499,11 +586,6 @@ function renderSection(
           ) : null}
           {section.data.closingLine ? (
             <p className="mt-10 text-ink/75">{section.data.closingLine}</p>
-          ) : null}
-          {!proposal.sections.some((s) => s.type === "terms" && s.enabled) ? (
-            <div className="mt-12">
-              <SignOff />
-            </div>
           ) : null}
         </section>
       );
@@ -556,6 +638,9 @@ export function ProposalView({
         </p>
       ) : null}
       {proposal.sections.map((section) => renderSection(section, proposal, { hidePrices }))}
+      <footer className="proposal-signoff mx-auto max-w-5xl px-5 pb-20 pt-2 md:pb-28">
+        <SignOff />
+      </footer>
     </article>
   );
 }

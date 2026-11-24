@@ -101,6 +101,9 @@ export type PlanData = {
   dayFlow: string;
   consent: string;
   scenes: PlanScene[];
+  /** When true, the page keeps a photograph beside the scene list. */
+  showImage?: boolean;
+  image?: ProposalImage | null;
 };
 
 export type ProofData = {
@@ -120,6 +123,8 @@ export type HowIWorkData = {
 export type DeliverablesData = {
   heading: string;
   cards: DeliverableCard[];
+  /** Bold label in front of `outOfScope`. Blank uses "Out of scope". */
+  noteLabel?: string;
   outOfScope: string;
   usage: string;
 };
@@ -128,7 +133,12 @@ export type AddonData = {
   heading: string;
   title: string;
   body: string;
+  /** Label beside priceUsd, for example "1 reel". */
+  priceLabel?: string;
   priceUsd: number;
+  /** Label beside bundlePriceUsd, for example "3 reels". */
+  bundleLabel?: string;
+  bundlePriceUsd?: number;
   note: string;
 };
 
@@ -137,7 +147,10 @@ export type InvestmentData = {
   clientLabel: string;
   packagePriceUsd: number;
   currencyNote: string;
+  /** Short key terms in the coloured price box. */
   offerNote: string;
+  /** Stay, meals, or other note on the dark panel. */
+  asideNote?: string;
   depositPercent: number;
   normalRatesLine: string;
   compareRows: { id: string; label: string; amount: string; struck?: boolean }[];
@@ -526,6 +539,8 @@ function parseSection(raw: unknown): ProposalSection | null {
                 };
               })
             : [],
+          showImage: typeof data.showImage === "boolean" ? data.showImage : undefined,
+          image: asImage(data.image),
         },
       };
     case "proof":
@@ -585,6 +600,7 @@ function parseSection(raw: unknown): ProposalSection | null {
                 };
               })
             : [],
+          noteLabel: asString(data.noteLabel, 80) || undefined,
           outOfScope: asString(data.outOfScope, 1200),
           usage: asString(data.usage, 1200),
         },
@@ -598,7 +614,10 @@ function parseSection(raw: unknown): ProposalSection | null {
           heading: asString(data.heading, 120) || "Optional add-on",
           title: asString(data.title, 160),
           body: asString(data.body, 1200),
+          priceLabel: asString(data.priceLabel, 80) || undefined,
           priceUsd: asNumber(data.priceUsd, 0),
+          bundleLabel: asString(data.bundleLabel, 80) || undefined,
+          bundlePriceUsd: asNumber(data.bundlePriceUsd, 0) || undefined,
           note: asString(data.note, 400),
         },
       };
@@ -613,6 +632,7 @@ function parseSection(raw: unknown): ProposalSection | null {
           packagePriceUsd: asNumber(data.packagePriceUsd, 0),
           currencyNote: asString(data.currencyNote, 80) || "USD",
           offerNote: asString(data.offerNote, 800),
+          asideNote: asString(data.asideNote, 500) || undefined,
           depositPercent: asNumber(data.depositPercent, 50),
           normalRatesLine: asString(data.normalRatesLine, 400),
           compareRows: Array.isArray(data.compareRows)
