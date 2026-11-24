@@ -12,6 +12,11 @@ import {
   type ActionState,
 } from "@/app/admin/proposals/actions";
 import { ProposalDesignFields } from "@/components/proposals/design-fields";
+import {
+  EditorViewportProvider,
+  EditorViewportToggle,
+  useEditorViewport,
+} from "@/components/proposals/editor-viewport";
 import { ProposalPdfButton } from "@/components/proposals/proposal-pdf-button";
 import { ProposalView } from "@/components/proposals/proposal-view";
 import { blankSection, SectionFields } from "@/components/proposals/section-fields";
@@ -20,6 +25,7 @@ import { Input, Label } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
 import { resetDesignDefaults } from "@/lib/proposal-design";
 import { resetAllImageCrops } from "@/lib/proposal-image-crop";
+import { moveSectionPhoneOrder, resetAllPhoneSettings } from "@/lib/proposal-mobile";
 import type { ProposalStudioReview } from "@/lib/proposal-reviews";
 import {
   SECTION_TYPES,
@@ -52,9 +58,32 @@ export function ProposalEditor({
   reviews: ProposalStudioReview[];
   films?: Film[];
 }) {
+  return (
+    <EditorViewportProvider>
+      <ProposalEditorInner
+        initial={initial}
+        origin={origin}
+        reviews={reviews}
+        films={films}
+      />
+    </EditorViewportProvider>
+  );
+}
+
+function ProposalEditorInner({
+  initial,
+  origin,
+  reviews,
+  films = [],
+}: {
+  initial: Proposal;
+  origin: string;
+  reviews: ProposalStudioReview[];
+  films?: Film[];
+}) {
+  const { viewport, isPhone } = useEditorViewport();
   const [proposal, setProposal] = useState(initial);
   const [selectedId, setSelectedId] = useState(initial.sections[0]?.id || "");
-  const [previewMode, setPreviewMode] = useState<"desktop" | "phone">("desktop");
   const [copied, setCopied] = useState<"live" | "preview" | null>(null);
   const [state, action, pending] = useActionState(saveProposalAction, null as ActionState);
   const reviewSelectRef = useRef<HTMLSelectElement>(null);
@@ -79,6 +108,9 @@ export function ProposalEditor({
 
   function moveSection(id: string, dir: -1 | 1) {
     setProposal((prev) => {
+      if (isPhone) {
+        return { ...prev, sections: moveSectionPhoneOrder(prev.sections, id, dir) };
+      }
       const index = prev.sections.findIndex((s) => s.id === id);
       const target = index + dir;
       if (index < 0 || target < 0 || target >= prev.sections.length) return prev;
@@ -108,6 +140,17 @@ export function ProposalEditor({
 
   return (
     <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-ink/10 bg-white/70 px-4 py-3">
+        <div>
+          <p className="text-xs tracking-[0.2em] text-ember uppercase">Edit for</p>
+          <p className="mt-1 text-sm text-ink/65">
+            {isPhone
+              ? "Phone changes apply under 768px only. Desktop stays as it is."
+              : "Desktop is the default. Switch to Phone to set phone-only overrides."}
+          </p>
+        </div>
+        <EditorViewportToggle />
+      </div>
       <div className="flex flex-wrap items-center gap-3">
         <Link href="/admin/proposals" className="text-sm underline underline-offset-4">
           Back to proposals
@@ -343,17 +386,29 @@ export function ProposalEditor({
       <div className="grid gap-6 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         <div className="space-y-4">
           <div className="rounded-3xl bg-white/70 p-4">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-xs tracking-[0.2em] text-ember uppercase">Design</p>
-              <button
-                type="button"
-                className="text-xs text-terracotta underline-offset-4 hover:underline"
-                onClick={() =>
-                  setProposal((prev) => resetAllImageCrops(resetDesignDefaults(prev)))
-                }
-              >
-                Reset to default
-              </button>
+              <div className="flex flex-wrap gap-3">
+                {isPhone ? (
+                  <button
+                    type="button"
+                    className="text-xs text-terracotta underline-offset-4 hover:underline"
+                    onClick={() => setProposal((prev) => resetAllPhoneSettings(prev))}
+                  >
+                    Reset all phone settings
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="text-xs text-terracotta underline-offset-4 hover:underline"
+                    onClick={() =>
+                      setProposal((prev) => resetAllImageCrops(resetDesignDefaults(prev)))
+                    }
+                  >
+                    Reset to default
+                  </button>
+                )}
+              </div>
             </div>
             <div className="mt-4">
               <ProposalDesignFields
@@ -374,7 +429,9 @@ export function ProposalEditor({
             </div>
           </div>
           <div className="rounded-3xl bg-white/70 p-4">
-            <p className="text-xs tracking-[0.2em] text-ember uppercase">Sections</p>
+            <p className="text-xs tracking-[0.2em] text-ember uppercase">
+              Sections{isPhone ? " · phone order" : ""}
+            </p>
             <ul className="mt-3 space-y-2">
               {proposal.sections.map((section) => (
                 <li key={section.id}>
@@ -388,15 +445,22 @@ export function ProposalEditor({
                       className="min-w-0 flex-1 text-left text-sm"
                       onClick={() => setSelectedId(section.id)}
                     >
-                      <span className={section.enabled ? "" : "text-ink/40 line-through"}>
+                      <span
+                        className={
+                          section.enabled && !section.mobile?.hidden
+                            ? ""
+                            : "text-ink/40 line-through"
+                        }
+                      >
                         {sectionLabel(section.type)}
+                        {isPhone && section.mobile?.hidden ? " · hidden" : ""}
                       </span>
                     </button>
                     <button
                       type="button"
                       className="text-xs text-ink/50"
                       onClick={() => moveSection(section.id, -1)}
-                      aria-label="Move up"
+                      aria-label={isPhone ? "Move up on phone" : "Move up"}
                     >
                       ↑
                     </button>
@@ -404,7 +468,7 @@ export function ProposalEditor({
                       type="button"
                       className="text-xs text-ink/50"
                       onClick={() => moveSection(section.id, 1)}
-                      aria-label="Move down"
+                      aria-label={isPhone ? "Move down on phone" : "Move down"}
                     >
                       ↓
                     </button>
@@ -414,26 +478,45 @@ export function ProposalEditor({
                       onClick={() =>
                         setProposal((prev) => ({
                           ...prev,
-                          sections: prev.sections.map((s) =>
-                            s.id === section.id ? { ...s, enabled: !s.enabled } : s,
-                          ),
+                          sections: prev.sections.map((s) => {
+                            if (s.id !== section.id) return s;
+                            if (isPhone) {
+                              const mobile = { ...(s.mobile || {}) };
+                              if (mobile.hidden) delete mobile.hidden;
+                              else mobile.hidden = true;
+                              if (!Object.keys(mobile).length) {
+                                const { mobile: _drop, ...rest } = s;
+                                return rest;
+                              }
+                              return { ...s, mobile };
+                            }
+                            return { ...s, enabled: !s.enabled };
+                          }),
                         }))
                       }
                     >
-                      {section.enabled ? "On" : "Off"}
+                      {isPhone
+                        ? section.mobile?.hidden
+                          ? "Hidden"
+                          : "Show"
+                        : section.enabled
+                          ? "On"
+                          : "Off"}
                     </button>
-                    <button
-                      type="button"
-                      className="text-xs text-ink/45"
-                      onClick={() => {
-                        setProposal((prev) => ({
-                          ...prev,
-                          sections: prev.sections.filter((s) => s.id !== section.id),
-                        }));
-                      }}
-                    >
-                      ×
-                    </button>
+                    {!isPhone ? (
+                      <button
+                        type="button"
+                        className="text-xs text-ink/45"
+                        onClick={() => {
+                          setProposal((prev) => ({
+                            ...prev,
+                            sections: prev.sections.filter((s) => s.id !== section.id),
+                          }));
+                        }}
+                      >
+                        ×
+                      </button>
+                    ) : null}
                   </div>
                 </li>
               ))}
@@ -481,34 +564,17 @@ export function ProposalEditor({
 
         <div className="rounded-3xl bg-white/70 p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs tracking-[0.2em] text-ember uppercase">Live preview</p>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                className={`rounded-full px-3 py-1 text-sm ${
-                  previewMode === "desktop" ? "bg-ink text-sand" : "bg-sand text-ink"
-                }`}
-                onClick={() => setPreviewMode("desktop")}
-              >
-                Desktop
-              </button>
-              <button
-                type="button"
-                className={`rounded-full px-3 py-1 text-sm ${
-                  previewMode === "phone" ? "bg-ink text-sand" : "bg-sand text-ink"
-                }`}
-                onClick={() => setPreviewMode("phone")}
-              >
-                Phone
-              </button>
-            </div>
+            <p className="text-xs tracking-[0.2em] text-ember uppercase">
+              Live preview · {viewport}
+            </p>
+            <EditorViewportToggle />
           </div>
           <div
             className={`mt-4 overflow-hidden rounded-2xl border border-ink/10 bg-sand ${
-              previewMode === "phone" ? "mx-auto max-w-[390px]" : ""
+              isPhone ? "mx-auto max-w-[390px]" : ""
             }`}
           >
-            <div className={previewMode === "phone" ? "max-h-[80vh] overflow-y-auto" : ""}>
+            <div className={isPhone ? "max-h-[80vh] overflow-y-auto" : ""}>
               <ProposalView
                 proposal={proposal}
                 mode="admin"

@@ -4,7 +4,13 @@
  * Lengths are CSS values, usually millimetres (`70mm`, `4.5mm 5mm 6.7mm`)
  * or pixels (`46px`). Column tracks are CSS grid values (`.79fr 1.21fr`).
  * Gradient stops are percentages. Missing fields use the Awake-style defaults.
+ * Optional `mobile` overrides apply under 768px; print always uses desktop.
  */
+
+import {
+  parseProposalDesignMobile,
+  type ProposalDesignMobile,
+} from "@/lib/proposal-mobile";
 
 export type DesignAlign = "left" | "center" | "right";
 
@@ -49,6 +55,8 @@ export type ProposalDesign = {
   buttonPosition?: DesignAlign;
   /** Sign-off alignment. Default `left`. */
   signOffAlign?: DesignAlign;
+  /** Phone-only overrides. Missing keys fall back to the desktop values above. */
+  mobile?: ProposalDesignMobile;
 };
 
 export type SectionDesign = {
@@ -188,6 +196,7 @@ export function parseProposalDesign(value: unknown): ProposalDesign | undefined 
   const signOffGap = asCss(record.signOffGap);
   const buttonPosition = asAlign(record.buttonPosition);
   const signOffAlign = asAlign(record.signOffAlign);
+  const mobile = parseProposalDesignMobile(record.mobile);
   if (cover) design.cover = cover;
   if (planColumns) design.planColumns = planColumns;
   if (planGap) design.planGap = planGap;
@@ -200,6 +209,7 @@ export function parseProposalDesign(value: unknown): ProposalDesign | undefined 
   if (signOffGap) design.signOffGap = signOffGap;
   if (buttonPosition) design.buttonPosition = buttonPosition;
   if (signOffAlign) design.signOffAlign = signOffAlign;
+  if (mobile) design.mobile = mobile;
   return Object.keys(design).length ? design : undefined;
 }
 
@@ -266,7 +276,7 @@ export function sectionTitleVisible(design?: SectionDesign) {
   return true;
 }
 
-/** Restore Awake-style design defaults. Copy on sections is left as it is. */
+/** Restore Awake-style design defaults. Copy on sections is left as it is. Clears phone design too. */
 export function resetDesignDefaults<T extends { design?: ProposalDesign; sections: { design?: SectionDesign }[] }>(
   entity: T,
 ): T {
@@ -281,3 +291,5 @@ export function resetDesignDefaults<T extends { design?: ProposalDesign; section
     }),
   };
 }
+
+export type { ProposalDesignMobile };
