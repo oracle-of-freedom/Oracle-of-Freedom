@@ -131,6 +131,8 @@ export type ProofData = {
   images: ProposalImage[];
   videoUrl: string;
   videoMediaId: string;
+  /** Cover for the video card. Falls back to a YouTube thumb or a brand placeholder. */
+  videoCover?: ProposalImage | null;
   portfolioLine: string;
 };
 
@@ -698,6 +700,7 @@ function parseSection(raw: unknown): ProposalSection | null {
           images: asImages(data.images),
           videoUrl: asString(data.videoUrl, 500),
           videoMediaId: asString(data.videoMediaId, 64),
+          videoCover: asImage(data.videoCover),
           portfolioLine: asString(data.portfolioLine, 300) || PORTFOLIO_LINE,
         },
       };

@@ -1,125 +1,226 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { resolveProposalVideo, type ProposalVideoSource } from "@/lib/proposal-video";
+import Image from "next/image";
+import { useState } from "react";
+import {
+  proposalVideoHostNote,
+  proposalVideoWatchHref,
+  resolveProposalVideo,
+  resolveProposalVideoCover,
+  type ProposalVideoSource,
+} from "@/lib/proposal-video";
+import type { ProposalImage } from "@/lib/proposals";
 
-function EmbedFrame({ source }: { source: Extract<ProposalVideoSource, { kind: "youtube" | "vimeo" }> }) {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
+function PlayMark({ note }: { note?: string }) {
   return (
-    <div ref={ref} className="proposal-video aspect-video w-full overflow-hidden rounded-3xl bg-night">
-      {visible ? (
-        <iframe
-          title="Proposal teaser"
-          src={source.embedUrl}
-          className="h-full w-full"
-          loading="lazy"
-          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-          allowFullScreen
-          referrerPolicy="strict-origin-when-cross-origin"
-        />
-      ) : (
-        <div className="flex h-full items-center justify-center text-sm text-sand/60">Loading film…</div>
-      )}
-      <p className="proposal-video-print-link hidden">
-        Watch the video:{" "}
-        <a href={source.watchUrl} className="text-terracotta underline">
-          {source.watchUrl}
-        </a>
-      </p>
+    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-night/25">
+      <span className="fx-play flex h-16 w-16 items-center justify-center rounded-full bg-sand text-ink shadow-[0_8px_30px_rgba(42,24,16,0.28)]">
+        <svg viewBox="0 0 24 24" className="ml-1 h-7 w-7" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M8 5.14v13.72a1 1 0 0 0 1.54.84l10.14-6.86a1 1 0 0 0 0-1.68L9.54 4.3A1 1 0 0 0 8 5.14Z"
+          />
+        </svg>
+      </span>
+      {note ? (
+        <span className="absolute inset-x-3 bottom-3 text-center text-[11px] leading-tight text-sand">
+          {note}
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+function CoverStill({
+  src,
+  alt,
+  placeholder,
+}: {
+  src: string;
+  alt: string;
+  placeholder: boolean;
+}) {
+  if (placeholder || !src) {
+    return (
+      <span
+        className="block aspect-video w-full bg-gradient-to-br from-night via-[#2a221c] to-ember/40"
+        aria-hidden="true"
+      />
+    );
+  }
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={1280}
+      height={720}
+      sizes="(max-width: 720px) 100vw, 182mm"
+      className="aspect-video w-full bg-night object-cover transition-transform duration-500 ease-out group-hover:scale-[1.015]"
+      unoptimized={src.startsWith("/api/media/") || src.includes("i.ytimg.com")}
+    />
+  );
+}
+
+function WatchPrintLink({ href }: { href: string }) {
+  if (!href) return null;
+  return (
+    <p className="proposal-video-print-link">
+      <a href={href}>Watch the film</a>
+    </p>
+  );
+}
+
+function VideoCardShell({
+  source,
+  cover,
+  children,
+}: {
+  source: ProposalVideoSource;
+  cover: ReturnType<typeof resolveProposalVideoCover>;
+  children: React.ReactNode;
+}) {
+  const watchHref = proposalVideoWatchHref(source);
+  return (
+    <div className="proposal-video mt-8">
+      {children}
+      {/* Cover for print (screen card / player are hidden in @media print). */}
+      <div className="proposal-video-print-cover" aria-hidden="true">
+        <div className="relative overflow-hidden rounded-3xl">
+          <CoverStill src={cover.src} alt="" placeholder={cover.placeholder} />
+          <PlayMark note={proposalVideoHostNote(source) || undefined} />
+        </div>
+      </div>
+      <WatchPrintLink href={watchHref} />
     </div>
   );
 }
 
-function FileVideo({ source }: { source: Extract<ProposalVideoSource, { kind: "file" }> }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  const [ready, setReady] = useState(false);
+function EmbeddableCard({
+  source,
+  cover,
+}: {
+  source: Extract<ProposalVideoSource, { kind: "youtube" | "vimeo" }>;
+  cover: ReturnType<typeof resolveProposalVideoCover>;
+}) {
+  const [playing, setPlaying] = useState(false);
+  const note = proposalVideoHostNote(source);
 
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setReady(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" },
+  if (playing) {
+    return (
+      <VideoCardShell source={source} cover={cover}>
+        <div className="proposal-video-player aspect-video w-full overflow-hidden rounded-3xl bg-night">
+          <iframe
+            title="Proposal film"
+            src={`${source.embedUrl}${source.embedUrl.includes("?") ? "&" : "?"}autoplay=1`}
+            className="h-full w-full"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        </div>
+      </VideoCardShell>
     );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+  }
 
   return (
-    <div className="proposal-video overflow-hidden rounded-3xl bg-night">
-      <video
-        ref={ref}
-        className="aspect-video w-full object-cover"
-        controls
-        playsInline
-        muted
-        autoPlay={ready}
-        loop
-        preload={ready ? "metadata" : "none"}
-        src={ready ? source.src : undefined}
-      />
-      <p className="proposal-video-print-link hidden">
-        Watch the video on the proposal page (uploaded film).
-      </p>
-    </div>
+    <VideoCardShell source={source} cover={cover}>
+      <button
+        type="button"
+        aria-label="Play video"
+        className="proposal-video-card group relative block w-full overflow-hidden rounded-3xl text-left shadow-sm transition-shadow duration-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+        onClick={() => setPlaying(true)}
+      >
+        <CoverStill src={cover.src} alt={cover.alt} placeholder={cover.placeholder} />
+        <PlayMark note={note || undefined} />
+      </button>
+    </VideoCardShell>
+  );
+}
+
+function ExternalCard({
+  source,
+  cover,
+}: {
+  source: Extract<ProposalVideoSource, { kind: "link" }>;
+  cover: ReturnType<typeof resolveProposalVideoCover>;
+}) {
+  const note = proposalVideoHostNote(source);
+  return (
+    <VideoCardShell source={source} cover={cover}>
+      <a
+        href={source.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Play video"
+        className="proposal-video-card group relative block overflow-hidden rounded-3xl shadow-sm transition-shadow duration-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+      >
+        <CoverStill src={cover.src} alt={cover.alt} placeholder={cover.placeholder} />
+        <PlayMark note={note || undefined} />
+      </a>
+    </VideoCardShell>
+  );
+}
+
+function FileCard({
+  source,
+  cover,
+}: {
+  source: Extract<ProposalVideoSource, { kind: "file" }>;
+  cover: ReturnType<typeof resolveProposalVideoCover>;
+}) {
+  const [playing, setPlaying] = useState(false);
+
+  if (playing) {
+    return (
+      <VideoCardShell source={source} cover={cover}>
+        <div className="proposal-video-player overflow-hidden rounded-3xl bg-night">
+          <video
+            className="aspect-video w-full object-cover"
+            controls
+            playsInline
+            autoPlay
+            preload="metadata"
+            src={source.src}
+            poster={cover.placeholder ? undefined : cover.src || undefined}
+          />
+        </div>
+      </VideoCardShell>
+    );
+  }
+
+  return (
+    <VideoCardShell source={source} cover={cover}>
+      <button
+        type="button"
+        aria-label="Play video"
+        className="proposal-video-card group relative block w-full overflow-hidden rounded-3xl text-left shadow-sm transition-shadow duration-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+        onClick={() => setPlaying(true)}
+      >
+        <CoverStill src={cover.src} alt={cover.alt} placeholder={cover.placeholder} />
+        <PlayMark />
+      </button>
+    </VideoCardShell>
   );
 }
 
 export function ProposalVideoBlock({
   videoUrl,
   videoMediaId,
+  videoCover,
 }: {
   videoUrl?: string;
   videoMediaId?: string;
+  videoCover?: ProposalImage | null;
 }) {
   const source = resolveProposalVideo({ videoUrl, videoMediaId });
   if (!source) return null;
+  const cover = resolveProposalVideoCover({ source, videoCover });
 
   if (source.kind === "youtube" || source.kind === "vimeo") {
-    return (
-      <div className="mt-8">
-        <EmbedFrame source={source} />
-      </div>
-    );
+    return <EmbeddableCard source={source} cover={cover} />;
   }
-
   if (source.kind === "file") {
-    return (
-      <div className="mt-8">
-        <FileVideo source={source} />
-      </div>
-    );
+    return <FileCard source={source} cover={cover} />;
   }
-
-  return (
-    <div className="proposal-video mt-8 rounded-3xl bg-night/5 p-4 text-sm">
-      <a className="text-terracotta underline-offset-4 hover:underline" href={source.href}>
-        Watch the video
-      </a>
-      <p className="proposal-video-print-link mt-1 text-ink/60">{source.href}</p>
-    </div>
-  );
+  return <ExternalCard source={source} cover={cover} />;
 }

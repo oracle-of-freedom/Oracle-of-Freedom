@@ -5,6 +5,7 @@ import { ProposalEditor } from "@/components/proposals/proposal-editor";
 import { isAdmin } from "@/lib/admin-auth";
 import { settings, siteUrl } from "@/lib/content";
 import { readLiveContent } from "@/lib/live-content-store";
+import { getFilms } from "@/lib/live-public";
 import { getProposal } from "@/lib/proposal-store";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
@@ -27,6 +28,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ i
       quote: r.quote.en,
       service: r.service.en,
     }));
+  const films = await getFilms("portfolio").catch(() => []);
 
   const h = await headers();
   const host = h.get("x-forwarded-host") || h.get("host");
@@ -37,7 +39,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ i
     <main className="studio-page mx-auto max-w-7xl px-4 py-4 md:py-12">
       <AdminHeader current="proposals" title={t.proposals.editTitle} />
       <div className="mt-6">
-        <ProposalEditor initial={proposal} origin={origin} reviews={reviews} />
+        <ProposalEditor initial={proposal} origin={origin} reviews={reviews} films={films} />
       </div>
     </main>
   );

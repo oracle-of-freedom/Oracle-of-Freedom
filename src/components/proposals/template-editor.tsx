@@ -13,6 +13,8 @@ import { ProposalView } from "@/components/proposals/proposal-view";
 import { blankSection, SectionFields } from "@/components/proposals/section-fields";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
+import type { Film } from "@/lib/content";
+import { resetDesignDefaults } from "@/lib/proposal-design";
 import {
   SECTION_TYPES,
   sectionLabel,
@@ -21,7 +23,6 @@ import {
   type ProposalTemplate,
   type SectionType,
 } from "@/lib/proposals";
-import { resetDesignDefaults } from "@/lib/proposal-design";
 
 function asPreviewProposal(template: ProposalTemplate): Proposal {
   const stamp = new Date().toISOString();
@@ -45,7 +46,13 @@ function asPreviewProposal(template: ProposalTemplate): Proposal {
   };
 }
 
-export function TemplateEditor({ initial }: { initial: ProposalTemplate }) {
+export function TemplateEditor({
+  initial,
+  films = [],
+}: {
+  initial: ProposalTemplate;
+  films?: Film[];
+}) {
   const [template, setTemplate] = useState(initial);
   const [selectedId, setSelectedId] = useState(initial.sections[0]?.id || "");
   const [state, action, pending] = useActionState(saveTemplateAction, null as ActionState);
@@ -227,7 +234,7 @@ export function TemplateEditor({ initial }: { initial: ProposalTemplate }) {
               <p className="mb-4 text-xs tracking-[0.2em] text-ember uppercase">
                 Edit · {sectionLabel(selected.type)}
               </p>
-              <SectionFields section={selected} onChange={updateSection} />
+              <SectionFields section={selected} onChange={updateSection} films={films} />
             </div>
           ) : null}
         </div>
