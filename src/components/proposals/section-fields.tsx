@@ -9,6 +9,11 @@ import {
 import { PhoneBadge, useEditorViewport } from "@/components/proposals/editor-viewport";
 import { ImageCropControl } from "@/components/proposals/image-crop-control";
 import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
+import {
+  ChoiceButtons,
+  SizeSlider,
+  ToggleControl,
+} from "@/components/proposals/visual-controls";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
@@ -128,9 +133,17 @@ function ImageFields({
           />
           {isPhone ? (
             <div className="grid gap-3 sm:grid-cols-2">
-              <Field
+              <SizeSlider
                 label="Image height"
-                hint="CSS length, for example 58mm. Leave blank to use desktop."
+                value={mobile.height || ""}
+                defaultValue="234px"
+                min={80}
+                max={600}
+                step={4}
+                unit="px"
+                optional
+                emptyMeansDefault
+                onChange={(height) => onChange(patchImageMobile(value, { height }))}
                 badge={
                   <PhoneBadge
                     active={Boolean(mobile.height)}
@@ -141,21 +154,17 @@ function ImageFields({
                     }
                   />
                 }
-              >
-                <Input
-                  value={mobile.height || ""}
-                  onChange={(e) =>
-                    onChange(
-                      patchImageMobile(value, {
-                        height: e.target.value.trim() || undefined,
-                      }),
-                    )
-                  }
-                  placeholder="Uses desktop"
-                />
-              </Field>
-              <Field
+              />
+              <ChoiceButtons
                 label="Aspect ratio"
+                value={(mobile.aspect || "auto") as ImageAspect}
+                onChange={(aspect) =>
+                  onChange(
+                    patchImageMobile(value, {
+                      aspect: aspect === "auto" ? undefined : aspect,
+                    }),
+                  )
+                }
                 badge={
                   <PhoneBadge
                     active={Boolean(mobile.aspect && mobile.aspect !== "auto")}
@@ -166,55 +175,36 @@ function ImageFields({
                     }
                   />
                 }
-              >
-                <select
-                  className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-                  value={mobile.aspect || "auto"}
-                  onChange={(e) => {
-                    const aspect = e.target.value as ImageAspect;
-                    onChange(
-                      patchImageMobile(value, {
-                        aspect: aspect === "auto" ? undefined : aspect,
-                      }),
-                    );
-                  }}
-                >
-                  <option value="auto">Auto (desktop)</option>
-                  <option value="1:1">1:1</option>
-                  <option value="4:5">4:5</option>
-                  <option value="3:4">3:4</option>
-                  <option value="16:9">16:9</option>
-                </select>
-              </Field>
-              <Field
-                label="Show on phone"
-                badge={
-                  <PhoneBadge
-                    active={mobile.hidden === true}
-                    onReset={
-                      mobile.hidden === true
-                        ? () => onChange(patchImageMobile(value, { hidden: undefined }))
-                        : undefined
-                    }
-                  />
-                }
-              >
-                <select
-                  className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-                  value={mobile.hidden ? "hide" : "show"}
-                  onChange={(e) =>
-                    onChange(
-                      patchImageMobile(value, {
-                        hidden: e.target.value === "hide" ? true : undefined,
-                      }),
-                    )
-                  }
-                >
-                  <option value="show">Show</option>
-                  <option value="hide">Hide on phone</option>
-                </select>
-              </Field>
+                options={[
+                  { value: "auto", label: "Auto" },
+                  { value: "1:1", label: "Square" },
+                  { value: "4:5", label: "Tall" },
+                  { value: "3:4", label: "Portrait" },
+                  { value: "16:9", label: "Wide" },
+                ]}
+              />
             </div>
+          ) : null}
+          {isPhone ? (
+            <ToggleControl
+              label="Show on phone"
+              checked={!mobile.hidden}
+              onLabel="Shown"
+              offLabel="Hidden"
+              onChange={(shown) =>
+                onChange(patchImageMobile(value, { hidden: shown ? undefined : true }))
+              }
+              badge={
+                <PhoneBadge
+                  active={mobile.hidden === true}
+                  onReset={
+                    mobile.hidden === true
+                      ? () => onChange(patchImageMobile(value, { hidden: undefined }))
+                      : undefined
+                  }
+                />
+              }
+            />
           ) : null}
         </>
       ) : null}
@@ -349,63 +339,57 @@ function SectionPhoneFields({
           }
         />
       </div>
-      <Field label="Show on phone">
-        <select
-          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-          value={mobile.hidden ? "hide" : "show"}
-          onChange={(e) =>
-            patch({ hidden: e.target.value === "hide" ? true : undefined })
-          }
-        >
-          <option value="show">Show</option>
-          <option value="hide">Hide on phone</option>
-        </select>
-      </Field>
-      <Field label="Space above" hint="CSS length. Leave blank to use desktop.">
-        <Input
-          value={mobile.marginTop || ""}
-          onChange={(e) => patch({ marginTop: e.target.value.trim() || undefined })}
-          placeholder="Uses desktop"
-        />
-      </Field>
-      <Field label="Space below" hint="CSS length. Leave blank to use desktop.">
-        <Input
-          value={mobile.marginBottom || ""}
-          onChange={(e) => patch({ marginBottom: e.target.value.trim() || undefined })}
-          placeholder="Uses desktop"
-        />
-      </Field>
-      <Field
+      <ToggleControl
+        label="Show on phone"
+        checked={!mobile.hidden}
+        onLabel="Shown"
+        offLabel="Hidden"
+        onChange={(shown) => patch({ hidden: shown ? undefined : true })}
+      />
+      <SizeSlider
+        label="Space above"
+        value={mobile.marginTop || ""}
+        defaultValue="0"
+        min={0}
+        max={80}
+        step={1}
+        unit="px"
+        optional
+        emptyMeansDefault
+        onChange={(marginTop) => patch({ marginTop })}
+      />
+      <SizeSlider
+        label="Space below"
+        value={mobile.marginBottom || ""}
+        defaultValue="0"
+        min={0}
+        max={80}
+        step={1}
+        unit="px"
+        optional
+        emptyMeansDefault
+        onChange={(marginBottom) => patch({ marginBottom })}
+      />
+      <ChoiceButtons
         label="Section title size"
-        hint="Overrides the phone Design default (25px) for this section only."
-      >
-        <select
-          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-          value={(mobile.headingSize as TextScale | undefined) || "normal"}
-          onChange={(e) => {
-            const value = e.target.value as TextScale;
-            patch({ headingSize: value === "normal" ? undefined : value });
-          }}
-        >
-          <option value="normal">Phone default</option>
-          <option value="small">Small</option>
-          <option value="large">Large</option>
-        </select>
-      </Field>
-      <Field label="Body text size">
-        <select
-          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-          value={(mobile.bodySize as TextScale | undefined) || "normal"}
-          onChange={(e) => {
-            const value = e.target.value as TextScale;
-            patch({ bodySize: value === "normal" ? undefined : value });
-          }}
-        >
-          <option value="normal">Normal (desktop)</option>
-          <option value="small">Small</option>
-          <option value="large">Large</option>
-        </select>
-      </Field>
+        value={(mobile.headingSize as TextScale | undefined) || "normal"}
+        onChange={(value) => patch({ headingSize: value === "normal" ? undefined : value })}
+        options={[
+          { value: "normal", label: "Normal" },
+          { value: "small", label: "Small" },
+          { value: "large", label: "Large" },
+        ]}
+      />
+      <ChoiceButtons
+        label="Body text size"
+        value={(mobile.bodySize as TextScale | undefined) || "normal"}
+        onChange={(value) => patch({ bodySize: value === "normal" ? undefined : value })}
+        options={[
+          { value: "normal", label: "Normal" },
+          { value: "small", label: "Small" },
+          { value: "large", label: "Large" },
+        ]}
+      />
       {sectionHasCardLayout(section.type) ? (
         <CardLayoutFields
           phone
