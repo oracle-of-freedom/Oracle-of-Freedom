@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Video Proposal for Norte Nosara</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f4ece1;
+  --sand:#e7d6c3;
+  --peach:#e7c4a4;
+  --terra:#b4532a;
+  --rust:#9a4522;
+  --amber:#d9913a;
+  --ink:#2a211c;
+  --night:#1b1512;
+  --olive:#46553a;
+}
+@page{size:A4;margin:0}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#d8cbbb;font-family:Karla,sans-serif;color:var(--ink);font-size:12pt;line-height:1.42}
+.page{width:210mm;height:297mm;margin:0 auto 10mm;background:var(--cream);position:relative;overflow:hidden;page-break-after:always;page-break-inside:avoid}
+@media print{body{background:none}.page{margin:0;box-shadow:none}}
+.serif{font-family:'DM Serif Display',serif;font-weight:400}
+.ph{
+  background:linear-gradient(160deg,#2a221c,#45382e 50%,#2f2822);
+  color:var(--peach);
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  text-transform:uppercase;letter-spacing:.2em;font-size:10.5pt;font-weight:500;
+}
+.ph-label{padding:4mm;line-height:1.4}
+
+/* Cover: exact Awake header layout (height, logo, type, photo, gradient). Norte text + date only. */
+.hero{height:70mm;position:relative;background:#1b1512 url(norte-awake-cover-hat.jpg) right center/auto 100% no-repeat;color:#fff}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(27,21,18,1) 42%,rgba(27,21,18,.6) 52%,rgba(27,21,18,0) 64%)}
+.hero .in{position:absolute;left:14mm;width:92mm;bottom:8mm;z-index:2;text-align:left;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.brand{position:absolute;top:8mm;left:14mm;text-shadow:0 1px 6px rgba(0,0,0,.6);z-index:2;display:flex;align-items:center;gap:8px;font-size:8.5pt;letter-spacing:.28em;text-transform:uppercase;color:#f4ece1}
+.brand img{width:46px;height:46px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+.kicker{font-size:9pt;letter-spacing:.28em;text-transform:uppercase;color:var(--peach);margin-bottom:2.5mm}
+.hero h1{font-size:32pt;line-height:1.0;margin:0 0 6px;font-weight:400}
+.hero h1 em{color:var(--amber)}
+.hero .sub{font-size:9.5pt;color:#f1e4d4}
+.hero .date{margin-top:2.8mm;font-size:8pt;color:#f1e4d4}
+
+.pad{padding:4.5mm 14mm 0}
+h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:16.5pt;color:var(--terra);margin:0 0 2.4mm;display:flex;align-items:center;gap:10px}
+h2:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--peach),transparent)}
+.intro{margin:0 0 2.2mm}
+.intro p{margin:0 0 1.8mm;font-size:12pt}
+
+.why{display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-bottom:2.2mm}
+.card{background:#fbf6ef;border-radius:10px;padding:2.3mm 3.4mm;border-left:3px solid var(--amber)}
+.card b{display:block;font-family:'DM Serif Display',serif;font-weight:400;font-size:14pt;color:var(--rust);margin-bottom:1mm;line-height:1.2}
+.card p{margin:0;font-size:12pt;line-height:1.32}
+.card.wide{grid-column:1/-1}
+
+.team{display:grid;grid-template-columns:.79fr 1.21fr;gap:5mm;align-items:start}
+.lead{background:var(--olive);color:#f4ece1;border-radius:12px;padding:4.5mm 5mm 6.7mm;font-size:12pt;line-height:1.42}
+.lead .kicker{color:var(--peach);margin-bottom:2.2mm}
+ul.dots{list-style:none;margin:0;padding:0}
+ul.dots li{position:relative;padding-left:16px;margin:0 0 1.7mm;font-size:12pt;line-height:1.35}
+ul.dots li:before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%;background:var(--amber)}
+
+.proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5mm;margin:0 0 5.5mm}
+.proof-cell{height:92mm;border-radius:12px}
+.portfolio{font-size:12.5pt;margin:0 0 5mm}
+.portfolio a{color:var(--terra)}
+.video-ph{height:48mm;border-radius:12px}
+
+.del{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm;margin-bottom:5mm}
+.dcard{background:#fbf6ef;border-radius:12px;padding:5.5mm 4.5mm 8mm;border-top:4px solid var(--terra);min-height:48mm}
+.dcard:nth-child(2){border-top-color:var(--amber)}
+.dcard:nth-child(3){border-top-color:var(--olive)}
+.dcard h3{font-family:'DM Serif Display',serif;font-weight:400;font-size:16pt;margin:0 0 3mm;color:var(--ink);line-height:1.2}
+.dcard li{font-size:12pt}
+.fine{margin:0 0 3.2mm;font-size:12.5pt;line-height:1.45;max-width:182mm}
+.fine .lab{font-weight:700;color:var(--ink)}
+.addon{margin-top:8mm}
+.addon h3{font-family:'DM Serif Display',serif;font-weight:400;font-size:16.5pt;color:var(--rust);margin:0 0 3.5mm}
+.addon > p{margin:0 0 3.5mm;font-size:12pt}
+.addon ul.dots{margin:0 0 4mm}
+.prices{display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin:1mm 0 3.5mm}
+.pricebox{background:#fbf6ef;border-radius:12px;padding:8mm 4mm;text-align:center}
+.pricebox .pl{font-size:12.5pt;color:var(--ink);margin:0 0 1.5mm}
+.pricebox .pv{font-family:'DM Serif Display',serif;font-size:26pt;color:var(--ink);line-height:1;margin:0}
+.needed{margin:0;font-size:12.5pt;color:var(--ink)}
+
+.inv-wrap{padding:8mm 14mm 10mm}
+.inv{background:var(--night);color:#efe3d3;border-radius:16px;padding:5.5mm 6.5mm;margin:0 0 8mm}
+.inv-body{display:grid;grid-template-columns:1.15fr 1fr;gap:6mm;align-items:stretch}
+.inv-copy{display:flex;flex-direction:column;justify-content:center}
+.inv .row{display:flex;justify-content:space-between;gap:8px;padding:3mm 0;border-bottom:1px solid rgba(231,196,164,.18);font-size:12.5pt}
+.inv .row.strike span{text-decoration:line-through;color:#efe3d3;opacity:.7}
+.inv .normal{margin:3.5mm 0 0;font-size:12.5pt;color:#efe3d3;opacity:.85}
+.offer{background:linear-gradient(135deg,var(--terra),var(--amber));border-radius:14px;padding:7mm 5mm;text-align:center;color:#fff;display:flex;flex-direction:column;justify-content:center;min-height:100%}
+.offer .kicker{color:#fde9d3;margin-bottom:4mm}
+.offer .price{font-family:'DM Serif Display',serif;font-size:36pt;line-height:1}
+.offer .usd{font-size:13pt;opacity:.95;margin:3mm 0 0}
+.offer .dep{margin:5mm 0 0;font-size:13.5pt}
+.terms-col{margin-bottom:9.5mm}
+.terms-col ul.dots li{font-size:12.5pt;margin-bottom:3.2mm}
+.review-block{margin-top:8mm}
+.review{margin:0;background:#fbf6ef;border:1.5px dashed rgba(217,145,58,.55);border-radius:12px;padding:6mm 5mm;text-align:center;color:rgba(42,33,28,.7);font-size:12.5pt}
+.next p{margin:0 0 3.2mm;font-size:12.5pt}
+.valid{font-size:12.5pt;margin:0 0 3mm}
+.valid b{color:var(--terra);font-weight:700}
+.closing{margin:0 0 3mm;font-size:12.5pt}
+.close{margin-top:8.5mm}
+.cta{display:inline-flex;align-items:center;justify-content:center;background:var(--terra);color:#fff;border-radius:999px;padding:3.4mm 7.5mm;font-size:12.5pt;font-weight:500;text-decoration:none;letter-spacing:.01em;line-height:1;box-shadow:0 1px 2px rgba(42,33,28,.12)}
+.sign{margin-top:7.5mm;text-align:left}
+.sign .with{font-family:'DM Serif Display',serif;font-style:italic;font-size:16pt;color:var(--terra)}
+.sign .name{font-family:'DM Serif Display',serif;font-size:24pt;line-height:1;margin:0.8mm 0}
+.sign-brand{font-size:11pt;letter-spacing:.16em;text-transform:uppercase;color:rgba(42,33,28,.75);margin:1.5mm 0 2mm}
+.sign a{color:var(--terra);text-decoration:none;font-size:12.5pt}
+</style>
+</head>
+<body>
+
+<section class="page">
+  <div class="hero">
+    <div class="brand"><img src="data:image/png;base64,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" alt="">Oracle of Freedom</div>
+    <div class="in">
+      <h1 class="serif">Video Proposal<br><em>for Norte Nosara</em></h1>
+      <div class="sub">Two filming days during one of your retreats, plus drone footage of the hotel and its setting</div>
+      <div class="date">24 November 2026</div>
+    </div>
+  </div>
+  <div class="pad">
+    <div class="intro">
+      <p>Dear Norte Nosara family,</p>
+      <p>Norte has something special, and it deserves to be seen moving. Here's how I'd capture it on video, with everything in one place.</p>
+    </div>
+
+    <h2>Why Norte Nosara needs this</h2>
+    <div class="why">
+      <div class="card">
+        <b>Photos only tell half the story</b>
+        <p>Your photos are beautiful. What they can't fully show is how the place feels: the cozy rooms, the calm, and the rhythm of a day at Norte.</p>
+      </div>
+      <div class="card">
+        <b>The location</b>
+        <p>You're in town, not hidden away in the jungle or the mountains, and it still feels calm and peaceful. Drone footage shows that in a few seconds, in a way no photo can.</p>
+      </div>
+      <div class="card">
+        <b>Video for social and your website</b>
+        <p>There's no video on your website yet, and no professional video on your Instagram. Video now plays an important role in how you show up on social media, and guests expect to feel the place through video before they book. Short videos reach people that photos don't.</p>
+      </div>
+      <div class="card">
+        <b>Made for a small team</b>
+        <p>As a small, family-run place, you may not have time to edit video. You'll get ready-to-post reels and a library of cut and edited clips your team can use any time, with no extra work.</p>
+      </div>
+    </div>
+
+    <h2>What we'd film</h2>
+    <div class="team">
+      <div class="lead"><div class="kicker">Dates</div>I'll be in the Nosara area from 9 February to 3 March 2027. The two filming days in the package would be inside whichever retreat you choose, plus some time before or after for hotel-only and drone shots.</div>
+      <ul class="dots">
+        <li>The shala during practice</li>
+        <li>The Jungle Bar, from morning bowls to evening cocktails</li>
+        <li>How a retreat day flows, from sunrise to evening</li>
+        <li>Drone footage of the property and how it sits in town</li>
+        <li>Surf coaching</li>
+        <li>The rooms, the pool and the cozy corners</li>
+        <li>Lifestyle footage that shows how the property really feels</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="pad" style="padding-top:12mm">
+    <h2>Proof</h2>
+    <div class="proof-grid">
+      <div class="proof-cell ph"><span class="ph-label">Your photo here</span></div>
+      <div class="proof-cell ph"><span class="ph-label">Your photo here</span></div>
+      <div class="proof-cell ph"><span class="ph-label">Your photo here</span></div>
+      <div class="proof-cell ph"><span class="ph-label">Your photo here</span></div>
+    </div>
+    <p class="portfolio">You can see my work here: <a href="https://oracleoffreedom.com/portfolio">https://oracleoffreedom.com/portfolio</a></p>
+    <div class="video-ph ph"><span class="ph-label">Your video here</span></div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="pad" style="padding-top:11mm">
+    <h2>What's included and usage</h2>
+    <div class="del">
+      <div class="dcard">
+        <h3>Website</h3>
+        <ul class="dots"><li>One short film for your website</li></ul>
+      </div>
+      <div class="dcard">
+        <h3>Social media</h3>
+        <ul class="dots"><li>3 edited vertical reels for Instagram and TikTok</li></ul>
+      </div>
+      <div class="dcard">
+        <h3>Content library</h3>
+        <ul class="dots">
+          <li>A library of cut and edited clips your team can post any time</li>
+          <li>Drone footage of the property and its surroundings</li>
+        </ul>
+      </div>
+    </div>
+    <p class="fine"><span class="lab">Delivery and changes. </span>Everything is delivered within about two weeks of the shoot, with one round of changes.</p>
+    <p class="fine"><span class="lab">Usage. </span>You can use everything on your own website and social media. Usage is non-exclusive, and I keep the right to share selected pieces in my portfolio.</p>
+
+    <div class="addon">
+      <h2>Later, if you need it</h2>
+      <h3>Social media editing</h3>
+      <p>I travel, so I can't commit to a monthly package, but I can edit remotely whenever you need more content.</p>
+      <ul class="dots">
+        <li>Each reel is cut from the clip library we build together or from footage your team films on a phone, depending on your idea or vision.</li>
+        <li>Captions or subtitles and music, formatted for Instagram and TikTok, with one round of changes.</li>
+      </ul>
+      <div class="prices">
+        <div class="pricebox"><p class="pl">1 reel</p><p class="pv">US$110</p></div>
+        <div class="pricebox"><p class="pl">3 reels</p><p class="pv">US$285</p></div>
+      </div>
+      <p class="needed">Booked only when needed</p>
+    </div>
+
+    <div class="review-block">
+      <h2>A word from a recent client</h2>
+      <div class="review">[REVIEW: Agota to supply]</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="inv-wrap">
+    <h2>Investment</h2>
+    <div class="inv">
+      <div class="inv-body">
+      <div class="inv-copy">
+        <div class="row strike"><span>Normal rates (around)</span><span>US$1,700</span></div>
+        <p class="normal">Booked separately at my normal rates: around US$1,700</p>
+      </div>
+      <div class="offer">
+        <div class="kicker">For Norte Nosara</div>
+        <div class="price">$1,100</div>
+        <div class="usd">USD</div>
+        <div class="dep">Deposit 50% · $550</div>
+      </div>
+      </div>
+    </div>
+    <div class="terms-col">
+      <h2>Terms</h2>
+      <ul class="dots">
+        <li>A 50% deposit of US$550 confirms the dates, and the balance is due on delivery.</li>
+        <li>My retreat packages usually include accommodation and meals during the shoot days, so I'd like to discuss that as part of this rate.</li>
+        <li>Before filming, I agree with the guests and the retreat leader what can be filmed, so everyone feels comfortable.</li>
+        <li>Drone filming only with your permission.</li>
+        <li>You can use everything on your own website and social media. Usage is non-exclusive, and I keep the right to share selected pieces in my portfolio.</li>
+        <li>This offer is valid until 20 December 2026.</li>
+      </ul>
+    </div>
+    <h2>Next step</h2>
+    <div class="next">
+      <p>Choose the retreat and the two filming days, and I'll send the deposit details right away.</p>
+      <p class="valid">Offer valid until <b>20 December 2026</b></p>
+      <p class="closing">I'd love to bring Norte to life on film.</p>
+    </div>
+    <div class="close">
+      <a class="cta" href="mailto:agota@oracleoffreedom.com">Reply to confirm</a>
+      <div class="sign">
+        <div class="with">With Love,</div>
+        <div class="name">Agota</div>
+        <div class="sign-brand">Oracle of Freedom</div>
+        <a href="https://oracleoffreedom.com">https://oracleoffreedom.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
