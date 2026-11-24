@@ -31,7 +31,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ i
   const origin = host ? `${proto}://${host}` : siteUrl() || `https://${settings.domain}`;
 
   return (
-    <main className="studio-page px-4 pt-3 lg:px-6">
+    <main className="studio-page px-4 pt-3 lg:px-6 lg:!pb-0">
       <div className="mx-auto w-full max-w-[1600px]">
         <AdminHeader current="proposals" title={t.proposals.editTitle} />
       </div>

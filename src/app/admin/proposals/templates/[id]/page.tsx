@@ -23,7 +23,7 @@ export default async function TemplateEditPage({ params }: { params: Promise<{ i
   const films = await getFilms("portfolio").catch(() => []);
 
   return (
-    <main className="studio-page px-4 pt-3 lg:px-6">
+    <main className="studio-page px-4 pt-3 lg:px-6 lg:!pb-0">
       <div className="mx-auto w-full max-w-[1600px]">
         <AdminHeader current="proposals" title={t.proposals.editTemplateTitle} />
       </div>
