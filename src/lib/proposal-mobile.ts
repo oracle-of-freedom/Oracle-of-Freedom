@@ -65,6 +65,11 @@ export type CoverMobileDesign = {
   imageSide?: CoverImageSide;
 };
 
+/** Default phone size for `.proposal-title` (serif section headings). */
+export const PHONE_SECTION_TITLE_DEFAULT = "25px";
+/** Default phone space above the sign-off block (between CTA and “With Love”). */
+export const PHONE_SIGNOFF_GAP_DEFAULT = "32px";
+
 export type ProposalDesignMobile = {
   cover?: CoverMobileDesign;
   /** Plan columns on phone. Prefer `1fr` or `1fr 1fr`. */
@@ -74,6 +79,10 @@ export type ProposalDesignMobile = {
   proofColumns?: 1 | 2;
   /** Reviews stacked or side by side. */
   reviewLayout?: ReviewPhoneLayout;
+  /** Space above the sign-off section on phone. CSS length; default 32px. */
+  signOffGap?: string;
+  /** Section title (h2) size on phone. CSS length; default 25px. */
+  sectionTitleSize?: string;
 };
 
 export type SectionMobile = {
@@ -240,6 +249,8 @@ export function parseProposalDesignMobile(value: unknown): ProposalDesignMobile 
   const planColumns = asCss(record.planColumns, 40);
   const investmentColumns = asCss(record.investmentColumns, 40);
   const proofColumns = asColumns(record.proofColumns);
+  const signOffGap = asCss(record.signOffGap);
+  const sectionTitleSize = asCss(record.sectionTitleSize, 40);
   if (cover) mobile.cover = cover;
   if (planColumns) mobile.planColumns = planColumns;
   if (investmentColumns) mobile.investmentColumns = investmentColumns;
@@ -247,6 +258,8 @@ export function parseProposalDesignMobile(value: unknown): ProposalDesignMobile 
   if (record.reviewLayout === "stack" || record.reviewLayout === "side") {
     mobile.reviewLayout = record.reviewLayout;
   }
+  if (signOffGap) mobile.signOffGap = signOffGap;
+  if (sectionTitleSize) mobile.sectionTitleSize = sectionTitleSize;
   return Object.keys(mobile).length ? mobile : undefined;
 }
 
@@ -458,6 +471,8 @@ export function designMobileVars(mobile?: ProposalDesignMobile | null): CSSPrope
   if (mobile.proofColumns === 2) style["--proof-columns-m"] = "1fr 1fr";
   if (mobile.reviewLayout === "stack") style["--review-columns-m"] = "1fr";
   if (mobile.reviewLayout === "side") style["--review-columns-m"] = "1fr 1fr";
+  if (mobile.signOffGap) style["--signoff-gap-m"] = mobile.signOffGap;
+  if (mobile.sectionTitleSize) style["--section-title-m"] = mobile.sectionTitleSize;
   return style;
 }
 

@@ -347,6 +347,34 @@ function PhoneDesignFields({
             <option value="side">Side by side</option>
           </select>
         </Field>
+        <TextControl
+          label="Section title size"
+          hint="Default 25px on phone. Desktop stays 16.5pt."
+          value={mobile.sectionTitleSize || ""}
+          placeholder="25px"
+          onChange={(sectionTitleSize) =>
+            patchMobile({ sectionTitleSize: sectionTitleSize.trim() || undefined })
+          }
+          badge={
+            <PhoneBadge
+              active={Boolean(mobile.sectionTitleSize)}
+              onReset={mobile.sectionTitleSize ? () => resetKey("sectionTitleSize") : undefined}
+            />
+          }
+        />
+        <TextControl
+          label="Space above sign-off"
+          hint="Space between Reply and With Love. Default 32px on phone."
+          value={mobile.signOffGap || ""}
+          placeholder="32px"
+          onChange={(signOffGap) => patchMobile({ signOffGap: signOffGap.trim() || undefined })}
+          badge={
+            <PhoneBadge
+              active={Boolean(mobile.signOffGap)}
+              onReset={mobile.signOffGap ? () => resetKey("signOffGap") : undefined}
+            />
+          }
+        />
       </div>
     </div>
   );

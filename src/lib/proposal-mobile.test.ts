@@ -172,6 +172,15 @@ test("mobile parsers reject unsafe css and clamp crop", () => {
   assert.equal(parseSectionMobile({ order: 2.6, headingSize: "small" })?.order, 3);
   assert.equal(parseProposalDesignMobile({ proofColumns: 3 }), undefined);
   assert.equal(parseProposalDesignMobile({ proofColumns: 2 })?.proofColumns, 2);
+  assert.equal(
+    parseProposalDesignMobile({ signOffGap: "36px", sectionTitleSize: "26px" })?.signOffGap,
+    "36px",
+  );
+  assert.equal(
+    parseProposalDesignMobile({ signOffGap: "36px", sectionTitleSize: "26px" })?.sectionTitleSize,
+    "26px",
+  );
+  assert.equal(parseProposalDesignMobile({ signOffGap: "12px;color:red" }), undefined);
   const design = parseDesign({
     mobile: { cover: { heroHeight: "48mm" }, reviewLayout: "side" },
   });
