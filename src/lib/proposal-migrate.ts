@@ -16,7 +16,7 @@ const ADDON_BODY =
   "I travel, so I can't commit to a monthly package, but I can edit remotely whenever you need more content.\n\nEach reel is cut from the clip library we build together or from footage your team films on a phone, depending on your idea or vision.\n\nCaptions or subtitles and music, formatted for Instagram and TikTok, with one round of changes.";
 
 const INVESTMENT_SIDE_NOTE =
-  "My retreat packages usually include accommodation and meals during the shoot days. I'd like to discuss that with you as part of this rate. Being on site from sunrise to evening means I'd live the guest experience, so I can catch the golden-hour light on the rooms, breakfast at the Jungle Bar and the quiet moments a day visit would miss. That gives you more content at no extra cost.";
+  "My retreat packages usually include accommodation and meals during the shoot days, so I'd like to discuss that as part of this rate. Being on site from sunrise to evening means I can catch the light, the meals and the quiet moments a day visit would miss. That gives you more content at no extra cost.";
 
 function planHasExampleImage(images: ProposalImage[] | undefined) {
   return (images ?? []).some((img) => {

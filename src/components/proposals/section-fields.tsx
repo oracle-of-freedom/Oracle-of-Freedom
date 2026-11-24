@@ -2,7 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
-import { newId, type ProposalImage, type ProposalSection, type SectionType } from "@/lib/proposals";
+import {
+  HEADING_EMPHASIS,
+  SECTION_LAYOUTS,
+  defaultLayoutFor,
+  newId,
+  type HeadingEmphasis,
+  type PriceLine,
+  type ProposalImage,
+  type ProposalSection,
+  type SectionLayout,
+  type SectionType,
+} from "@/lib/proposals";
 
 function Field({
   label,
@@ -65,6 +76,154 @@ function ImageFields({
   );
 }
 
+function ImagesListEditor({
+  images,
+  onChange,
+  label = "Extra images",
+}: {
+  images: ProposalImage[];
+  onChange: (images: ProposalImage[]) => void;
+  label?: string;
+}) {
+  return (
+    <div className="space-y-3 rounded-2xl border border-ink/10 bg-white/40 p-4">
+      <p className="text-sm font-medium">{label}</p>
+      {images.map((image, index) => (
+        <ImageFields
+          key={`${image.mediaId || image.src || "img"}-${index}`}
+          label={`Image ${index + 1}`}
+          image={image}
+          onChange={(next) => {
+            const list = [...images];
+            if (next) list[index] = next;
+            else list.splice(index, 1);
+            onChange(list);
+          }}
+        />
+      ))}
+      <Button type="button" variant="outline" size="sm" onClick={() => onChange([...images, { alt: "" }])}>
+        Add image
+      </Button>
+    </div>
+  );
+}
+
+function PriceLinesEditor({
+  lines,
+  onChange,
+}: {
+  lines: PriceLine[];
+  onChange: (lines: PriceLine[]) => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <Label>Price lines</Label>
+      {lines.map((line, index) => (
+        <div key={line.id} className="grid gap-2 rounded-2xl border border-ink/10 p-4 sm:grid-cols-2">
+          <Input
+            value={line.label}
+            placeholder="Label"
+            onChange={(e) => {
+              const priceLines = lines.map((row, i) => (i === index ? { ...row, label: e.target.value } : row));
+              onChange(priceLines);
+            }}
+          />
+          <div className="flex gap-2">
+            <Input
+              value={line.price}
+              placeholder="US$110"
+              onChange={(e) => {
+                const priceLines = lines.map((row, i) => (i === index ? { ...row, price: e.target.value } : row));
+                onChange(priceLines);
+              }}
+            />
+            <button
+              type="button"
+              className="shrink-0 text-sm text-terracotta"
+              onClick={() => onChange(lines.filter((_, i) => i !== index))}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      ))}
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={() => onChange([...lines, { id: newId("price"), label: "", price: "" }])}
+      >
+        Add price line
+      </Button>
+    </div>
+  );
+}
+
+function CommonSectionControls({
+  section,
+  onChange,
+}: {
+  section: ProposalSection;
+  onChange: (section: ProposalSection) => void;
+}) {
+  const layout = section.layout || defaultLayoutFor(section.type);
+  return (
+    <div className="grid gap-4 rounded-2xl border border-terracotta/20 bg-sand/40 p-4">
+      <p className="text-xs tracking-[0.2em] text-ember uppercase">Section layout</p>
+      <Field label="Layout" hint={`Default for this type: ${defaultLayoutFor(section.type)}`}>
+        <select
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          value={section.layout || ""}
+          onChange={(e) => {
+            const value = e.target.value as SectionLayout | "";
+            onChange({
+              ...section,
+              layout: value ? value : undefined,
+            } as ProposalSection);
+          }}
+        >
+          <option value="">Default ({defaultLayoutFor(section.type)})</option>
+          {SECTION_LAYOUTS.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+      </Field>
+      <Field label="Heading emphasis">
+        <select
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          value={section.headingEmphasis || "default"}
+          onChange={(e) =>
+            onChange({
+              ...section,
+              headingEmphasis: (e.target.value as HeadingEmphasis) === "default" ? undefined : (e.target.value as HeadingEmphasis),
+            } as ProposalSection)
+          }
+        >
+          {HEADING_EMPHASIS.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+      </Field>
+      {layout === "textPhoto" ? (
+        <p className="text-xs text-ink/50">Text + photo lays content and extra images side by side on desktop.</p>
+      ) : null}
+      <ImagesListEditor
+        images={section.images || []}
+        onChange={(images) =>
+          onChange({
+            ...section,
+            images: images.length ? images : undefined,
+          } as ProposalSection)
+        }
+      />
+    </div>
+  );
+}
+
 function ListEditor({
   items,
   onChange,
@@ -113,6 +272,7 @@ export function SectionFields({
   const patch = <T extends ProposalSection>(data: T["data"]) =>
     onChange({ ...section, data } as ProposalSection);
 
+  const typeFields = (() => {
   switch (section.type) {
     case "cover":
       return (
@@ -308,6 +468,22 @@ export function SectionFields({
                   }}
                 />
               </Field>
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  className="accent-terracotta"
+                  checked={scene.showBody !== false}
+                  onChange={(e) => {
+                    const scenes = section.data.scenes.map((s, i) =>
+                      i === index
+                        ? { ...s, showBody: e.target.checked ? undefined : false }
+                        : s,
+                    );
+                    patch({ ...section.data, scenes });
+                  }}
+                />
+                Show sub-line
+              </label>
               <Textarea
                 value={scene.body}
                 onChange={(e) => {
@@ -438,6 +614,22 @@ export function SectionFields({
                   }}
                 />
               </Field>
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  className="accent-terracotta"
+                  checked={step.showBody !== false}
+                  onChange={(e) => {
+                    const steps = section.data.steps.map((s, i) =>
+                      i === index
+                        ? { ...s, showBody: e.target.checked ? undefined : false }
+                        : s,
+                    );
+                    patch({ ...section.data, steps });
+                  }}
+                />
+                Show sub-line
+              </label>
               <Textarea
                 value={step.body}
                 onChange={(e) => {
@@ -483,10 +675,24 @@ export function SectionFields({
               />
             </div>
           ))}
+          <Field label="Out of scope label" hint='Default: "Out of scope"'>
+            <Input
+              value={section.data.outOfScopeLabel || ""}
+              onChange={(e) =>
+                patch({ ...section.data, outOfScopeLabel: e.target.value || undefined })
+              }
+            />
+          </Field>
           <Field label="Out of scope">
             <Textarea
               value={section.data.outOfScope}
               onChange={(e) => patch({ ...section.data, outOfScope: e.target.value })}
+            />
+          </Field>
+          <Field label="Usage label" hint='Default: "Usage"'>
+            <Input
+              value={section.data.usageLabel || ""}
+              onChange={(e) => patch({ ...section.data, usageLabel: e.target.value || undefined })}
             />
           </Field>
           <Field label="Usage">
@@ -512,7 +718,11 @@ export function SectionFields({
           <Field label="Body">
             <Textarea value={section.data.body} onChange={(e) => patch({ ...section.data, body: e.target.value })} />
           </Field>
-          <Field label="Price (USD)">
+          <PriceLinesEditor
+            lines={section.data.priceLines || []}
+            onChange={(priceLines) => patch({ ...section.data, priceLines: priceLines.length ? priceLines : undefined })}
+          />
+          <Field label="Legacy price (USD)" hint="Used only when no price lines are set.">
             <Input
               type="number"
               value={section.data.priceUsd || ""}
@@ -559,7 +769,19 @@ export function SectionFields({
               onChange={(e) => patch({ ...section.data, depositPercent: Number(e.target.value) || 0 })}
             />
           </Field>
-          <Field label="Offer note">
+          <Field label="Key terms (offer panel)" hint="Short line on the terracotta offer panel.">
+            <Input
+              value={section.data.keyTerms || ""}
+              onChange={(e) => patch({ ...section.data, keyTerms: e.target.value || undefined })}
+            />
+          </Field>
+          <Field label="Side note (night panel)" hint="Accommodation / on-site context in the dark panel.">
+            <Textarea
+              value={section.data.sideNote || ""}
+              onChange={(e) => patch({ ...section.data, sideNote: e.target.value || undefined })}
+            />
+          </Field>
+          <Field label="Legacy offer note" hint="Prefer side note + key terms. Shown in offer panel only when side note is empty.">
             <Textarea
               value={section.data.offerNote}
               onChange={(e) => patch({ ...section.data, offerNote: e.target.value })}
@@ -680,6 +902,15 @@ export function SectionFields({
           </Field>
         </div>
       );
+    case "signOff":
+      return (
+        <Field label="Intro (optional)" hint="Sits above the fixed With Love sign-off.">
+          <Textarea
+            value={section.data.intro}
+            onChange={(e) => patch({ ...section.data, intro: e.target.value })}
+          />
+        </Field>
+      );
     case "text":
       return (
         <div className="grid gap-4">
@@ -729,6 +960,14 @@ export function SectionFields({
     default:
       return null;
   }
+  })();
+
+  return (
+    <div className="grid gap-4">
+      <CommonSectionControls section={section} onChange={onChange} />
+      {typeFields}
+    </div>
+  );
 }
 
 export function blankSection(type: SectionType): ProposalSection {
@@ -852,6 +1091,8 @@ export function blankSection(type: SectionType): ProposalSection {
           closingLine: "",
         },
       };
+    case "signOff":
+      return { id, type, enabled: true, data: { intro: "" } };
     case "text":
       return { id, type, enabled: true, data: { heading: "", body: "" } };
     case "photos":

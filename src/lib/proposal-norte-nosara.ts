@@ -5,6 +5,12 @@ export const NORTE_NOSARA_EXAMPLE_ID = "prop_norte_nosara_example";
 export const NORTE_NOSARA_EXAMPLE_SLUG = "norte-nosara-example";
 export const NORTE_NOSARA_TEMPLATE_ID = "tmpl_retreat_hotel";
 
+const ADDON_BODY =
+  "I travel, so I can't commit to a monthly package, but I can edit remotely whenever you need more content.\n\nEach reel is cut from the clip library we build together or from footage your team films on a phone, depending on your idea or vision.\n\nCaptions or subtitles and music, formatted for Instagram and TikTok, with one round of changes.";
+
+const INVESTMENT_SIDE_NOTE =
+  "My retreat packages usually include accommodation and meals during the shoot days, so I'd like to discuss that as part of this rate. Being on site from sunrise to evening means I can catch the light, the meals and the quiet moments a day visit would miss. That gives you more content at no extra cost.";
+
 /**
  * Example proposal for Norte Nosara, built from the Retreat / Hotel template shape.
  * Does not change starter template copy. Review and media stay as placeholders.
@@ -80,6 +86,7 @@ export function norteNosaraExample(now = new Date()): Proposal {
       id: "norte_plan",
       type: "plan",
       enabled: true,
+      images: [{ alt: "[EXAMPLE PHOTOS: plan photo placeholder]" }],
       data: {
         heading: "What we'd film",
         intro: "",
@@ -91,35 +98,37 @@ export function norteNosaraExample(now = new Date()): Proposal {
         consent:
           "Before filming, I agree with the guests and the retreat leader what can be filmed, so everyone feels comfortable.",
         scenes: [
-          {
-            id: "norte_scene_1",
-            title: "The shala during practice",
-            body: "Quiet coverage of practice in the movement space.",
-          },
-          {
-            id: "norte_scene_2",
-            title: "Surf coaching",
-            body: "Coaching moments that show the energy of the retreat.",
-          },
+          { id: "norte_scene_1", title: "The shala during practice", body: "", showBody: false },
+          { id: "norte_scene_2", title: "Surf coaching", body: "", showBody: false },
           {
             id: "norte_scene_3",
-            title: "The Jungle Bar",
-            body: "From morning bowls to evening cocktails.",
+            title: "The Jungle Bar, from morning bowls to evening cocktails",
+            body: "",
+            showBody: false,
           },
           {
             id: "norte_scene_4",
-            title: "Rooms, pool and cozy corners",
-            body: "The spaces guests fall in love with.",
+            title: "The rooms, the pool and the cozy corners",
+            body: "",
+            showBody: false,
           },
           {
             id: "norte_scene_5",
-            title: "How a retreat day flows",
-            body: "From sunrise to evening, the real rhythm of the day.",
+            title: "How a retreat day flows, from sunrise to evening",
+            body: "",
+            showBody: false,
           },
           {
             id: "norte_scene_6",
-            title: "Lifestyle and drone",
-            body: "Lifestyle footage of how the property feels, plus drone of the property and how it sits in town.",
+            title: "Lifestyle footage that shows how the property really feels",
+            body: "",
+            showBody: false,
+          },
+          {
+            id: "norte_scene_7",
+            title: "Drone footage of the property and how it sits in town",
+            body: "",
+            showBody: false,
           },
         ],
       },
@@ -181,6 +190,7 @@ export function norteNosaraExample(now = new Date()): Proposal {
           },
         ],
         outOfScope: "Everything is delivered within about two weeks of the shoot, with one round of changes.",
+        outOfScopeLabel: "Delivery and changes",
         usage:
           "You can use everything on your own website and social media. Usage is non-exclusive, and I keep the right to share selected pieces in my portfolio.",
       },
@@ -189,12 +199,17 @@ export function norteNosaraExample(now = new Date()): Proposal {
       id: "norte_addon",
       type: "addon",
       enabled: true,
+      headingEmphasis: "xl",
       data: {
         heading: "Later, if you need it",
         title: "Social media editing",
-        body: "I travel, so I can't commit to a monthly package, but I can edit remotely whenever you need more content.\n\nEach reel is cut from the clip library we build together or from footage your team films on a phone, depending on your idea or vision.\n\nCaptions or subtitles and music, formatted for Instagram and TikTok, with one round of changes.\n\n1 reel: US$110\n3 reels: US$285\n\nBook them only when you need them.",
-        priceUsd: 110,
-        note: "3 reels: US$285. Booked only when needed.",
+        body: ADDON_BODY,
+        priceUsd: 0,
+        note: "Booked only when needed",
+        priceLines: [
+          { id: "norte_price_1", label: "1 reel", price: "US$110" },
+          { id: "norte_price_2", label: "3 reels", price: "US$285" },
+        ],
       },
     },
     {
@@ -206,8 +221,9 @@ export function norteNosaraExample(now = new Date()): Proposal {
         clientLabel: "For Norte Nosara",
         packagePriceUsd: 1100,
         currencyNote: "USD",
-        offerNote:
-          "My retreat packages usually include accommodation and meals during the shoot days, so I'd like to discuss that with you as part of this rate. Being on site from sunrise to evening means I'd live the guest experience, so I can catch the golden-hour light on the rooms, breakfast at the Jungle Bar and the quiet moments a day visit would miss. That gives you more content at no extra cost.",
+        offerNote: "",
+        keyTerms: "Balance due on delivery.",
+        sideNote: INVESTMENT_SIDE_NOTE,
         depositPercent: 50,
         normalRatesLine: "Booked separately at my normal rates: around US$1,700",
         compareRows: [
@@ -265,6 +281,12 @@ export function norteNosaraExample(now = new Date()): Proposal {
         validUntilLabel: "Offer valid until",
         closingLine: "I'd love to bring Norte to life on film.",
       },
+    },
+    {
+      id: "norte_signoff",
+      type: "signOff",
+      enabled: true,
+      data: { intro: "" },
     },
   ];
 

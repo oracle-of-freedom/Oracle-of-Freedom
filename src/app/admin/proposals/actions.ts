@@ -19,6 +19,8 @@ import {
   setProposalStatus,
 } from "@/lib/proposal-store";
 import {
+  cloneSections,
+  newId,
   parseProposal,
   parseTemplate,
   type Proposal,
@@ -111,6 +113,26 @@ export async function duplicateProposalAction(formData: FormData) {
   const copy = await duplicateProposal(id, clientName);
   revalidateProposals(copy.id);
   redirect(`/admin/proposals/${copy.id}`);
+}
+
+export async function saveProposalAsTemplateAction(formData: FormData) {
+  await guard();
+  const id = String(formData.get("id") || "");
+  const name = String(formData.get("name") || "").trim() || "Saved template";
+  const proposal = await getProposal(id);
+  if (!proposal) throw new Error("Proposal not found.");
+  const stamp = new Date().toISOString();
+  const template: ProposalTemplate = {
+    id: newId("tmpl"),
+    name,
+    kind: "custom",
+    createdAt: stamp,
+    updatedAt: stamp,
+    sections: cloneSections(proposal.sections),
+  };
+  await saveTemplate(template);
+  revalidateProposals(template.id);
+  redirect(`/admin/proposals/templates/${template.id}`);
 }
 
 export async function deleteProposalAction(formData: FormData) {
