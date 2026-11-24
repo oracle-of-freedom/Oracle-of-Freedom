@@ -7,6 +7,7 @@ import {
   duplicateProposalAction,
   reopenAction,
   saveProposalAction,
+  saveProposalAsTemplateAction,
   setStatusAction,
   type ActionState,
 } from "@/app/admin/proposals/actions";
@@ -244,6 +245,13 @@ export function ProposalEditor({
             <Input name="clientName" placeholder="New client name" className="w-40" required />
             <Button type="submit" variant="outline">
               Duplicate for client
+            </Button>
+          </form>
+          <form action={saveProposalAsTemplateAction} className="flex flex-wrap items-end gap-2">
+            <input type="hidden" name="id" value={proposal.id} />
+            <Input name="name" placeholder="Template name" className="w-48" defaultValue={`${proposal.clientName} template`} />
+            <Button type="submit" variant="outline">
+              Save as template
             </Button>
           </form>
           <form action={deleteProposalAction}>

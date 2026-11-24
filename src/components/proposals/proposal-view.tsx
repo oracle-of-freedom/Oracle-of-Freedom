@@ -5,25 +5,103 @@ import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
 import { Button } from "@/components/ui/button";
 import {
   SIGN_OFF,
+  addonPriceLines,
   depositAmount,
   imageSrc,
+  resolveHeadingEmphasis,
+  resolveLayout,
+  sceneShowsBody,
+  type HeadingEmphasis,
   type Proposal,
   type ProposalImage,
   type ProposalSection,
   type ProposalSectionOf,
+  type SectionLayout,
 } from "@/lib/proposals";
 import { resolveProposalVideo } from "@/lib/proposal-video";
 
 export type ProposalViewMode = "public" | "preview" | "admin";
 
-function SectionHeading({ children }: { children: React.ReactNode }) {
+function headingEmphasisClass(emphasis: HeadingEmphasis) {
+  if (emphasis === "xl") return "text-4xl md:text-6xl";
+  if (emphasis === "large") return "text-4xl md:text-5xl";
+  return "text-3xl md:text-4xl";
+}
+
+function sectionShellClass(layout: SectionLayout) {
+  if (layout === "text") return "mx-auto max-w-3xl";
+  return "mx-auto max-w-5xl";
+}
+
+function labelWithPeriod(label: string) {
+  const trimmed = label.trim();
+  if (!trimmed) return "";
+  return trimmed.endsWith(".") ? `${trimmed} ` : `${trimmed}. `;
+}
+
+function SectionHeading({
+  children,
+  emphasis = "default",
+}: {
+  children: React.ReactNode;
+  emphasis?: HeadingEmphasis;
+}) {
   return (
-    <div className="mb-8 flex items-center gap-4">
-      <h2 className="shrink-0 font-serif text-3xl text-terracotta md:text-4xl">{children}</h2>
+    <div className="mb-8 flex min-w-0 items-center gap-4">
+      <h2 className={`min-w-0 font-serif text-balance text-terracotta ${headingEmphasisClass(emphasis)}`}>
+        {children}
+      </h2>
       <span
-        className="h-px min-w-12 flex-1 bg-gradient-to-r from-clay to-transparent"
+        className="hidden h-px min-w-12 flex-1 bg-gradient-to-r from-clay to-transparent sm:block"
         aria-hidden="true"
       />
+    </div>
+  );
+}
+
+function SectionWithExtras({
+  section,
+  className,
+  children,
+}: {
+  section: ProposalSection;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const layout = resolveLayout(section);
+  const extras = (section.images ?? []).filter((img) => imageSrc(img));
+  const shell = sectionShellClass(layout);
+
+  if (layout === "textPhoto" && extras.length) {
+    return (
+      <section className={`${shell} px-5 py-14 md:py-20 ${className || ""}`}>
+        <div className="md:grid md:grid-cols-2 md:items-start md:gap-8">
+          <div>{children}</div>
+          <PhotoStrip images={extras} />
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className={`${shell} px-5 py-14 md:py-20 ${className || ""}`}>
+      {children}
+      {extras.length ? (
+        <div className="mt-10">
+          <PhotoStrip images={extras} />
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function ExtraSectionImages({ section }: { section: ProposalSection }) {
+  if (resolveLayout(section) === "textPhoto") return null;
+  const extras = (section.images ?? []).filter((img) => imageSrc(img));
+  if (!extras.length) return null;
+  return (
+    <div className="mt-10">
+      <PhotoStrip images={extras} />
     </div>
   );
 }
@@ -160,9 +238,10 @@ function Cover({ section }: { section: ProposalSectionOf<"cover"> }) {
   );
 }
 
-function SignOff() {
+function SignOff({ intro }: { intro?: string }) {
   return (
     <div className="text-right">
+      {intro?.trim() ? <p className="mb-5 text-lg text-ink/80">{intro}</p> : null}
       <p className="font-quote text-2xl text-terracotta italic">{SIGN_OFF.withLove}</p>
       <p className="mt-2 font-serif text-4xl text-ink">{SIGN_OFF.name}</p>
       <p className="mt-1 text-sm tracking-[0.18em] text-ink/70 uppercase">{SIGN_OFF.brand}</p>
@@ -188,16 +267,16 @@ function renderSection(
       return <Cover key={section.id} section={section} />;
     case "welcome":
       return (
-        <section key={section.id} className="mx-auto max-w-3xl px-5 py-14 md:py-20">
+        <SectionWithExtras key={section.id} section={section}>
           <p className="whitespace-pre-wrap text-lg leading-relaxed text-ink/85 md:text-xl">
             {section.data.body}
           </p>
-        </section>
+        </SectionWithExtras>
       );
     case "noticed":
       return (
-        <section key={section.id} className="mx-auto max-w-5xl px-5 py-14 md:py-20">
-          <SectionHeading>{section.data.heading}</SectionHeading>
+        <SectionWithExtras key={section.id} section={section}>
+          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
           <div className="grid gap-4 md:grid-cols-2">
             {section.data.cards.map((card) => (
               <article
@@ -214,7 +293,7 @@ function renderSection(
           {section.data.opportunity ? (
             <p className="mt-8 max-w-2xl text-lg text-ink/75">{section.data.opportunity}</p>
           ) : null}
-        </section>
+        </SectionWithExtras>
       );
     case "divider": {
       const src = imageSrc(section.data.image);
@@ -241,8 +320,8 @@ function renderSection(
     }
     case "plan":
       return (
-        <section key={section.id} className="mx-auto max-w-5xl px-5 py-14 md:py-20">
-          <SectionHeading>{section.data.heading}</SectionHeading>
+        <SectionWithExtras key={section.id} section={section}>
+          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
           {section.data.intro ? (
             <p className="max-w-2xl whitespace-pre-wrap text-lg text-ink/80">{section.data.intro}</p>
           ) : null}
@@ -259,7 +338,9 @@ function renderSection(
                   {String(index + 1).padStart(2, "0")}
                 </p>
                 <h3 className="mt-2 font-serif text-2xl text-terracotta">{scene.title}</h3>
-                <p className="mt-3 whitespace-pre-wrap text-ink/80">{scene.body}</p>
+                {sceneShowsBody(scene) ? (
+                  <p className="mt-3 whitespace-pre-wrap text-ink/80">{scene.body}</p>
+                ) : null}
               </li>
             ))}
           </ol>
@@ -269,7 +350,7 @@ function renderSection(
           {section.data.consent ? (
             <p className="mt-4 max-w-2xl text-sm text-ink/60">{section.data.consent}</p>
           ) : null}
-        </section>
+        </SectionWithExtras>
       );
     case "proof": {
       const video = resolveProposalVideo({
@@ -299,6 +380,7 @@ function renderSection(
               https://oracleoffreedom.com/portfolio
             </a>
           </p>
+          <ExtraSectionImages section={section} />
         </section>
       );
     }
@@ -317,17 +399,20 @@ function renderSection(
                     {String(index + 1).padStart(2, "0")}
                   </p>
                   <h3 className="mt-2 font-serif text-2xl">{step.title}</h3>
-                  <p className="mt-3 whitespace-pre-wrap text-sand/85">{step.body}</p>
+                  {sceneShowsBody(step) ? (
+                    <p className="mt-3 whitespace-pre-wrap text-sand/85">{step.body}</p>
+                  ) : null}
                 </li>
               ))}
             </ol>
+            <ExtraSectionImages section={section} />
           </div>
         </section>
       );
     case "deliverables":
       return (
-        <section key={section.id} className="mx-auto max-w-5xl px-5 py-14 md:py-20">
-          <SectionHeading>{section.data.heading}</SectionHeading>
+        <SectionWithExtras key={section.id} section={section}>
+          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
           <div className="grid gap-4 md:grid-cols-3">
             {section.data.cards.map((card) => {
               const bar =
@@ -351,40 +436,53 @@ function renderSection(
           </div>
           {section.data.outOfScope ? (
             <p className="mt-8 max-w-2xl text-sm text-ink/65">
-              <span className="font-medium text-ink">Out of scope. </span>
+              <span className="font-medium text-ink">
+                {labelWithPeriod(section.data.outOfScopeLabel || "Out of scope")}
+              </span>
               {section.data.outOfScope}
             </p>
           ) : null}
           {section.data.usage ? (
             <p className="mt-3 max-w-2xl text-sm text-ink/65">
-              <span className="font-medium text-ink">Usage. </span>
+              <span className="font-medium text-ink">
+                {labelWithPeriod(section.data.usageLabel || "Usage")}
+              </span>
               {section.data.usage}
             </p>
           ) : null}
-        </section>
+        </SectionWithExtras>
       );
-    case "addon":
-      if (options.hidePrices) {
-        return (
-          <section key={section.id} className="mx-auto max-w-3xl px-5 py-10">
-            <p className="text-xs tracking-[0.2em] text-ember uppercase">{section.data.heading}</p>
-            <h3 className="mt-2 font-serif text-3xl text-terracotta">{section.data.title}</h3>
-            <p className="mt-3 text-ink/75">{section.data.body}</p>
-            <p className="mt-2 text-sm text-ink/55">Price shared when the offer is live.</p>
-          </section>
-        );
-      }
+    case "addon": {
+      const emphasis = resolveHeadingEmphasis(section);
+      const lines = addonPriceLines(section.data);
+      const headingClass =
+        emphasis === "xl"
+          ? "font-serif text-4xl text-terracotta md:text-6xl"
+          : emphasis === "large"
+            ? "font-serif text-4xl text-terracotta md:text-5xl"
+            : "text-xs tracking-[0.2em] text-ember uppercase";
       return (
-        <section key={section.id} className="mx-auto max-w-3xl px-5 py-10">
-          <p className="text-xs tracking-[0.2em] text-ember uppercase">{section.data.heading}</p>
-          <h3 className="mt-2 font-serif text-3xl text-terracotta">{section.data.title}</h3>
-          <p className="mt-3 text-ink/75">{section.data.body}</p>
-          {section.data.priceUsd > 0 ? (
-            <p className="mt-4 font-serif text-3xl text-ink">{formatMoney(section.data.priceUsd)}</p>
+        <SectionWithExtras key={section.id} section={section} className="py-10 md:py-14">
+          <p className={headingClass}>{section.data.heading}</p>
+          <h3 className="mt-3 font-serif text-2xl text-terracotta md:text-3xl">{section.data.title}</h3>
+          <p className="mt-4 whitespace-pre-wrap text-ink/75">{section.data.body}</p>
+          {lines.length && !options.hidePrices ? (
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              {lines.map((line) => (
+                <div key={line.id} className="rounded-2xl bg-white/60 px-5 py-4 text-center">
+                  <p className="text-sm text-ink/60">{line.label}</p>
+                  <p className="mt-1 font-serif text-3xl text-ink md:text-4xl">{line.price}</p>
+                </div>
+              ))}
+            </div>
           ) : null}
-          {section.data.note ? <p className="mt-2 text-sm text-ink/55">{section.data.note}</p> : null}
-        </section>
+          {options.hidePrices && lines.length ? (
+            <p className="mt-6 text-sm text-ink/55">Price shared when the offer is live.</p>
+          ) : null}
+          {section.data.note ? <p className="mt-6 text-sm text-ink/55">{section.data.note}</p> : null}
+        </SectionWithExtras>
       );
+    }
     case "investment": {
       if (options.hidePrices) {
         return (
@@ -401,6 +499,13 @@ function renderSection(
         );
       }
       const deposit = depositAmount(section.data.packagePriceUsd, section.data.depositPercent);
+      const { sideNote, keyTerms, offerNote } = section.data;
+      const offerPanelCopy = keyTerms?.trim()
+        ? keyTerms
+        : !sideNote?.trim() && offerNote?.trim()
+          ? offerNote
+          : "";
+      const nightCopy = sideNote?.trim() || "";
       return (
         <section key={section.id} className="px-5 py-14 md:py-20">
           <div className="mx-auto grid max-w-5xl gap-6 rounded-3xl bg-night p-6 text-sand md:grid-cols-2 md:p-10">
@@ -420,6 +525,14 @@ function renderSection(
               {section.data.normalRatesLine ? (
                 <p className="mt-6 text-sm text-sand/55">{section.data.normalRatesLine}</p>
               ) : null}
+              {nightCopy ? (
+                <p className="mt-6 whitespace-pre-wrap text-sm leading-relaxed text-sand/75">{nightCopy}</p>
+              ) : null}
+              {(section.images ?? []).filter((img) => imageSrc(img)).length ? (
+                <div className="mt-8">
+                  <PhotoStrip images={section.images!.filter((img) => imageSrc(img))} />
+                </div>
+              ) : null}
             </div>
             <div className="order-1 flex items-center justify-center md:order-2">
               <div className="w-full rounded-3xl bg-gradient-to-br from-terracotta to-ember px-6 py-10 text-center text-white shadow-lg md:px-8">
@@ -428,8 +541,8 @@ function renderSection(
                   {formatMoney(section.data.packagePriceUsd)}
                 </p>
                 <p className="mt-2 text-sm text-white/85">{section.data.currencyNote}</p>
-                {section.data.offerNote ? (
-                  <p className="mx-auto mt-5 max-w-sm text-sm text-white/90">{section.data.offerNote}</p>
+                {offerPanelCopy ? (
+                  <p className="mx-auto mt-5 max-w-sm text-sm text-white/90">{offerPanelCopy}</p>
                 ) : null}
                 <p className="mt-6 text-sm text-white/90">
                   Deposit {section.data.depositPercent}% · {formatMoney(deposit)}
@@ -442,15 +555,10 @@ function renderSection(
     }
     case "terms":
       return (
-        <section key={section.id} className="mx-auto max-w-5xl px-5 py-10 md:py-14">
-          <div className="grid gap-10 md:grid-cols-2 md:items-start">
-            <div>
-              <SectionHeading>{section.data.heading}</SectionHeading>
-              <EmberList items={section.data.items} />
-            </div>
-            <SignOff />
-          </div>
-        </section>
+        <SectionWithExtras key={section.id} section={section} className="py-10 md:py-14">
+          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
+          <EmberList items={section.data.items} />
+        </SectionWithExtras>
       );
     case "review":
       if (!section.data.quote.trim()) return null;
@@ -479,8 +587,8 @@ function renderSection(
       );
     case "nextStep":
       return (
-        <section key={section.id} className="mx-auto max-w-3xl px-5 py-16 md:py-24">
-          <SectionHeading>{section.data.heading}</SectionHeading>
+        <SectionWithExtras key={section.id} section={section} className="py-16 md:py-24">
+          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
           <p className="whitespace-pre-wrap text-lg text-ink/80">{section.data.body}</p>
           <p className="mt-6 text-sm tracking-wide text-ink/60 uppercase">
             {section.data.validUntilLabel}{" "}
@@ -500,19 +608,22 @@ function renderSection(
           {section.data.closingLine ? (
             <p className="mt-10 text-ink/75">{section.data.closingLine}</p>
           ) : null}
-          {!proposal.sections.some((s) => s.type === "terms" && s.enabled) ? (
-            <div className="mt-12">
-              <SignOff />
-            </div>
-          ) : null}
+        </SectionWithExtras>
+      );
+    case "signOff":
+      return (
+        <section key={section.id} className="mx-auto max-w-5xl px-5 py-10 md:py-14">
+          <SignOff intro={section.data.intro} />
         </section>
       );
     case "text":
       return (
-        <section key={section.id} className="mx-auto max-w-3xl px-5 py-12">
-          {section.data.heading ? <SectionHeading>{section.data.heading}</SectionHeading> : null}
+        <SectionWithExtras key={section.id} section={section} className="py-12">
+          {section.data.heading ? (
+            <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
+          ) : null}
           <p className="whitespace-pre-wrap text-lg text-ink/80">{section.data.body}</p>
-        </section>
+        </SectionWithExtras>
       );
     case "photos":
       return (

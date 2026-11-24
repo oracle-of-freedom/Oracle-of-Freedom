@@ -5,6 +5,7 @@ import {
   NORTE_NOSARA_EXAMPLE_ID,
   norteNosaraExample,
 } from "@/lib/proposal-norte-nosara";
+import { applyNorteNosaraContentFix, normalizeProposalSections } from "@/lib/proposal-migrate";
 import {
   addDaysIso,
   buildSlug,
@@ -123,12 +124,22 @@ export async function writeTemplates(templates: ProposalTemplate[]) {
 
 export async function readProposals(): Promise<Proposal[]> {
   const mode = storageMode();
-  if (mode === "readonly") return mergeExamples([]);
+  if (mode === "readonly") {
+    return mergeExamples([]).map((p) => normalizeOnRead(p).proposal);
+  }
   const raw = mode === "blob" ? await readJsonBlob(PROPOSALS_BLOB) : await readJsonLocal(PROPOSALS_LOCAL);
-  return mergeExamples(asProposals(raw)).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  const merged = mergeExamples(asProposals(raw));
+  let persist = false;
+  const list = merged.map((proposal) => {
+    const { proposal: next, changed } = normalizeOnRead(proposal);
+    if (changed) persist = true;
+    return next;
+  });
+  if (persist) await persistProposals(list);
+  return list.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
-export async function writeProposals(proposals: Proposal[]) {
+async function persistProposals(proposals: Proposal[]) {
   const mode = storageMode();
   if (mode === "readonly") {
     throw new Error("Connect Vercel Blob before saving proposals.");
@@ -138,6 +149,26 @@ export async function writeProposals(proposals: Proposal[]) {
   };
   if (mode === "blob") await writeJsonBlob(PROPOSALS_BLOB, payload);
   else await writeJsonLocal(PROPOSALS_LOCAL, payload);
+}
+
+export async function writeProposals(proposals: Proposal[]) {
+  await persistProposals(proposals);
+}
+
+function proposalSectionsNeedPersistence(before: Proposal, after: Proposal) {
+  if (before.sections.length !== after.sections.length) return true;
+  return JSON.stringify(before.sections) !== JSON.stringify(after.sections);
+}
+
+function normalizeOnRead(proposal: Proposal): { proposal: Proposal; changed: boolean } {
+  let next = normalizeProposalSections(proposal);
+  let changed = proposalSectionsNeedPersistence(proposal, next);
+  const fix = applyNorteNosaraContentFix(next);
+  if (fix.changed) {
+    next = fix.proposal;
+    changed = true;
+  }
+  return { proposal: next, changed };
 }
 
 export async function getTemplate(id: string) {
