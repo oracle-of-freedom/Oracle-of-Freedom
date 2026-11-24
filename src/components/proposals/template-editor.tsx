@@ -123,8 +123,8 @@ function TemplateEditorInner({
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col lg:h-full lg:overflow-hidden">
-      <div className="shrink-0 space-y-3 border-b border-ink/10 px-1 pb-4 lg:max-h-[38vh] lg:overflow-y-auto">
+    <div>
+      <div className="space-y-3 border-b border-ink/10 px-1 pb-4">
         <div className="flex flex-wrap items-center gap-3">
           <Link href="/admin/proposals/templates" className="text-sm underline underline-offset-4">
             Back to templates
@@ -193,8 +193,23 @@ function TemplateEditorInner({
         </div>
       </div>
 
-      <div className="grid min-h-0 flex-1 gap-4 pt-4 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-0 lg:overflow-hidden">
-        <aside className="min-h-0 space-y-4 lg:overflow-y-auto lg:pr-4">
+      <div className="relative mt-4 lg:min-h-[calc(100dvh-16px+10rem)]">
+        <div className="grid items-stretch gap-4 lg:sticky lg:top-0 lg:h-[calc(100dvh-16px)] lg:min-h-[70dvh] lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-0">
+        <aside className="space-y-4 lg:h-full lg:min-h-0 lg:overflow-y-auto lg:pr-4">
+          <div className="sticky top-0 z-10 -mx-1 flex items-center gap-2 border-b border-ink/10 bg-sand/95 px-1 py-2 backdrop-blur-sm">
+            <form action={action}>
+              <input type="hidden" name="templateJson" value={JSON.stringify(template)} />
+              <Button type="submit" size="sm" disabled={pending}>
+                {pending ? "Saving…" : "Save"}
+              </Button>
+            </form>
+            {state?.ok === false ? (
+              <p className="text-xs text-terracotta-ink">{state.error}</p>
+            ) : null}
+            {state?.ok === true ? (
+              <p className="text-xs text-moss">{state.message || "Saved."}</p>
+            ) : null}
+          </div>
           <div className="rounded-3xl bg-white/70 p-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-xs tracking-[0.2em] text-ember uppercase">Design</p>
@@ -361,16 +376,18 @@ function TemplateEditorInner({
           ) : null}
         </aside>
 
-        <div className="flex min-h-0 flex-col rounded-3xl bg-white/70 p-4 lg:overflow-hidden lg:rounded-none lg:border-l lg:border-ink/10 lg:pl-4">
-          <div className="flex shrink-0 flex-wrap items-center justify-between gap-3">
+        <div
+          ref={previewScrollRef}
+          className="rounded-3xl bg-white/70 p-4 lg:h-full lg:min-h-0 lg:overflow-y-auto lg:rounded-none lg:border-l lg:border-ink/10 lg:pl-4"
+        >
+          <div className="sticky top-0 z-10 -mx-1 mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-ink/10 bg-sand/95 px-1 py-2 backdrop-blur-sm lg:bg-white/95">
             <p className="text-xs tracking-[0.2em] text-ember uppercase">
               Live preview · {viewport}
             </p>
             <EditorViewportToggle />
           </div>
           <div
-            ref={previewScrollRef}
-            className={`mt-4 min-h-0 flex-1 overflow-y-auto rounded-2xl border border-ink/10 bg-sand ${
+            className={`rounded-2xl border border-ink/10 bg-sand ${
               isPhone ? "mx-auto w-full max-w-[390px]" : ""
             }`}
           >
@@ -395,6 +412,7 @@ function TemplateEditorInner({
               }}
             />
           </div>
+        </div>
         </div>
       </div>
     </div>
