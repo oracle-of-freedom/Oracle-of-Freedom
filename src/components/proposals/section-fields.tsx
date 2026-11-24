@@ -1,7 +1,11 @@
 "use client";
 
 import { useRef } from "react";
-import { SectionDesignFields } from "@/components/proposals/design-fields";
+import {
+  CardLayoutFields,
+  SectionDesignFields,
+  sectionHasCardLayout,
+} from "@/components/proposals/design-fields";
 import { PhoneBadge, useEditorViewport } from "@/components/proposals/editor-viewport";
 import { ImageCropControl } from "@/components/proposals/image-crop-control";
 import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
@@ -321,10 +325,12 @@ function SectionPhoneFields({
     for (const key of Object.keys(partial) as (keyof typeof partial)[]) {
       if (partial[key] === undefined) delete next[key];
     }
-    const updated = { ...section } as ProposalSection;
-    if (Object.keys(next).length) updated.mobile = next;
-    else delete updated.mobile;
-    onChange(updated);
+    if (!Object.keys(next).length) {
+      const { mobile: _drop, ...rest } = section;
+      onChange(rest as ProposalSection);
+      return;
+    }
+    onChange({ ...section, mobile: next } as ProposalSection);
   }
 
   return (
@@ -336,9 +342,8 @@ function SectionPhoneFields({
           onReset={
             active
               ? () => {
-                  const next = { ...section } as ProposalSection;
-                  delete next.mobile;
-                  onChange(next);
+                  const { mobile: _drop, ...rest } = section;
+                  onChange(rest as ProposalSection);
                 }
               : undefined
           }
@@ -398,6 +403,20 @@ function SectionPhoneFields({
           <option value="large">Large</option>
         </select>
       </Field>
+      {sectionHasCardLayout(section.type) ? (
+        <CardLayoutFields
+          phone
+          value={{
+            cardHeight: mobile.cardHeight,
+            cardHeightValue: mobile.cardHeightValue,
+            cardPadding: mobile.cardPadding,
+            cardTextSize: mobile.cardTextSize,
+            gap: mobile.gap,
+            columns: mobile.columns,
+          }}
+          onChange={(partial) => patch(partial)}
+        />
+      ) : null}
       <p className="text-xs text-ink/50">
         Use the Phone ↑ ↓ buttons in the section list to change phone order without moving desktop.
       </p>
