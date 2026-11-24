@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { imageCropStyle } from "@/lib/proposal-image-crop";
+import {
+  imagePhoneHiddenClass,
+  imageResponsiveStyle,
+} from "@/lib/proposal-mobile";
 import {
   proposalVideoHostNote,
   proposalVideoWatchHref,
@@ -51,11 +54,12 @@ function CoverStill({
       />
     );
   }
-  const crop = imageCropStyle(videoCover);
-  // Hover scale stacks with crop zoom via CSS variable when zoom is 1.
+  const crop = imageResponsiveStyle(videoCover);
+  const zoom = videoCover?.zoom ?? 1;
+  const mobileZoom = videoCover?.mobile?.zoom;
   const hoverSafe =
-    !crop.transform
-      ? "transition-transform duration-500 ease-out group-hover:scale-[1.015]"
+    zoom === 1 && (mobileZoom == null || mobileZoom === 1)
+      ? "proposal-video-hover"
       : "";
   return (
     <Image
@@ -63,8 +67,8 @@ function CoverStill({
       alt={alt}
       width={1280}
       height={720}
-      sizes="(max-width: 720px) 100vw, 182mm"
-      className={`aspect-video w-full bg-night object-cover ${hoverSafe}`}
+      sizes="(max-width: 767px) 100vw, 182mm"
+      className={`aspect-video w-full bg-night object-cover proposal-cropped ${hoverSafe} ${imagePhoneHiddenClass(videoCover)}`.trim()}
       style={crop}
       unoptimized={src.startsWith("/api/media/") || src.includes("i.ytimg.com")}
     />

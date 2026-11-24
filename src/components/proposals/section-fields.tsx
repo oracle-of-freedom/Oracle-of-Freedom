@@ -2,12 +2,20 @@
 
 import { useRef } from "react";
 import { SectionDesignFields } from "@/components/proposals/design-fields";
+import { PhoneBadge, useEditorViewport } from "@/components/proposals/editor-viewport";
 import { ImageCropControl } from "@/components/proposals/image-crop-control";
 import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
 import type { ImageCrop } from "@/lib/proposal-image-crop";
+import {
+  clearImageMobile,
+  hasImageMobileSettings,
+  patchImageMobile,
+  type ImageAspect,
+  type TextScale,
+} from "@/lib/proposal-mobile";
 import type { ProposalStudioReview } from "@/lib/proposal-reviews";
 import {
   HEADING_EMPHASIS,
@@ -29,14 +37,19 @@ function Field({
   label,
   children,
   hint,
+  badge,
 }: {
   label: string;
   children: React.ReactNode;
   hint?: string;
+  badge?: React.ReactNode;
 }) {
   return (
     <div>
-      <Label>{label}</Label>
+      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+        <Label className="mb-0">{label}</Label>
+        {badge}
+      </div>
       {children}
       {hint ? <p className="mt-1 text-xs text-ink/50">{hint}</p> : null}
     </div>
@@ -56,44 +69,156 @@ function ImageFields({
   frame?: "hero" | "proof" | "video" | "square" | "wide";
   cropFallback?: Partial<ImageCrop>;
 }) {
+  const { isPhone } = useEditorViewport();
   const value = image || { alt: "" };
+  const mobile = value.mobile || {};
+  const phoneActive = hasImageMobileSettings(value);
+
   return (
     <div className="space-y-3 rounded-2xl border border-ink/10 bg-white/50 p-4">
-      <p className="text-sm font-medium">{label}</p>
-      <Field label="Media id (from studio upload)" hint="Paste a media UUID from Content → Photos, or leave blank and use a public path.">
-        <Input
-          value={value.mediaId || ""}
-          onChange={(e) => onChange({ ...value, mediaId: e.target.value.trim() || undefined })}
-          placeholder="uuid"
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm font-medium">{label}</p>
+        <PhoneBadge
+          active={isPhone && phoneActive}
+          onReset={isPhone && phoneActive ? () => onChange(clearImageMobile(value)) : undefined}
         />
-      </Field>
-      <Field label="Or public image path">
-        <Input
-          value={value.src || ""}
-          onChange={(e) => onChange({ ...value, src: e.target.value.trim() || undefined })}
-          placeholder="/images/portfolio/…"
-        />
-      </Field>
-      <Field label="Alt text">
-        <Input value={value.alt} onChange={(e) => onChange({ ...value, alt: e.target.value })} />
-      </Field>
-      <Field label="Caption (optional)">
-        <Input
-          value={value.caption || ""}
-          onChange={(e) => onChange({ ...value, caption: e.target.value || undefined })}
-        />
-      </Field>
+      </div>
+      {!isPhone ? (
+        <>
+          <Field label="Media id (from studio upload)" hint="Paste a media UUID from Content → Photos, or leave blank and use a public path.">
+            <Input
+              value={value.mediaId || ""}
+              onChange={(e) => onChange({ ...value, mediaId: e.target.value.trim() || undefined })}
+              placeholder="uuid"
+            />
+          </Field>
+          <Field label="Or public image path">
+            <Input
+              value={value.src || ""}
+              onChange={(e) => onChange({ ...value, src: e.target.value.trim() || undefined })}
+              placeholder="/images/portfolio/…"
+            />
+          </Field>
+          <Field label="Alt text">
+            <Input value={value.alt} onChange={(e) => onChange({ ...value, alt: e.target.value })} />
+          </Field>
+          <Field label="Caption (optional)">
+            <Input
+              value={value.caption || ""}
+              onChange={(e) => onChange({ ...value, caption: e.target.value || undefined })}
+            />
+          </Field>
+        </>
+      ) : (
+        <p className="text-xs text-ink/55">
+          Phone mode edits crop, height, aspect and visibility for this image only. Media path and alt stay on Desktop.
+        </p>
+      )}
       {imageSrc(value) ? (
-        <ImageCropControl
-          image={value}
-          frame={frame}
-          fallback={cropFallback}
-          onChange={(next) => onChange(next)}
-        />
+        <>
+          <ImageCropControl
+            image={value}
+            frame={frame}
+            fallback={cropFallback}
+            onChange={(next) => onChange(next)}
+          />
+          {isPhone ? (
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Field
+                label="Image height"
+                hint="CSS length, for example 58mm. Leave blank to use desktop."
+                badge={
+                  <PhoneBadge
+                    active={Boolean(mobile.height)}
+                    onReset={
+                      mobile.height
+                        ? () => onChange(patchImageMobile(value, { height: undefined }))
+                        : undefined
+                    }
+                  />
+                }
+              >
+                <Input
+                  value={mobile.height || ""}
+                  onChange={(e) =>
+                    onChange(
+                      patchImageMobile(value, {
+                        height: e.target.value.trim() || undefined,
+                      }),
+                    )
+                  }
+                  placeholder="Uses desktop"
+                />
+              </Field>
+              <Field
+                label="Aspect ratio"
+                badge={
+                  <PhoneBadge
+                    active={Boolean(mobile.aspect && mobile.aspect !== "auto")}
+                    onReset={
+                      mobile.aspect && mobile.aspect !== "auto"
+                        ? () => onChange(patchImageMobile(value, { aspect: undefined }))
+                        : undefined
+                    }
+                  />
+                }
+              >
+                <select
+                  className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+                  value={mobile.aspect || "auto"}
+                  onChange={(e) => {
+                    const aspect = e.target.value as ImageAspect;
+                    onChange(
+                      patchImageMobile(value, {
+                        aspect: aspect === "auto" ? undefined : aspect,
+                      }),
+                    );
+                  }}
+                >
+                  <option value="auto">Auto (desktop)</option>
+                  <option value="1:1">1:1</option>
+                  <option value="4:5">4:5</option>
+                  <option value="3:4">3:4</option>
+                  <option value="16:9">16:9</option>
+                </select>
+              </Field>
+              <Field
+                label="Show on phone"
+                badge={
+                  <PhoneBadge
+                    active={mobile.hidden === true}
+                    onReset={
+                      mobile.hidden === true
+                        ? () => onChange(patchImageMobile(value, { hidden: undefined }))
+                        : undefined
+                    }
+                  />
+                }
+              >
+                <select
+                  className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+                  value={mobile.hidden ? "hide" : "show"}
+                  onChange={(e) =>
+                    onChange(
+                      patchImageMobile(value, {
+                        hidden: e.target.value === "hide" ? true : undefined,
+                      }),
+                    )
+                  }
+                >
+                  <option value="show">Show</option>
+                  <option value="hide">Hide on phone</option>
+                </select>
+              </Field>
+            </div>
+          ) : null}
+        </>
       ) : null}
-      <button type="button" className="text-sm text-terracotta underline-offset-4 hover:underline" onClick={() => onChange(null)}>
-        Clear image
-      </button>
+      {!isPhone ? (
+        <button type="button" className="text-sm text-terracotta underline-offset-4 hover:underline" onClick={() => onChange(null)}>
+          Clear image
+        </button>
+      ) : null}
     </div>
   );
 }
@@ -181,6 +306,105 @@ function PriceLinesEditor({
   );
 }
 
+function SectionPhoneFields({
+  section,
+  onChange,
+}: {
+  section: ProposalSection;
+  onChange: (section: ProposalSection) => void;
+}) {
+  const mobile = section.mobile || {};
+  const active = Boolean(section.mobile && Object.keys(section.mobile).length);
+
+  function patch(partial: Partial<NonNullable<ProposalSection["mobile"]>>) {
+    const next = { ...(section.mobile || {}), ...partial };
+    for (const key of Object.keys(partial) as (keyof typeof partial)[]) {
+      if (partial[key] === undefined) delete next[key];
+    }
+    const updated = { ...section } as ProposalSection;
+    if (Object.keys(next).length) updated.mobile = next;
+    else delete updated.mobile;
+    onChange(updated);
+  }
+
+  return (
+    <div className="grid gap-3 rounded-2xl border border-ember/25 bg-ember/5 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs tracking-[0.2em] text-ember uppercase">Phone for this section</p>
+        <PhoneBadge
+          active={active}
+          onReset={
+            active
+              ? () => {
+                  const next = { ...section } as ProposalSection;
+                  delete next.mobile;
+                  onChange(next);
+                }
+              : undefined
+          }
+        />
+      </div>
+      <Field label="Show on phone">
+        <select
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          value={mobile.hidden ? "hide" : "show"}
+          onChange={(e) =>
+            patch({ hidden: e.target.value === "hide" ? true : undefined })
+          }
+        >
+          <option value="show">Show</option>
+          <option value="hide">Hide on phone</option>
+        </select>
+      </Field>
+      <Field label="Space above" hint="CSS length. Leave blank to use desktop.">
+        <Input
+          value={mobile.marginTop || ""}
+          onChange={(e) => patch({ marginTop: e.target.value.trim() || undefined })}
+          placeholder="Uses desktop"
+        />
+      </Field>
+      <Field label="Space below" hint="CSS length. Leave blank to use desktop.">
+        <Input
+          value={mobile.marginBottom || ""}
+          onChange={(e) => patch({ marginBottom: e.target.value.trim() || undefined })}
+          placeholder="Uses desktop"
+        />
+      </Field>
+      <Field label="Heading size">
+        <select
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          value={(mobile.headingSize as TextScale | undefined) || "normal"}
+          onChange={(e) => {
+            const value = e.target.value as TextScale;
+            patch({ headingSize: value === "normal" ? undefined : value });
+          }}
+        >
+          <option value="normal">Normal (desktop)</option>
+          <option value="small">Small</option>
+          <option value="large">Large</option>
+        </select>
+      </Field>
+      <Field label="Body text size">
+        <select
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          value={(mobile.bodySize as TextScale | undefined) || "normal"}
+          onChange={(e) => {
+            const value = e.target.value as TextScale;
+            patch({ bodySize: value === "normal" ? undefined : value });
+          }}
+        >
+          <option value="normal">Normal (desktop)</option>
+          <option value="small">Small</option>
+          <option value="large">Large</option>
+        </select>
+      </Field>
+      <p className="text-xs text-ink/50">
+        Use the Phone ↑ ↓ buttons in the section list to change phone order without moving desktop.
+      </p>
+    </div>
+  );
+}
+
 function CommonSectionControls({
   section,
   onChange,
@@ -188,7 +412,26 @@ function CommonSectionControls({
   section: ProposalSection;
   onChange: (section: ProposalSection) => void;
 }) {
+  const { isPhone } = useEditorViewport();
   const layout = section.layout || defaultLayoutFor(section.type);
+
+  if (isPhone) {
+    return (
+      <div className="grid gap-4">
+        <SectionPhoneFields section={section} onChange={onChange} />
+        <ImagesListEditor
+          images={section.images || []}
+          onChange={(images) =>
+            onChange({
+              ...section,
+              images: images.length ? images : undefined,
+            } as ProposalSection)
+          }
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="grid gap-4 rounded-2xl border border-terracotta/20 bg-sand/40 p-4">
       <p className="text-xs tracking-[0.2em] text-ember uppercase">Section layout</p>

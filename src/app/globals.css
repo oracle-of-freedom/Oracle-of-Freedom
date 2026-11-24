@@ -372,6 +372,20 @@ dialog.fx-dialog[open]::backdrop {
   font-size: 12pt;
   line-height: 1.42;
   overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+}
+
+.proposal-cropped {
+  object-fit: cover;
+  object-position: var(--crop-x, 50%) var(--crop-y, 50%);
+  transform: scale(var(--crop-z, 1));
+  transform-origin: var(--crop-x, 50%) var(--crop-y, 50%);
+}
+
+.proposal-proof-cell.has-photo {
+  height: var(--img-height, 92mm);
+  aspect-ratio: var(--img-aspect, auto);
 }
 
 .proposal-doc *,
@@ -484,7 +498,7 @@ dialog.fx-dialog[open]::backdrop {
 .proposal-hero h1 {
   margin: 0 0 6px;
   font-family: var(--font-serif), "DM Serif Display", serif;
-  font-size: 32pt;
+  font-size: var(--title-size, 32pt);
   font-weight: 400;
   line-height: 1;
 }
@@ -699,6 +713,18 @@ dialog.fx-dialog[open]::backdrop {
 }
 
 .proposal-video-ph { height: 48mm; border-radius: 12px; }
+
+.proposal-video-hover {
+  transition: transform 0.5s ease-out;
+}
+.group:hover .proposal-cropped.proposal-video-hover {
+  transform: scale(calc(var(--crop-z, 1) * 1.015));
+}
+@container proposal (max-width: 767px) {
+  .group:hover .proposal-cropped.proposal-video-hover {
+    transform: scale(calc(var(--crop-z-m, var(--crop-z, 1)) * 1.015));
+  }
+}
 
 .proposal-video-print-cover {
   display: none;
@@ -1002,7 +1028,8 @@ dialog.fx-dialog[open]::backdrop {
 
 .proposal-opportunity { margin: 2mm 0 0; font-size: 12pt; }
 
-@container proposal (max-width: 720px) {
+/* Phone overrides: container query so the Studio 390px preview matches real phones. */
+@container proposal (max-width: 767px) {
   .proposal-why,
   .proposal-team,
   .proposal-del,
@@ -1019,9 +1046,86 @@ dialog.fx-dialog[open]::backdrop {
   .proposal-brand { left: 5mm; }
   .proposal-section { padding-left: 5mm; padding-right: 5mm; }
   .proposal-proof-cell { height: 62mm; }
+
+  .proposal-hero {
+    height: var(--hero-height-m, var(--hero-height, 70mm));
+  }
+  .proposal-logo-wrap {
+    width: var(--logo-size-m, var(--logo-size, 46px));
+    height: var(--logo-size-m, var(--logo-size, 46px));
+  }
+  .proposal-date {
+    margin-top: var(--date-offset-m, var(--date-offset, 2.8mm));
+    font-size: var(--date-size-m, var(--date-size, 8pt));
+  }
+  .proposal-hero h1 {
+    font-size: var(--title-size-m, var(--title-size, 26pt));
+  }
+  .proposal-hero-copy {
+    text-align: var(--hero-align-m, left);
+  }
+  .proposal-team {
+    grid-template-columns: var(--plan-columns-m, 1fr);
+  }
+  .proposal-inv-body {
+    grid-template-columns: var(--investment-columns-m, 1fr);
+  }
+  .proposal-proof-grid {
+    grid-template-columns: var(--proof-columns-m, 1fr);
+  }
+  .proposal-review-grid.is-pair {
+    grid-template-columns: var(--review-columns-m, 1fr);
+  }
+  .proposal-cropped {
+    object-position: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));
+    transform: scale(var(--crop-z-m, var(--crop-z, 1)));
+    transform-origin: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));
+  }
+  .proposal-proof-cell,
+  .proposal-proof-cell.has-photo {
+    height: var(--img-height-m, 62mm);
+    aspect-ratio: var(--img-aspect-m, auto);
+  }
+  .proposal-section,
+  .proposal-hero,
+  .proposal-divider {
+    order: calc(20 + var(--section-order-m, 0));
+    margin-top: var(--section-mt-m, unset);
+    margin-bottom: var(--section-mb-m, unset);
+  }
+  .proposal-section .proposal-title {
+    font-size: var(--section-heading-m, inherit);
+  }
+  .proposal-section .proposal-intro,
+  .proposal-section .proposal-follow,
+  .proposal-section p {
+    font-size: var(--section-body-m, inherit);
+  }
+  .is-phone-hidden {
+    display: none !important;
+  }
+  .proposal-hero.is-phone-top {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: var(--hero-height-m, var(--hero-height, 70mm));
+  }
+  .proposal-hero.is-phone-top .proposal-hero-media {
+    position: relative;
+    inset: auto;
+    min-height: 42mm;
+  }
+  .proposal-hero.is-phone-top .proposal-brand,
+  .proposal-hero.is-phone-top .proposal-hero-copy {
+    position: relative;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    padding: 4mm 5mm;
+  }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .proposal-why,
   .proposal-team,
   .proposal-del,
@@ -1037,13 +1141,93 @@ dialog.fx-dialog[open]::backdrop {
   .proposal-hero-copy { width: calc(100% - 10mm); left: 5mm; }
   .proposal-brand { left: 5mm; letter-spacing: 0.16em; }
   .proposal-section { padding-left: 5mm; padding-right: 5mm; }
-  .proposal-hero h1 { font-size: 26pt; }
-  .proposal-proof-cell { height: 62mm; }
+  .proposal-hero h1 { font-size: var(--title-size-m, var(--title-size, 26pt)); }
+  .proposal-proof-cell { height: var(--img-height-m, 62mm); }
   .proposal-doc { max-width: none; }
+
+  .proposal-hero {
+    height: var(--hero-height-m, var(--hero-height, 70mm));
+  }
+  .proposal-logo-wrap {
+    width: var(--logo-size-m, var(--logo-size, 46px));
+    height: var(--logo-size-m, var(--logo-size, 46px));
+  }
+  .proposal-date {
+    margin-top: var(--date-offset-m, var(--date-offset, 2.8mm));
+    font-size: var(--date-size-m, var(--date-size, 8pt));
+  }
+  .proposal-hero-copy {
+    text-align: var(--hero-align-m, left);
+  }
+  .proposal-team {
+    grid-template-columns: var(--plan-columns-m, 1fr);
+  }
+  .proposal-inv-body {
+    grid-template-columns: var(--investment-columns-m, 1fr);
+  }
+  .proposal-proof-grid {
+    grid-template-columns: var(--proof-columns-m, 1fr);
+  }
+  .proposal-review-grid.is-pair {
+    grid-template-columns: var(--review-columns-m, 1fr);
+  }
+  .proposal-cropped {
+    object-position: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));
+    transform: scale(var(--crop-z-m, var(--crop-z, 1)));
+    transform-origin: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));
+  }
+  .proposal-section,
+  .proposal-hero,
+  .proposal-divider {
+    order: calc(20 + var(--section-order-m, 0));
+    margin-top: var(--section-mt-m, unset);
+    margin-bottom: var(--section-mb-m, unset);
+  }
+  .proposal-section .proposal-title {
+    font-size: var(--section-heading-m, inherit);
+  }
+  .is-phone-hidden {
+    display: none !important;
+  }
 }
 
 @media print {
   .proposal-no-print { display: none !important; }
+
+  /* PDF always uses desktop layout values. */
+  .proposal-hero {
+    height: var(--hero-height, 70mm) !important;
+  }
+  .proposal-logo-wrap {
+    width: var(--logo-size, 46px) !important;
+    height: var(--logo-size, 46px) !important;
+  }
+  .proposal-hero h1 {
+    font-size: var(--title-size, 32pt) !important;
+  }
+  .proposal-date {
+    margin-top: var(--date-offset, 2.8mm) !important;
+    font-size: var(--date-size, 8pt) !important;
+  }
+  .proposal-cropped {
+    object-position: var(--crop-x, 50%) var(--crop-y, 50%) !important;
+    transform: scale(var(--crop-z, 1)) !important;
+    transform-origin: var(--crop-x, 50%) var(--crop-y, 50%) !important;
+  }
+  .proposal-section,
+  .proposal-hero,
+  .proposal-divider {
+    order: unset !important;
+    margin-top: revert-layer;
+    margin-bottom: revert-layer;
+  }
+  .is-phone-hidden {
+    display: revert !important;
+  }
+  .proposal-proof-cell {
+    height: 92mm !important;
+    aspect-ratio: auto !important;
+  }
 
   html,
   body {

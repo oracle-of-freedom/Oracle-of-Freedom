@@ -9,6 +9,11 @@ import {
   type ActionState,
 } from "@/app/admin/proposals/actions";
 import { ProposalDesignFields } from "@/components/proposals/design-fields";
+import {
+  EditorViewportProvider,
+  EditorViewportToggle,
+  useEditorViewport,
+} from "@/components/proposals/editor-viewport";
 import { ProposalView } from "@/components/proposals/proposal-view";
 import { blankSection, SectionFields } from "@/components/proposals/section-fields";
 import { Button } from "@/components/ui/button";
@@ -16,6 +21,7 @@ import { Input, Label } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
 import { resetDesignDefaults } from "@/lib/proposal-design";
 import { resetAllImageCrops } from "@/lib/proposal-image-crop";
+import { moveSectionPhoneOrder, resetAllPhoneSettings } from "@/lib/proposal-mobile";
 import type { ProposalStudioReview } from "@/lib/proposal-reviews";
 import {
   SECTION_TYPES,
@@ -58,6 +64,23 @@ export function TemplateEditor({
   films?: Film[];
   reviews?: ProposalStudioReview[];
 }) {
+  return (
+    <EditorViewportProvider>
+      <TemplateEditorInner initial={initial} films={films} reviews={reviews} />
+    </EditorViewportProvider>
+  );
+}
+
+function TemplateEditorInner({
+  initial,
+  films = [],
+  reviews = [],
+}: {
+  initial: ProposalTemplate;
+  films?: Film[];
+  reviews?: ProposalStudioReview[];
+}) {
+  const { viewport, isPhone } = useEditorViewport();
   const [template, setTemplate] = useState(initial);
   const [selectedId, setSelectedId] = useState(initial.sections[0]?.id || "");
   const [state, action, pending] = useActionState(saveTemplateAction, null as ActionState);
@@ -73,6 +96,9 @@ export function TemplateEditor({
 
   function moveSection(id: string, dir: -1 | 1) {
     setTemplate((prev) => {
+      if (isPhone) {
+        return { ...prev, sections: moveSectionPhoneOrder(prev.sections, id, dir) };
+      }
       const index = prev.sections.findIndex((s) => s.id === id);
       const target = index + dir;
       if (index < 0 || target < 0 || target >= prev.sections.length) return prev;
@@ -88,6 +114,18 @@ export function TemplateEditor({
       <Link href="/admin/proposals/templates" className="text-sm underline underline-offset-4">
         Back to templates
       </Link>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-ink/10 bg-white/70 px-4 py-3">
+        <div>
+          <p className="text-xs tracking-[0.2em] text-ember uppercase">Edit for</p>
+          <p className="mt-1 text-sm text-ink/65">
+            {isPhone
+              ? "Phone changes apply under 768px only. Desktop stays as it is."
+              : "Desktop is the default. Switch to Phone to set phone-only overrides."}
+          </p>
+        </div>
+        <EditorViewportToggle />
+      </div>
 
       <div className="rounded-3xl bg-white/70 p-4 md:p-6">
         <div className="grid gap-4 md:grid-cols-2">
@@ -148,17 +186,27 @@ export function TemplateEditor({
       <div className="grid gap-6 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         <div className="space-y-4">
           <div className="rounded-3xl bg-white/70 p-4">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-xs tracking-[0.2em] text-ember uppercase">Design</p>
-              <button
-                type="button"
-                className="text-xs text-terracotta underline-offset-4 hover:underline"
-                onClick={() =>
-                  setTemplate((prev) => resetAllImageCrops(resetDesignDefaults(prev)))
-                }
-              >
-                Reset to default
-              </button>
+              {isPhone ? (
+                <button
+                  type="button"
+                  className="text-xs text-terracotta underline-offset-4 hover:underline"
+                  onClick={() => setTemplate((prev) => resetAllPhoneSettings(prev))}
+                >
+                  Reset all phone settings
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="text-xs text-terracotta underline-offset-4 hover:underline"
+                  onClick={() =>
+                    setTemplate((prev) => resetAllImageCrops(resetDesignDefaults(prev)))
+                  }
+                >
+                  Reset to default
+                </button>
+              )}
             </div>
             <div className="mt-4">
               <ProposalDesignFields
@@ -179,13 +227,22 @@ export function TemplateEditor({
             </div>
           </div>
           <div className="rounded-3xl bg-white/70 p-4">
-            <p className="text-xs tracking-[0.2em] text-ember uppercase">Sections</p>
+            <p className="text-xs tracking-[0.2em] text-ember uppercase">
+              Sections{isPhone ? " · phone order" : ""}
+            </p>
             <ul className="mt-3 space-y-2">
               {template.sections.map((section) => (
                 <li key={section.id} className="flex items-center gap-2 rounded-2xl px-2 py-2 hover:bg-sand">
                   <button type="button" className="min-w-0 flex-1 text-left text-sm" onClick={() => setSelectedId(section.id)}>
-                    <span className={section.enabled ? "" : "text-ink/40 line-through"}>
+                    <span
+                      className={
+                        section.enabled && !section.mobile?.hidden
+                          ? ""
+                          : "text-ink/40 line-through"
+                      }
+                    >
                       {sectionLabel(section.type)}
+                      {isPhone && section.mobile?.hidden ? " · hidden" : ""}
                     </span>
                   </button>
                   <button type="button" className="text-xs" onClick={() => moveSection(section.id, -1)}>
@@ -200,53 +257,74 @@ export function TemplateEditor({
                     onClick={() =>
                       setTemplate((prev) => ({
                         ...prev,
-                        sections: prev.sections.map((s) =>
-                          s.id === section.id ? { ...s, enabled: !s.enabled } : s,
-                        ),
+                        sections: prev.sections.map((s) => {
+                          if (s.id !== section.id) return s;
+                          if (isPhone) {
+                            const mobile = { ...(s.mobile || {}) };
+                            if (mobile.hidden) delete mobile.hidden;
+                            else mobile.hidden = true;
+                            if (!Object.keys(mobile).length) {
+                              const { mobile: _drop, ...rest } = s;
+                              return rest;
+                            }
+                            return { ...s, mobile };
+                          }
+                          return { ...s, enabled: !s.enabled };
+                        }),
                       }))
                     }
                   >
-                    {section.enabled ? "On" : "Off"}
+                    {isPhone
+                      ? section.mobile?.hidden
+                        ? "Hidden"
+                        : "Show"
+                      : section.enabled
+                        ? "On"
+                        : "Off"}
                   </button>
-                  <button
-                    type="button"
-                    className="text-xs text-ink/45"
-                    onClick={() =>
-                      setTemplate((prev) => ({
-                        ...prev,
-                        sections: prev.sections.filter((s) => s.id !== section.id),
-                      }))
-                    }
-                  >
-                    ×
-                  </button>
+                  {!isPhone ? (
+                    <button
+                      type="button"
+                      className="text-xs text-ink/45"
+                      onClick={() =>
+                        setTemplate((prev) => ({
+                          ...prev,
+                          sections: prev.sections.filter((s) => s.id !== section.id),
+                        }))
+                      }
+                    >
+                      ×
+                    </button>
+                  ) : null}
                 </li>
               ))}
             </ul>
-            <div className="mt-4">
-              <Label>Add section</Label>
-              <select
-                className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-                defaultValue=""
-                onChange={(e) => {
-                  const type = e.target.value as SectionType;
-                  if (!type) return;
-                  const section = blankSection(type);
-                  setTemplate((prev) => ({ ...prev, sections: [...prev.sections, section] }));
-                  setSelectedId(section.id);
-                  e.target.value = "";
-                }}
-              >
-                <option value="" disabled>
-                  Choose type…
-                </option>
-                {SECTION_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {sectionLabel(type)}
+            {!isPhone ? (
+              <div className="mt-4">
+                <Label>Add section</Label>
+                <select
+                  className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+                  defaultValue=""
+                  onChange={(e) => {
+                    const type = e.target.value as SectionType;
+                    if (!type) return;
+                    const section = blankSection(type);
+                    setTemplate((prev) => ({ ...prev, sections: [...prev.sections, section] }));
+                    setSelectedId(section.id);
+                    e.target.value = "";
+                  }}
+                >
+                  <option value="" disabled>
+                    Choose type…
                   </option>
-                ))}
-              </select>
-            </div>
+                  {SECTION_TYPES.map((type) => (
+                    <option key={type} value={type}>
+                      {sectionLabel(type)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
           </div>
           {selected ? (
             <div className="rounded-3xl bg-white/70 p-4">
@@ -263,20 +341,34 @@ export function TemplateEditor({
             </div>
           ) : null}
         </div>
-        <div className="overflow-hidden rounded-3xl border border-ink/10 bg-sand">
-          <ProposalView
-            proposal={asPreviewProposal(template)}
-            mode="admin"
-            showPdfButton={false}
-            onChooseReview={() => {
-              const reviewSection = template.sections.find((s) => s.type === "review");
-              if (reviewSection) setSelectedId(reviewSection.id);
-              requestAnimationFrame(() => {
-                reviewSelectRef.current?.focus();
-                reviewSelectRef.current?.showPicker?.();
-              });
-            }}
-          />
+        <div className="rounded-3xl bg-white/70 p-4">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs tracking-[0.2em] text-ember uppercase">
+              Live preview · {viewport}
+            </p>
+            <EditorViewportToggle />
+          </div>
+          <div
+            className={`overflow-hidden rounded-2xl border border-ink/10 bg-sand ${
+              isPhone ? "mx-auto max-w-[390px]" : ""
+            }`}
+          >
+            <div className={isPhone ? "max-h-[80vh] overflow-y-auto" : ""}>
+              <ProposalView
+                proposal={asPreviewProposal(template)}
+                mode="admin"
+                showPdfButton={false}
+                onChooseReview={() => {
+                  const reviewSection = template.sections.find((s) => s.type === "review");
+                  if (reviewSection) setSelectedId(reviewSection.id);
+                  requestAnimationFrame(() => {
+                    reviewSelectRef.current?.focus();
+                    reviewSelectRef.current?.showPicker?.();
+                  });
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

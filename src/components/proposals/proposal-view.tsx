@@ -12,8 +12,16 @@ import {
 import {
   HERO_CROP_FALLBACK,
   hasImageCrop,
-  imageCropStyle,
 } from "@/lib/proposal-image-crop";
+import {
+  designMobileVars,
+  hasMobileImageCrop,
+  imageFrameMobileStyle,
+  imagePhoneHiddenClass,
+  imageResponsiveStyle,
+  sectionMobileStyle,
+  sectionPhoneClass,
+} from "@/lib/proposal-mobile";
 import { isReviewPlaceholder, reviewSlotHasContent } from "@/lib/proposal-reviews";
 import { resolveProposalVideo } from "@/lib/proposal-video";
 import {
@@ -66,7 +74,10 @@ function alignClass(align: DesignAlign | undefined, fallback: DesignAlign) {
   return "is-left";
 }
 
-function designVars(design: ResolvedProposalDesign): CSSProperties {
+function designVars(
+  design: ResolvedProposalDesign,
+  mobile?: import("@/lib/proposal-mobile").ProposalDesignMobile,
+): CSSProperties {
   const [stop1, stop2, stop3] = design.cover.gradientStops;
   return {
     ["--hero-height" as string]: design.cover.heroHeight,
@@ -87,13 +98,16 @@ function designVars(design: ResolvedProposalDesign): CSSProperties {
     ["--next-step-gap" as string]: design.nextStepGap,
     ["--cta-gap" as string]: design.ctaGap,
     ["--signoff-gap" as string]: design.signOffGap,
+    ...designMobileVars(mobile),
   };
 }
 
-function sectionStyle(section: ProposalSection): CSSProperties {
+function sectionStyle(section: ProposalSection, index: number): CSSProperties {
   const design = section.design;
-  if (!design) return {};
-  const style: Record<string, string> = {};
+  const style: Record<string, string> = {
+    ...(sectionMobileStyle(section, index) as Record<string, string>),
+  };
+  if (!design) return style;
   if (design.padding) style.padding = design.padding;
   if (design.marginTop) style.marginTop = design.marginTop;
   if (design.offsetX && design.offsetX !== "0") style.marginLeft = design.offsetX;
@@ -184,27 +198,36 @@ function headlineNode(headline: string, emphasis?: string) {
 
 function Cover({
   section,
+  index,
+  imageSide,
 }: {
   section: ProposalSectionOf<"cover">;
+  index: number;
+  imageSide?: "behind" | "top";
 }) {
   const { data } = section;
   const src = imageSrc(data.heroImage);
-  const useCroppedPhoto = Boolean(src && hasImageCrop(data.heroImage));
+  const useCroppedPhoto = Boolean(
+    src && (hasImageCrop(data.heroImage) || hasMobileImageCrop(data.heroImage)),
+  );
   const style: CSSProperties = {
     ...(src && !useCroppedPhoto ? { backgroundImage: `url("${src}")` } : {}),
-    ...sectionStyle(section),
+    ...sectionStyle(section, index),
   };
+  const phoneClass = sectionPhoneClass(section);
+  const topClass = imageSide === "top" ? "is-phone-top" : "";
+  const imageHidden = imagePhoneHiddenClass(data.heroImage);
   return (
-    <header className="proposal-hero" style={style}>
+    <header className={`proposal-hero ${phoneClass} ${topClass}`.trim()} style={style}>
       {useCroppedPhoto && src ? (
-        <div className="proposal-hero-media" aria-hidden="true">
+        <div className={`proposal-hero-media ${imageHidden}`.trim()} aria-hidden="true">
           <Image
             src={src}
             alt=""
             fill
             priority
-            className="proposal-hero-photo"
-            style={imageCropStyle(data.heroImage, HERO_CROP_FALLBACK)}
+            className="proposal-hero-photo proposal-cropped"
+            style={imageResponsiveStyle(data.heroImage, HERO_CROP_FALLBACK)}
             sizes="100vw"
             unoptimized={src.startsWith("/api/media/")}
           />
@@ -252,14 +275,17 @@ function ExtraPhotos({ section }: { section: ProposalSection }) {
       {images.map((image, index) => {
         const src = imageSrc(image);
         return (
-          <figure key={`${image.src || image.mediaId || "extra"}-${index}`} className="proposal-extra-frame">
+          <figure
+            key={`${image.src || image.mediaId || "extra"}-${index}`}
+            className={`proposal-extra-frame ${imagePhoneHiddenClass(image)}`.trim()}
+          >
             <Image
               src={src}
               alt={image.alt || ""}
               width={800}
               height={600}
-              className="proposal-extra-img"
-              style={imageCropStyle(image)}
+              className="proposal-extra-img proposal-cropped"
+              style={imageResponsiveStyle(image)}
               unoptimized={src.startsWith("/api/media/")}
             />
           </figure>
@@ -278,22 +304,27 @@ function ProofGrid({ images }: { images: ProposalImage[] }) {
     <div className="proposal-proof-grid">
       {cells.map((image, index) => {
         const src = imageSrc(image);
+        const phoneHidden = imagePhoneHiddenClass(image);
         if (!src) {
           return (
-            <div key={`ph-${index}`} className="proposal-ph proposal-proof-cell">
+            <div key={`ph-${index}`} className={`proposal-ph proposal-proof-cell ${phoneHidden}`.trim()}>
               <span>{photoSlotLabel(image.alt)}</span>
             </div>
           );
         }
         return (
-          <figure key={`${src}-${index}`} className="proposal-proof-cell has-photo">
+          <figure
+            key={`${src}-${index}`}
+            className={`proposal-proof-cell has-photo ${phoneHidden}`.trim()}
+            style={imageFrameMobileStyle(image)}
+          >
             <Image
               src={src}
               alt={image.alt || ""}
               fill
-              className="object-cover"
-              style={imageCropStyle(image)}
-              sizes="(max-width: 720px) 100vw, 90mm"
+              className="object-cover proposal-cropped"
+              style={imageResponsiveStyle(image)}
+              sizes="(max-width: 767px) 100vw, 90mm"
               unoptimized={src.startsWith("/api/media/")}
             />
           </figure>
@@ -322,14 +353,14 @@ function ReviewCard({ slot }: { slot: ReviewSlot }) {
   return (
     <article className="proposal-review-card">
       {src ? (
-        <div className="proposal-review-photo">
+        <div className={`proposal-review-photo ${imagePhoneHiddenClass(slot.image)}`.trim()}>
           <Image
             src={src}
             alt={slot.image?.alt || slot.name || ""}
             fill
-            className="object-cover"
-            style={imageCropStyle(slot.image)}
-            sizes="(max-width: 720px) 100vw, 90mm"
+            className="object-cover proposal-cropped"
+            style={imageResponsiveStyle(slot.image)}
+            sizes="(max-width: 767px) 100vw, 90mm"
             unoptimized={src.startsWith("/api/media/")}
           />
         </div>
@@ -351,16 +382,26 @@ function renderSection(
     hidePrices: boolean;
     design: ResolvedProposalDesign;
     onChooseReview?: () => void;
+    index: number;
+    coverImageSide?: "behind" | "top";
   },
 ) {
   if (!section.enabled) return null;
-  const style = sectionStyle(section);
+  const style = sectionStyle(section, options.index);
   const breakClass = PAGE_BREAK_TYPES.has(section.type) ? "proposal-break" : "";
-  const shell = `proposal-section proposal-section-${section.type} ${breakClass}`.trim();
+  const phoneClass = sectionPhoneClass(section);
+  const shell = `proposal-section proposal-section-${section.type} ${breakClass} ${phoneClass}`.trim();
 
   switch (section.type) {
     case "cover":
-      return <Cover key={section.id} section={section} />;
+      return (
+        <Cover
+          key={section.id}
+          section={section}
+          index={options.index}
+          imageSide={options.coverImageSide}
+        />
+      );
     case "welcome":
       if (!section.data.body.trim() && !(section.images ?? []).some((img) => imageSrc(img))) return null;
       return (
@@ -392,14 +433,14 @@ function renderSection(
     case "divider": {
       const src = imageSrc(section.data.image);
       return (
-        <section key={section.id} className="proposal-divider" style={style}>
+        <section key={section.id} className={`proposal-divider ${phoneClass}`.trim()} style={style}>
           {src ? (
             <Image
               src={src}
               alt={section.data.image?.alt || ""}
               fill
-              className="object-cover"
-              style={imageCropStyle(section.data.image)}
+              className={`object-cover proposal-cropped ${imagePhoneHiddenClass(section.data.image)}`.trim()}
+              style={imageResponsiveStyle(section.data.image)}
               sizes="100vw"
               unoptimized={src.startsWith("/api/media/")}
             />
@@ -719,7 +760,10 @@ export function ProposalView({
   const hidePrices = mode === "preview";
   const design = resolveProposalDesign(proposal.design);
   return (
-    <article className={`proposal-doc ${className || ""}`.trim()} style={designVars(design)}>
+    <article
+      className={`proposal-doc ${className || ""}`.trim()}
+      style={designVars(design, proposal.design?.mobile)}
+    >
       {showPdfButton ? (
         <div className="proposal-no-print proposal-toolbar">
           <ProposalPdfButton />
@@ -729,10 +773,12 @@ export function ProposalView({
       {mode === "preview" ? (
         <p className="proposal-no-print proposal-banner is-preview">Draft preview · prices hidden</p>
       ) : null}
-      {proposal.sections.map((section) =>
+      {proposal.sections.map((section, index) =>
         renderSection(section, proposal, {
           hidePrices,
           design,
+          index,
+          coverImageSide: proposal.design?.mobile?.cover?.imageSide,
           onChooseReview: mode === "admin" ? onChooseReview : undefined,
         }),
       )}

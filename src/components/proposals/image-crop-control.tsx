@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef } from "react";
+import { PhoneBadge, useEditorViewport } from "@/components/proposals/editor-viewport";
 import {
   IMAGE_CROP_NUDGE,
   IMAGE_CROP_ZOOM_MAX,
@@ -12,6 +13,12 @@ import {
   resolveImageCrop,
   type ImageCrop,
 } from "@/lib/proposal-image-crop";
+import {
+  applyMobileImageCrop,
+  clearMobileImageCrop,
+  hasMobileImageCrop,
+  resolveMobileImageCrop,
+} from "@/lib/proposal-mobile";
 import { imageSrc, type ProposalImage } from "@/lib/proposals";
 
 type FrameShape = "hero" | "proof" | "video" | "square" | "wide";
@@ -67,8 +74,12 @@ export function ImageCropControl({
   /** Used when the image has no stored crop (for example Awake cover right-centre). */
   fallback?: Partial<ImageCrop>;
 }) {
+  const { isPhone } = useEditorViewport();
   const src = imageSrc(image);
-  const crop = resolveImageCrop(image, fallback);
+  const crop = isPhone
+    ? resolveMobileImageCrop(image, fallback)
+    : resolveImageCrop(image, fallback);
+  const hasCrop = isPhone ? hasMobileImageCrop(image) : hasImageCrop(image);
   const dragRef = useRef<{
     pointerId: number;
     startX: number;
@@ -81,7 +92,9 @@ export function ImageCropControl({
   if (!src) return null;
 
   function patch(partial: Partial<ImageCrop>) {
-    onChange(applyImageCrop(image, partial));
+    onChange(
+      isPhone ? applyMobileImageCrop(image, partial) : applyImageCrop(image, partial),
+    );
   }
 
   function nudge(dx: number, dy: number) {
@@ -133,7 +146,17 @@ export function ImageCropControl({
 
   return (
     <div className="space-y-3 rounded-2xl border border-ink/10 bg-sand/40 p-3">
-      <p className="text-xs tracking-[0.18em] text-ember uppercase">Crop</p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs tracking-[0.18em] text-ember uppercase">Crop</p>
+        <PhoneBadge
+          active={isPhone && hasCrop}
+          onReset={
+            isPhone && hasCrop
+              ? () => onChange(clearMobileImageCrop(image))
+              : undefined
+          }
+        />
+      </div>
       <div
         ref={frameRef}
         className={`proposal-crop-preview relative w-full overflow-hidden rounded-2xl bg-night ${FRAME_CLASS[frame]} touch-none`}
@@ -227,8 +250,10 @@ export function ImageCropControl({
         <button
           type="button"
           className="ml-auto text-sm text-terracotta underline-offset-4 hover:underline disabled:opacity-40"
-          disabled={!hasImageCrop(image)}
-          onClick={() => onChange(clearImageCrop(image))}
+          disabled={!hasCrop}
+          onClick={() =>
+            onChange(isPhone ? clearMobileImageCrop(image) : clearImageCrop(image))
+          }
         >
           Reset crop
         </button>

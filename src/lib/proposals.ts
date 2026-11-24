@@ -5,6 +5,12 @@ import {
   type ProposalDesign,
   type SectionDesign,
 } from "@/lib/proposal-design";
+import {
+  parseImageMobile,
+  parseSectionMobile,
+  type ProposalImageMobile,
+  type SectionMobile,
+} from "@/lib/proposal-mobile";
 
 /**
  * Section kinds a proposal or template can hold.
@@ -61,6 +67,8 @@ export type ProposalImage = {
   focusY?: number;
   /** Zoom scale from 1 to 3. Missing means 1 (no zoom). */
   zoom?: number;
+  /** Phone-only crop, size and visibility. Missing keys fall back to desktop. */
+  mobile?: ProposalImageMobile;
 };
 
 export type NoticedCard = {
@@ -271,6 +279,8 @@ export type ProposalSection = {
     images?: ProposalImage[];
     /** Per-block layout. Missing fields use the proposal design, then Awake defaults. */
     design?: SectionDesign;
+    /** Phone-only visibility, order, spacing and type size. */
+    mobile?: SectionMobile;
   };
 }[SectionType];
 
@@ -530,7 +540,10 @@ function asImage(value: unknown): ProposalImage | null {
   const focusX = asFocusPercent(record.focusX);
   const focusY = asFocusPercent(record.focusY);
   const zoom = asZoom(record.zoom);
-  if (!mediaId && !src && !alt && focusX == null && focusY == null && zoom == null) return null;
+  const mobile = parseImageMobile(record.mobile);
+  if (!mediaId && !src && !alt && focusX == null && focusY == null && zoom == null && !mobile) {
+    return null;
+  }
   return {
     ...(mediaId ? { mediaId } : {}),
     ...(src ? { src } : {}),
@@ -539,6 +552,7 @@ function asImage(value: unknown): ProposalImage | null {
     ...(focusX != null ? { focusX } : {}),
     ...(focusY != null ? { focusY } : {}),
     ...(zoom != null ? { zoom } : {}),
+    ...(mobile ? { mobile } : {}),
   };
 }
 
@@ -558,11 +572,13 @@ function parseCommonSectionFields(record: Record<string, unknown>) {
     : undefined;
   const images = asImages(record.images);
   const design = parseSectionDesign(record.design);
+  const mobile = parseSectionMobile(record.mobile);
   return {
     ...(layout ? { layout } : {}),
     ...(headingEmphasis ? { headingEmphasis } : {}),
     ...(images.length ? { images } : {}),
     ...(design ? { design } : {}),
+    ...(mobile ? { mobile } : {}),
   };
 }
 
