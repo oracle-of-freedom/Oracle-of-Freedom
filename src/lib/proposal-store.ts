@@ -215,6 +215,7 @@ export async function duplicateTemplate(id: string, name?: string) {
     builtin: false,
     createdAt: stamp,
     updatedAt: stamp,
+    ...(source.design ? { design: structuredClone(source.design) } : {}),
     sections: cloneSections(source.sections),
   };
   await saveTemplate(copy);
@@ -241,8 +242,9 @@ export async function createProposalFromTemplate(templateId: string, clientName 
   const sections = cloneSections(template.sections);
   const cover = findSection(sections, "cover");
   if (cover) {
+    const templateKicker = cover.data.kicker.trim();
     cover.data.clientName = clientName;
-    cover.data.kicker = `Prepared for ${clientName}`;
+    cover.data.kicker = templateKicker ? `Prepared for ${clientName}` : "";
     cover.data.proposalDate = proposalDate;
   }
   const investment = findSection(sections, "investment");
@@ -255,7 +257,7 @@ export async function createProposalFromTemplate(templateId: string, clientName 
     templateId: template.id,
     templateKind: template.kind,
     clientName,
-    projectTitle: cover?.data.headline || template.name,
+    projectTitle: cover?.data.headline.replace(/\s*\n\s*/g, " ") || template.name,
     status: "draft",
     createdAt: stamp,
     updatedAt: stamp,
@@ -263,6 +265,7 @@ export async function createProposalFromTemplate(templateId: string, clientName 
     validUntil: addDaysIso(proposalDate, 30),
     viewCount: 0,
     lastOpenedAt: "",
+    ...(template.design ? { design: structuredClone(template.design) } : {}),
     sections,
   };
   list.unshift(proposal);
@@ -320,8 +323,9 @@ export async function duplicateProposal(id: string, clientName: string) {
   const sections = cloneSections(source.sections);
   const cover = findSection(sections, "cover");
   if (cover) {
+    const hadKicker = Boolean(cover.data.kicker.trim());
     cover.data.clientName = clientName;
-    cover.data.kicker = `Prepared for ${clientName}`;
+    cover.data.kicker = hadKicker ? `Prepared for ${clientName}` : "";
     cover.data.proposalDate = proposalDate;
   }
   const investment = findSection(sections, "investment");
@@ -341,6 +345,8 @@ export async function duplicateProposal(id: string, clientName: string) {
     viewCount: 0,
     lastOpenedAt: "",
     example: undefined,
+    contentRevision: undefined,
+    ...(source.design ? { design: structuredClone(source.design) } : {}),
     sections,
   };
   list.unshift(copy);

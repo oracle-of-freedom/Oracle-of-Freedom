@@ -1,133 +1,67 @@
-import { NORTE_NOSARA_EXAMPLE_ID } from "./proposal-norte-nosara";
-import type { Proposal, ProposalImage, ProposalSection } from "./proposals";
-import { ensureSignOffSection, findSection, newId } from "./proposals";
+import {
+  NORTE_AWAKE_REVISION,
+  NORTE_NOSARA_EXAMPLE_ID,
+  norteNosaraExample,
+} from "./proposal-norte-nosara";
+import type { Proposal } from "./proposals";
+import { ensureSignOffSection } from "./proposals";
 
-const MIGRATED_PLAN_SCENES: { id: string; title: string }[] = [
-  { id: "norte_scene_1", title: "The shala during practice" },
-  { id: "norte_scene_2", title: "Surf coaching" },
-  { id: "norte_scene_3", title: "The Jungle Bar, from morning bowls to evening cocktails" },
-  { id: "norte_scene_4", title: "The rooms, the pool and the cozy corners" },
-  { id: "norte_scene_5", title: "How a retreat day flows, from sunrise to evening" },
-  { id: "norte_scene_6", title: "Lifestyle footage that shows how the property really feels" },
-  { id: "norte_scene_7", title: "Drone footage of the property and how it sits in town" },
-];
+function isNorteExample(proposal: Proposal) {
+  return proposal.id === NORTE_NOSARA_EXAMPLE_ID || proposal.slug === "norte-nosara-example";
+}
 
-const ADDON_BODY =
-  "I travel, so I can't commit to a monthly package, but I can edit remotely whenever you need more content.\n\nEach reel is cut from the clip library we build together or from footage your team films on a phone, depending on your idea or vision.\n\nCaptions or subtitles and music, formatted for Instagram and TikTok, with one round of changes.";
-
-const INVESTMENT_SIDE_NOTE =
-  "My retreat packages usually include accommodation and meals during the shoot days, so I'd like to discuss that as part of this rate. Being on site from sunrise to evening means I can catch the light, the meals and the quiet moments a day visit would miss. That gives you more content at no extra cost.";
-
-function planHasExampleImage(images: ProposalImage[] | undefined) {
-  return (images ?? []).some((img) => {
-    const alt = img.alt.toLowerCase();
-    return alt.includes("example photos") || alt.includes("plan photo");
+function deckSignature(proposal: Proposal) {
+  return JSON.stringify({
+    templateId: proposal.templateId,
+    templateKind: proposal.templateKind,
+    proposalDate: proposal.proposalDate,
+    projectTitle: proposal.projectTitle,
+    clientName: proposal.clientName,
+    design: proposal.design ?? null,
+    sections: proposal.sections,
   });
 }
 
-function isNorteContentMigrated(sections: ProposalSection[]): boolean {
-  const deliverables = findSection(sections, "deliverables");
-  if (deliverables?.data.outOfScopeLabel !== "Delivery and changes") return false;
-
-  const addon = findSection(sections, "addon");
-  if ((addon?.data.priceLines?.length ?? 0) !== 2) return false;
-  if (addon?.headingEmphasis !== "xl") return false;
-
-  const plan = findSection(sections, "plan");
-  const scenes = plan?.data.scenes ?? [];
-  if (scenes.length !== MIGRATED_PLAN_SCENES.length) return false;
-  for (let i = 0; i < MIGRATED_PLAN_SCENES.length; i++) {
-    const expected = MIGRATED_PLAN_SCENES[i]!;
-    const scene = scenes[i];
-    if (!scene || scene.title !== expected.title || scene.showBody !== false || scene.body !== "") return false;
-  }
-
-  const investment = findSection(sections, "investment");
-  if (investment?.data.keyTerms !== "Balance due on delivery.") return false;
-  if (investment?.data.sideNote !== INVESTMENT_SIDE_NOTE) return false;
-
-  const last = sections[sections.length - 1];
-  if (last?.type !== "signOff" || !last.enabled) return false;
-
-  return true;
-}
-
-function moveSignOffToEnd(sections: ProposalSection[]): ProposalSection[] {
-  const without = sections.filter((s) => s.type !== "signOff");
-  const existing = sections.find((s) => s.type === "signOff");
-  const signOff: ProposalSection = existing
-    ? { ...existing, enabled: true }
-    : { id: newId("sec"), type: "signOff", enabled: true, data: { intro: "" } };
-  return [...without, signOff];
-}
-
-/** Idempotent content fix for the live Norte Nosara example. Preserves viewCount/slug/status/validUntil. */
+/**
+ * Idempotent content fix for the live Norte Nosara example.
+ * Preserves viewCount, lastOpenedAt, slug, previewToken, status, and validUntil.
+ * Once contentRevision reaches NORTE_AWAKE_REVISION, later edits are left alone.
+ */
 export function applyNorteNosaraContentFix(proposal: Proposal): { proposal: Proposal; changed: boolean } {
-  if (proposal.id !== NORTE_NOSARA_EXAMPLE_ID && proposal.slug !== "norte-nosara-example") {
+  if (!isNorteExample(proposal)) return { proposal, changed: false };
+  if ((proposal.contentRevision ?? 0) >= NORTE_AWAKE_REVISION) {
     return { proposal, changed: false };
   }
 
-  if (isNorteContentMigrated(proposal.sections)) {
-    return { proposal, changed: false };
-  }
-
-  let sections = structuredClone(proposal.sections) as ProposalSection[];
-
-  const deliverables = findSection(sections, "deliverables");
-  if (deliverables) {
-    deliverables.data = {
-      ...deliverables.data,
-      outOfScopeLabel: "Delivery and changes",
+  const seed = norteNosaraExample();
+  const already = deckSignature(proposal) === deckSignature(seed);
+  if (already) {
+    return {
+      proposal: { ...proposal, contentRevision: NORTE_AWAKE_REVISION },
+      changed: proposal.contentRevision !== NORTE_AWAKE_REVISION,
     };
   }
-
-  const plan = findSection(sections, "plan");
-  if (plan) {
-    plan.data.scenes = MIGRATED_PLAN_SCENES.map((expected) => ({
-      id: expected.id,
-      title: expected.title,
-      body: "",
-      showBody: false,
-    }));
-    if (!planHasExampleImage(plan.images)) {
-      const extra: ProposalImage = { alt: "[EXAMPLE PHOTOS: plan photo placeholder]" };
-      plan.images = [...(plan.images ?? []), extra];
-    }
-  }
-
-  const addon = findSection(sections, "addon");
-  if (addon) {
-    addon.headingEmphasis = "xl";
-    addon.data = {
-      ...addon.data,
-      heading: "Later, if you need it",
-      title: "Social media editing",
-      body: ADDON_BODY,
-      priceUsd: 0,
-      note: "Booked only when needed",
-      priceLines: [
-        { id: "norte_price_1", label: "1 reel", price: "US$110" },
-        { id: "norte_price_2", label: "3 reels", price: "US$285" },
-      ],
-    };
-  }
-
-  const investment = findSection(sections, "investment");
-  if (investment) {
-    investment.data = {
-      ...investment.data,
-      offerNote: "",
-      keyTerms: "Balance due on delivery.",
-      sideNote: INVESTMENT_SIDE_NOTE,
-    };
-  }
-
-  sections = moveSignOffToEnd(sections);
 
   return {
     proposal: {
       ...proposal,
-      sections,
+      templateId: seed.templateId,
+      templateKind: seed.templateKind,
+      projectTitle: seed.projectTitle,
+      proposalDate: seed.proposalDate,
+      clientName: seed.clientName,
+      design: structuredClone(seed.design),
+      sections: structuredClone(seed.sections),
+      contentRevision: NORTE_AWAKE_REVISION,
+      id: proposal.id,
+      slug: proposal.slug,
+      previewToken: proposal.previewToken,
+      status: proposal.status,
+      validUntil: proposal.validUntil,
+      viewCount: proposal.viewCount,
+      lastOpenedAt: proposal.lastOpenedAt,
+      createdAt: proposal.createdAt,
+      example: proposal.example ?? true,
     },
     changed: true,
   };

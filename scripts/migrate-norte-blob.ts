@@ -33,16 +33,27 @@ async function main() {
   const a = findSection(norte.sections, "addon");
   const inv = findSection(norte.sections, "investment");
   const plan = findSection(norte.sections, "plan");
+  const cover = findSection(norte.sections, "cover");
+  const terms = findSection(norte.sections, "terms");
+  const enabled = norte.sections.filter((s) => s.enabled).map((s) => s.type);
   console.log("label", d?.data.outOfScopeLabel);
   console.log("priceLines", JSON.stringify(a?.data.priceLines));
+  console.log("bullets", a?.data.bullets?.length);
   console.log("emphasis", a?.headingEmphasis);
   console.log("keyTerms", inv?.data.keyTerms);
-  console.log("sideNote", inv?.data.sideNote?.slice(0, 80));
+  console.log("sideNote", inv?.data.sideNote || "");
+  console.log("offerNote", inv?.data.offerNote);
+  console.log("kicker", JSON.stringify(cover?.data.kicker));
+  console.log("date", cover?.data.proposalDate);
+  console.log("terms", terms?.data.items.length);
   console.log(
     "scenes",
     plan?.data.scenes.map((s) => `${s.title}|show=${s.showBody}|body=${s.body}`),
   );
-  console.log("plan images", plan?.images?.length);
+  console.log("plan images", plan?.images?.length ?? 0);
+  console.log("enabled", enabled.join(" > "));
+  console.log("revision", norte.contentRevision);
+  console.log("template", norte.templateId);
   console.log("last section", norte.sections.at(-1)?.type);
   console.log("preserved", {
     viewCount: norte.viewCount,

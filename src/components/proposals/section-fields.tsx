@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionDesignFields } from "@/components/proposals/design-fields";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
 import {
@@ -220,6 +221,7 @@ function CommonSectionControls({
           } as ProposalSection)
         }
       />
+      <SectionDesignFields section={section} onChange={onChange} />
     </div>
   );
 }
@@ -718,6 +720,11 @@ export function SectionFields({
           <Field label="Body">
             <Textarea value={section.data.body} onChange={(e) => patch({ ...section.data, body: e.target.value })} />
           </Field>
+          <ListEditor
+            label="Bullets"
+            items={section.data.bullets || []}
+            onChange={(bullets) => patch({ ...section.data, bullets })}
+          />
           <PriceLinesEditor
             lines={section.data.priceLines || []}
             onChange={(priceLines) => patch({ ...section.data, priceLines: priceLines.length ? priceLines : undefined })}

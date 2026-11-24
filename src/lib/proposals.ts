@@ -1,6 +1,16 @@
 import { createHash, randomBytes } from "node:crypto";
+import {
+  parseProposalDesign,
+  parseSectionDesign,
+  type ProposalDesign,
+  type SectionDesign,
+} from "@/lib/proposal-design";
 
-/** Section kinds a proposal or template can hold. Cap a full deck at 10. */
+/**
+ * Section kinds a proposal or template can hold.
+ * Starter templates used to trim optional sections once 10 were enabled.
+ * Awake-style decks are longer, so the cap stays above a full Norte deck.
+ */
 export const SECTION_TYPES = [
   "cover",
   "welcome",
@@ -148,6 +158,8 @@ export type AddonData = {
   priceUsd: number;
   note: string;
   priceLines?: PriceLine[];
+  /** Rendered as bullets under the body. Old records may only have body text. */
+  bullets?: string[];
 };
 
 export type InvestmentData = {
@@ -233,6 +245,8 @@ export type ProposalSection = {
     headingEmphasis?: HeadingEmphasis;
     /** Extra images on any section; hidden when empty. */
     images?: ProposalImage[];
+    /** Per-block layout. Missing fields use the proposal design, then Awake defaults. */
+    design?: SectionDesign;
   };
 }[SectionType];
 
@@ -246,6 +260,8 @@ export type ProposalTemplate = {
   updatedAt: string;
   /** Built-in starter templates cannot be deleted. */
   builtin?: boolean;
+  /** Layout controls copied onto proposals created from this template. */
+  design?: ProposalDesign;
   sections: ProposalSection[];
 };
 
@@ -269,6 +285,13 @@ export type Proposal = {
   lastOpenedAt: string;
   /** Seeded example proposal (Norte Nosara). */
   example?: boolean;
+  /** Layout controls. Missing fields use Awake-style defaults. */
+  design?: ProposalDesign;
+  /**
+   * Norte content revision. Once this reaches the current Awake revision,
+   * later reads do not overwrite Agota's edits.
+   */
+  contentRevision?: number;
   sections: ProposalSection[];
 };
 
@@ -283,7 +306,7 @@ export const SIGN_OFF = {
   urlHref: "https://oracleoffreedom.com",
 } as const;
 
-export const MAX_FULL_SECTIONS = 10;
+export const MAX_FULL_SECTIONS = 16;
 
 export function newId(prefix = "p") {
   return `${prefix}_${randomBytes(6).toString("hex")}`;
@@ -490,10 +513,12 @@ function parseCommonSectionFields(record: Record<string, unknown>) {
     ? (headingEmphasisRaw as HeadingEmphasis)
     : undefined;
   const images = asImages(record.images);
+  const design = parseSectionDesign(record.design);
   return {
     ...(layout ? { layout } : {}),
     ...(headingEmphasis ? { headingEmphasis } : {}),
     ...(images.length ? { images } : {}),
+    ...(design ? { design } : {}),
   };
 }
 
@@ -732,6 +757,11 @@ function parseSection(raw: unknown): ProposalSection | null {
           priceUsd: asNumber(data.priceUsd, 0),
           note: asString(data.note, 400),
           ...(parsePriceLines(data.priceLines) ? { priceLines: parsePriceLines(data.priceLines) } : {}),
+          ...(Array.isArray(data.bullets)
+            ? {
+                bullets: data.bullets.map((item) => asString(item, 500)).filter(Boolean),
+              }
+            : {}),
         },
       };
     case "investment":
@@ -851,6 +881,7 @@ export function parseTemplate(raw: unknown): ProposalTemplate | null {
   const sections = Array.isArray(record.sections)
     ? record.sections.map(parseSection).filter((s): s is ProposalSection => Boolean(s))
     : [];
+  const design = parseProposalDesign(record.design);
   return {
     id,
     name,
@@ -858,6 +889,7 @@ export function parseTemplate(raw: unknown): ProposalTemplate | null {
     createdAt: asString(record.createdAt, 40) || new Date(0).toISOString(),
     updatedAt: asString(record.updatedAt, 40) || new Date(0).toISOString(),
     builtin: asBool(record.builtin, false) || undefined,
+    ...(design ? { design } : {}),
     sections: ensureSignOffSection(sections),
   };
 }
@@ -873,6 +905,8 @@ export function parseProposal(raw: unknown): Proposal | null {
   const sections = Array.isArray(record.sections)
     ? record.sections.map(parseSection).filter((s): s is ProposalSection => Boolean(s))
     : [];
+  const design = parseProposalDesign(record.design);
+  const contentRevision = Math.max(0, Math.floor(asNumber(record.contentRevision, 0)));
   return {
     id,
     slug,
@@ -889,6 +923,8 @@ export function parseProposal(raw: unknown): Proposal | null {
     viewCount: Math.max(0, Math.floor(asNumber(record.viewCount, 0))),
     lastOpenedAt: asString(record.lastOpenedAt, 40),
     example: asBool(record.example, false) || undefined,
+    ...(design ? { design } : {}),
+    ...(contentRevision > 0 ? { contentRevision } : {}),
     sections: ensureSignOffSection(sections),
   };
 }

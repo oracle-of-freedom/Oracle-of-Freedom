@@ -7,13 +7,14 @@ import "../globals.css";
 
 const serif = DM_Serif_Display({
   weight: "400",
+  style: ["normal", "italic"],
   subsets: ["latin"],
   variable: "--font-dm-serif",
   display: "swap",
 });
 
 const sans = Karla({
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-karla",
   display: "swap",
