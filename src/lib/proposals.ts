@@ -55,6 +55,12 @@ export type ProposalImage = {
   src?: string;
   alt: string;
   caption?: string;
+  /** Horizontal focus as 0 to 100 percent. Missing means centred (50). */
+  focusX?: number;
+  /** Vertical focus as 0 to 100 percent. Missing means centred (50). */
+  focusY?: number;
+  /** Zoom scale from 1 to 3. Missing means 1 (no zoom). */
+  zoom?: number;
 };
 
 export type NoticedCard = {
@@ -484,6 +490,20 @@ function asBool(value: unknown, fallback = false) {
   return typeof value === "boolean" ? value : fallback;
 }
 
+function asFocusPercent(value: unknown): number | undefined {
+  if (value == null || value === "") return undefined;
+  const n = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(n)) return undefined;
+  return Math.min(100, Math.max(0, Math.round(n * 10) / 10));
+}
+
+function asZoom(value: unknown): number | undefined {
+  if (value == null || value === "") return undefined;
+  const n = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(n)) return undefined;
+  return Math.min(3, Math.max(1, Math.round(n * 100) / 100));
+}
+
 function asImage(value: unknown): ProposalImage | null {
   if (!value || typeof value !== "object") return null;
   const record = value as Record<string, unknown>;
@@ -491,12 +511,18 @@ function asImage(value: unknown): ProposalImage | null {
   const mediaId = asString(record.mediaId, 64);
   const src = asString(record.src, 400);
   const caption = asString(record.caption, 300);
-  if (!mediaId && !src && !alt) return null;
+  const focusX = asFocusPercent(record.focusX);
+  const focusY = asFocusPercent(record.focusY);
+  const zoom = asZoom(record.zoom);
+  if (!mediaId && !src && !alt && focusX == null && focusY == null && zoom == null) return null;
   return {
     ...(mediaId ? { mediaId } : {}),
     ...(src ? { src } : {}),
     alt,
     ...(caption ? { caption } : {}),
+    ...(focusX != null ? { focusX } : {}),
+    ...(focusY != null ? { focusY } : {}),
+    ...(zoom != null ? { zoom } : {}),
   };
 }
 

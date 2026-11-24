@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
 import { resetDesignDefaults } from "@/lib/proposal-design";
+import { resetAllImageCrops } from "@/lib/proposal-image-crop";
 import {
   SECTION_TYPES,
   depositAmount,
@@ -345,7 +346,9 @@ export function ProposalEditor({
               <button
                 type="button"
                 className="text-xs text-terracotta underline-offset-4 hover:underline"
-                onClick={() => setProposal((prev) => resetDesignDefaults(prev))}
+                onClick={() =>
+                  setProposal((prev) => resetAllImageCrops(resetDesignDefaults(prev)))
+                }
               >
                 Reset to default
               </button>
@@ -354,6 +357,17 @@ export function ProposalEditor({
               <ProposalDesignFields
                 design={proposal.design}
                 onChange={(design) => setProposal((prev) => ({ ...prev, design }))}
+                heroImage={findSection(proposal.sections, "cover")?.data.heroImage || null}
+                onHeroImageChange={(heroImage) =>
+                  setProposal((prev) => ({
+                    ...prev,
+                    sections: prev.sections.map((section) =>
+                      section.type === "cover"
+                        ? { ...section, data: { ...section.data, heroImage } }
+                        : section,
+                    ),
+                  }))
+                }
               />
             </div>
           </div>

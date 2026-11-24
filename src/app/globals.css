@@ -411,6 +411,17 @@ dialog.fx-dialog[open]::backdrop {
   overflow: hidden;
 }
 
+.proposal-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.proposal-hero-photo {
+  object-fit: cover;
+}
+
 .proposal-hero::after {
   content: "";
   position: absolute;
@@ -938,7 +949,17 @@ dialog.fx-dialog[open]::backdrop {
   gap: 4mm;
   margin-top: 4mm;
 }
-.proposal-extra-img { width: 100%; height: auto; border-radius: 12px; }
+.proposal-extra-frame {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.proposal-extra-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
 
 .proposal-opportunity { margin: 2mm 0 0; font-size: 12pt; }
 

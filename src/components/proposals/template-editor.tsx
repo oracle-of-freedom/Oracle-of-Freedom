@@ -15,8 +15,10 @@ import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
 import { resetDesignDefaults } from "@/lib/proposal-design";
+import { resetAllImageCrops } from "@/lib/proposal-image-crop";
 import {
   SECTION_TYPES,
+  findSection,
   sectionLabel,
   todayIsoDate,
   type Proposal,
@@ -147,7 +149,9 @@ export function TemplateEditor({
               <button
                 type="button"
                 className="text-xs text-terracotta underline-offset-4 hover:underline"
-                onClick={() => setTemplate((prev) => resetDesignDefaults(prev))}
+                onClick={() =>
+                  setTemplate((prev) => resetAllImageCrops(resetDesignDefaults(prev)))
+                }
               >
                 Reset to default
               </button>
@@ -156,6 +160,17 @@ export function TemplateEditor({
               <ProposalDesignFields
                 design={template.design}
                 onChange={(design) => setTemplate((prev) => ({ ...prev, design }))}
+                heroImage={findSection(template.sections, "cover")?.data.heroImage || null}
+                onHeroImageChange={(heroImage) =>
+                  setTemplate((prev) => ({
+                    ...prev,
+                    sections: prev.sections.map((section) =>
+                      section.type === "cover"
+                        ? { ...section, data: { ...section.data, heroImage } }
+                        : section,
+                    ),
+                  }))
+                }
               />
             </div>
           </div>
