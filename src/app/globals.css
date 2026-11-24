@@ -787,10 +787,49 @@ dialog.fx-dialog[open]::backdrop {
   font-size: 12.5pt;
 }
 
+.proposal-choose-review {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--terra);
+  font-family: var(--font-sans), Karla, sans-serif;
+  font-size: 12.5pt;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.proposal-review-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5mm;
+}
+
+.proposal-review-grid.is-pair {
+  grid-template-columns: 1fr 1fr;
+}
+
+.proposal-review-card {
+  background: #fbf6ef;
+  border-radius: 12px;
+  border-left: 3px solid var(--amber);
+  padding: 5mm 4.5mm 6mm;
+  min-width: 0;
+}
+
+.proposal-review-photo {
+  position: relative;
+  width: 28mm;
+  height: 28mm;
+  margin: 0 0 4mm;
+  overflow: hidden;
+  border-radius: 999px;
+}
+
 .proposal-quote {
   margin: 0;
   font-family: var(--font-serif), "DM Serif Display", serif;
-  font-size: 18pt;
+  font-size: 16pt;
   font-style: italic;
   line-height: 1.3;
 }
@@ -798,7 +837,7 @@ dialog.fx-dialog[open]::backdrop {
 .proposal-review-name {
   margin: 4mm 0 0;
   font-family: var(--font-serif), "DM Serif Display", serif;
-  font-size: 16pt;
+  font-size: 15pt;
   color: var(--terra);
 }
 
@@ -971,7 +1010,8 @@ dialog.fx-dialog[open]::backdrop {
   .proposal-inv-body,
   .proposal-proof-grid,
   .proposal-steps,
-  .proposal-extra-photos {
+  .proposal-extra-photos,
+  .proposal-review-grid.is-pair {
     grid-template-columns: 1fr;
   }
   .proposal-card.is-wide { grid-column: auto; }
@@ -989,7 +1029,8 @@ dialog.fx-dialog[open]::backdrop {
   .proposal-inv-body,
   .proposal-proof-grid,
   .proposal-steps,
-  .proposal-extra-photos {
+  .proposal-extra-photos,
+  .proposal-review-grid.is-pair {
     grid-template-columns: 1fr;
   }
   .proposal-card.is-wide { grid-column: auto; }

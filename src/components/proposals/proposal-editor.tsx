@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useMemo, useRef, useState } from "react";
 import {
   deleteProposalAction,
   duplicateProposalAction,
@@ -20,6 +20,7 @@ import { Input, Label } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
 import { resetDesignDefaults } from "@/lib/proposal-design";
 import { resetAllImageCrops } from "@/lib/proposal-image-crop";
+import type { ProposalStudioReview } from "@/lib/proposal-reviews";
 import {
   SECTION_TYPES,
   depositAmount,
@@ -48,7 +49,7 @@ export function ProposalEditor({
 }: {
   initial: Proposal;
   origin: string;
-  reviews: { id: string; name: string; quote: string; service: string }[];
+  reviews: ProposalStudioReview[];
   films?: Film[];
 }) {
   const [proposal, setProposal] = useState(initial);
@@ -56,6 +57,7 @@ export function ProposalEditor({
   const [previewMode, setPreviewMode] = useState<"desktop" | "phone">("desktop");
   const [copied, setCopied] = useState<"live" | "preview" | null>(null);
   const [state, action, pending] = useActionState(saveProposalAction, null as ActionState);
+  const reviewSelectRef = useRef<HTMLSelectElement>(null);
 
   const selected = proposal.sections.find((s) => s.id === selectedId) || proposal.sections[0];
   const warnings = useMemo(() => proposalWarnings(proposal), [proposal]);
@@ -465,39 +467,14 @@ export function ProposalEditor({
                 Edit · {sectionLabel(selected.type)}
               </p>
               <div className="mt-4">
-                <SectionFields section={selected} onChange={updateSection} films={films} />
+                <SectionFields
+                  section={selected}
+                  onChange={updateSection}
+                  films={films}
+                  reviews={reviews}
+                  reviewSelectRef={reviewSelectRef}
+                />
               </div>
-              {selected.type === "review" && reviews.length ? (
-                <div className="mt-4">
-                  <Label>Pick from studio reviews</Label>
-                  <select
-                    className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-                    defaultValue=""
-                    onChange={(e) => {
-                      const review = reviews.find((r) => r.id === e.target.value);
-                      if (!review || selected.type !== "review") return;
-                      updateSection({
-                        ...selected,
-                        data: {
-                          ...selected.data,
-                          quote: review.quote,
-                          name: review.name,
-                          service: review.service,
-                          sourceReviewId: review.id,
-                        },
-                      });
-                      e.target.value = "";
-                    }}
-                  >
-                    <option value="">Choose a review…</option>
-                    {reviews.map((r) => (
-                      <option key={r.id} value={r.id}>
-                        {r.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ) : null}
             </div>
           ) : null}
         </div>
@@ -532,7 +509,19 @@ export function ProposalEditor({
             }`}
           >
             <div className={previewMode === "phone" ? "max-h-[80vh] overflow-y-auto" : ""}>
-              <ProposalView proposal={proposal} mode="admin" showPdfButton={false} />
+              <ProposalView
+                proposal={proposal}
+                mode="admin"
+                showPdfButton={false}
+                onChooseReview={() => {
+                  const reviewSection = proposal.sections.find((s) => s.type === "review");
+                  if (reviewSection) setSelectedId(reviewSection.id);
+                  requestAnimationFrame(() => {
+                    reviewSelectRef.current?.focus();
+                    reviewSelectRef.current?.showPicker?.();
+                  });
+                }}
+              />
             </div>
           </div>
         </div>

@@ -190,6 +190,18 @@ export type TermsData = {
   items: string[];
 };
 
+/** One client quote shown in a review section. */
+export type ReviewSlot = {
+  quote: string;
+  name: string;
+  service: string;
+  /** Optional id of a Studio review this was copied from. */
+  sourceReviewId?: string;
+  metricsNote?: string;
+  /** Optional portrait or still shown with the quote. */
+  image?: ProposalImage | null;
+};
+
 export type ReviewData = {
   heading: string;
   quote: string;
@@ -198,6 +210,10 @@ export type ReviewData = {
   /** Optional id of an admin review this was copied from. */
   sourceReviewId?: string;
   metricsNote: string;
+  /** Optional portrait or still for the first quote. */
+  image?: ProposalImage | null;
+  /** Optional second quote, shown beside the first on desktop. */
+  second?: ReviewSlot | null;
 };
 
 export type NextStepData = {
@@ -835,7 +851,28 @@ function parseSection(raw: unknown): ProposalSection | null {
             : [],
         },
       };
-    case "review":
+    case "review": {
+      const secondRaw =
+        data.second && typeof data.second === "object"
+          ? (data.second as Record<string, unknown>)
+          : null;
+      const secondQuote = secondRaw ? asString(secondRaw.quote, 2000) : "";
+      const secondName = secondRaw ? asString(secondRaw.name, 160) : "";
+      const secondService = secondRaw ? asString(secondRaw.service, 160) : "";
+      const secondSource = secondRaw ? asString(secondRaw.sourceReviewId, 64) : "";
+      const secondMetrics = secondRaw ? asString(secondRaw.metricsNote, 400) : "";
+      const secondImage = secondRaw ? asImage(secondRaw.image) : null;
+      const second =
+        secondQuote || secondName || secondService || secondSource || secondMetrics || secondImage
+          ? {
+              quote: secondQuote,
+              name: secondName,
+              service: secondService,
+              ...(secondSource ? { sourceReviewId: secondSource } : {}),
+              ...(secondMetrics ? { metricsNote: secondMetrics } : {}),
+              ...(secondImage ? { image: secondImage } : {}),
+            }
+          : null;
       return {
         id,
         type,
@@ -848,8 +885,11 @@ function parseSection(raw: unknown): ProposalSection | null {
           service: asString(data.service, 160),
           sourceReviewId: asString(data.sourceReviewId, 64) || undefined,
           metricsNote: asString(data.metricsNote, 400),
+          image: asImage(data.image),
+          ...(second ? { second } : {}),
         },
       };
+    }
     case "nextStep":
       return {
         id,

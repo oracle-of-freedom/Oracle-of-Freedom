@@ -5,7 +5,8 @@ import { ProposalEditor } from "@/components/proposals/proposal-editor";
 import { isAdmin } from "@/lib/admin-auth";
 import { settings, siteUrl } from "@/lib/content";
 import { readLiveContent } from "@/lib/live-content-store";
-import { getFilms } from "@/lib/live-public";
+import { bundledReviews, getFilms } from "@/lib/live-public";
+import { listProposalStudioReviews } from "@/lib/proposal-reviews";
 import { getProposal } from "@/lib/proposal-store";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
@@ -18,16 +19,10 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ i
   const proposal = await getProposal(id);
   if (!proposal) notFound();
 
-  const t = studioCopy(await studioLang());
+  const lang = await studioLang();
+  const t = studioCopy(lang);
   const live = await readLiveContent().catch(() => null);
-  const reviews = (live?.reviews || [])
-    .filter((r) => !r.hidden && r.quote.en.trim())
-    .map((r) => ({
-      id: r.id,
-      name: r.name,
-      quote: r.quote.en,
-      service: r.service.en,
-    }));
+  const reviews = listProposalStudioReviews(live, bundledReviews(), lang);
   const films = await getFilms("portfolio").catch(() => []);
 
   const h = await headers();

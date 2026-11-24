@@ -14,6 +14,7 @@ import {
   hasImageCrop,
   imageCropStyle,
 } from "@/lib/proposal-image-crop";
+import { isReviewPlaceholder, reviewSlotHasContent } from "@/lib/proposal-reviews";
 import { resolveProposalVideo } from "@/lib/proposal-video";
 import {
   SIGN_OFF,
@@ -26,6 +27,7 @@ import {
   type ProposalImage,
   type ProposalSection,
   type ProposalSectionOf,
+  type ReviewSlot,
 } from "@/lib/proposals";
 
 export type ProposalViewMode = "public" | "preview" | "admin";
@@ -315,10 +317,41 @@ function PortfolioLine({ line }: { line: string }) {
   );
 }
 
+function ReviewCard({ slot }: { slot: ReviewSlot }) {
+  const src = imageSrc(slot.image);
+  return (
+    <article className="proposal-review-card">
+      {src ? (
+        <div className="proposal-review-photo">
+          <Image
+            src={src}
+            alt={slot.image?.alt || slot.name || ""}
+            fill
+            className="object-cover"
+            style={imageCropStyle(slot.image)}
+            sizes="(max-width: 720px) 100vw, 90mm"
+            unoptimized={src.startsWith("/api/media/")}
+          />
+        </div>
+      ) : null}
+      <blockquote className="proposal-quote">“{slot.quote}”</blockquote>
+      {slot.name.trim() ? <p className="proposal-review-name">{slot.name}</p> : null}
+      {slot.service.trim() ? <p className="proposal-review-service">{slot.service}</p> : null}
+      {slot.metricsNote?.trim() ? (
+        <p className="proposal-review-service">{slot.metricsNote}</p>
+      ) : null}
+    </article>
+  );
+}
+
 function renderSection(
   section: ProposalSection,
   proposal: Proposal,
-  options: { hidePrices: boolean; design: ResolvedProposalDesign },
+  options: {
+    hidePrices: boolean;
+    design: ResolvedProposalDesign;
+    onChooseReview?: () => void;
+  },
 ) {
   if (!section.enabled) return null;
   const style = sectionStyle(section);
@@ -568,25 +601,52 @@ function renderSection(
           <ExtraPhotos section={section} />
         </section>
       );
-    case "review":
-      if (!section.data.quote.trim()) return null;
-      if (/\[REVIEW:/i.test(section.data.quote)) {
-        return (
-          <section key={section.id} className={shell} style={style}>
-            <Title section={section}>{section.data.heading}</Title>
-            <p className="proposal-review-ph">{section.data.quote}</p>
-          </section>
-        );
+    case "review": {
+      const first: ReviewSlot = {
+        quote: section.data.quote,
+        name: section.data.name,
+        service: section.data.service,
+        sourceReviewId: section.data.sourceReviewId,
+        metricsNote: section.data.metricsNote,
+        image: section.data.image,
+      };
+      const slots = [first, section.data.second].filter((slot): slot is ReviewSlot =>
+        reviewSlotHasContent(slot),
+      );
+      if (!slots.length) {
+        if (options.onChooseReview && isReviewPlaceholder(section.data.quote)) {
+          return (
+            <section key={section.id} className={`${shell} proposal-no-print`} style={style}>
+              <Title section={section}>{section.data.heading}</Title>
+              <div className="proposal-review-ph">
+                <button
+                  type="button"
+                  className="proposal-choose-review"
+                  onClick={options.onChooseReview}
+                >
+                  Choose a review
+                </button>
+              </div>
+            </section>
+          );
+        }
+        return null;
       }
       return (
         <section key={section.id} className={shell} style={style}>
           <Title section={section}>{section.data.heading}</Title>
-          <blockquote className="proposal-quote">“{section.data.quote}”</blockquote>
-          {section.data.name.trim() ? <p className="proposal-review-name">{section.data.name}</p> : null}
-          {section.data.service.trim() ? <p className="proposal-review-service">{section.data.service}</p> : null}
-          {section.data.metricsNote.trim() ? <p className="proposal-review-service">{section.data.metricsNote}</p> : null}
+          <div
+            className={
+              slots.length > 1 ? "proposal-review-grid is-pair" : "proposal-review-grid"
+            }
+          >
+            {slots.map((slot, index) => (
+              <ReviewCard key={`${slot.sourceReviewId || slot.name}-${index}`} slot={slot} />
+            ))}
+          </div>
         </section>
       );
+    }
     case "nextStep": {
       const position = section.design?.buttonPosition || options.design.buttonPosition;
       return (
@@ -647,11 +707,14 @@ export function ProposalView({
   mode = "public",
   className,
   showPdfButton = true,
+  onChooseReview,
 }: {
   proposal: Proposal;
   mode?: ProposalViewMode;
   className?: string;
   showPdfButton?: boolean;
+  /** Admin editor only: open the review section picker from the live preview. */
+  onChooseReview?: () => void;
 }) {
   const hidePrices = mode === "preview";
   const design = resolveProposalDesign(proposal.design);
@@ -666,7 +729,13 @@ export function ProposalView({
       {mode === "preview" ? (
         <p className="proposal-no-print proposal-banner is-preview">Draft preview · prices hidden</p>
       ) : null}
-      {proposal.sections.map((section) => renderSection(section, proposal, { hidePrices, design }))}
+      {proposal.sections.map((section) =>
+        renderSection(section, proposal, {
+          hidePrices,
+          design,
+          onChooseReview: mode === "admin" ? onChooseReview : undefined,
+        }),
+      )}
     </article>
   );
 }
