@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { SectionDesignFields } from "@/components/proposals/design-fields";
 import { ImageCropControl } from "@/components/proposals/image-crop-control";
 import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
@@ -7,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
 import type { ImageCrop } from "@/lib/proposal-image-crop";
+import type { ProposalStudioReview } from "@/lib/proposal-reviews";
 import {
   HEADING_EMPHASIS,
   SECTION_LAYOUTS,
@@ -17,6 +19,8 @@ import {
   type PriceLine,
   type ProposalImage,
   type ProposalSection,
+  type ReviewData,
+  type ReviewSlot,
   type SectionLayout,
   type SectionType,
 } from "@/lib/proposals";
@@ -281,18 +285,114 @@ function ListEditor({
   );
 }
 
+function emptyReviewSlot(): ReviewSlot {
+  return { quote: "", name: "", service: "", metricsNote: "" };
+}
+
+function ReviewSlotPicker({
+  label,
+  reviews,
+  selectRef,
+  currentSourceId,
+  onPick,
+  onWriteOwn,
+  onClear,
+}: {
+  label: string;
+  reviews: ProposalStudioReview[];
+  selectRef?: React.RefObject<HTMLSelectElement | null>;
+  currentSourceId?: string;
+  onPick: (review: ProposalStudioReview) => void;
+  onWriteOwn: () => void;
+  onClear: () => void;
+}) {
+  return (
+    <div className="space-y-2 rounded-2xl border border-ink/10 bg-white/50 p-4">
+      <Field
+        label={label}
+        hint="Fills the quote, name and service from a review already saved in Content → Reviews."
+      >
+        <select
+          ref={selectRef}
+          className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+          defaultValue=""
+          onChange={(e) => {
+            const value = e.target.value;
+            e.target.value = "";
+            if (value === "__write__") {
+              onWriteOwn();
+              return;
+            }
+            if (value === "__clear__") {
+              onClear();
+              return;
+            }
+            const review = reviews.find((item) => item.id === value);
+            if (review) onPick(review);
+          }}
+        >
+          <option value="">Choose a review…</option>
+          <option value="__write__">Write my own</option>
+          <option value="__clear__">Clear</option>
+          {reviews.map((review) => (
+            <option key={review.id} value={review.id}>
+              {review.optionLabel}
+              {currentSourceId === review.id ? " (selected)" : ""}
+            </option>
+          ))}
+        </select>
+      </Field>
+    </div>
+  );
+}
+
 export function SectionFields({
   section,
   onChange,
   films = [],
+  reviews = [],
+  reviewSelectRef,
+  quoteTextareaRef,
 }: {
   section: ProposalSection;
   onChange: (section: ProposalSection) => void;
   /** Portfolio films for the Proof “pick from portfolio” dropdown. */
   films?: Film[];
+  /** Studio reviews for the review section picker. */
+  reviews?: ProposalStudioReview[];
+  /** Focused when the live preview “Choose a review” button is clicked. */
+  reviewSelectRef?: React.RefObject<HTMLSelectElement | null>;
+  quoteTextareaRef?: React.RefObject<HTMLTextAreaElement | null>;
 }) {
+  const localReviewSelectRef = useRef<HTMLSelectElement>(null);
+  const firstReviewSelectRef = reviewSelectRef || localReviewSelectRef;
+  const localQuoteRef = useRef<HTMLTextAreaElement>(null);
+  const firstQuoteRef = quoteTextareaRef || localQuoteRef;
+
   const patch = <T extends ProposalSection>(data: T["data"]) =>
     onChange({ ...section, data } as ProposalSection);
+
+  function applyStudioReview(data: ReviewData, review: ProposalStudioReview, which: "first" | "second") {
+    const slot: ReviewSlot = {
+      quote: review.quote,
+      name: review.name,
+      service: review.service,
+      sourceReviewId: review.id,
+      metricsNote: which === "first" ? data.metricsNote : data.second?.metricsNote || "",
+      image: review.image || null,
+    };
+    if (which === "first") {
+      return {
+        ...data,
+        quote: slot.quote,
+        name: slot.name,
+        service: slot.service,
+        sourceReviewId: slot.sourceReviewId,
+        image: slot.image || null,
+      } satisfies ReviewData;
+    }
+    return { ...data, second: slot } satisfies ReviewData;
+  }
 
   const typeFields = (() => {
   switch (section.type) {
@@ -933,24 +1033,172 @@ export function SectionFields({
               onChange={(e) => patch({ ...section.data, heading: e.target.value })}
             />
           </Field>
-          <Field label="Quote" hint="Type it, or paste from Content → Reviews. Hide this section if empty.">
-            <Textarea value={section.data.quote} onChange={(e) => patch({ ...section.data, quote: e.target.value })} />
+          {reviews.length ? (
+            <ReviewSlotPicker
+              label="Pick from studio reviews"
+              reviews={reviews}
+              selectRef={firstReviewSelectRef}
+              currentSourceId={section.data.sourceReviewId}
+              onPick={(review) => patch(applyStudioReview(section.data, review, "first"))}
+              onWriteOwn={() => {
+                patch({
+                  ...section.data,
+                  sourceReviewId: undefined,
+                  quote: section.data.quote.startsWith("[REVIEW:") ? "" : section.data.quote,
+                });
+                requestAnimationFrame(() => firstQuoteRef.current?.focus());
+              }}
+              onClear={() =>
+                patch({
+                  ...section.data,
+                  quote: "",
+                  name: "",
+                  service: "",
+                  sourceReviewId: undefined,
+                  metricsNote: "",
+                  image: null,
+                })
+              }
+            />
+          ) : (
+            <p className="text-xs text-ink/50">
+              Add reviews in Content → Reviews to pick one here.
+            </p>
+          )}
+          <Field label="Quote" hint="Or write your own. The public page hides this block until a real quote is set.">
+            <Textarea
+              ref={firstQuoteRef}
+              value={section.data.quote}
+              onChange={(e) =>
+                patch({
+                  ...section.data,
+                  quote: e.target.value,
+                  sourceReviewId: undefined,
+                })
+              }
+            />
           </Field>
           <Field label="Name">
-            <Input value={section.data.name} onChange={(e) => patch({ ...section.data, name: e.target.value })} />
+            <Input
+              value={section.data.name}
+              onChange={(e) => patch({ ...section.data, name: e.target.value, sourceReviewId: undefined })}
+            />
           </Field>
           <Field label="Service">
             <Input
               value={section.data.service}
-              onChange={(e) => patch({ ...section.data, service: e.target.value })}
+              onChange={(e) =>
+                patch({ ...section.data, service: e.target.value, sourceReviewId: undefined })
+              }
             />
           </Field>
+          <ImageFields
+            label="Review photo (optional)"
+            frame="square"
+            image={section.data.image || null}
+            onChange={(image) => patch({ ...section.data, image })}
+          />
           <Field label="Metrics note (optional, real only)">
             <Input
               value={section.data.metricsNote}
               onChange={(e) => patch({ ...section.data, metricsNote: e.target.value })}
             />
           </Field>
+
+          <div className="space-y-3 rounded-2xl border border-dashed border-ink/15 p-4">
+            <p className="text-sm font-medium">Second review (optional)</p>
+            <p className="text-xs text-ink/50">
+              Shown beside the first on desktop, stacked on phone.
+            </p>
+            {reviews.length ? (
+              <ReviewSlotPicker
+                label="Pick a second studio review"
+                reviews={reviews}
+                currentSourceId={section.data.second?.sourceReviewId}
+                onPick={(review) => patch(applyStudioReview(section.data, review, "second"))}
+                onWriteOwn={() =>
+                  patch({
+                    ...section.data,
+                    second: {
+                      ...(section.data.second || emptyReviewSlot()),
+                      sourceReviewId: undefined,
+                      quote: section.data.second?.quote || "",
+                    },
+                  })
+                }
+                onClear={() => patch({ ...section.data, second: null })}
+              />
+            ) : null}
+            {section.data.second ? (
+              <>
+                <Field label="Second quote">
+                  <Textarea
+                    value={section.data.second.quote}
+                    onChange={(e) =>
+                      patch({
+                        ...section.data,
+                        second: {
+                          ...(section.data.second || emptyReviewSlot()),
+                          quote: e.target.value,
+                          sourceReviewId: undefined,
+                        },
+                      })
+                    }
+                  />
+                </Field>
+                <Field label="Second name">
+                  <Input
+                    value={section.data.second.name}
+                    onChange={(e) =>
+                      patch({
+                        ...section.data,
+                        second: {
+                          ...(section.data.second || emptyReviewSlot()),
+                          name: e.target.value,
+                          sourceReviewId: undefined,
+                        },
+                      })
+                    }
+                  />
+                </Field>
+                <Field label="Second service">
+                  <Input
+                    value={section.data.second.service}
+                    onChange={(e) =>
+                      patch({
+                        ...section.data,
+                        second: {
+                          ...(section.data.second || emptyReviewSlot()),
+                          service: e.target.value,
+                          sourceReviewId: undefined,
+                        },
+                      })
+                    }
+                  />
+                </Field>
+                <ImageFields
+                  label="Second review photo (optional)"
+                  frame="square"
+                  image={section.data.second.image || null}
+                  onChange={(image) =>
+                    patch({
+                      ...section.data,
+                      second: { ...(section.data.second || emptyReviewSlot()), image },
+                    })
+                  }
+                />
+              </>
+            ) : (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => patch({ ...section.data, second: emptyReviewSlot() })}
+              >
+                Add a second review
+              </Button>
+            )}
+          </div>
         </div>
       );
     case "nextStep":
@@ -1164,7 +1412,15 @@ export function blankSection(type: SectionType): ProposalSection {
         id,
         type,
         enabled: true,
-        data: { heading: "A word from a recent client", quote: "", name: "", service: "", metricsNote: "" },
+        data: {
+          heading: "A word from a recent client",
+          quote: "",
+          name: "",
+          service: "",
+          metricsNote: "",
+          image: null,
+          second: null,
+        },
       };
     case "nextStep":
       return {

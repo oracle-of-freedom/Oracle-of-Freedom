@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import {
   deleteTemplateAction,
   duplicateTemplateAction,
@@ -16,6 +16,7 @@ import { Input, Label } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
 import { resetDesignDefaults } from "@/lib/proposal-design";
 import { resetAllImageCrops } from "@/lib/proposal-image-crop";
+import type { ProposalStudioReview } from "@/lib/proposal-reviews";
 import {
   SECTION_TYPES,
   findSection,
@@ -51,13 +52,16 @@ function asPreviewProposal(template: ProposalTemplate): Proposal {
 export function TemplateEditor({
   initial,
   films = [],
+  reviews = [],
 }: {
   initial: ProposalTemplate;
   films?: Film[];
+  reviews?: ProposalStudioReview[];
 }) {
   const [template, setTemplate] = useState(initial);
   const [selectedId, setSelectedId] = useState(initial.sections[0]?.id || "");
   const [state, action, pending] = useActionState(saveTemplateAction, null as ActionState);
+  const reviewSelectRef = useRef<HTMLSelectElement>(null);
   const selected = template.sections.find((s) => s.id === selectedId) || template.sections[0];
 
   function updateSection(next: NonNullable<typeof selected>) {
@@ -249,12 +253,30 @@ export function TemplateEditor({
               <p className="mb-4 text-xs tracking-[0.2em] text-ember uppercase">
                 Edit · {sectionLabel(selected.type)}
               </p>
-              <SectionFields section={selected} onChange={updateSection} films={films} />
+              <SectionFields
+                section={selected}
+                onChange={updateSection}
+                films={films}
+                reviews={reviews}
+                reviewSelectRef={reviewSelectRef}
+              />
             </div>
           ) : null}
         </div>
         <div className="overflow-hidden rounded-3xl border border-ink/10 bg-sand">
-          <ProposalView proposal={asPreviewProposal(template)} mode="admin" showPdfButton={false} />
+          <ProposalView
+            proposal={asPreviewProposal(template)}
+            mode="admin"
+            showPdfButton={false}
+            onChooseReview={() => {
+              const reviewSection = template.sections.find((s) => s.type === "review");
+              if (reviewSection) setSelectedId(reviewSection.id);
+              requestAnimationFrame(() => {
+                reviewSelectRef.current?.focus();
+                reviewSelectRef.current?.showPicker?.();
+              });
+            }}
+          />
         </div>
       </div>
     </div>
