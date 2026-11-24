@@ -109,41 +109,47 @@ export async function AdminHeader({ current, title }: { current: StudioSection; 
             </form>
           </div>
         </div>
-        <div className="hidden items-end justify-between gap-4 md:flex">
-          <div className="min-w-0">
-            <p className="text-xs tracking-[0.22em] text-ember uppercase">Oracle of Freedom</p>
-            <h1 className="mt-2 font-serif text-5xl">{title}</h1>
-            <nav className="mt-4 flex gap-2" aria-label={t.nav.menu}>
-              {links.map((link) => {
-                const active = link.id === current;
-                return (
-                  <Link
-                    key={link.id}
-                    href={link.href}
-                    aria-current={active ? "page" : undefined}
-                    className={
-                      active
-                        ? "rounded-full bg-ink px-4 py-2 text-sm text-sand"
-                        : "rounded-full px-4 py-2 text-sm text-ink/80 underline-offset-4 hover:underline"
-                    }
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-          <div className="flex shrink-0 flex-col items-end gap-2">
-            <div className="flex items-center gap-2">
-              <NotificationBell />
-              <LanguageToggle />
+        <div className="hidden md:block">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-xs tracking-[0.22em] text-ember uppercase">Oracle of Freedom</p>
+              <h1 className="mt-2 font-serif text-5xl">{title}</h1>
             </div>
-            <form action={logout}>
-              <button type="submit" className="text-sm underline underline-offset-4">
-                {t.nav.logout}
-              </button>
-            </form>
+            <div className="flex shrink-0 flex-col items-end gap-2">
+              <div className="flex items-center gap-2">
+                <NotificationBell />
+                <LanguageToggle />
+              </div>
+              <form action={logout}>
+                <button type="submit" className="text-sm underline underline-offset-4">
+                  {t.nav.logout}
+                </button>
+              </form>
+            </div>
           </div>
+          {/*
+            Nav sits on its own full-width row so the language toggle (min-h-12)
+            cannot overlap the last tab (Proposals) when the title row is tight.
+          */}
+          <nav className="mt-4 flex flex-wrap gap-2" aria-label={t.nav.menu}>
+            {links.map((link) => {
+              const active = link.id === current;
+              return (
+                <Link
+                  key={link.id}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={
+                    active
+                      ? "rounded-full bg-ink px-4 py-2 text-sm text-sand"
+                      : "rounded-full px-4 py-2 text-sm text-ink/80 underline-offset-4 hover:underline"
+                  }
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
       </header>
       <OfflineBanner />
