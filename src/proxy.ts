@@ -31,6 +31,9 @@ function withLocaleCookie(response: NextResponse, locale: string) {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  if (pathname === "/p" || pathname.startsWith("/p/")) {
+    return NextResponse.next();
+  }
   if (pathname === "/en" || pathname.startsWith("/en/")) {
     const url = request.nextUrl.clone();
     const stripped = pathname.slice(3);
@@ -67,5 +70,6 @@ export const config = {
   // That rewrite would miss public/ and the request would render as a locale
   // page. Root image names that are not files are mapped in next.config.ts
   // before [locale] is matched.
-  matcher: ["/((?!api|keystatic|admin|p|_next|_vercel|.*\\..*).*)"],
+  // Proposal URLs under /p are skipped in proxy(). Do not add a bare |p here, it also matches /portfolio, /people, /places, /privacy, /portraits-engagement and every /pt/ path.
+  matcher: ["/((?!api|keystatic|admin|_next|_vercel|.*\\..*).*)"],
 };
