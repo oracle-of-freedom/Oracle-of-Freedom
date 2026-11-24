@@ -1,175 +1,34 @@
+import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
 import { OmMark } from "@/components/om-mark";
 import { ProposalPdfButton } from "@/components/proposals/proposal-pdf-button";
 import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
-import { Button } from "@/components/ui/button";
+import {
+  resolveProposalDesign,
+  sectionTitleVisible,
+  type DesignAlign,
+  type ResolvedProposalDesign,
+} from "@/lib/proposal-design";
+import { resolveProposalVideo } from "@/lib/proposal-video";
 import {
   SIGN_OFF,
   addonPriceLines,
   depositAmount,
   imageSrc,
   resolveHeadingEmphasis,
-  resolveLayout,
   sceneShowsBody,
-  type HeadingEmphasis,
   type Proposal,
   type ProposalImage,
   type ProposalSection,
   type ProposalSectionOf,
-  type SectionLayout,
 } from "@/lib/proposals";
-import { resolveProposalVideo } from "@/lib/proposal-video";
 
 export type ProposalViewMode = "public" | "preview" | "admin";
 
-function headingEmphasisClass(emphasis: HeadingEmphasis) {
-  if (emphasis === "xl") return "text-4xl md:text-6xl";
-  if (emphasis === "large") return "text-4xl md:text-5xl";
-  return "text-3xl md:text-4xl";
-}
+const PAGE_BREAK_TYPES = new Set<ProposalSection["type"]>(["proof", "deliverables", "investment"]);
 
-function sectionShellClass(layout: SectionLayout) {
-  if (layout === "text") return "mx-auto max-w-3xl";
-  return "mx-auto max-w-5xl";
-}
-
-function labelWithPeriod(label: string) {
-  const trimmed = label.trim();
-  if (!trimmed) return "";
-  return trimmed.endsWith(".") ? `${trimmed} ` : `${trimmed}. `;
-}
-
-function SectionHeading({
-  children,
-  emphasis = "default",
-}: {
-  children: React.ReactNode;
-  emphasis?: HeadingEmphasis;
-}) {
-  return (
-    <div className="mb-8 flex min-w-0 items-center gap-4">
-      <h2 className={`min-w-0 font-serif text-balance text-terracotta ${headingEmphasisClass(emphasis)}`}>
-        {children}
-      </h2>
-      <span
-        className="hidden h-px min-w-12 flex-1 bg-gradient-to-r from-clay to-transparent sm:block"
-        aria-hidden="true"
-      />
-    </div>
-  );
-}
-
-function SectionWithExtras({
-  section,
-  className,
-  children,
-}: {
-  section: ProposalSection;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  const layout = resolveLayout(section);
-  const extras = (section.images ?? []).filter((img) => imageSrc(img));
-  const shell = sectionShellClass(layout);
-
-  if (layout === "textPhoto" && extras.length) {
-    return (
-      <section className={`${shell} px-5 py-14 md:py-20 ${className || ""}`}>
-        <div className="md:grid md:grid-cols-2 md:items-start md:gap-8">
-          <div>{children}</div>
-          <PhotoStrip images={extras} />
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section className={`${shell} px-5 py-14 md:py-20 ${className || ""}`}>
-      {children}
-      {extras.length ? (
-        <div className="mt-10">
-          <PhotoStrip images={extras} />
-        </div>
-      ) : null}
-    </section>
-  );
-}
-
-function ExtraSectionImages({ section }: { section: ProposalSection }) {
-  if (resolveLayout(section) === "textPhoto") return null;
-  const extras = (section.images ?? []).filter((img) => imageSrc(img));
-  if (!extras.length) return null;
-  return (
-    <div className="mt-10">
-      <PhotoStrip images={extras} />
-    </div>
-  );
-}
-
-function EmberList({ items }: { items: string[] }) {
-  return (
-    <ul className="space-y-3">
-      {items.map((item) => (
-        <li key={item} className="flex gap-3 text-ink/85">
-          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-ember" aria-hidden="true" />
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function PhotoFigure({
-  image,
-  className,
-  sizes,
-}: {
-  image: ProposalImage;
-  className?: string;
-  sizes?: string;
-}) {
-  const src = imageSrc(image);
-  if (!src) {
-    return (
-      <div className={`flex items-center justify-center bg-clay/60 text-sm text-ink/45 ${className || ""}`}>
-        Add a photograph
-      </div>
-    );
-  }
-  return (
-    <figure className={className}>
-      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-night/10 md:aspect-[3/4]">
-        <Image
-          src={src}
-          alt={image.alt || ""}
-          fill
-          className="object-cover"
-          sizes={sizes || "(max-width: 768px) 50vw, 25vw"}
-          unoptimized={src.startsWith("/api/media/")}
-        />
-      </div>
-      {image.caption ? (
-        <figcaption className="mt-2 text-center text-xs tracking-wide text-ink/55">
-          {image.caption}
-        </figcaption>
-      ) : null}
-    </figure>
-  );
-}
-
-function PhotoStrip({ images }: { images: ProposalImage[] }) {
-  if (!images.length) return null;
-  return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-      {images.slice(0, 8).map((image, index) => (
-        <PhotoFigure key={`${image.mediaId || image.src || "img"}-${index}`} image={image} />
-      ))}
-    </div>
-  );
-}
-
-function formatMoney(amount: number) {
-  if (!Number.isFinite(amount) || amount <= 0) return "—";
+function formatUsd(amount: number) {
+  if (!Number.isFinite(amount)) return "";
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -187,449 +46,558 @@ function formatDisplayDate(iso: string) {
   }).format(d);
 }
 
-function Cover({ section }: { section: ProposalSectionOf<"cover"> }) {
+function photoSlotLabel(alt: string) {
+  const trimmed = alt.trim();
+  if (!trimmed || /EXAMPLE PHOTOS|Agota to supply/i.test(trimmed)) return "Your photo here";
+  return trimmed;
+}
+
+function alignClass(align: DesignAlign | undefined, fallback: DesignAlign) {
+  const value = align || fallback;
+  if (value === "center") return "is-center";
+  if (value === "right") return "is-right";
+  return "is-left";
+}
+
+function designVars(design: ResolvedProposalDesign): CSSProperties {
+  const [stop1, stop2, stop3] = design.cover.gradientStops;
+  return {
+    ["--hero-height" as string]: design.cover.heroHeight,
+    ["--logo-size" as string]: design.cover.logoSize,
+    ["--date-size" as string]: design.cover.dateSize,
+    ["--date-offset" as string]: design.cover.dateOffset,
+    ["--hero-position" as string]: design.cover.imagePosition,
+    ["--hero-size" as string]: design.cover.imageSize,
+    ["--grad-1" as string]: `${stop1}%`,
+    ["--grad-2" as string]: `${stop2}%`,
+    ["--grad-3" as string]: `${stop3}%`,
+    ["--plan-columns" as string]: design.planColumns,
+    ["--plan-gap" as string]: design.planGap,
+    ["--plan-lead-padding" as string]: design.planLeadPadding,
+    ["--investment-columns" as string]: design.investmentColumns,
+    ["--investment-gap" as string]: design.investmentGap,
+    ["--card-offset" as string]: design.cardOffsetTop,
+    ["--next-step-gap" as string]: design.nextStepGap,
+    ["--cta-gap" as string]: design.ctaGap,
+    ["--signoff-gap" as string]: design.signOffGap,
+  };
+}
+
+function sectionStyle(section: ProposalSection): CSSProperties {
+  const design = section.design;
+  if (!design) return {};
+  const style: Record<string, string> = {};
+  if (design.padding) style.padding = design.padding;
+  if (design.marginTop) style.marginTop = design.marginTop;
+  if (design.offsetX && design.offsetX !== "0") style.marginLeft = design.offsetX;
+  if (design.align) style.textAlign = design.align;
+  if (design.columns) {
+    style["--block-columns"] = design.columns;
+    if (section.type === "plan") style["--plan-columns"] = design.columns;
+    if (section.type === "investment") style["--investment-columns"] = design.columns;
+  }
+  if (design.gap) {
+    style["--block-gap"] = design.gap;
+    if (section.type === "plan") style["--plan-gap"] = design.gap;
+    if (section.type === "investment") style["--investment-gap"] = design.gap;
+  }
+  if (section.type === "investment" && design.cardOffsetTop) {
+    style["--card-offset"] = design.cardOffsetTop;
+  }
+  if (section.type === "nextStep" && design.marginTop) style["--next-step-gap"] = design.marginTop;
+  if (section.type === "signOff" && design.marginTop) style["--signoff-gap"] = design.marginTop;
+  return style;
+}
+
+function Paragraphs({ text }: { text: string }) {
+  const blocks = text.split(/\n{2,}/).map((part) => part.trim()).filter(Boolean);
+  if (!blocks.length) return null;
+  return blocks.map((block, blockIndex) => (
+    <p key={`${blockIndex}-${block.slice(0, 24)}`}>
+      {block.split("\n").map((line, index) => (
+        <span key={`${blockIndex}-${index}`}>
+          {index > 0 ? <br /> : null}
+          {line}
+        </span>
+      ))}
+    </p>
+  ));
+}
+
+function Title({
+  section,
+  children,
+}: {
+  section: ProposalSection;
+  children: ReactNode;
+}) {
+  if (!sectionTitleVisible(section.design) || !String(children || "").trim()) return null;
+  const emphasis = resolveHeadingEmphasis(section);
+  const size = emphasis === "xl" ? "is-xl" : emphasis === "large" ? "is-large" : "";
+  return (
+    <h2 className={`proposal-title ${size}`.trim()}>
+      <span>{children}</span>
+    </h2>
+  );
+}
+
+function Dots({ items }: { items: string[] }) {
+  return (
+    <ul className="proposal-dots">
+      {items.filter(Boolean).map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+function headlineNode(headline: string, emphasis?: string) {
+  const lines = headline.split("\n");
+  return lines.map((line, index) => {
+    const mark = emphasis?.trim();
+    let content: ReactNode = line;
+    if (mark && line.includes(mark)) {
+      const [before, after] = line.split(mark);
+      content = (
+        <>
+          {before}
+          <em>{mark}</em>
+          {after}
+        </>
+      );
+    }
+    return (
+      <span key={`${line}-${index}`}>
+        {index > 0 ? <br /> : null}
+        {content}
+      </span>
+    );
+  });
+}
+
+function Cover({
+  section,
+}: {
+  section: ProposalSectionOf<"cover">;
+}) {
   const { data } = section;
   const src = imageSrc(data.heroImage);
-  const emphasis = data.headlineEmphasis?.trim();
-  let headlineNode: React.ReactNode = data.headline;
-  if (emphasis && data.headline.includes(emphasis)) {
-    const [before, after] = data.headline.split(emphasis);
-    headlineNode = (
-      <>
-        {before}
-        <em className="font-serif text-ember not-italic md:italic">{emphasis}</em>
-        {after}
-      </>
-    );
-  }
-
+  const style: CSSProperties = {
+    ...(src ? { backgroundImage: `url("${src}")` } : {}),
+    ...sectionStyle(section),
+  };
   return (
-    <header className="relative min-h-[88vh] overflow-hidden bg-night text-sand">
-      {src ? (
-        <Image
-          src={src}
-          alt={data.heroImage?.alt || ""}
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-          unoptimized={src.startsWith("/api/media/")}
-        />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-night via-moss/40 to-terracotta-ink/50" />
-      )}
-      <div
-        className="absolute inset-0 bg-gradient-to-r from-night via-night/85 to-transparent"
-        aria-hidden="true"
-      />
-      <div className="relative z-10 flex min-h-[88vh] flex-col px-5 py-8 md:px-12 md:py-10 lg:px-16">
-        <div className="flex items-center gap-3">
-          <OmMark className="h-8 w-8 brightness-0 invert" />
-          <p className="text-[11px] tracking-[0.28em] text-sand/90 uppercase">Oracle of Freedom</p>
-        </div>
-        <div className="mt-auto max-w-2xl pb-10 pt-24 md:pb-16">
-          <p className="text-xs tracking-[0.22em] text-sand/75 uppercase">{data.kicker}</p>
-          <h1 className="mt-5 font-serif text-4xl leading-tight md:text-6xl lg:text-7xl">{headlineNode}</h1>
-          {data.subtitle ? <p className="mt-5 max-w-lg text-lg text-sand/85 md:text-xl">{data.subtitle}</p> : null}
-          <p className="mt-8 text-sm text-sand/60">{formatDisplayDate(data.proposalDate)}</p>
-        </div>
+    <header className="proposal-hero" style={style}>
+      <div className="proposal-brand">
+        <span className="proposal-logo-wrap">
+          <OmMark className="h-full w-full" />
+        </span>
+        <span>Oracle of Freedom</span>
+      </div>
+      <div className="proposal-hero-copy">
+        {data.kicker.trim() ? <p className="proposal-kicker">{data.kicker}</p> : null}
+        <h1>{headlineNode(data.headline, data.headlineEmphasis)}</h1>
+        {data.subtitle.trim() ? <p className="proposal-sub">{data.subtitle}</p> : null}
+        {data.proposalDate ? <p className="proposal-date">{formatDisplayDate(data.proposalDate)}</p> : null}
       </div>
     </header>
   );
 }
 
-function SignOff({ intro }: { intro?: string }) {
+function SignOffBlock({
+  intro,
+  align,
+}: {
+  intro?: string;
+  align: DesignAlign;
+}) {
   return (
-    <div className="text-right">
-      {intro?.trim() ? <p className="mb-5 text-lg text-ink/80">{intro}</p> : null}
-      <p className="font-quote text-2xl text-terracotta italic">{SIGN_OFF.withLove}</p>
-      <p className="mt-2 font-serif text-4xl text-ink">{SIGN_OFF.name}</p>
-      <p className="mt-1 text-sm tracking-[0.18em] text-ink/70 uppercase">{SIGN_OFF.brand}</p>
-      <a
-        href={SIGN_OFF.urlHref}
-        className="mt-3 inline-block text-terracotta underline-offset-4 hover:underline"
-      >
-        {SIGN_OFF.url}
-      </a>
+    <div className={`proposal-sign ${alignClass(align, "left")}`}>
+      {intro?.trim() ? <p className="proposal-sign-intro">{intro}</p> : null}
+      <p className="proposal-with">{SIGN_OFF.withLove}</p>
+      <p className="proposal-name">{SIGN_OFF.name}</p>
+      <p className="proposal-sign-brand">{SIGN_OFF.brand}</p>
+      <a href={SIGN_OFF.urlHref}>{SIGN_OFF.url}</a>
     </div>
+  );
+}
+
+function ExtraPhotos({ section }: { section: ProposalSection }) {
+  const images = (section.images ?? []).filter((img) => imageSrc(img));
+  if (!images.length) return null;
+  return (
+    <div className="proposal-extra-photos">
+      {images.map((image, index) => (
+        <figure key={`${image.src || image.mediaId || "extra"}-${index}`}>
+          <Image
+            src={imageSrc(image)}
+            alt={image.alt || ""}
+            width={800}
+            height={600}
+            className="proposal-extra-img"
+            unoptimized={imageSrc(image).startsWith("/api/media/")}
+          />
+        </figure>
+      ))}
+    </div>
+  );
+}
+
+function ProofGrid({ images }: { images: ProposalImage[] }) {
+  const cells = images.length ? [...images] : [{ alt: "Your photo here" }];
+  if (cells.every((image) => !imageSrc(image)) && cells.length < 4) {
+    while (cells.length < 4) cells.push({ alt: "Your photo here" });
+  }
+  return (
+    <div className="proposal-proof-grid">
+      {cells.map((image, index) => {
+        const src = imageSrc(image);
+        if (!src) {
+          return (
+            <div key={`ph-${index}`} className="proposal-ph proposal-proof-cell">
+              <span>{photoSlotLabel(image.alt)}</span>
+            </div>
+          );
+        }
+        return (
+          <figure key={`${src}-${index}`} className="proposal-proof-cell has-photo">
+            <Image
+              src={src}
+              alt={image.alt || ""}
+              fill
+              className="object-cover"
+              sizes="(max-width: 720px) 100vw, 90mm"
+              unoptimized={src.startsWith("/api/media/")}
+            />
+          </figure>
+        );
+      })}
+    </div>
+  );
+}
+
+function PortfolioLine({ line }: { line: string }) {
+  const url = "https://oracleoffreedom.com/portfolio";
+  if (!line.trim()) return null;
+  if (!line.includes(url)) return <p className="proposal-portfolio">{line}</p>;
+  const [before, after] = line.split(url);
+  return (
+    <p className="proposal-portfolio">
+      {before}
+      <a href={url}>{url}</a>
+      {after}
+    </p>
   );
 }
 
 function renderSection(
   section: ProposalSection,
   proposal: Proposal,
-  options: { hidePrices: boolean },
+  options: { hidePrices: boolean; design: ResolvedProposalDesign },
 ) {
   if (!section.enabled) return null;
+  const style = sectionStyle(section);
+  const breakClass = PAGE_BREAK_TYPES.has(section.type) ? "proposal-break" : "";
+  const shell = `proposal-section proposal-section-${section.type} ${breakClass}`.trim();
 
   switch (section.type) {
     case "cover":
       return <Cover key={section.id} section={section} />;
     case "welcome":
+      if (!section.data.body.trim() && !(section.images ?? []).some((img) => imageSrc(img))) return null;
       return (
-        <SectionWithExtras key={section.id} section={section}>
-          <p className="whitespace-pre-wrap text-lg leading-relaxed text-ink/85 md:text-xl">
-            {section.data.body}
-          </p>
-        </SectionWithExtras>
+        <section key={section.id} className={shell} style={style}>
+          <div className="proposal-intro">
+            <Paragraphs text={section.data.body} />
+          </div>
+          <ExtraPhotos section={section} />
+        </section>
       );
     case "noticed":
       return (
-        <SectionWithExtras key={section.id} section={section}>
-          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
-          <div className="grid gap-4 md:grid-cols-2">
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          <div className="proposal-why">
             {section.data.cards.map((card) => (
-              <article
-                key={card.id}
-                className={`rounded-3xl border-l-[3px] border-ember bg-[#f7efe4] p-6 md:p-7 ${
-                  card.fullWidth ? "md:col-span-2" : ""
-                }`}
-              >
-                <h3 className="font-serif text-2xl text-terracotta">{card.title}</h3>
-                <p className="mt-3 whitespace-pre-wrap text-ink/80">{card.body}</p>
+              <article key={card.id} className={card.fullWidth ? "proposal-card is-wide" : "proposal-card"}>
+                <h3>{card.title}</h3>
+                <Paragraphs text={card.body} />
               </article>
             ))}
           </div>
-          {section.data.opportunity ? (
-            <p className="mt-8 max-w-2xl text-lg text-ink/75">{section.data.opportunity}</p>
+          {section.data.opportunity.trim() ? (
+            <p className="proposal-opportunity">{section.data.opportunity}</p>
           ) : null}
-        </SectionWithExtras>
+          <ExtraPhotos section={section} />
+        </section>
       );
     case "divider": {
       const src = imageSrc(section.data.image);
       return (
-        <section key={section.id} className="relative my-6 min-h-[42vh] overflow-hidden bg-night">
+        <section key={section.id} className="proposal-divider" style={style}>
           {src ? (
-            <Image
-              src={src}
-              alt={section.data.image?.alt || ""}
-              fill
-              className="object-cover opacity-80"
-              sizes="100vw"
-              unoptimized={src.startsWith("/api/media/")}
-            />
+            <Image src={src} alt={section.data.image?.alt || ""} fill className="object-cover" sizes="100vw" unoptimized={src.startsWith("/api/media/")} />
           ) : null}
-          <div className="absolute inset-0 bg-night/45" aria-hidden="true" />
-          <div className="relative z-10 flex min-h-[42vh] items-center justify-center px-6 py-16">
-            <p className="max-w-2xl text-center font-serif text-2xl text-sand md:text-4xl">
-              {section.data.line}
-            </p>
-          </div>
+          {section.data.line.trim() ? <p>{section.data.line}</p> : null}
         </section>
       );
     }
     case "plan":
       return (
-        <SectionWithExtras key={section.id} section={section}>
-          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
-          {section.data.intro ? (
-            <p className="max-w-2xl whitespace-pre-wrap text-lg text-ink/80">{section.data.intro}</p>
-          ) : null}
-          {section.data.showDates && section.data.datesBody ? (
-            <div className="mt-8 rounded-3xl bg-white/70 px-5 py-4 md:px-6">
-              <p className="text-xs tracking-[0.2em] text-ember uppercase">{section.data.datesLabel}</p>
-              <p className="mt-2 font-serif text-2xl text-ink">{section.data.datesBody}</p>
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          {section.data.intro.trim() ? (
+            <div className="proposal-intro">
+              <Paragraphs text={section.data.intro} />
             </div>
           ) : null}
-          <ol className="mt-10 grid gap-5 md:grid-cols-2">
-            {section.data.scenes.map((scene, index) => (
-              <li key={scene.id} className="rounded-3xl bg-white/60 p-5 md:p-6">
-                <p className="text-xs tracking-[0.2em] text-ink/45 uppercase">
-                  {String(index + 1).padStart(2, "0")}
-                </p>
-                <h3 className="mt-2 font-serif text-2xl text-terracotta">{scene.title}</h3>
-                {sceneShowsBody(scene) ? (
-                  <p className="mt-3 whitespace-pre-wrap text-ink/80">{scene.body}</p>
-                ) : null}
-              </li>
-            ))}
-          </ol>
-          {section.data.dayFlow ? (
-            <p className="mt-8 max-w-2xl whitespace-pre-wrap text-ink/75">{section.data.dayFlow}</p>
-          ) : null}
-          {section.data.consent ? (
-            <p className="mt-4 max-w-2xl text-sm text-ink/60">{section.data.consent}</p>
-          ) : null}
-        </SectionWithExtras>
+          <div
+            className={
+              section.data.showDates && section.data.datesBody.trim()
+                ? "proposal-team"
+                : "proposal-team is-single"
+            }
+          >
+            {section.data.showDates && section.data.datesBody.trim() ? (
+              <div className="proposal-lead">
+                {section.data.datesLabel.trim() ? <p className="proposal-kicker">{section.data.datesLabel}</p> : null}
+                <Paragraphs text={section.data.datesBody} />
+              </div>
+            ) : null}
+            <ul className="proposal-dots">
+              {section.data.scenes.map((scene) => (
+                <li key={scene.id}>
+                  {scene.title}
+                  {sceneShowsBody(scene) ? <span className="proposal-scene-body">{scene.body}</span> : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+          {section.data.dayFlow.trim() ? <p className="proposal-follow">{section.data.dayFlow}</p> : null}
+          {section.data.consent.trim() ? <p className="proposal-follow">{section.data.consent}</p> : null}
+          <ExtraPhotos section={section} />
+        </section>
       );
     case "proof": {
       const video = resolveProposalVideo({
         videoUrl: section.data.videoUrl,
         videoMediaId: section.data.videoMediaId,
       });
-      const hasPlaceholderMedia = section.data.images.some((img) =>
-        /EXAMPLE PHOTOS|Agota to supply/i.test(`${img.alt} ${img.caption || ""}`),
-      );
       return (
-        <section key={section.id} className="mx-auto max-w-5xl px-5 py-14 md:py-20">
-          <SectionHeading>{section.data.heading}</SectionHeading>
-          {hasPlaceholderMedia && !video ? (
-            <p className="rounded-3xl border border-dashed border-ember/50 bg-ember/10 px-5 py-8 text-center text-ink/70">
-              [EXAMPLE PHOTOS / VIDEO: Agota to supply]
-            </p>
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          <ProofGrid images={section.data.images} />
+          <PortfolioLine line={section.data.portfolioLine} />
+          {video ? (
+            <ProposalVideoBlock videoUrl={section.data.videoUrl} videoMediaId={section.data.videoMediaId} />
           ) : (
-            <PhotoStrip images={section.data.images.filter((img) => imageSrc(img))} />
+            <div className="proposal-ph proposal-video-ph">
+              <span>Your video here</span>
+            </div>
           )}
-          <ProposalVideoBlock videoUrl={section.data.videoUrl} videoMediaId={section.data.videoMediaId} />
-          <p className="mt-8 text-ink/80">
-            You can see my work here:{" "}
-            <a
-              href="https://oracleoffreedom.com/portfolio"
-              className="text-terracotta underline-offset-4 hover:underline"
-            >
-              https://oracleoffreedom.com/portfolio
-            </a>
-          </p>
-          <ExtraSectionImages section={section} />
+          <ExtraPhotos section={section} />
         </section>
       );
     }
     case "howIWork":
       return (
-        <section key={section.id} className="bg-moss px-5 py-14 text-sand md:py-20">
-          <div className="mx-auto max-w-5xl">
-            {section.data.kicker ? (
-              <p className="text-xs tracking-[0.22em] text-clay uppercase">{section.data.kicker}</p>
-            ) : null}
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl">{section.data.heading}</h2>
-            <ol className="mt-10 grid gap-6 md:grid-cols-3">
-              {section.data.steps.map((step, index) => (
-                <li key={step.id}>
-                  <p className="text-xs tracking-[0.2em] text-clay/80 uppercase">
-                    {String(index + 1).padStart(2, "0")}
-                  </p>
-                  <h3 className="mt-2 font-serif text-2xl">{step.title}</h3>
-                  {sceneShowsBody(step) ? (
-                    <p className="mt-3 whitespace-pre-wrap text-sand/85">{step.body}</p>
-                  ) : null}
-                </li>
-              ))}
-            </ol>
-            <ExtraSectionImages section={section} />
-          </div>
+        <section key={section.id} className={`${shell} proposal-how`} style={style}>
+          {section.data.kicker.trim() ? <p className="proposal-kicker">{section.data.kicker}</p> : null}
+          <Title section={section}>{section.data.heading}</Title>
+          <ol className="proposal-steps">
+            {section.data.steps.map((step) => (
+              <li key={step.id}>
+                <h3>{step.title}</h3>
+                {sceneShowsBody(step) ? <Paragraphs text={step.body} /> : null}
+              </li>
+            ))}
+          </ol>
+          <ExtraPhotos section={section} />
         </section>
       );
     case "deliverables":
       return (
-        <SectionWithExtras key={section.id} section={section}>
-          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
-          <div className="grid gap-4 md:grid-cols-3">
-            {section.data.cards.map((card) => {
-              const bar =
-                card.accent === "moss"
-                  ? "bg-moss"
-                  : card.accent === "ember"
-                    ? "bg-ember"
-                    : "bg-terracotta";
-              return (
-                <article key={card.id} className="overflow-hidden rounded-3xl bg-[#f7efe4]">
-                  <div className={`h-1 ${bar}`} aria-hidden="true" />
-                  <div className="p-6">
-                    <h3 className="font-serif text-2xl text-terracotta">{card.title}</h3>
-                    <div className="mt-4">
-                      <EmberList items={card.items} />
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          <div className="proposal-del">
+            {section.data.cards.map((card) => (
+              <article key={card.id} className={`proposal-dcard is-${card.accent || "terracotta"}`}>
+                <h3>{card.title}</h3>
+                <Dots items={card.items} />
+              </article>
+            ))}
           </div>
-          {section.data.outOfScope ? (
-            <p className="mt-8 max-w-2xl text-sm text-ink/65">
-              <span className="font-medium text-ink">
-                {labelWithPeriod(section.data.outOfScopeLabel || "Out of scope")}
+          {section.data.outOfScope.trim() ? (
+            <p className="proposal-fine">
+              <span className="proposal-lab">
+                {(section.data.outOfScopeLabel || "Out of scope").replace(/\.$/, "")}.{" "}
               </span>
               {section.data.outOfScope}
             </p>
           ) : null}
-          {section.data.usage ? (
-            <p className="mt-3 max-w-2xl text-sm text-ink/65">
-              <span className="font-medium text-ink">
-                {labelWithPeriod(section.data.usageLabel || "Usage")}
+          {section.data.usage.trim() ? (
+            <p className="proposal-fine">
+              <span className="proposal-lab">
+                {(section.data.usageLabel || "Usage").replace(/\.$/, "")}.{" "}
               </span>
               {section.data.usage}
             </p>
           ) : null}
-        </SectionWithExtras>
+          <ExtraPhotos section={section} />
+        </section>
       );
     case "addon": {
-      const emphasis = resolveHeadingEmphasis(section);
       const lines = addonPriceLines(section.data);
-      const headingClass =
-        emphasis === "xl"
-          ? "font-serif text-4xl text-terracotta md:text-6xl"
-          : emphasis === "large"
-            ? "font-serif text-4xl text-terracotta md:text-5xl"
-            : "text-xs tracking-[0.2em] text-ember uppercase";
       return (
-        <SectionWithExtras key={section.id} section={section} className="py-10 md:py-14">
-          <p className={headingClass}>{section.data.heading}</p>
-          <h3 className="mt-3 font-serif text-2xl text-terracotta md:text-3xl">{section.data.title}</h3>
-          <p className="mt-4 whitespace-pre-wrap text-ink/75">{section.data.body}</p>
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          {section.data.title.trim() ? <h3 className="proposal-addon-title">{section.data.title}</h3> : null}
+          {section.data.body.trim() ? (
+            <div className="proposal-addon-body">
+              <Paragraphs text={section.data.body} />
+            </div>
+          ) : null}
+          {section.data.bullets?.length ? <Dots items={section.data.bullets} /> : null}
           {lines.length && !options.hidePrices ? (
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <div className="proposal-prices">
               {lines.map((line) => (
-                <div key={line.id} className="rounded-2xl bg-white/60 px-5 py-4 text-center">
-                  <p className="text-sm text-ink/60">{line.label}</p>
-                  <p className="mt-1 font-serif text-3xl text-ink md:text-4xl">{line.price}</p>
+                <div key={line.id} className="proposal-pricebox">
+                  <p className="proposal-pl">{line.label}</p>
+                  <p className="proposal-pv">{line.price}</p>
                 </div>
               ))}
             </div>
           ) : null}
           {options.hidePrices && lines.length ? (
-            <p className="mt-6 text-sm text-ink/55">Price shared when the offer is live.</p>
+            <p className="proposal-needed">Price shared when the offer is live.</p>
           ) : null}
-          {section.data.note ? <p className="mt-6 text-sm text-ink/55">{section.data.note}</p> : null}
-        </SectionWithExtras>
+          {section.data.note.trim() ? <p className="proposal-needed">{section.data.note}</p> : null}
+          <ExtraPhotos section={section} />
+        </section>
       );
     }
     case "investment": {
       if (options.hidePrices) {
         return (
-          <section key={section.id} className="px-5 py-14 md:py-20">
-            <div className="mx-auto max-w-5xl rounded-3xl bg-night px-6 py-12 text-center text-sand md:px-10">
-              <SectionHeading>
-                <span className="text-sand">{section.data.heading}</span>
-              </SectionHeading>
-              <p className="mt-4 text-sand/75">
-                The package price is shown on the live link once Agota is ready to send it.
-              </p>
+          <section key={section.id} className={shell} style={style}>
+            <Title section={section}>{section.data.heading}</Title>
+            <div className="proposal-inv">
+              <p className="proposal-inv-hidden">The package price is shown on the live link once Agota is ready to send it.</p>
             </div>
+            <ExtraPhotos section={section} />
           </section>
         );
       }
       const deposit = depositAmount(section.data.packagePriceUsd, section.data.depositPercent);
-      const { sideNote, keyTerms, offerNote } = section.data;
-      const offerPanelCopy = keyTerms?.trim()
-        ? keyTerms
-        : !sideNote?.trim() && offerNote?.trim()
-          ? offerNote
-          : "";
-      const nightCopy = sideNote?.trim() || "";
       return (
-        <section key={section.id} className="px-5 py-14 md:py-20">
-          <div className="mx-auto grid max-w-5xl gap-6 rounded-3xl bg-night p-6 text-sand md:grid-cols-2 md:p-10">
-            <div className="order-2 md:order-1">
-              <h2 className="font-serif text-3xl text-sand/90">{section.data.heading}</h2>
-              <ul className="mt-8 space-y-0">
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          <div className="proposal-inv">
+            <div className="proposal-inv-body">
+              <div className="proposal-inv-copy">
                 {section.data.compareRows.map((row) => (
-                  <li
-                    key={row.id}
-                    className="flex items-baseline justify-between gap-4 border-b border-sand/15 py-4 text-sand/55"
-                  >
-                    <span className={row.struck ? "line-through" : ""}>{row.label}</span>
-                    <span className={row.struck ? "line-through" : ""}>{row.amount}</span>
-                  </li>
+                  <div key={row.id} className={row.struck ? "proposal-row is-strike" : "proposal-row"}>
+                    <span>{row.label}</span>
+                    <span>{row.amount}</span>
+                  </div>
                 ))}
-              </ul>
-              {section.data.normalRatesLine ? (
-                <p className="mt-6 text-sm text-sand/55">{section.data.normalRatesLine}</p>
-              ) : null}
-              {nightCopy ? (
-                <p className="mt-6 whitespace-pre-wrap text-sm leading-relaxed text-sand/75">{nightCopy}</p>
-              ) : null}
-              {(section.images ?? []).filter((img) => imageSrc(img)).length ? (
-                <div className="mt-8">
-                  <PhotoStrip images={section.images!.filter((img) => imageSrc(img))} />
-                </div>
-              ) : null}
-            </div>
-            <div className="order-1 flex items-center justify-center md:order-2">
-              <div className="w-full rounded-3xl bg-gradient-to-br from-terracotta to-ember px-6 py-10 text-center text-white shadow-lg md:px-8">
-                <p className="text-xs tracking-[0.22em] uppercase">{section.data.clientLabel}</p>
-                <p className="mt-4 font-serif text-5xl md:text-6xl">
-                  {formatMoney(section.data.packagePriceUsd)}
-                </p>
-                <p className="mt-2 text-sm text-white/85">{section.data.currencyNote}</p>
-                {offerPanelCopy ? (
-                  <p className="mx-auto mt-5 max-w-sm text-sm text-white/90">{offerPanelCopy}</p>
+                {section.data.normalRatesLine.trim() ? (
+                  <p className="proposal-normal">{section.data.normalRatesLine}</p>
                 ) : null}
-                <p className="mt-6 text-sm text-white/90">
-                  Deposit {section.data.depositPercent}% · {formatMoney(deposit)}
+                {section.data.sideNote?.trim() ? (
+                  <p className="proposal-normal">{section.data.sideNote}</p>
+                ) : null}
+              </div>
+              <div className="proposal-offer">
+                {section.data.clientLabel.trim() ? <p className="proposal-kicker">{section.data.clientLabel}</p> : null}
+                <p className="proposal-price">{formatUsd(section.data.packagePriceUsd)}</p>
+                {section.data.currencyNote.trim() ? <p className="proposal-usd">{section.data.currencyNote}</p> : null}
+                {section.data.keyTerms?.trim() ? <p className="proposal-dep">{section.data.keyTerms}</p> : null}
+                <p className="proposal-dep">
+                  Deposit {section.data.depositPercent}% · {formatUsd(deposit)}
                 </p>
               </div>
             </div>
           </div>
+          <ExtraPhotos section={section} />
         </section>
       );
     }
     case "terms":
       return (
-        <SectionWithExtras key={section.id} section={section} className="py-10 md:py-14">
-          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
-          <EmberList items={section.data.items} />
-        </SectionWithExtras>
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          <Dots items={section.data.items} />
+          <ExtraPhotos section={section} />
+        </section>
       );
     case "review":
       if (!section.data.quote.trim()) return null;
       if (/\[REVIEW:/i.test(section.data.quote)) {
         return (
-          <section key={section.id} className="mx-auto max-w-3xl px-5 py-14 md:py-20">
-            <p className="text-xs tracking-[0.22em] text-ember uppercase">{section.data.heading}</p>
-            <p className="mt-6 rounded-3xl border border-dashed border-ember/50 bg-ember/10 px-5 py-8 text-center text-ink/70">
-              {section.data.quote}
-            </p>
+          <section key={section.id} className={shell} style={style}>
+            <Title section={section}>{section.data.heading}</Title>
+            <p className="proposal-review-ph">{section.data.quote}</p>
           </section>
         );
       }
       return (
-        <section key={section.id} className="mx-auto max-w-3xl px-5 py-14 md:py-20">
-          <p className="text-xs tracking-[0.22em] text-ember uppercase">{section.data.heading}</p>
-          <blockquote className="mt-6 font-quote text-3xl leading-snug text-ink italic md:text-4xl">
-            “{section.data.quote}”
-          </blockquote>
-          <p className="mt-6 font-serif text-xl text-terracotta">{section.data.name}</p>
-          {section.data.service ? <p className="text-sm text-ink/55">{section.data.service}</p> : null}
-          {section.data.metricsNote ? (
-            <p className="mt-4 text-sm text-ink/55">{section.data.metricsNote}</p>
-          ) : null}
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          <blockquote className="proposal-quote">“{section.data.quote}”</blockquote>
+          {section.data.name.trim() ? <p className="proposal-review-name">{section.data.name}</p> : null}
+          {section.data.service.trim() ? <p className="proposal-review-service">{section.data.service}</p> : null}
+          {section.data.metricsNote.trim() ? <p className="proposal-review-service">{section.data.metricsNote}</p> : null}
         </section>
       );
-    case "nextStep":
+    case "nextStep": {
+      const position = section.design?.buttonPosition || options.design.buttonPosition;
       return (
-        <SectionWithExtras key={section.id} section={section} className="py-16 md:py-24">
-          <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
-          <p className="whitespace-pre-wrap text-lg text-ink/80">{section.data.body}</p>
-          <p className="mt-6 text-sm tracking-wide text-ink/60 uppercase">
-            {section.data.validUntilLabel}{" "}
-            <span className="font-serif text-lg normal-case tracking-normal text-terracotta">
-              {formatDisplayDate(proposal.validUntil)}
-            </span>
-          </p>
-          {section.data.ctaLabel ? (
-            <div className="mt-8">
-              <Button asChild>
-                <a href={section.data.ctaHref || "mailto:agota@oracleoffreedom.com"}>
-                  {section.data.ctaLabel}
-                </a>
-              </Button>
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          <div className="proposal-next">
+            {section.data.body.trim() ? <Paragraphs text={section.data.body} /> : null}
+            <p className="proposal-valid">
+              {section.data.validUntilLabel} <strong>{formatDisplayDate(proposal.validUntil)}</strong>
+            </p>
+            {section.data.closingLine.trim() ? <p className="proposal-closing">{section.data.closingLine}</p> : null}
+          </div>
+          {section.data.ctaLabel.trim() ? (
+            <div className={`proposal-cta-row ${alignClass(position, "left")}`}>
+              <a className="proposal-cta" href={section.data.ctaHref || "mailto:agota@oracleoffreedom.com"}>
+                {section.data.ctaLabel}
+              </a>
             </div>
           ) : null}
-          {section.data.closingLine ? (
-            <p className="mt-10 text-ink/75">{section.data.closingLine}</p>
-          ) : null}
-        </SectionWithExtras>
+          <ExtraPhotos section={section} />
+        </section>
       );
+    }
     case "signOff":
       return (
-        <section key={section.id} className="mx-auto max-w-5xl px-5 py-10 md:py-14">
-          <SignOff intro={section.data.intro} />
+        <section key={section.id} className={shell} style={style}>
+          <SignOffBlock
+            intro={section.data.intro}
+            align={section.design?.signOffAlign || options.design.signOffAlign}
+          />
         </section>
       );
     case "text":
       return (
-        <SectionWithExtras key={section.id} section={section} className="py-12">
-          {section.data.heading ? (
-            <SectionHeading emphasis={resolveHeadingEmphasis(section)}>{section.data.heading}</SectionHeading>
-          ) : null}
-          <p className="whitespace-pre-wrap text-lg text-ink/80">{section.data.body}</p>
-        </SectionWithExtras>
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          <div className="proposal-intro">
+            <Paragraphs text={section.data.body} />
+          </div>
+          <ExtraPhotos section={section} />
+        </section>
       );
     case "photos":
+      if (!section.data.images.length && !section.data.heading.trim()) return null;
       return (
-        <section key={section.id} className="mx-auto max-w-5xl px-5 py-10">
-          {section.data.heading ? <SectionHeading>{section.data.heading}</SectionHeading> : null}
-          <PhotoStrip images={section.data.images} />
+        <section key={section.id} className={shell} style={style}>
+          <Title section={section}>{section.data.heading}</Title>
+          <ProofGrid images={section.data.images} />
         </section>
       );
     default:
@@ -649,24 +617,19 @@ export function ProposalView({
   showPdfButton?: boolean;
 }) {
   const hidePrices = mode === "preview";
+  const design = resolveProposalDesign(proposal.design);
   return (
-    <article className={`proposal-doc bg-sand text-ink ${className || ""}`}>
+    <article className={`proposal-doc ${className || ""}`.trim()} style={designVars(design)}>
       {showPdfButton ? (
-        <div className="proposal-no-print sticky top-0 z-20 flex justify-end gap-2 bg-sand/90 px-4 py-3 backdrop-blur md:px-8">
+        <div className="proposal-no-print proposal-toolbar">
           <ProposalPdfButton />
         </div>
       ) : null}
-      {mode === "admin" ? (
-        <p className="proposal-no-print bg-clay/80 px-4 py-2 text-center text-xs tracking-wide text-ink/70 uppercase">
-          Admin preview
-        </p>
-      ) : null}
+      {mode === "admin" ? <p className="proposal-no-print proposal-banner">Admin preview</p> : null}
       {mode === "preview" ? (
-        <p className="proposal-no-print bg-ember/20 px-4 py-2 text-center text-xs tracking-wide text-ink/70 uppercase">
-          Draft preview · prices hidden
-        </p>
+        <p className="proposal-no-print proposal-banner is-preview">Draft preview · prices hidden</p>
       ) : null}
-      {proposal.sections.map((section) => renderSection(section, proposal, { hidePrices }))}
+      {proposal.sections.map((section) => renderSection(section, proposal, { hidePrices, design }))}
     </article>
   );
 }

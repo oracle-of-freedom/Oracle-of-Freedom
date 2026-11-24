@@ -1,3 +1,5 @@
+import { defaultProposalDesign } from "@/lib/proposal-design";
+import { NORTE_NOSARA_TEMPLATE_ID } from "@/lib/proposal-norte-nosara";
 import {
   MAX_FULL_SECTIONS,
   PORTFOLIO_LINE,
@@ -80,7 +82,7 @@ function sharedPlan(heading: string) {
     heading,
     intro: "Real dates, a handful of scenes, and how a day would flow on the ground.",
     datesLabel: "Dates",
-    datesBody: "[Start date] – [End date]",
+    datesBody: "[Start date] to [End date]",
     showDates: true,
     dayFlow: "Morning arrival, quiet setup, filming through the natural peaks of the day, a soft wrap before dark.",
     consent: "People who appear on camera will be briefed; consent is gathered before we film faces up close.",
@@ -336,6 +338,156 @@ export function quickOfferSections(): ProposalSection[] {
   ];
 }
 
+/** Awake-style deck: cover through sign-off, no divider, How I work, or footer photo strip. */
+export function awakeStyleSections(): ProposalSection[] {
+  return [
+    sec("cover", {
+      clientName: "[Client name]",
+      kicker: "Prepared for [Client name]",
+      headline: "Video Proposal\nfor [Client name]",
+      headlineEmphasis: "for [Client name]",
+      subtitle: "Two filming days during one of your retreats, plus drone footage of the place and its setting",
+      heroImage: null,
+      proposalDate: todayIsoDate(),
+    }),
+    sec("welcome", {
+      body: "Dear [Client name] family,\n\nHere is a video proposal for the days we would film, with the offer in one place.",
+    }),
+    sec("noticed", {
+      heading: "Why this place needs this",
+      opportunity: "",
+      cards: [
+        {
+          id: newId("card"),
+          title: "Photos only tell half the story",
+          body: "A short note on what still photographs cannot show about the feeling of the place.",
+        },
+        {
+          id: newId("card"),
+          title: "The location",
+          body: "How the place sits in its setting, and why moving pictures make that clear.",
+        },
+        {
+          id: newId("card"),
+          title: "Video for social and your website",
+          body: "Where video is missing today, and what guests look for before they book.",
+        },
+        {
+          id: newId("card"),
+          title: "Made for a small team",
+          body: "Ready-to-post films and a library the team can use without extra editing.",
+        },
+      ],
+    }),
+    sec("plan", {
+      heading: "What we'd film",
+      intro: "",
+      datesLabel: "Dates",
+      datesBody:
+        "The filming days sit inside the retreat you choose, with time before or after for the place itself and drone shots.",
+      showDates: true,
+      dayFlow: "",
+      consent: "",
+      scenes: [
+        "The practice space",
+        "Shared meals and the bar",
+        "How a retreat day flows",
+        "Drone footage of the place and how it sits",
+        "Time outside",
+        "Rooms and quiet corners",
+        "Footage that shows how the place really feels",
+      ].map((title) => ({ id: newId("scene"), title, body: "", showBody: false as const })),
+    }),
+    sec("proof", {
+      heading: "Proof",
+      images: [1, 2, 3, 4].map(() => ({ alt: "Your photo here" })),
+      videoUrl: "",
+      videoMediaId: "",
+      portfolioLine: PORTFOLIO_LINE,
+    }),
+    sec("deliverables", {
+      heading: "What's included and usage",
+      cards: [
+        {
+          id: newId("del"),
+          title: "Website",
+          accent: "terracotta" as const,
+          items: ["One short film for your website"],
+        },
+        {
+          id: newId("del"),
+          title: "Social media",
+          accent: "ember" as const,
+          items: ["Edited vertical reels for Instagram and TikTok"],
+        },
+        {
+          id: newId("del"),
+          title: "Content library",
+          accent: "moss" as const,
+          items: ["A library of cut and edited clips your team can post any time", "Drone footage of the place"],
+        },
+      ],
+      outOfScopeLabel: "Delivery and changes",
+      outOfScope: "Everything is delivered within about two weeks of the shoot, with one round of changes.",
+      usageLabel: "Usage",
+      usage:
+        "You can use everything on your own website and social media. Usage is non-exclusive, and I keep the right to share selected pieces in my portfolio.",
+    }),
+    sec("addon", {
+      heading: "Later, if you need it",
+      title: "Social media editing",
+      body: "I travel, so I can't commit to a monthly package, but I can edit remotely whenever you need more content.",
+      bullets: [
+        "Each reel is cut from the clip library we build together or from footage your team films on a phone, depending on your idea or vision.",
+        "Captions or subtitles and music, formatted for Instagram and TikTok, with one round of changes.",
+      ],
+      priceUsd: 0,
+      note: "Booked only when needed",
+      priceLines: [
+        { id: newId("price"), label: "1 reel", price: "US$[price]" },
+        { id: newId("price"), label: "3 reels", price: "US$[price]" },
+      ],
+    }),
+    sec("review", {
+      heading: "A word from a recent client",
+      quote: "[REVIEW: Agota to supply]",
+      name: "",
+      service: "",
+      metricsNote: "",
+    }),
+    sec("investment", {
+      heading: "Investment",
+      clientLabel: "For [Client name]",
+      packagePriceUsd: 0,
+      currencyNote: "USD",
+      offerNote: "",
+      depositPercent: 50,
+      normalRatesLine: "Booked separately at my normal rates.",
+      compareRows: [{ id: newId("row"), label: "Normal rates (around)", amount: "US$[amount]", struck: true }],
+    }),
+    sec("terms", {
+      heading: "Terms",
+      items: [
+        "A 50% deposit confirms the dates, and the balance is due on delivery.",
+        "My retreat packages usually include accommodation and meals during the shoot days, so I'd like to discuss that as part of this rate.",
+        "Before filming, I agree with the guests and the retreat leader what can be filmed, so everyone feels comfortable.",
+        "Drone filming only with your permission.",
+        "You can use everything on your own website and social media. Usage is non-exclusive, and I keep the right to share selected pieces in my portfolio.",
+        "This offer is valid until the date on the next step.",
+      ],
+    }),
+    sec("nextStep", {
+      heading: "Next step",
+      body: "Choose the retreat and the filming days, and I'll send the deposit details right away.",
+      ctaLabel: "Reply to confirm",
+      ctaHref: "mailto:agota@oracleoffreedom.com",
+      validUntilLabel: "Offer valid until",
+      closingLine: "I'd love to bring this place to life on film.",
+    }),
+    sec("signOff", { intro: "" }),
+  ];
+}
+
 function enforceCap(sections: ProposalSection[], full: boolean) {
   if (!full) return sections;
   const enabled = sections.filter((s) => s.enabled);
@@ -358,6 +510,16 @@ function enforceCap(sections: ProposalSection[], full: boolean) {
 export function builtinTemplates(now = new Date()): ProposalTemplate[] {
   const stamp = now.toISOString();
   return [
+    {
+      id: NORTE_NOSARA_TEMPLATE_ID,
+      name: "Awake style",
+      kind: "custom",
+      builtin: true,
+      createdAt: stamp,
+      updatedAt: stamp,
+      design: defaultProposalDesign(),
+      sections: awakeStyleSections(),
+    },
     {
       id: "tmpl_retreat_hotel",
       name: "Retreat / Hotel",

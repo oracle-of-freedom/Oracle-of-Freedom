@@ -128,6 +128,7 @@ export async function saveProposalAsTemplateAction(formData: FormData) {
     kind: "custom",
     createdAt: stamp,
     updatedAt: stamp,
+    ...(proposal.design ? { design: structuredClone(proposal.design) } : {}),
     sections: cloneSections(proposal.sections),
   };
   await saveTemplate(template);

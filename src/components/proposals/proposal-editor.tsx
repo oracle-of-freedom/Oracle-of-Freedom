@@ -11,6 +11,7 @@ import {
   setStatusAction,
   type ActionState,
 } from "@/app/admin/proposals/actions";
+import { ProposalDesignFields } from "@/components/proposals/design-fields";
 import { ProposalPdfButton } from "@/components/proposals/proposal-pdf-button";
 import { ProposalView } from "@/components/proposals/proposal-view";
 import { blankSection, SectionFields } from "@/components/proposals/section-fields";
@@ -28,6 +29,7 @@ import {
   type Proposal,
   type SectionType,
 } from "@/lib/proposals";
+import { resetDesignDefaults } from "@/lib/proposal-design";
 
 const hints = [
   "No em dashes in client-facing copy.",
@@ -137,12 +139,21 @@ export function ProposalEditor({
                 setProposal((prev) => {
                   const sections = prev.sections.map((s) => {
                     if (s.type === "cover") {
+                      const previousKicker = `Prepared for ${prev.clientName}`;
+                      const keepCustom =
+                        s.data.kicker.trim() !== "" &&
+                        s.data.kicker !== previousKicker &&
+                        s.data.kicker !== "Prepared for [Client name]";
                       return {
                         ...s,
                         data: {
                           ...s.data,
                           clientName,
-                          kicker: `Prepared for ${clientName}`,
+                          kicker: keepCustom
+                            ? s.data.kicker
+                            : s.data.kicker.trim()
+                              ? `Prepared for ${clientName}`
+                              : "",
                         },
                       };
                     }
@@ -190,7 +201,7 @@ export function ProposalEditor({
         </div>
         {investment ? (
           <p className="mt-4 text-sm text-ink/60">
-            Deposit auto-calc: {investment.data.depositPercent}% = ${deposit || "—"}
+            Deposit auto-calc: {investment.data.depositPercent}% = ${deposit || "0"}
           </p>
         ) : null}
         <div className="mt-4 flex flex-wrap gap-2">
@@ -325,6 +336,24 @@ export function ProposalEditor({
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         <div className="space-y-4">
+          <div className="rounded-3xl bg-white/70 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs tracking-[0.2em] text-ember uppercase">Design</p>
+              <button
+                type="button"
+                className="text-xs text-terracotta underline-offset-4 hover:underline"
+                onClick={() => setProposal((prev) => resetDesignDefaults(prev))}
+              >
+                Reset to default
+              </button>
+            </div>
+            <div className="mt-4">
+              <ProposalDesignFields
+                design={proposal.design}
+                onChange={(design) => setProposal((prev) => ({ ...prev, design }))}
+              />
+            </div>
+          </div>
           <div className="rounded-3xl bg-white/70 p-4">
             <p className="text-xs tracking-[0.2em] text-ember uppercase">Sections</p>
             <ul className="mt-3 space-y-2">

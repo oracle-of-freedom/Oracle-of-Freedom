@@ -8,6 +8,7 @@ import {
   saveTemplateAction,
   type ActionState,
 } from "@/app/admin/proposals/actions";
+import { ProposalDesignFields } from "@/components/proposals/design-fields";
 import { ProposalView } from "@/components/proposals/proposal-view";
 import { blankSection, SectionFields } from "@/components/proposals/section-fields";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ import {
   type ProposalTemplate,
   type SectionType,
 } from "@/lib/proposals";
+import { resetDesignDefaults } from "@/lib/proposal-design";
 
 function asPreviewProposal(template: ProposalTemplate): Proposal {
   const stamp = new Date().toISOString();
@@ -38,6 +40,7 @@ function asPreviewProposal(template: ProposalTemplate): Proposal {
     validUntil: todayIsoDate(),
     viewCount: 0,
     lastOpenedAt: "",
+    design: template.design,
     sections: template.sections,
   };
 }
@@ -131,6 +134,24 @@ export function TemplateEditor({ initial }: { initial: ProposalTemplate }) {
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         <div className="space-y-4">
+          <div className="rounded-3xl bg-white/70 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs tracking-[0.2em] text-ember uppercase">Design</p>
+              <button
+                type="button"
+                className="text-xs text-terracotta underline-offset-4 hover:underline"
+                onClick={() => setTemplate((prev) => resetDesignDefaults(prev))}
+              >
+                Reset to default
+              </button>
+            </div>
+            <div className="mt-4">
+              <ProposalDesignFields
+                design={template.design}
+                onChange={(design) => setTemplate((prev) => ({ ...prev, design }))}
+              />
+            </div>
+          </div>
           <div className="rounded-3xl bg-white/70 p-4">
             <p className="text-xs tracking-[0.2em] text-ember uppercase">Sections</p>
             <ul className="mt-3 space-y-2">
