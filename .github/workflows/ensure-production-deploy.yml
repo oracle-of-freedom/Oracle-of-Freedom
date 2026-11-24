@@ -3,12 +3,15 @@
 # Vercel built #82 and never created a deployment for #81, so production
 # stayed on 98cb5af while GitHub main had moved on.
 #
-# This job runs after every push to main. It waits for the Git integration
-# to publish a READY production deployment of that exact SHA. If the SHA is
-# still missing, it deploys the checked-out commit with the Vercel CLI.
+# This job runs after every push to main. When VERCEL_TOKEN is set, it waits
+# for a READY production deployment of that exact SHA and, if the Git
+# integration skipped the commit, deploys it with the Vercel CLI.
 #
-# Required repository secret: VERCEL_TOKEN (a token that can deploy
-# prj_UaEpJG9sPUDNGtrxsKmNV6LBwIrx on team team_s96Q6VsOZlu15m700MS0XMHs).
+# Without VERCEL_TOKEN the job warns and exits successfully. Add the secret
+# (deploy access for prj_UaEpJG9sPUDNGtrxsKmNV6LBwIrx on team
+# team_s96Q6VsOZlu15m700MS0XMHs) so a missed production deploy can be repaired
+# automatically. Until then, confirm the production SHA by hand after each
+# main merge.
 
 name: Ensure production deployment
 
@@ -22,18 +25,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - name: Require a Vercel token
+      - name: Require a Vercel token for auto-repair
+        id: token
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           if [ -z "$VERCEL_TOKEN" ]; then
-            echo "::error::VERCEL_TOKEN is not set. Add it under GitHub Actions secrets so a missed production deploy can be created for the merge commit. Until then, open Vercel after every main merge and confirm the production deployment SHA matches the merge commit."
-            exit 1
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::VERCEL_TOKEN is not set. This job cannot confirm or repair the production SHA. After each main merge, open Vercel and confirm a READY production deployment whose SHA equals the merge commit. Add VERCEL_TOKEN under GitHub Actions secrets to enable auto-repair."
+            exit 0
           fi
+          echo "present=true" >> "$GITHUB_OUTPUT"
 
       - uses: actions/checkout@v4
+        if: steps.token.outputs.present == 'true'
 
       - name: Confirm production is serving this commit
+        if: steps.token.outputs.present == 'true'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: team_s96Q6VsOZlu15m700MS0XMHs
