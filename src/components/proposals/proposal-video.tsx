@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { imageCropStyle } from "@/lib/proposal-image-crop";
 import {
   proposalVideoHostNote,
   proposalVideoWatchHref,
@@ -35,10 +36,12 @@ function CoverStill({
   src,
   alt,
   placeholder,
+  videoCover,
 }: {
   src: string;
   alt: string;
   placeholder: boolean;
+  videoCover?: ProposalImage | null;
 }) {
   if (placeholder || !src) {
     return (
@@ -48,6 +51,12 @@ function CoverStill({
       />
     );
   }
+  const crop = imageCropStyle(videoCover);
+  // Hover scale stacks with crop zoom via CSS variable when zoom is 1.
+  const hoverSafe =
+    !crop.transform
+      ? "transition-transform duration-500 ease-out group-hover:scale-[1.015]"
+      : "";
   return (
     <Image
       src={src}
@@ -55,7 +64,8 @@ function CoverStill({
       width={1280}
       height={720}
       sizes="(max-width: 720px) 100vw, 182mm"
-      className="aspect-video w-full bg-night object-cover transition-transform duration-500 ease-out group-hover:scale-[1.015]"
+      className={`aspect-video w-full bg-night object-cover ${hoverSafe}`}
+      style={crop}
       unoptimized={src.startsWith("/api/media/") || src.includes("i.ytimg.com")}
     />
   );
@@ -73,10 +83,12 @@ function WatchPrintLink({ href }: { href: string }) {
 function VideoCardShell({
   source,
   cover,
+  videoCover,
   children,
 }: {
   source: ProposalVideoSource;
   cover: ReturnType<typeof resolveProposalVideoCover>;
+  videoCover?: ProposalImage | null;
   children: React.ReactNode;
 }) {
   const watchHref = proposalVideoWatchHref(source);
@@ -86,7 +98,12 @@ function VideoCardShell({
       {/* Cover for print (screen card / player are hidden in @media print). */}
       <div className="proposal-video-print-cover" aria-hidden="true">
         <div className="relative overflow-hidden rounded-3xl">
-          <CoverStill src={cover.src} alt="" placeholder={cover.placeholder} />
+          <CoverStill
+            src={cover.src}
+            alt=""
+            placeholder={cover.placeholder}
+            videoCover={videoCover}
+          />
           <PlayMark note={proposalVideoHostNote(source) || undefined} />
         </div>
       </div>
@@ -98,16 +115,18 @@ function VideoCardShell({
 function EmbeddableCard({
   source,
   cover,
+  videoCover,
 }: {
   source: Extract<ProposalVideoSource, { kind: "youtube" | "vimeo" }>;
   cover: ReturnType<typeof resolveProposalVideoCover>;
+  videoCover?: ProposalImage | null;
 }) {
   const [playing, setPlaying] = useState(false);
   const note = proposalVideoHostNote(source);
 
   if (playing) {
     return (
-      <VideoCardShell source={source} cover={cover}>
+      <VideoCardShell source={source} cover={cover} videoCover={videoCover}>
         <div className="proposal-video-player aspect-video w-full overflow-hidden rounded-3xl bg-night">
           <iframe
             title="Proposal film"
@@ -123,14 +142,19 @@ function EmbeddableCard({
   }
 
   return (
-    <VideoCardShell source={source} cover={cover}>
+    <VideoCardShell source={source} cover={cover} videoCover={videoCover}>
       <button
         type="button"
         aria-label="Play video"
         className="proposal-video-card group relative block w-full overflow-hidden rounded-3xl text-left shadow-sm transition-shadow duration-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
         onClick={() => setPlaying(true)}
       >
-        <CoverStill src={cover.src} alt={cover.alt} placeholder={cover.placeholder} />
+        <CoverStill
+          src={cover.src}
+          alt={cover.alt}
+          placeholder={cover.placeholder}
+          videoCover={videoCover}
+        />
         <PlayMark note={note || undefined} />
       </button>
     </VideoCardShell>
@@ -140,13 +164,15 @@ function EmbeddableCard({
 function ExternalCard({
   source,
   cover,
+  videoCover,
 }: {
   source: Extract<ProposalVideoSource, { kind: "link" }>;
   cover: ReturnType<typeof resolveProposalVideoCover>;
+  videoCover?: ProposalImage | null;
 }) {
   const note = proposalVideoHostNote(source);
   return (
-    <VideoCardShell source={source} cover={cover}>
+    <VideoCardShell source={source} cover={cover} videoCover={videoCover}>
       <a
         href={source.href}
         target="_blank"
@@ -154,7 +180,12 @@ function ExternalCard({
         aria-label="Play video"
         className="proposal-video-card group relative block overflow-hidden rounded-3xl shadow-sm transition-shadow duration-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
       >
-        <CoverStill src={cover.src} alt={cover.alt} placeholder={cover.placeholder} />
+        <CoverStill
+          src={cover.src}
+          alt={cover.alt}
+          placeholder={cover.placeholder}
+          videoCover={videoCover}
+        />
         <PlayMark note={note || undefined} />
       </a>
     </VideoCardShell>
@@ -164,15 +195,17 @@ function ExternalCard({
 function FileCard({
   source,
   cover,
+  videoCover,
 }: {
   source: Extract<ProposalVideoSource, { kind: "file" }>;
   cover: ReturnType<typeof resolveProposalVideoCover>;
+  videoCover?: ProposalImage | null;
 }) {
   const [playing, setPlaying] = useState(false);
 
   if (playing) {
     return (
-      <VideoCardShell source={source} cover={cover}>
+      <VideoCardShell source={source} cover={cover} videoCover={videoCover}>
         <div className="proposal-video-player overflow-hidden rounded-3xl bg-night">
           <video
             className="aspect-video w-full object-cover"
@@ -189,14 +222,19 @@ function FileCard({
   }
 
   return (
-    <VideoCardShell source={source} cover={cover}>
+    <VideoCardShell source={source} cover={cover} videoCover={videoCover}>
       <button
         type="button"
         aria-label="Play video"
         className="proposal-video-card group relative block w-full overflow-hidden rounded-3xl text-left shadow-sm transition-shadow duration-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
         onClick={() => setPlaying(true)}
       >
-        <CoverStill src={cover.src} alt={cover.alt} placeholder={cover.placeholder} />
+        <CoverStill
+          src={cover.src}
+          alt={cover.alt}
+          placeholder={cover.placeholder}
+          videoCover={videoCover}
+        />
         <PlayMark />
       </button>
     </VideoCardShell>
@@ -217,10 +255,10 @@ export function ProposalVideoBlock({
   const cover = resolveProposalVideoCover({ source, videoCover });
 
   if (source.kind === "youtube" || source.kind === "vimeo") {
-    return <EmbeddableCard source={source} cover={cover} />;
+    return <EmbeddableCard source={source} cover={cover} videoCover={videoCover} />;
   }
   if (source.kind === "file") {
-    return <FileCard source={source} cover={cover} />;
+    return <FileCard source={source} cover={cover} videoCover={videoCover} />;
   }
-  return <ExternalCard source={source} cover={cover} />;
+  return <ExternalCard source={source} cover={cover} videoCover={videoCover} />;
 }

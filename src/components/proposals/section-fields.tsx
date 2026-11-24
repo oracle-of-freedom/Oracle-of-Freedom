@@ -1,14 +1,17 @@
 "use client";
 
 import { SectionDesignFields } from "@/components/proposals/design-fields";
+import { ImageCropControl } from "@/components/proposals/image-crop-control";
 import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
+import type { ImageCrop } from "@/lib/proposal-image-crop";
 import {
   HEADING_EMPHASIS,
   SECTION_LAYOUTS,
   defaultLayoutFor,
+  imageSrc,
   newId,
   type HeadingEmphasis,
   type PriceLine,
@@ -40,10 +43,14 @@ function ImageFields({
   image,
   onChange,
   label = "Image",
+  frame = "wide",
+  cropFallback,
 }: {
   image: ProposalImage | null;
   onChange: (next: ProposalImage | null) => void;
   label?: string;
+  frame?: "hero" | "proof" | "video" | "square" | "wide";
+  cropFallback?: Partial<ImageCrop>;
 }) {
   const value = image || { alt: "" };
   return (
@@ -72,6 +79,14 @@ function ImageFields({
           onChange={(e) => onChange({ ...value, caption: e.target.value || undefined })}
         />
       </Field>
+      {imageSrc(value) ? (
+        <ImageCropControl
+          image={value}
+          frame={frame}
+          fallback={cropFallback}
+          onChange={(next) => onChange(next)}
+        />
+      ) : null}
       <button type="button" className="text-sm text-terracotta underline-offset-4 hover:underline" onClick={() => onChange(null)}>
         Clear image
       </button>
@@ -320,6 +335,8 @@ export function SectionFields({
           </Field>
           <ImageFields
             label="Cover photograph"
+            frame="hero"
+            cropFallback={{ focusX: 100, focusY: 50, zoom: 1 }}
             image={section.data.heroImage}
             onChange={(heroImage) => patch({ ...section.data, heroImage })}
           />
@@ -613,6 +630,7 @@ export function SectionFields({
           </Field>
           <ImageFields
             label="Video cover"
+            frame="video"
             image={section.data.videoCover || null}
             onChange={(next) => patch({ ...section.data, videoCover: next })}
           />
@@ -630,6 +648,7 @@ export function SectionFields({
             <ImageFields
               key={index}
               label={`Still ${index + 1}`}
+              frame="proof"
               image={image}
               onChange={(next) => {
                 const images = [...section.data.images];

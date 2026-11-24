@@ -9,6 +9,11 @@ import {
   type DesignAlign,
   type ResolvedProposalDesign,
 } from "@/lib/proposal-design";
+import {
+  HERO_CROP_FALLBACK,
+  hasImageCrop,
+  imageCropStyle,
+} from "@/lib/proposal-image-crop";
 import { resolveProposalVideo } from "@/lib/proposal-video";
 import {
   SIGN_OFF,
@@ -182,12 +187,27 @@ function Cover({
 }) {
   const { data } = section;
   const src = imageSrc(data.heroImage);
+  const useCroppedPhoto = Boolean(src && hasImageCrop(data.heroImage));
   const style: CSSProperties = {
-    ...(src ? { backgroundImage: `url("${src}")` } : {}),
+    ...(src && !useCroppedPhoto ? { backgroundImage: `url("${src}")` } : {}),
     ...sectionStyle(section),
   };
   return (
     <header className="proposal-hero" style={style}>
+      {useCroppedPhoto && src ? (
+        <div className="proposal-hero-media" aria-hidden="true">
+          <Image
+            src={src}
+            alt=""
+            fill
+            priority
+            className="proposal-hero-photo"
+            style={imageCropStyle(data.heroImage, HERO_CROP_FALLBACK)}
+            sizes="100vw"
+            unoptimized={src.startsWith("/api/media/")}
+          />
+        </div>
+      ) : null}
       <div className="proposal-brand">
         <span className="proposal-logo-wrap">
           <OmMark className="h-full w-full" />
@@ -227,18 +247,22 @@ function ExtraPhotos({ section }: { section: ProposalSection }) {
   if (!images.length) return null;
   return (
     <div className="proposal-extra-photos">
-      {images.map((image, index) => (
-        <figure key={`${image.src || image.mediaId || "extra"}-${index}`}>
-          <Image
-            src={imageSrc(image)}
-            alt={image.alt || ""}
-            width={800}
-            height={600}
-            className="proposal-extra-img"
-            unoptimized={imageSrc(image).startsWith("/api/media/")}
-          />
-        </figure>
-      ))}
+      {images.map((image, index) => {
+        const src = imageSrc(image);
+        return (
+          <figure key={`${image.src || image.mediaId || "extra"}-${index}`} className="proposal-extra-frame">
+            <Image
+              src={src}
+              alt={image.alt || ""}
+              width={800}
+              height={600}
+              className="proposal-extra-img"
+              style={imageCropStyle(image)}
+              unoptimized={src.startsWith("/api/media/")}
+            />
+          </figure>
+        );
+      })}
     </div>
   );
 }
@@ -266,6 +290,7 @@ function ProofGrid({ images }: { images: ProposalImage[] }) {
               alt={image.alt || ""}
               fill
               className="object-cover"
+              style={imageCropStyle(image)}
               sizes="(max-width: 720px) 100vw, 90mm"
               unoptimized={src.startsWith("/api/media/")}
             />
@@ -336,7 +361,15 @@ function renderSection(
       return (
         <section key={section.id} className="proposal-divider" style={style}>
           {src ? (
-            <Image src={src} alt={section.data.image?.alt || ""} fill className="object-cover" sizes="100vw" unoptimized={src.startsWith("/api/media/")} />
+            <Image
+              src={src}
+              alt={section.data.image?.alt || ""}
+              fill
+              className="object-cover"
+              style={imageCropStyle(section.data.image)}
+              sizes="100vw"
+              unoptimized={src.startsWith("/api/media/")}
+            />
           ) : null}
           {section.data.line.trim() ? <p>{section.data.line}</p> : null}
         </section>

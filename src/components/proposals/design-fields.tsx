@@ -1,5 +1,6 @@
 "use client";
 
+import { ImageCropControl } from "@/components/proposals/image-crop-control";
 import { Input, Label } from "@/components/ui/input";
 import {
   resolveProposalDesign,
@@ -9,7 +10,8 @@ import {
   type ResolvedProposalDesign,
   type SectionDesign,
 } from "@/lib/proposal-design";
-import type { ProposalSection } from "@/lib/proposals";
+import { HERO_CROP_FALLBACK } from "@/lib/proposal-image-crop";
+import { imageSrc, type ProposalImage, type ProposalSection } from "@/lib/proposals";
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
@@ -66,9 +68,13 @@ function AlignControl({
 export function ProposalDesignFields({
   design,
   onChange,
+  heroImage,
+  onHeroImageChange,
 }: {
   design?: ProposalDesign;
   onChange: (design: ProposalDesign) => void;
+  heroImage?: ProposalImage | null;
+  onHeroImageChange?: (heroImage: ProposalImage | null) => void;
 }) {
   const value = resolveProposalDesign(design);
 
@@ -81,6 +87,7 @@ export function ProposalDesignFields({
   }
 
   const stops = value.cover.gradientStops;
+  const coverPhoto = heroImage || null;
 
   return (
     <div className="grid gap-4">
@@ -92,9 +99,19 @@ export function ProposalDesignFields({
         <TextControl label="Logo size" hint="Default 46px" value={value.cover.logoSize} onChange={(logoSize) => patchCover({ logoSize })} />
         <TextControl label="Date size" hint="Default 8pt, smaller than the subtitle" value={value.cover.dateSize} onChange={(dateSize) => patchCover({ dateSize })} />
         <TextControl label="Date offset" hint="Default 2.8mm, pulls the date lower" value={value.cover.dateOffset} onChange={(dateOffset) => patchCover({ dateOffset })} />
-        <TextControl label="Image focal point" hint="CSS background-position. Default right center" value={value.cover.imagePosition} onChange={(imagePosition) => patchCover({ imagePosition })} />
-        <TextControl label="Image zoom" hint="CSS background-size. Default auto 100%" value={value.cover.imageSize} onChange={(imageSize) => patchCover({ imageSize })} />
       </div>
+      {onHeroImageChange && coverPhoto && imageSrc(coverPhoto) ? (
+        <ImageCropControl
+          image={coverPhoto}
+          frame="hero"
+          fallback={HERO_CROP_FALLBACK}
+          onChange={onHeroImageChange}
+        />
+      ) : (
+        <p className="text-xs text-ink/50">
+          Add a cover photograph in the Cover section to crop the header image here.
+        </p>
+      )}
       <div className="grid gap-3 sm:grid-cols-3">
         {([0, 1, 2] as const).map((index) => (
           <Field key={index} label={`Gradient stop ${index + 1} (%)`} hint={index === 0 ? "Default 42 / 52 / 64" : undefined}>
