@@ -1,8 +1,10 @@
 "use client";
 
 import { SectionDesignFields } from "@/components/proposals/design-fields";
+import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
+import type { Film } from "@/lib/content";
 import {
   HEADING_EMPHASIS,
   SECTION_LAYOUTS,
@@ -267,9 +269,12 @@ function ListEditor({
 export function SectionFields({
   section,
   onChange,
+  films = [],
 }: {
   section: ProposalSection;
   onChange: (section: ProposalSection) => void;
+  /** Portfolio films for the Proof “pick from portfolio” dropdown. */
+  films?: Film[];
 }) {
   const patch = <T extends ProposalSection>(data: T["data"]) =>
     onChange({ ...section, data } as ProposalSection);
@@ -551,10 +556,53 @@ export function SectionFields({
               onChange={(e) => patch({ ...section.data, portfolioLine: e.target.value })}
             />
           </Field>
-          <Field label="Teaser video URL (YouTube / Vimeo)" hint="Embed player comes in Part 2; the link is stored now.">
+          {films.length ? (
+            <Field
+              label="Pick from portfolio films"
+              hint="Fills the video link and the cover from a film already on the portfolio page."
+            >
+              <select
+                className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+                defaultValue=""
+                onChange={(e) => {
+                  const film = films.find((item) => item.video.id === e.target.value);
+                  e.target.value = "";
+                  if (!film) return;
+                  const caption = film.video.label.en.trim();
+                  patch({
+                    ...section.data,
+                    videoUrl: film.video.platform === "file" ? "" : film.video.url,
+                    videoMediaId:
+                      film.video.platform === "file" ? film.video.videoMediaId || "" : "",
+                    videoCover: {
+                      src: film.poster.src,
+                      alt: caption || "Film still",
+                    },
+                  });
+                }}
+              >
+                <option value="">Choose a portfolio film…</option>
+                {films.map((film) => {
+                  const label =
+                    film.video.label.en.trim() ||
+                    (film.video.platform === "file" ? "Uploaded film" : film.video.url);
+                  return (
+                    <option key={film.video.id} value={film.video.id}>
+                      {label}
+                    </option>
+                  );
+                })}
+              </select>
+            </Field>
+          ) : null}
+          <Field
+            label="Video link (Instagram, YouTube, Vimeo or any link)"
+            hint="Shows as a cover card with a play button. YouTube and Vimeo can play on the page; other links open in a new tab."
+          >
             <Input
               value={section.data.videoUrl}
               onChange={(e) => patch({ ...section.data, videoUrl: e.target.value })}
+              placeholder="https://"
             />
           </Field>
           <Field label="Or uploaded mp4 media id">
@@ -563,6 +611,21 @@ export function SectionFields({
               onChange={(e) => patch({ ...section.data, videoMediaId: e.target.value })}
             />
           </Field>
+          <ImageFields
+            label="Video cover"
+            image={section.data.videoCover || null}
+            onChange={(next) => patch({ ...section.data, videoCover: next })}
+          />
+          {section.data.videoUrl.trim() || section.data.videoMediaId.trim() ? (
+            <div className="rounded-2xl border border-ink/10 bg-sand/50 p-3">
+              <p className="mb-2 text-xs tracking-[0.2em] text-ember uppercase">Video card preview</p>
+              <ProposalVideoBlock
+                videoUrl={section.data.videoUrl}
+                videoMediaId={section.data.videoMediaId}
+                videoCover={section.data.videoCover}
+              />
+            </div>
+          ) : null}
           {section.data.images.map((image, index) => (
             <ImageFields
               key={index}

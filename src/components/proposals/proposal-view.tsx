@@ -389,7 +389,11 @@ function renderSection(
           <ProofGrid images={section.data.images} />
           <PortfolioLine line={section.data.portfolioLine} />
           {video ? (
-            <ProposalVideoBlock videoUrl={section.data.videoUrl} videoMediaId={section.data.videoMediaId} />
+            <ProposalVideoBlock
+              videoUrl={section.data.videoUrl}
+              videoMediaId={section.data.videoMediaId}
+              videoCover={section.data.videoCover}
+            />
           ) : (
             <div className="proposal-ph proposal-video-ph">
               <span>Your video here</span>

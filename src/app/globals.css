@@ -689,6 +689,21 @@ dialog.fx-dialog[open]::backdrop {
 
 .proposal-video-ph { height: 48mm; border-radius: 12px; }
 
+.proposal-video-print-cover {
+  display: none;
+}
+
+.proposal-video-print-link {
+  display: none;
+  margin-top: 2mm;
+  font-size: 12.5pt;
+}
+
+.proposal-video-print-link a {
+  color: var(--terra, #b4532a);
+  text-decoration: underline;
+}
+
 .proposal-del {
   grid-template-columns: var(--block-columns, 1fr 1fr 1fr);
   gap: var(--block-gap, 4mm);
@@ -1005,15 +1020,17 @@ dialog.fx-dialog[open]::backdrop {
     page-break-inside: avoid;
   }
 
-  .proposal-video iframe,
-  .proposal-video video {
+  .proposal-video-card,
+  .proposal-video-player {
     display: none !important;
+  }
+
+  .proposal-video-print-cover {
+    display: block !important;
   }
 
   .proposal-video-print-link {
     display: block !important;
-    margin-top: 2mm;
-    font-size: 12pt;
   }
 
   .proposal-cta {
