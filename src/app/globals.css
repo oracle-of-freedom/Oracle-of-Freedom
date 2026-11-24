@@ -368,9 +368,14 @@ dialog.fx-dialog[open]::backdrop {
   }
 
   .proposal-doc header,
-  .proposal-doc section {
+  .proposal-doc section,
+  .proposal-doc footer {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+
+  .proposal-plan-placeholder {
+    display: none !important;
   }
 
   .proposal-doc .grid {

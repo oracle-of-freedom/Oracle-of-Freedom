@@ -3,7 +3,9 @@ import path from "node:path";
 import { builtinTemplates } from "@/lib/proposal-defaults";
 import {
   NORTE_NOSARA_EXAMPLE_ID,
+  NORTE_NOSARA_EXAMPLE_SLUG,
   norteNosaraExample,
+  patchNorteNosaraContent,
 } from "@/lib/proposal-norte-nosara";
 import {
   addDaysIso,
@@ -82,11 +84,17 @@ function asProposals(value: unknown): Proposal[] {
 }
 
 function mergeExamples(saved: Proposal[]): Proposal[] {
-  const example = norteNosaraExample();
-  const existing = saved.find((p) => p.id === NORTE_NOSARA_EXAMPLE_ID);
-  if (!existing) return [example, ...saved];
-  // Keep Agota's edits / view stats; refresh only if the seed was never saved.
-  return saved;
+  let found = false;
+  const next = saved.map((proposal) => {
+    if (proposal.id !== NORTE_NOSARA_EXAMPLE_ID && proposal.slug !== NORTE_NOSARA_EXAMPLE_SLUG) {
+      return proposal;
+    }
+    found = true;
+    // Saved blob keeps her edits. This only rewrites the known Norte lines.
+    return patchNorteNosaraContent(proposal);
+  });
+  if (!found) return [norteNosaraExample(), ...saved];
+  return next;
 }
 
 function mergeBuiltins(saved: ProposalTemplate[]): ProposalTemplate[] {
