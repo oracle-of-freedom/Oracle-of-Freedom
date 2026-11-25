@@ -14,16 +14,22 @@ import {
 import {
   addDaysIso,
   buildSlug,
+  cleanProposalSlug,
   cloneSections,
+  collectedProposalSlugs,
   coverClientName,
   effectiveStatus,
+  findProposalForSlug,
   findSection,
+  isReservedProposalSlug,
+  isValidProposalSlug,
   newId,
   newPreviewToken,
   parseProposal,
   parseTemplate,
   todayIsoDate,
   type Proposal,
+  type ProposalSlugMatch,
   type ProposalStatus,
   type ProposalTemplate,
 } from "@/lib/proposals";
@@ -188,6 +194,11 @@ export async function getProposalBySlug(slug: string) {
   return (await readProposals()).find((p) => p.slug === slug) || null;
 }
 
+/** Current slug first, then previousSlugs (for permanent redirects). */
+export async function resolveProposalBySlug(slug: string): Promise<ProposalSlugMatch | null> {
+  return findProposalForSlug(await readProposals(), slug);
+}
+
 export async function saveTemplate(template: ProposalTemplate) {
   const list = await readTemplates();
   const stamp = new Date().toISOString();
@@ -315,8 +326,9 @@ export async function saveProposal(proposal: Proposal) {
   const index = list.findIndex((p) => p.id === next.id);
   if (index >= 0) {
     const existing = list[index]!;
-    // Keep slug and open stats stable across editor saves.
+    // Keep slug, redirect history, and open stats stable across editor saves.
     next.slug = existing.slug || next.slug;
+    next.previousSlugs = existing.previousSlugs;
     next.viewCount = existing.viewCount || 0;
     next.lastOpenedAt = existing.lastOpenedAt || "";
     list[index] = next;
@@ -325,6 +337,59 @@ export async function saveProposal(proposal: Proposal) {
   }
   await writeProposals(list);
   return next;
+}
+
+/**
+ * Change only the public slug. Keeps id, previewToken, open stats, and all
+ * other fields. Old slug is stored on previousSlugs for permanent redirects.
+ */
+export async function updateProposalSlug(id: string, rawSlug: string) {
+  const cleaned = cleanProposalSlug(rawSlug);
+  if (!cleaned || cleaned.length < 3 || cleaned.length > 60 || cleaned !== cleanProposalSlug(cleaned)) {
+    throw new Error("Use 3–60 letters, numbers, or hyphens for the link.");
+  }
+  if (isReservedProposalSlug(cleaned)) {
+    throw new Error("That link is reserved. Choose another.");
+  }
+  if (!isValidProposalSlug(cleaned)) {
+    throw new Error("Use 3–60 letters, numbers, or hyphens for the link.");
+  }
+
+  const list = await readProposals();
+  const index = list.findIndex((p) => p.id === id);
+  if (index < 0) throw new Error("Proposal not found.");
+  const existing = list[index]!;
+
+  if (existing.slug === cleaned) {
+    return { proposal: existing, previousSlug: existing.slug, changed: false as const };
+  }
+
+  const taken = collectedProposalSlugs(list, id);
+  // Own previous slugs may be reclaimed.
+  for (const previous of existing.previousSlugs || []) taken.delete(previous);
+  if (taken.has(cleaned)) {
+    throw new Error("That link is already used");
+  }
+
+  const previousSlugs = [
+    ...new Set(
+      [...(existing.previousSlugs || []), existing.slug].filter(
+        (slug) => slug && slug !== cleaned,
+      ),
+    ),
+  ];
+
+  const next: Proposal = {
+    ...existing,
+    slug: cleaned,
+    updatedAt: new Date().toISOString(),
+  };
+  if (previousSlugs.length) next.previousSlugs = previousSlugs;
+  else delete next.previousSlugs;
+
+  list[index] = next;
+  await writeProposals(list);
+  return { proposal: next, previousSlug: existing.slug, changed: true as const };
 }
 
 export async function setProposalStatus(id: string, status: ProposalStatus) {
@@ -374,9 +439,11 @@ export async function duplicateProposal(id: string, clientName: string) {
     lastOpenedAt: "",
     example: undefined,
     contentRevision: undefined,
+    previousSlugs: undefined,
     ...(source.design ? { design: structuredClone(source.design) } : {}),
     sections,
   };
+  delete copy.previousSlugs;
   list.unshift(copy);
   await writeProposals(list);
   return copy;
@@ -400,10 +467,14 @@ export async function archiveIfExpired(proposal: Proposal) {
 /**
  * Count a public open of a live proposal. Skips drafts, expired, archived,
  * and callers that already decided this hit should not count (admin / preview).
+ * Looks up by current slug (or a previous slug that still redirects) and
+ * always increments the proposal under its current slug.
  */
 export async function recordProposalView(slug: string) {
   const list = await readProposals();
-  const index = list.findIndex((p) => p.slug === slug);
+  const match = findProposalForSlug(list, slug);
+  if (!match) return null;
+  const index = list.findIndex((p) => p.id === match.proposal.id);
   if (index < 0) return null;
   const proposal = list[index]!;
   if (effectiveStatus(proposal) !== "live") return proposal;

@@ -307,6 +307,11 @@ export type ProposalTemplate = {
 export type Proposal = {
   id: string;
   slug: string;
+  /**
+   * Former public slugs that permanently redirect to `slug`.
+   * Kept so old client links keep working after a rename.
+   */
+  previousSlugs?: string[];
   /** Opaque token for draft preview without prices. See DECISIONS in PR. */
   previewToken: string;
   templateId: string;
@@ -372,6 +377,126 @@ export function buildSlug(clientName: string, code = randomCode(7)) {
       .replace(/^-|-$/g, "")
       .slice(0, 40) || "proposal";
   return `${stem}-${code}`;
+}
+
+/** Reserved path segments that must never be a proposal slug. */
+export const RESERVED_PROPOSAL_SLUGS = ["admin", "api", "new", "edit"] as const;
+
+export const PROPOSAL_SLUG_MIN = 3;
+export const PROPOSAL_SLUG_MAX = 60;
+
+/**
+ * Live-clean a slug input: lowercase, spaces to hyphens, strip accents and
+ * anything other than a-z / 0-9 / "-", collapse and trim hyphens.
+ * Does not enforce length — callers validate 3–60 on save.
+ */
+export function cleanProposalSlug(input: string): string {
+  return input
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function isReservedProposalSlug(slug: string) {
+  return (RESERVED_PROPOSAL_SLUGS as readonly string[]).includes(slug);
+}
+
+/** True when the slug is already cleaned, within length, and not reserved. */
+export function isValidProposalSlug(slug: string) {
+  if (!slug) return false;
+  if (slug !== cleanProposalSlug(slug)) return false;
+  if (slug.length < PROPOSAL_SLUG_MIN || slug.length > PROPOSAL_SLUG_MAX) return false;
+  if (isReservedProposalSlug(slug)) return false;
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+}
+
+/**
+ * Client-name stem for Suggest: cleaned, no random code, no "example" token.
+ */
+export function proposalSlugStem(clientName: string) {
+  const cleaned = cleanProposalSlug(clientName)
+    .split("-")
+    .filter((part) => part && part !== "example")
+    .join("-");
+  const stem = cleaned.slice(0, PROPOSAL_SLUG_MAX).replace(/-+$/g, "");
+  return stem || "proposal";
+}
+
+/**
+ * Suggest a free public slug from the client name (no random code).
+ * If the stem is taken, append -2, -3, …
+ */
+export function suggestProposalSlug(clientName: string, taken: Iterable<string>) {
+  const takenSet = taken instanceof Set ? taken : new Set(taken);
+  let base = proposalSlugStem(clientName);
+  if (base.length < PROPOSAL_SLUG_MIN) {
+    base = `${base}${base ? "-" : ""}link`.slice(0, PROPOSAL_SLUG_MAX);
+  }
+  if (base.length < PROPOSAL_SLUG_MIN) base = "proposal";
+
+  const tryCandidate = (candidate: string) =>
+    isValidProposalSlug(candidate) && !takenSet.has(candidate);
+
+  if (tryCandidate(base)) return base;
+
+  for (let n = 2; n < 1000; n++) {
+    const suffix = `-${n}`;
+    const maxBase = PROPOSAL_SLUG_MAX - suffix.length;
+    const trimmed = base.slice(0, maxBase).replace(/-+$/g, "");
+    const candidate = `${trimmed || "proposal"}${suffix}`;
+    if (tryCandidate(candidate)) return candidate;
+  }
+  throw new Error("Could not suggest a free link.");
+}
+
+export type ProposalSlugMatch = {
+  proposal: Proposal;
+  matchedBy: "current" | "previous";
+};
+
+/** Resolve a public slug to a proposal, preferring the current slug. */
+export function findProposalForSlug(
+  proposals: Proposal[],
+  slug: string,
+): ProposalSlugMatch | null {
+  if (!slug) return null;
+  const current = proposals.find((p) => p.slug === slug);
+  if (current) return { proposal: current, matchedBy: "current" };
+  const previous = proposals.find((p) => p.previousSlugs?.includes(slug));
+  if (previous) return { proposal: previous, matchedBy: "previous" };
+  return null;
+}
+
+/** Path for a permanent redirect from an old slug, keeping ?preview=. */
+export function previousSlugRedirectPath(
+  currentSlug: string,
+  preview?: string | null,
+) {
+  const qs =
+    preview && preview.trim()
+      ? `?preview=${encodeURIComponent(preview.trim())}`
+      : "";
+  return `/p/${currentSlug}${qs}`;
+}
+
+/** All slugs (current + previous) for uniqueness checks, optionally excluding one id. */
+export function collectedProposalSlugs(
+  proposals: Proposal[],
+  exceptId?: string,
+): Set<string> {
+  const taken = new Set<string>();
+  for (const proposal of proposals) {
+    if (exceptId && proposal.id === exceptId) continue;
+    if (proposal.slug) taken.add(proposal.slug);
+    for (const previous of proposal.previousSlugs || []) {
+      if (previous) taken.add(previous);
+    }
+  }
+  return taken;
 }
 
 export function newPreviewToken() {
@@ -998,9 +1123,19 @@ export function parseProposal(raw: unknown): Proposal | null {
     : [];
   const design = parseProposalDesign(record.design);
   const contentRevision = Math.max(0, Math.floor(asNumber(record.contentRevision, 0)));
+  const previousSlugs = Array.isArray(record.previousSlugs)
+    ? [
+        ...new Set(
+          record.previousSlugs
+            .map((value) => asString(value, PROPOSAL_SLUG_MAX))
+            .filter((value) => value && value !== slug),
+        ),
+      ]
+    : [];
   return {
     id,
     slug,
+    ...(previousSlugs.length ? { previousSlugs } : {}),
     previewToken: asString(record.previewToken, 64) || newPreviewToken(),
     templateId: asString(record.templateId, 64),
     templateKind: (TEMPLATE_KINDS as readonly string[]).includes(kind) ? kind : "custom",

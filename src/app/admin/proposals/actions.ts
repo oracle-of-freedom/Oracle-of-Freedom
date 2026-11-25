@@ -20,6 +20,7 @@ import {
   saveTemplate,
   setProposalStatus,
   setTemplatesHidden,
+  updateProposalSlug,
 } from "@/lib/proposal-store";
 import {
   cloneSections,
@@ -40,6 +41,7 @@ export type ActionState =
       ids?: string[];
       name?: string;
       hidden?: boolean;
+      slug?: string;
     }
   | { ok: false; error: string }
   | null;
@@ -91,9 +93,41 @@ export async function saveProposalAction(
     const saved = await saveProposal(parsed);
     revalidateProposals(saved.id);
     revalidatePath(`/p/${saved.slug}`);
-    return { ok: true, message: "Saved.", id: saved.id };
+    return { ok: true, message: "Saved.", id: saved.id, slug: saved.slug };
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : "Could not save." };
+  }
+}
+
+/** Change only the public /p/… slug. Does not touch content or stats. */
+export async function updateProposalSlugAction(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  try {
+    await guard();
+    const id = String(formData.get("id") || "").trim();
+    const slug = String(formData.get("slug") || "");
+    if (!id) return { ok: false, error: "Proposal not found." };
+    const result = await updateProposalSlug(id, slug);
+    revalidateProposals(result.proposal.id);
+    if (result.changed) {
+      revalidatePath(`/p/${result.previousSlug}`);
+      revalidatePath(`/p/${result.proposal.slug}`);
+    } else {
+      revalidatePath(`/p/${result.proposal.slug}`);
+    }
+    return {
+      ok: true,
+      message: result.changed ? "Link saved." : "Link unchanged.",
+      id: result.proposal.id,
+      slug: result.proposal.slug,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not save the link.",
+    };
   }
 }
 
