@@ -785,11 +785,14 @@ function renderSection(
       const hasVideo =
         section.data.videoUrl.trim() || section.data.videoMediaId.trim();
       if (!hasVideo) return null;
-      const video = resolveProposalVideo({
-        videoUrl: section.data.videoUrl,
-        videoMediaId: section.data.videoMediaId,
-      });
-      if (!video) return null;
+      if (
+        !resolveProposalVideo({
+          videoUrl: section.data.videoUrl,
+          videoMediaId: section.data.videoMediaId,
+        })
+      ) {
+        return null;
+      }
       return (
         <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
