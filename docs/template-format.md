@@ -20,7 +20,7 @@ Oracle of Freedom proposal templates can be exported and imported as JSON files 
 | `name` | string | yes | Template title |
 | `kind` | string | yes | One of: `retreat`, `festival`, `quick`, `custom` |
 | `sections` | array | yes | Ordered list of blocks (desktop order) |
-| `design` | object | no | Page design (margins, columns, cover). Omit to use defaults. |
+| `design` | object | no | Page design (margins, columns, cover, colours, backgrounds). Omit to use defaults. |
 | `id` | string | no | Ignored on import (new id assigned) |
 | `createdAt` / `updatedAt` | ISO string | no | Replaced on import |
 | `exportedAt` | ISO string | no | Written by Export; ignored on import |
@@ -39,8 +39,38 @@ Every item in `sections` is an object:
 | `layout` | string | Optional: `stack`, `text`, `textPhoto`, `twoColumn` |
 | `headingEmphasis` | string | Optional: `default`, `large`, `xl` |
 | `images` | array | Optional extra photos on the block |
-| `design` | object | Optional per-block spacing / cards |
-| `mobile` | object | Phone overrides: `hidden`, `order`, sizes, columns |
+| `design` | object | Optional per-block spacing / cards / background |
+| `mobile` | object | Phone overrides: `hidden`, `order`, sizes, columns, `background` |
+
+### Design colours and backgrounds
+
+Optional on the top-level `design` object (and phone overrides under `design.mobile`). Missing values keep the current Awake sheet look.
+
+**`design.colours`** — hex strings (`#rrggbb`) unless noted:
+
+| Field | Notes |
+| --- | --- |
+| `pageBg` | Page background |
+| `cardBg` | Card / block fill |
+| `border` | Card border accent |
+| `borderOpacity` | 0–100 |
+| `heading` / `text` / `muted` | Typography |
+| `accent` | Links, dividers, highlights |
+| `buttonBg` / `buttonText` | CTA buttons |
+
+**`design.background`** (also allowed on `section.design.background`):
+
+| Field | Notes |
+| --- | --- |
+| `kind` | `solid` · `gradient` · `mesh` · `image` · `texture` |
+| `solid` | Base fill colour |
+| `gradient` | `{ kind: "linear"\|"radial", angle, stops: [{ colour, position }] }` (2–4 stops) |
+| `mesh` | `{ colours, seed, softness }` soft blobs; keep `seed` stable |
+| `image` | `{ src\|mediaId, overlay, overlayOpacity, focusX, focusY, zoom }` |
+| `texture` | `{ enabled, intensity }` light grain |
+| `animate` | Slow drift; default false; respects reduced motion |
+
+Phone: `design.mobile.colours` and `design.mobile.background` override desktop field by field.
 
 ### Image object
 

@@ -8,6 +8,14 @@
 
 import type { CSSProperties } from "react";
 import {
+  parseProposalBackground,
+  type ProposalBackground,
+} from "@/lib/proposal-backgrounds";
+import {
+  parseColourScheme,
+  type ProposalColourScheme,
+} from "@/lib/proposal-colours";
+import {
   IMAGE_CROP_FOCUS_DEFAULT,
   IMAGE_CROP_ZOOM_DEFAULT,
   clampFocus,
@@ -85,6 +93,10 @@ export type ProposalDesignMobile = {
   signOffGap?: string;
   /** Section title (h2) size on phone. CSS length; default 25px. */
   sectionTitleSize?: string;
+  /** Phone colour overrides. Missing keys fall back to desktop colours. */
+  colours?: ProposalColourScheme;
+  /** Phone page background override. */
+  background?: ProposalBackground;
 };
 
 export type SectionMobile = {
@@ -105,6 +117,8 @@ export type SectionMobile = {
   cardHeightValue?: string;
   cardPadding?: "compact" | "normal" | "roomy" | string;
   cardTextSize?: string;
+  /** Phone section background override. */
+  background?: ProposalBackground;
 };
 
 export type ProposalDesignWithMobile = {
@@ -262,6 +276,10 @@ export function parseProposalDesignMobile(value: unknown): ProposalDesignMobile 
   }
   if (signOffGap) mobile.signOffGap = signOffGap;
   if (sectionTitleSize) mobile.sectionTitleSize = sectionTitleSize;
+  const colours = parseColourScheme(record.colours);
+  const background = parseProposalBackground(record.background);
+  if (colours) mobile.colours = colours;
+  if (background) mobile.background = background;
   return Object.keys(mobile).length ? mobile : undefined;
 }
 
@@ -300,6 +318,8 @@ export function parseSectionMobile(value: unknown): SectionMobile | undefined {
   if (cardHeightValue) mobile.cardHeightValue = cardHeightValue;
   if (cardPadding) mobile.cardPadding = cardPadding;
   if (cardTextSize) mobile.cardTextSize = cardTextSize;
+  const background = parseProposalBackground(record.background);
+  if (background) mobile.background = background;
   return Object.keys(mobile).length ? mobile : undefined;
 }
 
