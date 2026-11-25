@@ -9,6 +9,7 @@ import {
   saveProposalAction,
   saveProposalAsTemplateAction,
   setStatusAction,
+  updateProposalSlugAction,
   type ActionState,
 } from "@/app/admin/proposals/actions";
 import { ProposalDesignFields } from "@/components/proposals/design-fields";
@@ -29,6 +30,8 @@ import { moveSectionPhoneOrder, resetAllPhoneSettings } from "@/lib/proposal-mob
 import type { ProposalStudioReview } from "@/lib/proposal-reviews";
 import {
   SECTION_TYPES,
+  PROPOSAL_SLUG_MAX,
+  cleanProposalSlug,
   depositAmount,
   effectiveStatus,
   findSection,
@@ -36,6 +39,7 @@ import {
   proposalWarnings,
   publicUrl,
   sectionLabel,
+  suggestProposalSlug,
   type Proposal,
   type SectionType,
 } from "@/lib/proposals";
@@ -52,11 +56,14 @@ export function ProposalEditor({
   origin,
   reviews,
   films = [],
+  takenSlugs = [],
 }: {
   initial: Proposal;
   origin: string;
   reviews: ProposalStudioReview[];
   films?: Film[];
+  /** Other proposals' current and previous slugs, for Suggest uniqueness. */
+  takenSlugs?: string[];
 }) {
   return (
     <EditorViewportProvider>
@@ -65,6 +72,7 @@ export function ProposalEditor({
         origin={origin}
         reviews={reviews}
         films={films}
+        takenSlugs={takenSlugs}
       />
     </EditorViewportProvider>
   );
@@ -75,17 +83,24 @@ function ProposalEditorInner({
   origin,
   reviews,
   films = [],
+  takenSlugs = [],
 }: {
   initial: Proposal;
   origin: string;
   reviews: ProposalStudioReview[];
   films?: Film[];
+  takenSlugs?: string[];
 }) {
   const { viewport, isPhone } = useEditorViewport();
   const [proposal, setProposal] = useState(initial);
   const [selectedId, setSelectedId] = useState(initial.sections[0]?.id || "");
   const [copied, setCopied] = useState<"live" | "preview" | null>(null);
+  const [slugDraft, setSlugDraft] = useState(initial.slug);
   const [state, action, pending] = useActionState(saveProposalAction, null as ActionState);
+  const [slugState, slugAction, slugPending] = useActionState(
+    updateProposalSlugAction,
+    null as ActionState,
+  );
   const reviewSelectRef = useRef<HTMLSelectElement>(null);
   const previewScrollRef = useRef<HTMLDivElement>(null);
   const skipPreviewScroll = useRef(false);
@@ -110,6 +125,14 @@ function ProposalEditorInner({
     const el = root.querySelector(`#proposal-section-${CSS.escape(selectedId)}`);
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [selectedId]);
+
+  useEffect(() => {
+    if (slugState?.ok === true && slugState.slug) {
+      const nextSlug = slugState.slug;
+      setProposal((prev) => (prev.slug === nextSlug ? prev : { ...prev, slug: nextSlug }));
+      setSlugDraft(nextSlug);
+    }
+  }, [slugState]);
 
   function updateSection(next: typeof selected) {
     if (!next) return;
@@ -148,6 +171,18 @@ function ProposalEditorInner({
       setTimeout(() => setCopied(null), 1500);
     } catch {
       setCopied(null);
+    }
+  }
+
+  function onSlugDraftChange(value: string) {
+    setSlugDraft(cleanProposalSlug(value).slice(0, PROPOSAL_SLUG_MAX));
+  }
+
+  function suggestSlug() {
+    try {
+      setSlugDraft(suggestProposalSlug(proposal.clientName || "proposal", takenSlugs));
+    } catch {
+      // Keep the current draft if nothing free is available.
     }
   }
 
@@ -342,33 +377,74 @@ function ProposalEditorInner({
           <summary className="cursor-pointer text-xs tracking-[0.2em] text-ember uppercase">
             Links & hints
           </summary>
-          <div className="mt-3 grid gap-3 md:grid-cols-2">
+          <div className="mt-3 space-y-3">
             <div>
-              <p className="text-sm text-ink/60">Private live link</p>
-              <p className="mt-1 break-all text-sm">{liveLink}</p>
+              <Label htmlFor="proposal-slug">Proposal link</Label>
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                <span className="text-sm text-ink/60">oracleoffreedom.com/p/</span>
+                <Input
+                  id="proposal-slug"
+                  value={slugDraft}
+                  onChange={(e) => onSlugDraftChange(e.target.value)}
+                  className="max-w-xs font-mono text-sm"
+                  autoComplete="off"
+                  spellCheck={false}
+                  aria-describedby="proposal-slug-hint"
+                />
+              </div>
+              <p id="proposal-slug-hint" className="mt-1 text-xs text-ink/50">
+                Lowercase letters, numbers and hyphens · 3–60 characters
+              </p>
               <div className="mt-2 flex flex-wrap gap-2">
+                <form action={slugAction}>
+                  <input type="hidden" name="id" value={proposal.id} />
+                  <input type="hidden" name="slug" value={slugDraft} />
+                  <Button type="submit" size="sm" disabled={slugPending || !slugDraft}>
+                    {slugPending ? "Saving…" : "Save link"}
+                  </Button>
+                </form>
                 <Button type="button" size="sm" variant="outline" onClick={() => copy("live")}>
                   {copied === "live" ? "Copied" : "Copy link"}
                 </Button>
-                <Button type="button" size="sm" variant="outline" asChild>
-                  <a href={liveLink} target="_blank" rel="noreferrer">
-                    Open
-                  </a>
+                <Button type="button" size="sm" variant="outline" onClick={suggestSlug}>
+                  Suggest
                 </Button>
               </div>
+              {slugState?.ok === false ? (
+                <p className="mt-2 text-sm text-terracotta-ink">{slugState.error}</p>
+              ) : null}
+              {slugState?.ok === true ? (
+                <p className="mt-2 text-sm text-moss">{slugState.message || "Link saved."}</p>
+              ) : null}
             </div>
-            <div>
-              <p className="text-sm text-ink/60">Draft preview (no prices) · token-gated</p>
-              <p className="mt-1 break-all text-sm">{draftPreview}</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                <Button type="button" size="sm" variant="outline" onClick={() => copy("preview")}>
-                  {copied === "preview" ? "Copied" : "Copy preview"}
-                </Button>
-                <Button type="button" size="sm" variant="outline" asChild>
-                  <a href={draftPreview} target="_blank" rel="noreferrer">
-                    Open preview
-                  </a>
-                </Button>
+            <div className="grid gap-3 md:grid-cols-2">
+              <div>
+                <p className="text-sm text-ink/60">Private live link</p>
+                <p className="mt-1 break-all text-sm">{liveLink}</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Button type="button" size="sm" variant="outline" onClick={() => copy("live")}>
+                    {copied === "live" ? "Copied" : "Copy link"}
+                  </Button>
+                  <Button type="button" size="sm" variant="outline" asChild>
+                    <a href={liveLink} target="_blank" rel="noreferrer">
+                      Open
+                    </a>
+                  </Button>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-ink/60">Draft preview (no prices) · token-gated</p>
+                <p className="mt-1 break-all text-sm">{draftPreview}</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Button type="button" size="sm" variant="outline" onClick={() => copy("preview")}>
+                    {copied === "preview" ? "Copied" : "Copy preview"}
+                  </Button>
+                  <Button type="button" size="sm" variant="outline" asChild>
+                    <a href={draftPreview} target="_blank" rel="noreferrer">
+                      Open preview
+                    </a>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
