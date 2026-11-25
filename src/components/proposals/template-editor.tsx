@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 import {
-  deleteTemplateAction,
+  deleteTemplatesAction,
   duplicateTemplateAction,
   saveTemplateAction,
   type ActionState,
 } from "@/app/admin/proposals/actions";
+import { ConfirmDialog } from "@/components/proposals/confirm-dialog";
 import { ProposalDesignFields } from "@/components/proposals/design-fields";
 import {
   EditorViewportProvider,
@@ -80,12 +82,20 @@ function TemplateEditorInner({
   films?: Film[];
   reviews?: ProposalStudioReview[];
 }) {
+  const router = useRouter();
   const { viewport, isPhone } = useEditorViewport();
   const [template, setTemplate] = useState(initial);
   const [selectedId, setSelectedId] = useState(initial.sections[0]?.id || "");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [state, action, pending] = useActionState(saveTemplateAction, null as ActionState);
+  const [deleteState, deleteAction, deletePending] = useActionState(
+    deleteTemplatesAction,
+    null as ActionState,
+  );
   const reviewSelectRef = useRef<HTMLSelectElement>(null);
   const previewScrollRef = useRef<HTMLDivElement>(null);
+  const deleteFormRef = useRef<HTMLFormElement>(null);
   const skipPreviewScroll = useRef(false);
   const selected = template.sections.find((s) => s.id === selectedId) || template.sections[0];
 
@@ -99,6 +109,18 @@ function TemplateEditorInner({
     const el = root.querySelector(`#proposal-section-${CSS.escape(selectedId)}`);
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [selectedId]);
+
+  useEffect(() => {
+    if (deleteState?.ok === true) {
+      router.push("/admin/proposals/templates");
+      router.refresh();
+      return;
+    }
+    if (deleteState?.ok === false) {
+      setConfirmDelete(false);
+      setDeleteError(deleteState.error);
+    }
+  }, [deleteState, router]);
 
   function updateSection(next: NonNullable<typeof selected>) {
     setTemplate((prev) => ({
@@ -178,20 +200,44 @@ function TemplateEditorInner({
               </Button>
             </form>
             {!template.builtin ? (
-              <form action={deleteTemplateAction}>
-                <input type="hidden" name="id" value={template.id} />
-                <Button type="submit" variant="outline">
+              <>
+                <form ref={deleteFormRef} action={deleteAction} className="hidden" aria-hidden="true">
+                  <input type="hidden" name="id" value={template.id} />
+                </form>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setDeleteError(null);
+                    setConfirmDelete(true);
+                  }}
+                >
                   Delete
                 </Button>
-              </form>
+              </>
             ) : (
-              <p className="self-center text-sm text-ink/50">Built-in starter · can edit, not delete</p>
+              <p className="self-center text-sm text-ink/50">
+                Built-in starter · can edit, not delete
+                {template.hidden ? " · hidden from list" : ""}
+              </p>
             )}
           </div>
           {state?.ok === false ? <p className="mt-3 text-sm text-terracotta-ink">{state.error}</p> : null}
           {state?.ok === true ? <p className="mt-3 text-sm text-moss">{state.message}</p> : null}
+          {deleteError ? <p className="mt-3 text-sm text-terracotta-ink">{deleteError}</p> : null}
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmDelete}
+        title="Delete template?"
+        body={`Delete '${template.name}'? This can't be undone.`}
+        confirmLabel="Delete"
+        confirmTone="danger"
+        pending={deletePending}
+        onCancel={() => setConfirmDelete(false)}
+        onConfirm={() => deleteFormRef.current?.requestSubmit()}
+      />
 
       <div className="relative mt-4 lg:min-h-[calc(100dvh-16px+10rem)]">
         <div className="grid items-stretch gap-4 lg:sticky lg:top-0 lg:h-[calc(100dvh-16px)] lg:min-h-[70dvh] lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-0">

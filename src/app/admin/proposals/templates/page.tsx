@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createTemplateAction } from "@/app/admin/proposals/actions";
 import { AdminHeader } from "@/components/admin-header";
+import { TemplatesList } from "@/components/proposals/templates-list";
 import { Button } from "@/components/ui/button";
 import { isAdmin } from "@/lib/admin-auth";
 import { readTemplates } from "@/lib/proposal-store";
@@ -27,25 +28,9 @@ export default async function TemplatesPage() {
           <Button type="submit">{t.proposals.createTemplate}</Button>
         </form>
       </div>
-      <ul className="mt-6 space-y-3">
-        {templates.map((template) => (
-          <li key={template.id}>
-            <Link
-              href={`/admin/proposals/templates/${template.id}`}
-              className="block rounded-3xl bg-white px-5 py-5 shadow-sm"
-            >
-              <span className="flex items-baseline justify-between gap-3">
-                <span className="font-serif text-3xl">{template.name}</span>
-                <span className="text-xs tracking-wide text-ink/50 uppercase">{template.kind}</span>
-              </span>
-              <span className="mt-2 block text-sm text-ink/60">
-                {template.sections.filter((s) => s.enabled).length} sections
-                {template.builtin ? " · starter" : ""}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-6">
+        <TemplatesList initial={templates} />
+      </div>
     </main>
   );
 }
