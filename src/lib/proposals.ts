@@ -294,6 +294,11 @@ export type ProposalTemplate = {
   updatedAt: string;
   /** Built-in starter templates cannot be deleted. */
   builtin?: boolean;
+  /**
+   * When true, the template is hidden from the templates list and the
+   * new-proposal picker. Built-in starters use this instead of delete.
+   */
+  hidden?: boolean;
   /** Layout controls copied onto proposals created from this template. */
   design?: ProposalDesign;
   sections: ProposalSection[];
@@ -1099,6 +1104,7 @@ export function parseTemplate(raw: unknown): ProposalTemplate | null {
     createdAt: asString(record.createdAt, 40) || new Date(0).toISOString(),
     updatedAt: asString(record.updatedAt, 40) || new Date(0).toISOString(),
     builtin: asBool(record.builtin, false) || undefined,
+    ...(asBool(record.hidden, false) ? { hidden: true } : {}),
     ...(design ? { design } : {}),
     sections: ensureSignOffSection(sections),
   };

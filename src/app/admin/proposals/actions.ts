@@ -9,14 +9,17 @@ import {
   createProposalFromTemplate,
   deleteProposal,
   deleteTemplate,
+  deleteTemplates,
   duplicateProposal,
   duplicateTemplate,
   getProposal,
   getTemplate,
   reopenProposal,
+  renameTemplate,
   saveProposal,
   saveTemplate,
   setProposalStatus,
+  setTemplatesHidden,
   updateProposalSlug,
 } from "@/lib/proposal-store";
 import {
@@ -31,7 +34,15 @@ import {
 import { storageMode } from "@/lib/store";
 
 export type ActionState =
-  | { ok: true; message?: string; id?: string; slug?: string }
+  | {
+      ok: true;
+      message?: string;
+      id?: string;
+      ids?: string[];
+      name?: string;
+      hidden?: boolean;
+      slug?: string;
+    }
   | { ok: false; error: string }
   | null;
 
@@ -221,6 +232,120 @@ export async function deleteTemplateAction(formData: FormData) {
   await deleteTemplate(id);
   revalidateProposals(id);
   redirect("/admin/proposals/templates");
+}
+
+/** List/editor confirmation path that returns state instead of redirecting. */
+export async function deleteTemplatesAction(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  try {
+    await guard();
+    const ids = formData
+      .getAll("ids")
+      .map((value) => String(value || "").trim())
+      .filter(Boolean);
+    const single = String(formData.get("id") || "").trim();
+    if (single) ids.push(single);
+    const unique = [...new Set(ids)];
+    if (!unique.length) return { ok: false, error: "Choose a template to delete." };
+    const deleted = await deleteTemplates(unique);
+    for (const id of deleted) revalidateProposals(id);
+    revalidatePath("/admin/proposals");
+    revalidatePath("/admin/proposals/templates");
+    return {
+      ok: true,
+      message: deleted.length === 1 ? "Template deleted." : "Templates deleted.",
+      ids: deleted,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not delete.",
+    };
+  }
+}
+
+export async function renameTemplateAction(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  try {
+    await guard();
+    const id = String(formData.get("id") || "").trim();
+    const name = String(formData.get("name") || "");
+    if (!id) return { ok: false, error: "Template not found." };
+    const saved = await renameTemplate(id, name);
+    revalidateProposals(saved.id);
+    return { ok: true, message: "Renamed.", id: saved.id, name: saved.name };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not rename.",
+    };
+  }
+}
+
+export async function setTemplatesHiddenAction(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  try {
+    await guard();
+    const ids = formData
+      .getAll("ids")
+      .map((value) => String(value || "").trim())
+      .filter(Boolean);
+    const single = String(formData.get("id") || "").trim();
+    if (single) ids.push(single);
+    const unique = [...new Set(ids)];
+    const hiddenRaw = String(formData.get("hidden") || "true");
+    const hidden = hiddenRaw !== "false" && hiddenRaw !== "0";
+    if (!unique.length) {
+      return { ok: false, error: hidden ? "Choose a template to hide." : "Choose a template to unhide." };
+    }
+    const saved = await setTemplatesHidden(unique, hidden);
+    for (const template of saved) revalidateProposals(template.id);
+    revalidatePath("/admin/proposals");
+    revalidatePath("/admin/proposals/templates");
+    return {
+      ok: true,
+      message: hidden
+        ? saved.length === 1
+          ? "Starter hidden."
+          : "Starters hidden."
+        : saved.length === 1
+          ? "Starter restored."
+          : "Starters restored.",
+      ids: saved.map((template) => template.id),
+      hidden,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not update templates.",
+    };
+  }
+}
+
+/** Duplicate without leaving the templates list (returns the new id). */
+export async function duplicateTemplateListAction(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  try {
+    await guard();
+    const id = String(formData.get("id") || "").trim();
+    if (!id) return { ok: false, error: "Template not found." };
+    const copy = await duplicateTemplate(id);
+    revalidateProposals(copy.id);
+    return { ok: true, message: "Duplicated.", id: copy.id };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not duplicate.",
+    };
+  }
 }
 
 /** Used by the public page when a live offer ages out. */

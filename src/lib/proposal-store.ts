@@ -7,6 +7,11 @@ import {
 } from "@/lib/proposal-norte-nosara";
 import { applyNorteNosaraContentFix, normalizeProposalSections } from "@/lib/proposal-migrate";
 import {
+  deleteTemplatesInList,
+  renameTemplateInList,
+  setTemplatesHiddenInList,
+} from "@/lib/proposal-template-manage";
+import {
   addDaysIso,
   buildSlug,
   cleanProposalSlug,
@@ -207,11 +212,32 @@ export async function saveTemplate(template: ProposalTemplate) {
 
 export async function deleteTemplate(id: string) {
   const list = await readTemplates();
-  const target = list.find((t) => t.id === id);
-  if (!target) return false;
-  if (target.builtin) throw new Error("Built-in templates cannot be deleted.");
-  await writeTemplates(list.filter((t) => t.id !== id));
+  if (!list.some((t) => t.id === id)) return false;
+  const { templates } = deleteTemplatesInList(list, [id]);
+  await writeTemplates(templates);
   return true;
+}
+
+export async function deleteTemplates(ids: string[]) {
+  const list = await readTemplates();
+  const { templates, deletedIds } = deleteTemplatesInList(list, ids);
+  if (!deletedIds.length) return [];
+  await writeTemplates(templates);
+  return deletedIds;
+}
+
+export async function renameTemplate(id: string, name: string) {
+  const list = await readTemplates();
+  const next = renameTemplateInList(list, id, name);
+  await writeTemplates(next);
+  return next.find((template) => template.id === id)!;
+}
+
+export async function setTemplatesHidden(ids: string[], hidden: boolean) {
+  const list = await readTemplates();
+  const next = setTemplatesHiddenInList(list, ids, hidden);
+  await writeTemplates(next);
+  return next.filter((template) => ids.includes(template.id));
 }
 
 export async function duplicateTemplate(id: string, name?: string) {
@@ -229,6 +255,7 @@ export async function duplicateTemplate(id: string, name?: string) {
     ...(source.design ? { design: structuredClone(source.design) } : {}),
     sections: cloneSections(source.sections),
   };
+  delete copy.hidden;
   await saveTemplate(copy);
   return copy;
 }
@@ -247,6 +274,7 @@ function uniqueSlug(clientName: string, existing: Proposal[]) {
 export async function createProposalFromTemplate(templateId: string, clientName = "[Client name]") {
   const template = await getTemplate(templateId);
   if (!template) throw new Error("Template not found.");
+  if (template.hidden) throw new Error("That template is hidden. Unhide it first, or pick another.");
   const list = await readProposals();
   const stamp = new Date().toISOString();
   const proposalDate = todayIsoDate();

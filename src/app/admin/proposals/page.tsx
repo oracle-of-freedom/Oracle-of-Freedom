@@ -3,6 +3,7 @@ import { AdminHeader } from "@/components/admin-header";
 import { ProposalsList } from "@/components/proposals/proposals-list";
 import { isAdmin } from "@/lib/admin-auth";
 import { readProposals, readTemplates } from "@/lib/proposal-store";
+import { visibleTemplates } from "@/lib/proposal-template-manage";
 import { storageMode } from "@/lib/store";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
@@ -17,6 +18,7 @@ export default async function ProposalsPage() {
     readProposals().catch(() => []),
     readTemplates().catch(() => []),
   ]);
+  const pickerTemplates = visibleTemplates(templates);
 
   return (
     <main className="studio-page mx-auto max-w-3xl px-4 py-4 md:py-12">
@@ -30,7 +32,7 @@ export default async function ProposalsPage() {
         <p className="mt-4 text-sm text-ink/55">{t.proposals.storage.blob}</p>
       )}
       <div className="mt-6">
-        <ProposalsList proposals={proposals} templates={templates} />
+        <ProposalsList proposals={proposals} templates={pickerTemplates} />
       </div>
     </main>
   );
