@@ -432,6 +432,11 @@ dialog.fx-dialog[open]::backdrop {
   overflow: hidden;
 }
 
+/* Phone-only hero crop: keep desktop on background-size auto 100%. */
+.proposal-hero-media.is-phone-crop-only {
+  display: none;
+}
+
 .proposal-hero-photo {
   object-fit: cover;
 }
@@ -1160,6 +1165,12 @@ dialog.fx-dialog[open]::backdrop {
     height: auto;
     min-height: var(--hero-height-m, var(--hero-height, 70mm));
   }
+  .proposal-hero-media.is-phone-crop-only {
+    display: block;
+  }
+  .proposal-hero:has(> .proposal-hero-media.is-phone-crop-only) {
+    background-image: none !important;
+  }
   .proposal-hero.is-phone-top .proposal-hero-media {
     position: relative;
     inset: auto;
@@ -1253,6 +1264,12 @@ dialog.fx-dialog[open]::backdrop {
     object-position: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));
     transform: scale(var(--crop-z-m, var(--crop-z, 1)));
     transform-origin: var(--crop-x-m, var(--crop-x, 50%)) var(--crop-y-m, var(--crop-y, 50%));
+  }
+  .proposal-hero-media.is-phone-crop-only {
+    display: block;
+  }
+  .proposal-hero:has(> .proposal-hero-media.is-phone-crop-only) {
+    background-image: none !important;
   }
   .proposal-section,
   .proposal-hero,

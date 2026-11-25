@@ -29,13 +29,16 @@ export function roundCropValue(value: number, digits = 1) {
   return Math.round(value * factor) / factor;
 }
 
-export function hasImageCrop(image: ProposalImage | null | undefined) {
+/** Minimal shape so phone helpers can share these without depending on ProposalImage. */
+export type ImageCropSource = Partial<ImageCrop> | null | undefined;
+
+export function hasImageCrop(image: ImageCropSource) {
   if (!image) return false;
   return image.focusX != null || image.focusY != null || image.zoom != null;
 }
 
 export function resolveImageCrop(
-  image: ProposalImage | null | undefined,
+  image: ImageCropSource,
   fallback?: Partial<ImageCrop>,
 ): ImageCrop {
   return {
@@ -72,7 +75,7 @@ export function clearImageCrop(image: ProposalImage): ProposalImage {
 }
 
 export function imageCropStyle(
-  image: ProposalImage | null | undefined,
+  image: ImageCropSource,
   fallback?: Partial<ImageCrop>,
 ): CSSProperties {
   const crop = resolveImageCrop(image, fallback);

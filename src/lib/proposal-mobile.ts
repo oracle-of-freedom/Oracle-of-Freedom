@@ -12,6 +12,8 @@ import {
   IMAGE_CROP_ZOOM_DEFAULT,
   clampFocus,
   clampZoom,
+  hasImageCrop,
+  resolveImageCrop,
   roundCropValue,
   type ImageCrop,
 } from "@/lib/proposal-image-crop";
@@ -391,25 +393,35 @@ export function clearImageMobile<T extends ImageWithMobile>(image: T): T {
 /**
  * CSS variables only. The `.proposal-cropped` class applies object-position /
  * transform so phone container queries can override without fighting inline styles.
+ *
+ * Desktop crop vars are emitted only when the image stores desktop focus/zoom.
+ * Do not invent desktop --crop-* from a render fallback (e.g. hero right-centre):
+ * that forced the Awake cover into object-fit:cover and broke the auto-100% look.
+ * Editor controls still resolve fallbacks via resolveImageCrop for slider display.
  */
 export function imageResponsiveStyle(
   image: ImageWithMobile | null | undefined,
   fallback?: Partial<ImageCrop>,
 ): CSSProperties {
-  const desktop: ImageCrop = {
-    focusX: clampFocus(image?.focusX ?? fallback?.focusX ?? IMAGE_CROP_FOCUS_DEFAULT),
-    focusY: clampFocus(image?.focusY ?? fallback?.focusY ?? IMAGE_CROP_FOCUS_DEFAULT),
-    zoom: clampZoom(image?.zoom ?? fallback?.zoom ?? IMAGE_CROP_ZOOM_DEFAULT),
-  };
-  const mobileCrop = resolveMobileImageCrop(image, desktop);
   const mobile = image?.mobile;
-  const style: Record<string, string> = {
-    ["--crop-x"]: `${desktop.focusX}%`,
-    ["--crop-y"]: `${desktop.focusY}%`,
-    ["--crop-z"]: String(desktop.zoom),
-  };
+  const style: Record<string, string> = {};
+
+  if (hasImageCrop(image)) {
+    const desktop = resolveImageCrop(image, fallback);
+    style["--crop-x"] = `${desktop.focusX}%`;
+    style["--crop-y"] = `${desktop.focusY}%`;
+    style["--crop-z"] = String(desktop.zoom);
+  }
 
   if (hasMobileImageCrop(image)) {
+    const desktopBase = hasImageCrop(image)
+      ? resolveImageCrop(image, fallback)
+      : {
+          focusX: IMAGE_CROP_FOCUS_DEFAULT,
+          focusY: IMAGE_CROP_FOCUS_DEFAULT,
+          zoom: IMAGE_CROP_ZOOM_DEFAULT,
+        };
+    const mobileCrop = resolveMobileImageCrop(image, desktopBase);
     style["--crop-x-m"] = `${mobileCrop.focusX}%`;
     style["--crop-y-m"] = `${mobileCrop.focusY}%`;
     style["--crop-z-m"] = String(mobileCrop.zoom);
