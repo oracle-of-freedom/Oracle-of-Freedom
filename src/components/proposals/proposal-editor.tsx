@@ -20,16 +20,16 @@ import {
 } from "@/components/proposals/editor-viewport";
 import { ProposalPdfButton } from "@/components/proposals/proposal-pdf-button";
 import { ProposalView } from "@/components/proposals/proposal-view";
-import { blankSection, SectionFields } from "@/components/proposals/section-fields";
+import { SectionFields } from "@/components/proposals/section-fields";
+import { SectionListEditor } from "@/components/proposals/section-list-editor";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import type { Film } from "@/lib/content";
 import { resetDesignDefaults } from "@/lib/proposal-design";
 import { resetAllImageCrops } from "@/lib/proposal-image-crop";
-import { moveSectionPhoneOrder, resetAllPhoneSettings } from "@/lib/proposal-mobile";
+import { resetAllPhoneSettings } from "@/lib/proposal-mobile";
 import type { ProposalStudioReview } from "@/lib/proposal-reviews";
 import {
-  SECTION_TYPES,
   PROPOSAL_SLUG_MAX,
   cleanProposalSlug,
   depositAmount,
@@ -42,7 +42,6 @@ import {
   sectionLabel,
   suggestProposalSlug,
   type Proposal,
-  type SectionType,
 } from "@/lib/proposals";
 
 const hints = [
@@ -142,27 +141,6 @@ function ProposalEditorInner({
       ...prev,
       sections: prev.sections.map((s) => (s.id === next.id ? next : s)),
     }));
-  }
-
-  function moveSection(id: string, dir: -1 | 1) {
-    setProposal((prev) => {
-      if (isPhone) {
-        return { ...prev, sections: moveSectionPhoneOrder(prev.sections, id, dir) };
-      }
-      const index = prev.sections.findIndex((s) => s.id === id);
-      const target = index + dir;
-      if (index < 0 || target < 0 || target >= prev.sections.length) return prev;
-      const sections = [...prev.sections];
-      const [item] = sections.splice(index, 1);
-      sections.splice(target, 0, item!);
-      return { ...prev, sections };
-    });
-  }
-
-  function addSection(type: SectionType) {
-    const section = blankSection(type);
-    setProposal((prev) => ({ ...prev, sections: [...prev.sections, section] }));
-    setSelectedId(section.id);
   }
 
   async function copy(kind: "live" | "preview") {
@@ -532,119 +510,13 @@ function ProposalEditorInner({
             </div>
           </div>
           <div className="rounded-3xl bg-white/70 p-4">
-            <p className="text-xs tracking-[0.2em] text-ember uppercase">
-              Sections{isPhone ? " · phone order" : ""}
-            </p>
-            <ul className="mt-3 space-y-2">
-              {proposal.sections.map((section) => (
-                <li key={section.id}>
-                  <div
-                    className={`flex items-center gap-2 rounded-2xl px-2 py-2 ${
-                      selected?.id === section.id ? "bg-clay/70" : "hover:bg-sand"
-                    }`}
-                  >
-                    <button
-                      type="button"
-                      className="min-w-0 flex-1 text-left text-sm"
-                      onClick={() => setSelectedId(section.id)}
-                    >
-                      <span
-                        className={
-                          section.enabled && !section.mobile?.hidden
-                            ? ""
-                            : "text-ink/40 line-through"
-                        }
-                      >
-                        {sectionLabel(section.type)}
-                        {isPhone && section.mobile?.hidden ? " · hidden" : ""}
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs text-ink/50"
-                      onClick={() => moveSection(section.id, -1)}
-                      aria-label={isPhone ? "Move up on phone" : "Move up"}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs text-ink/50"
-                      onClick={() => moveSection(section.id, 1)}
-                      aria-label={isPhone ? "Move down on phone" : "Move down"}
-                    >
-                      ↓
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs text-terracotta"
-                      onClick={() =>
-                        setProposal((prev) => ({
-                          ...prev,
-                          sections: prev.sections.map((s) => {
-                            if (s.id !== section.id) return s;
-                            if (isPhone) {
-                              const mobile = { ...(s.mobile || {}) };
-                              if (mobile.hidden) delete mobile.hidden;
-                              else mobile.hidden = true;
-                              if (!Object.keys(mobile).length) {
-                                const { mobile: _drop, ...rest } = s;
-                                return rest;
-                              }
-                              return { ...s, mobile };
-                            }
-                            return { ...s, enabled: !s.enabled };
-                          }),
-                        }))
-                      }
-                    >
-                      {isPhone
-                        ? section.mobile?.hidden
-                          ? "Hidden"
-                          : "Show"
-                        : section.enabled
-                          ? "On"
-                          : "Off"}
-                    </button>
-                    {!isPhone ? (
-                      <button
-                        type="button"
-                        className="text-xs text-ink/45"
-                        onClick={() => {
-                          setProposal((prev) => ({
-                            ...prev,
-                            sections: prev.sections.filter((s) => s.id !== section.id),
-                          }));
-                        }}
-                      >
-                        ×
-                      </button>
-                    ) : null}
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-4">
-              <Label>Add section</Label>
-              <select
-                className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
-                defaultValue=""
-                onChange={(e) => {
-                  const type = e.target.value as SectionType;
-                  if (type) addSection(type);
-                  e.target.value = "";
-                }}
-              >
-                <option value="" disabled>
-                  Choose type…
-                </option>
-                {SECTION_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {sectionLabel(type)}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <SectionListEditor
+              sections={proposal.sections}
+              selectedId={selected?.id}
+              isPhone={isPhone}
+              onChange={(sections) => setProposal((prev) => ({ ...prev, sections }))}
+              onSelect={setSelectedId}
+            />
           </div>
 
           {selected ? (

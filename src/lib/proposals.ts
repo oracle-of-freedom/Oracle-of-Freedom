@@ -35,7 +35,17 @@ export const SECTION_TYPES = [
   "signOff",
   "text",
   "photos",
+  "faq",
+  "video",
+  "quote",
+  "gallery",
+  "timeline",
+  "cta",
+  "columns",
 ] as const;
+
+/** Schema version written on exported template JSON files. */
+export const TEMPLATE_FORMAT_VERSION = 1;
 
 export const SECTION_LAYOUTS = ["stack", "text", "textPhoto", "twoColumn"] as const;
 export type SectionLayout = (typeof SECTION_LAYOUTS)[number];
@@ -249,6 +259,64 @@ export type PhotosBlockData = {
   images: ProposalImage[];
 };
 
+export type FaqItem = { id: string; question: string; answer: string };
+export type FaqData = {
+  heading: string;
+  items: FaqItem[];
+};
+
+export type VideoBlockData = {
+  heading: string;
+  videoUrl: string;
+  videoMediaId: string;
+  videoCover: ProposalImage | null;
+  caption: string;
+};
+
+export type QuoteBlockData = {
+  quote: string;
+  name: string;
+  role: string;
+  image: ProposalImage | null;
+};
+
+export type GalleryColumns = 2 | 3 | 4;
+export type GalleryData = {
+  heading: string;
+  columns: GalleryColumns;
+  images: ProposalImage[];
+};
+
+export type TimelineItem = {
+  id: string;
+  when: string;
+  title: string;
+  body: string;
+};
+export type TimelineData = {
+  heading: string;
+  items: TimelineItem[];
+};
+
+export type CtaButton = { id: string; label: string; href: string };
+export type CtaData = {
+  heading: string;
+  body: string;
+  buttons: CtaButton[];
+};
+
+export type ColumnItem = {
+  id: string;
+  heading: string;
+  body: string;
+  image: ProposalImage | null;
+};
+export type ColumnsData = {
+  heading: string;
+  columnCount: 2 | 3;
+  columns: ColumnItem[];
+};
+
 export type SectionDataMap = {
   cover: CoverData;
   welcome: WelcomeData;
@@ -266,6 +334,13 @@ export type SectionDataMap = {
   signOff: SignOffData;
   text: TextBlockData;
   photos: PhotosBlockData;
+  faq: FaqData;
+  video: VideoBlockData;
+  quote: QuoteBlockData;
+  gallery: GalleryData;
+  timeline: TimelineData;
+  cta: CtaData;
+  columns: ColumnsData;
 };
 
 export type ProposalSection = {
@@ -302,6 +377,11 @@ export type ProposalTemplate = {
   hidden?: boolean;
   /** Layout controls copied onto proposals created from this template. */
   design?: ProposalDesign;
+  /**
+   * Export schema version. Missing on older records; export writes
+   * TEMPLATE_FORMAT_VERSION.
+   */
+  formatVersion?: number;
   sections: ProposalSection[];
 };
 
@@ -801,6 +881,13 @@ export function defaultLayoutFor(type: SectionType): SectionLayout {
     signOff: "text",
     text: "text",
     photos: "stack",
+    faq: "text",
+    video: "stack",
+    quote: "text",
+    gallery: "stack",
+    timeline: "text",
+    cta: "text",
+    columns: "twoColumn",
   };
   return map[type];
 }
@@ -1110,6 +1197,147 @@ function parseSection(raw: unknown): ProposalSection | null {
           images: asImages(data.images),
         },
       };
+    case "faq":
+      return {
+        id,
+        type,
+        enabled,
+        ...common,
+        data: {
+          heading: asString(data.heading, 160) || "FAQ",
+          items: Array.isArray(data.items)
+            ? data.items.map((item) => {
+                const row = (item || {}) as Record<string, unknown>;
+                return {
+                  id: asString(row.id, 64) || newId("faq"),
+                  question: asString(row.question, 300),
+                  answer: asString(row.answer, 2000),
+                };
+              })
+            : [],
+        },
+      };
+    case "video":
+      return {
+        id,
+        type,
+        enabled,
+        ...common,
+        data: {
+          heading: asString(data.heading, 160),
+          videoUrl: asString(data.videoUrl, 500),
+          videoMediaId: asString(data.videoMediaId, 64),
+          videoCover: asImage(data.videoCover),
+          caption: asString(data.caption, 400),
+        },
+      };
+    case "quote":
+      return {
+        id,
+        type,
+        enabled,
+        ...common,
+        data: {
+          quote: asString(data.quote, 2000),
+          name: asString(data.name, 160),
+          role: asString(data.role, 160),
+          image: asImage(data.image),
+        },
+      };
+    case "gallery": {
+      const columnsRaw = Math.floor(asNumber(data.columns, 3));
+      const columns = ([2, 3, 4] as const).includes(columnsRaw as GalleryColumns)
+        ? (columnsRaw as GalleryColumns)
+        : 3;
+      return {
+        id,
+        type,
+        enabled,
+        ...common,
+        data: {
+          heading: asString(data.heading, 160),
+          columns,
+          images: asImages(data.images),
+        },
+      };
+    }
+    case "timeline":
+      return {
+        id,
+        type,
+        enabled,
+        ...common,
+        data: {
+          heading: asString(data.heading, 160) || "Timeline",
+          items: Array.isArray(data.items)
+            ? data.items.map((item) => {
+                const row = (item || {}) as Record<string, unknown>;
+                return {
+                  id: asString(row.id, 64) || newId("time"),
+                  when: asString(row.when, 120),
+                  title: asString(row.title, 200),
+                  body: asString(row.body, 1200),
+                };
+              })
+            : [],
+        },
+      };
+    case "cta":
+      return {
+        id,
+        type,
+        enabled,
+        ...common,
+        data: {
+          heading: asString(data.heading, 160),
+          body: asString(data.body, 1200),
+          buttons: Array.isArray(data.buttons)
+            ? data.buttons
+                .map((item) => {
+                  const row = (item || {}) as Record<string, unknown>;
+                  const label = asString(row.label, 80);
+                  const href = asString(row.href, 400);
+                  if (!label && !href) return null;
+                  return {
+                    id: asString(row.id, 64) || newId("cta"),
+                    label,
+                    href,
+                  };
+                })
+                .filter((button): button is CtaButton => Boolean(button))
+                .slice(0, 2)
+            : [],
+        },
+      };
+    case "columns": {
+      const countRaw = Math.floor(asNumber(data.columnCount, 2));
+      const columnCount = countRaw === 3 ? 3 : 2;
+      const columns = Array.isArray(data.columns)
+        ? data.columns.map((item) => {
+            const row = (item || {}) as Record<string, unknown>;
+            return {
+              id: asString(row.id, 64) || newId("col"),
+              heading: asString(row.heading, 160),
+              body: asString(row.body, 2000),
+              image: asImage(row.image),
+            };
+          })
+        : [];
+      while (columns.length < columnCount) {
+        columns.push({ id: newId("col"), heading: "", body: "", image: null });
+      }
+      return {
+        id,
+        type,
+        enabled,
+        ...common,
+        data: {
+          heading: asString(data.heading, 160),
+          columnCount,
+          columns: columns.slice(0, columnCount),
+        },
+      };
+    }
     default:
       return null;
   }
@@ -1126,6 +1354,7 @@ export function parseTemplate(raw: unknown): ProposalTemplate | null {
     ? record.sections.map(parseSection).filter((s): s is ProposalSection => Boolean(s))
     : [];
   const design = parseProposalDesign(record.design);
+  const formatVersion = Math.max(0, Math.floor(asNumber(record.formatVersion, 0)));
   return {
     id,
     name,
@@ -1135,6 +1364,7 @@ export function parseTemplate(raw: unknown): ProposalTemplate | null {
     builtin: asBool(record.builtin, false) || undefined,
     ...(asBool(record.hidden, false) ? { hidden: true } : {}),
     ...(design ? { design } : {}),
+    ...(formatVersion > 0 ? { formatVersion } : {}),
     sections: ensureSignOffSection(sections),
   };
 }
@@ -1207,6 +1437,13 @@ export function sectionLabel(type: SectionType) {
     signOff: "Sign-off",
     text: "Text block",
     photos: "Photo strip",
+    faq: "FAQ",
+    video: "Video",
+    quote: "Quote",
+    gallery: "Gallery",
+    timeline: "Timeline",
+    cta: "Call to action",
+    columns: "Columns",
   };
   return labels[type];
 }

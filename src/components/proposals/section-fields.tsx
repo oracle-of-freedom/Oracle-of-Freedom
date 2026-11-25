@@ -38,9 +38,18 @@ import {
   type ProposalSection,
   type ReviewData,
   type ReviewSlot,
+  type GalleryColumns,
   type SectionLayout,
   type SectionType,
 } from "@/lib/proposals";
+
+function moveItems<T>(items: T[], index: number, dir: -1 | 1): T[] {
+  const next = [...items];
+  const t = index + dir;
+  if (t < 0 || t >= next.length) return items;
+  [next[index], next[t]] = [next[t], next[index]];
+  return next;
+}
 
 function Field({
   label,
@@ -1543,6 +1552,476 @@ export function SectionFields({
           </Button>
         </div>
       );
+    case "faq":
+      return (
+        <div className="grid gap-4">
+          <Field label="Heading">
+            <Input
+              value={section.data.heading}
+              onChange={(e) => patch({ ...section.data, heading: e.target.value })}
+            />
+          </Field>
+          {section.data.items.map((item, index) => (
+            <div key={item.id} className="space-y-2 rounded-2xl border border-ink/10 p-4">
+              <Field label={`Question ${index + 1}`}>
+                <Input
+                  value={item.question}
+                  onChange={(e) => {
+                    const items = section.data.items.map((row, i) =>
+                      i === index ? { ...row, question: e.target.value } : row,
+                    );
+                    patch({ ...section.data, items });
+                  }}
+                />
+              </Field>
+              <Field label="Answer">
+                <Textarea
+                  value={item.answer}
+                  onChange={(e) => {
+                    const items = section.data.items.map((row, i) =>
+                      i === index ? { ...row, answer: e.target.value } : row,
+                    );
+                    patch({ ...section.data, items });
+                  }}
+                />
+              </Field>
+              <div className="flex flex-wrap gap-3 text-sm">
+                <button
+                  type="button"
+                  className="text-terracotta"
+                  disabled={index === 0}
+                  onClick={() => patch({ ...section.data, items: moveItems(section.data.items, index, -1) })}
+                >
+                  Move up
+                </button>
+                <button
+                  type="button"
+                  className="text-terracotta"
+                  disabled={index === section.data.items.length - 1}
+                  onClick={() => patch({ ...section.data, items: moveItems(section.data.items, index, 1) })}
+                >
+                  Move down
+                </button>
+                <button
+                  type="button"
+                  className="text-terracotta"
+                  onClick={() =>
+                    patch({ ...section.data, items: section.data.items.filter((_, i) => i !== index) })
+                  }
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              patch({
+                ...section.data,
+                items: [...section.data.items, { id: newId("faq"), question: "", answer: "" }],
+              })
+            }
+          >
+            Add question
+          </Button>
+        </div>
+      );
+    case "video":
+      return (
+        <div className="grid gap-4">
+          <Field label="Heading">
+            <Input
+              value={section.data.heading}
+              onChange={(e) => patch({ ...section.data, heading: e.target.value })}
+            />
+          </Field>
+          {films.length ? (
+            <Field
+              label="Pick from portfolio films"
+              hint="Fills the video link and the cover from a film already on the portfolio page."
+            >
+              <select
+                className="h-11 w-full rounded-2xl border border-ink/15 bg-white/70 px-3"
+                defaultValue=""
+                onChange={(e) => {
+                  const film = films.find((item) => item.video.id === e.target.value);
+                  e.target.value = "";
+                  if (!film) return;
+                  const caption = film.video.label.en.trim();
+                  patch({
+                    ...section.data,
+                    videoUrl: film.video.platform === "file" ? "" : film.video.url,
+                    videoMediaId:
+                      film.video.platform === "file" ? film.video.videoMediaId || "" : "",
+                    videoCover: {
+                      src: film.poster.src,
+                      alt: caption || "Film still",
+                    },
+                    caption: caption || section.data.caption,
+                  });
+                }}
+              >
+                <option value="">Choose a portfolio film…</option>
+                {films.map((film) => {
+                  const label =
+                    film.video.label.en.trim() ||
+                    (film.video.platform === "file" ? "Uploaded film" : film.video.url);
+                  return (
+                    <option key={film.video.id} value={film.video.id}>
+                      {label}
+                    </option>
+                  );
+                })}
+              </select>
+            </Field>
+          ) : null}
+          <Field
+            label="Video link (Instagram, YouTube, Vimeo or any link)"
+            hint="Shows as a cover card with a play button. YouTube and Vimeo can play on the page; other links open in a new tab."
+          >
+            <Input
+              value={section.data.videoUrl}
+              onChange={(e) => patch({ ...section.data, videoUrl: e.target.value })}
+              placeholder="https://"
+            />
+          </Field>
+          <Field label="Or uploaded mp4 media id">
+            <Input
+              value={section.data.videoMediaId}
+              onChange={(e) => patch({ ...section.data, videoMediaId: e.target.value })}
+            />
+          </Field>
+          <ImageFields
+            label="Video cover"
+            frame="video"
+            image={section.data.videoCover || null}
+            onChange={(videoCover) => patch({ ...section.data, videoCover })}
+          />
+          <Field label="Caption (optional)">
+            <Input
+              value={section.data.caption}
+              onChange={(e) => patch({ ...section.data, caption: e.target.value })}
+            />
+          </Field>
+          {section.data.videoUrl.trim() || section.data.videoMediaId.trim() ? (
+            <div className="rounded-2xl border border-ink/10 bg-sand/50 p-3">
+              <p className="mb-2 text-xs tracking-[0.2em] text-ember uppercase">Video card preview</p>
+              <ProposalVideoBlock
+                videoUrl={section.data.videoUrl}
+                videoMediaId={section.data.videoMediaId}
+                videoCover={section.data.videoCover}
+              />
+            </div>
+          ) : null}
+        </div>
+      );
+    case "quote":
+      return (
+        <div className="grid gap-4">
+          <Field label="Quote">
+            <Textarea
+              value={section.data.quote}
+              onChange={(e) => patch({ ...section.data, quote: e.target.value })}
+            />
+          </Field>
+          <Field label="Name">
+            <Input
+              value={section.data.name}
+              onChange={(e) => patch({ ...section.data, name: e.target.value })}
+            />
+          </Field>
+          <Field label="Role">
+            <Input
+              value={section.data.role}
+              onChange={(e) => patch({ ...section.data, role: e.target.value })}
+            />
+          </Field>
+          <ImageFields
+            label="Photo (optional)"
+            frame="square"
+            image={section.data.image || null}
+            onChange={(image) => patch({ ...section.data, image })}
+          />
+        </div>
+      );
+    case "gallery":
+      return (
+        <div className="grid gap-4">
+          <Field label="Heading">
+            <Input
+              value={section.data.heading}
+              onChange={(e) => patch({ ...section.data, heading: e.target.value })}
+            />
+          </Field>
+          <ChoiceButtons
+            label="Columns"
+            value={String(section.data.columns)}
+            onChange={(picked) => {
+              const columns = Number(picked) as GalleryColumns;
+              patch({ ...section.data, columns });
+            }}
+            options={[
+              { value: "2", label: "2" },
+              { value: "3", label: "3" },
+              { value: "4", label: "4" },
+            ]}
+          />
+          {section.data.images.map((image, index) => (
+            <ImageFields
+              key={index}
+              label={`Photo ${index + 1}`}
+              frame="proof"
+              image={image}
+              onChange={(next) => {
+                const images = [...section.data.images];
+                if (next) images[index] = next;
+                else images.splice(index, 1);
+                patch({ ...section.data, images });
+              }}
+            />
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => patch({ ...section.data, images: [...section.data.images, { alt: "" }] })}
+          >
+            Add photo
+          </Button>
+        </div>
+      );
+    case "timeline":
+      return (
+        <div className="grid gap-4">
+          <Field label="Heading">
+            <Input
+              value={section.data.heading}
+              onChange={(e) => patch({ ...section.data, heading: e.target.value })}
+            />
+          </Field>
+          {section.data.items.map((item, index) => (
+            <div key={item.id} className="space-y-2 rounded-2xl border border-ink/10 p-4">
+              <Field label={`When (${index + 1})`}>
+                <Input
+                  value={item.when}
+                  onChange={(e) => {
+                    const items = section.data.items.map((row, i) =>
+                      i === index ? { ...row, when: e.target.value } : row,
+                    );
+                    patch({ ...section.data, items });
+                  }}
+                />
+              </Field>
+              <Field label="Title">
+                <Input
+                  value={item.title}
+                  onChange={(e) => {
+                    const items = section.data.items.map((row, i) =>
+                      i === index ? { ...row, title: e.target.value } : row,
+                    );
+                    patch({ ...section.data, items });
+                  }}
+                />
+              </Field>
+              <Field label="Body">
+                <Textarea
+                  value={item.body}
+                  onChange={(e) => {
+                    const items = section.data.items.map((row, i) =>
+                      i === index ? { ...row, body: e.target.value } : row,
+                    );
+                    patch({ ...section.data, items });
+                  }}
+                />
+              </Field>
+              <div className="flex flex-wrap gap-3 text-sm">
+                <button
+                  type="button"
+                  className="text-terracotta"
+                  disabled={index === 0}
+                  onClick={() => patch({ ...section.data, items: moveItems(section.data.items, index, -1) })}
+                >
+                  Move up
+                </button>
+                <button
+                  type="button"
+                  className="text-terracotta"
+                  disabled={index === section.data.items.length - 1}
+                  onClick={() => patch({ ...section.data, items: moveItems(section.data.items, index, 1) })}
+                >
+                  Move down
+                </button>
+                <button
+                  type="button"
+                  className="text-terracotta"
+                  onClick={() =>
+                    patch({ ...section.data, items: section.data.items.filter((_, i) => i !== index) })
+                  }
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              patch({
+                ...section.data,
+                items: [...section.data.items, { id: newId("time"), when: "", title: "", body: "" }],
+              })
+            }
+          >
+            Add timeline item
+          </Button>
+        </div>
+      );
+    case "cta":
+      return (
+        <div className="grid gap-4">
+          <Field label="Heading">
+            <Input
+              value={section.data.heading}
+              onChange={(e) => patch({ ...section.data, heading: e.target.value })}
+            />
+          </Field>
+          <Field label="Body">
+            <Textarea
+              value={section.data.body}
+              onChange={(e) => patch({ ...section.data, body: e.target.value })}
+            />
+          </Field>
+          {section.data.buttons.map((button, index) => (
+            <div key={button.id} className="grid gap-2 rounded-2xl border border-ink/10 p-4 sm:grid-cols-2">
+              <Field label={`Button ${index + 1} label`}>
+                <Input
+                  value={button.label}
+                  onChange={(e) => {
+                    const buttons = section.data.buttons.map((row, i) =>
+                      i === index ? { ...row, label: e.target.value } : row,
+                    );
+                    patch({ ...section.data, buttons });
+                  }}
+                />
+              </Field>
+              <div className="flex gap-2">
+                <div className="min-w-0 flex-1">
+                  <Field label="Link">
+                    <Input
+                      value={button.href}
+                      onChange={(e) => {
+                        const buttons = section.data.buttons.map((row, i) =>
+                          i === index ? { ...row, href: e.target.value } : row,
+                        );
+                        patch({ ...section.data, buttons });
+                      }}
+                    />
+                  </Field>
+                </div>
+                <button
+                  type="button"
+                  className="shrink-0 self-end pb-2 text-sm text-terracotta"
+                  onClick={() =>
+                    patch({ ...section.data, buttons: section.data.buttons.filter((_, i) => i !== index) })
+                  }
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))}
+          {section.data.buttons.length < 2 ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                patch({
+                  ...section.data,
+                  buttons: [
+                    ...section.data.buttons,
+                    { id: newId("cta"), label: "Reply to confirm", href: "mailto:agota@oracleoffreedom.com" },
+                  ],
+                })
+              }
+            >
+              Add button
+            </Button>
+          ) : null}
+        </div>
+      );
+    case "columns":
+      return (
+        <div className="grid gap-4">
+          <Field label="Heading">
+            <Input
+              value={section.data.heading}
+              onChange={(e) => patch({ ...section.data, heading: e.target.value })}
+            />
+          </Field>
+          <ChoiceButtons
+            label="Column count"
+            value={String(section.data.columnCount)}
+            onChange={(picked) => {
+              const count = Number(picked) as 2 | 3;
+              let columns = [...section.data.columns];
+              while (columns.length < count) {
+                columns.push({ id: newId("col"), heading: "", body: "", image: null });
+              }
+              if (columns.length > count) {
+                columns = columns.slice(0, count);
+              }
+              patch({ ...section.data, columnCount: count, columns });
+            }}
+            options={[
+              { value: "2", label: "2 columns" },
+              { value: "3", label: "3 columns" },
+            ]}
+          />
+          {section.data.columns.map((col, index) => (
+            <div key={col.id} className="space-y-2 rounded-2xl border border-ink/10 p-4">
+              <p className="text-sm font-medium">Column {index + 1}</p>
+              <Field label="Heading">
+                <Input
+                  value={col.heading}
+                  onChange={(e) => {
+                    const columns = section.data.columns.map((row, i) =>
+                      i === index ? { ...row, heading: e.target.value } : row,
+                    );
+                    patch({ ...section.data, columns });
+                  }}
+                />
+              </Field>
+              <Field label="Body">
+                <Textarea
+                  value={col.body}
+                  onChange={(e) => {
+                    const columns = section.data.columns.map((row, i) =>
+                      i === index ? { ...row, body: e.target.value } : row,
+                    );
+                    patch({ ...section.data, columns });
+                  }}
+                />
+              </Field>
+              <ImageFields
+                label="Image (optional)"
+                image={col.image || null}
+                onChange={(image) => {
+                  const columns = section.data.columns.map((row, i) =>
+                    i === index ? { ...row, image } : row,
+                  );
+                  patch({ ...section.data, columns });
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      );
     default:
       return null;
   }
@@ -1691,5 +2170,77 @@ export function blankSection(type: SectionType): ProposalSection {
       return { id, type, enabled: true, data: { heading: "", body: "" } };
     case "photos":
       return { id, type, enabled: true, data: { heading: "", images: [] } };
+    case "faq":
+      return {
+        id,
+        type,
+        enabled: true,
+        data: {
+          heading: "FAQ",
+          items: [{ id: newId("faq"), question: "", answer: "" }],
+        },
+      };
+    case "video":
+      return {
+        id,
+        type,
+        enabled: true,
+        data: {
+          heading: "",
+          videoUrl: "",
+          videoMediaId: "",
+          videoCover: null,
+          caption: "",
+        },
+      };
+    case "quote":
+      return {
+        id,
+        type,
+        enabled: true,
+        data: { quote: "", name: "", role: "", image: null },
+      };
+    case "gallery":
+      return {
+        id,
+        type,
+        enabled: true,
+        data: { heading: "", columns: 3, images: [] },
+      };
+    case "timeline":
+      return {
+        id,
+        type,
+        enabled: true,
+        data: {
+          heading: "Timeline",
+          items: [{ id: newId("time"), when: "", title: "", body: "" }],
+        },
+      };
+    case "cta":
+      return {
+        id,
+        type,
+        enabled: true,
+        data: {
+          heading: "",
+          body: "",
+          buttons: [{ id: newId("cta"), label: "Reply to confirm", href: "mailto:agota@oracleoffreedom.com" }],
+        },
+      };
+    case "columns":
+      return {
+        id,
+        type,
+        enabled: true,
+        data: {
+          heading: "",
+          columnCount: 2,
+          columns: [
+            { id: newId("col"), heading: "", body: "", image: null },
+            { id: newId("col"), heading: "", body: "", image: null },
+          ],
+        },
+      };
   }
 }

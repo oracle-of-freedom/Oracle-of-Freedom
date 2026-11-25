@@ -23,6 +23,10 @@ import {
   updateProposalSlug,
 } from "@/lib/proposal-store";
 import {
+  TEMPLATE_EXPORT_MAX_BYTES,
+  importTemplateFromJson,
+} from "@/lib/proposal-template-io";
+import {
   cloneSections,
   newId,
   parseProposal,
@@ -199,6 +203,45 @@ export async function createTemplateAction() {
   await saveTemplate(template);
   revalidateProposals(template.id);
   redirect(`/admin/proposals/templates/${template.id}`);
+}
+
+export async function importTemplateAction(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  try {
+    await guard();
+    const file = formData.get("file");
+    if (!(file instanceof File)) {
+      return { ok: false, error: "Choose a .oot.json template file." };
+    }
+    if (file.size <= 0) return { ok: false, error: "That file is empty." };
+    if (file.size > TEMPLATE_EXPORT_MAX_BYTES) {
+      return { ok: false, error: "Template files must be 1 MB or smaller." };
+    }
+    const text = await file.text();
+    let raw: unknown;
+    try {
+      raw = JSON.parse(text);
+    } catch {
+      return { ok: false, error: "That file is not valid JSON." };
+    }
+    const result = importTemplateFromJson(raw);
+    if (!result.ok) return { ok: false, error: result.error };
+    const saved = await saveTemplate(result.template);
+    revalidateProposals(saved.id);
+    return {
+      ok: true,
+      message: result.message,
+      id: saved.id,
+      name: saved.name,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not import template.",
+    };
+  }
 }
 
 export async function saveTemplateAction(

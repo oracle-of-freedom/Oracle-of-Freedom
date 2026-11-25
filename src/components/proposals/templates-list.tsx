@@ -6,6 +6,7 @@ import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import {
   deleteTemplatesAction,
   duplicateTemplateAction,
+  importTemplateAction,
   renameTemplateAction,
   setTemplatesHiddenAction,
   type ActionState,
@@ -17,6 +18,7 @@ import {
   hiddenStarterTemplates,
   visibleTemplates,
 } from "@/lib/proposal-template-manage";
+import { TEMPLATE_EXPORT_MAX_BYTES } from "@/lib/proposal-template-io";
 import type { ProposalTemplate } from "@/lib/proposals";
 
 type ConfirmKind = "delete" | "hide" | null;
@@ -47,10 +49,17 @@ export function TemplatesList({ initial }: { initial: ProposalTemplate[] }) {
     renameTemplateAction,
     null as ActionState,
   );
+  const [importState, importAction, importPending] = useActionState(
+    importTemplateAction,
+    null as ActionState,
+  );
 
   const deleteFormRef = useRef<HTMLFormElement>(null);
   const hideFormRef = useRef<HTMLFormElement>(null);
   const renameFormRef = useRef<HTMLFormElement>(null);
+  const importFormRef = useRef<HTMLFormElement>(null);
+  const importInputRef = useRef<HTMLInputElement>(null);
+  const [importDragging, setImportDragging] = useState(false);
 
   useEffect(() => {
     setTemplates(initial);
@@ -109,6 +118,34 @@ export function TemplatesList({ initial }: { initial: ProposalTemplate[] }) {
       setError(renameState.error);
     }
   }, [renameState, router]);
+
+  useEffect(() => {
+    if (importState?.ok === true && importState.id) {
+      setMessage(importState.message || "Template imported.");
+      setError(null);
+      router.refresh();
+      router.push(`/admin/proposals/templates/${importState.id}`);
+    } else if (importState?.ok === false) {
+      setError(importState.error);
+      setMessage(null);
+    }
+  }, [importState, router]);
+
+  function submitImportFile(file: File | null | undefined) {
+    if (!file) return;
+    setError(null);
+    if (file.size > TEMPLATE_EXPORT_MAX_BYTES) {
+      setError("Template files must be 1 MB or smaller.");
+      return;
+    }
+    const form = importFormRef.current;
+    const input = importInputRef.current;
+    if (!form || !input) return;
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    input.files = transfer.files;
+    form.requestSubmit();
+  }
 
   const mainList = useMemo(() => visibleTemplates(templates), [templates]);
   const hiddenStarters = useMemo(() => hiddenStarterTemplates(templates), [templates]);
@@ -221,7 +258,7 @@ export function TemplatesList({ initial }: { initial: ProposalTemplate[] }) {
     form.requestSubmit();
   }
 
-  const busy = deletePending || hidePending || renamePending;
+  const busy = deletePending || hidePending || renamePending || importPending;
 
   return (
     <div className="space-y-4">
@@ -233,6 +270,54 @@ export function TemplatesList({ initial }: { initial: ProposalTemplate[] }) {
         <input type="hidden" name="id" defaultValue="" />
         <input type="hidden" name="name" defaultValue="" />
       </form>
+      <form ref={importFormRef} action={importAction} className="hidden" aria-hidden="true">
+        <input
+          ref={importInputRef}
+          type="file"
+          name="file"
+          accept=".json,.oot.json,application/json"
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            if (file.size > TEMPLATE_EXPORT_MAX_BYTES) {
+              setError("Template files must be 1 MB or smaller.");
+              event.target.value = "";
+              return;
+            }
+            importFormRef.current?.requestSubmit();
+          }}
+        />
+      </form>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          disabled={busy}
+          className={`inline-flex h-11 items-center justify-center rounded-full border border-dashed px-4 text-sm transition ${
+            importDragging
+              ? "border-terracotta bg-terracotta/10 text-terracotta"
+              : "border-ink/25 bg-white/70 text-ink hover:border-terracotta hover:text-terracotta"
+          }`}
+          onClick={() => importInputRef.current?.click()}
+          onDragEnter={(event) => {
+            event.preventDefault();
+            setImportDragging(true);
+          }}
+          onDragOver={(event) => {
+            event.preventDefault();
+            setImportDragging(true);
+          }}
+          onDragLeave={() => setImportDragging(false)}
+          onDrop={(event) => {
+            event.preventDefault();
+            setImportDragging(false);
+            submitImportFile(event.dataTransfer.files?.[0]);
+          }}
+        >
+          {importPending ? "Importing…" : "Import template"}
+        </button>
+        <p className="text-xs text-ink/50">Drop a .oot.json file or click to upload (max 1 MB).</p>
+      </div>
 
       {selected.size > 0 ? (
         <div className="sticky top-2 z-10 flex flex-wrap items-center gap-2 rounded-3xl bg-ink px-4 py-3 text-sand shadow-md">
