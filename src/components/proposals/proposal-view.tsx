@@ -755,6 +755,195 @@ function renderSection(
           <ProposalProofGrid images={section.data.images} lightbox={false} />
         </section>
       );
+    case "faq": {
+      const items = section.data.items.filter((item) => item.question.trim());
+      if (!items.length && !section.data.heading.trim() && !(section.images ?? []).some((img) => imageSrc(img))) {
+        return null;
+      }
+      return (
+        <section key={section.id} className={shell} {...sectionProps}>
+          <Title section={section}>{section.data.heading}</Title>
+          {items.length ? (
+            <div className="proposal-faq">
+              {items.map((item) => (
+                <details key={item.id} className="proposal-faq-item">
+                  <summary>{item.question}</summary>
+                  {item.answer.trim() ? (
+                    <div className="proposal-faq-answer">
+                      <Paragraphs text={item.answer} />
+                    </div>
+                  ) : null}
+                </details>
+              ))}
+            </div>
+          ) : null}
+          <ExtraPhotos section={section} />
+        </section>
+      );
+    }
+    case "video": {
+      const hasVideo =
+        section.data.videoUrl.trim() || section.data.videoMediaId.trim();
+      if (!hasVideo) return null;
+      const video = resolveProposalVideo({
+        videoUrl: section.data.videoUrl,
+        videoMediaId: section.data.videoMediaId,
+      });
+      if (!video) return null;
+      return (
+        <section key={section.id} className={shell} {...sectionProps}>
+          <Title section={section}>{section.data.heading}</Title>
+          <ProposalVideoBlock
+            videoUrl={section.data.videoUrl}
+            videoMediaId={section.data.videoMediaId}
+            videoCover={section.data.videoCover}
+          />
+          {section.data.caption.trim() ? (
+            <p className="proposal-follow">{section.data.caption}</p>
+          ) : null}
+          <ExtraPhotos section={section} />
+        </section>
+      );
+    }
+    case "quote": {
+      const { quote, name, role, image } = section.data;
+      if (!quote.trim() && !imageSrc(image) && !(section.images ?? []).some((img) => imageSrc(img))) {
+        return null;
+      }
+      const photoSrc = imageSrc(image);
+      return (
+        <section key={section.id} className={shell} {...sectionProps}>
+          <figure className="proposal-pullquote">
+            {quote.trim() ? <blockquote>“{quote}”</blockquote> : null}
+            {name.trim() || role.trim() || photoSrc ? (
+              <figcaption className="proposal-pullquote-meta">
+                {photoSrc ? (
+                  <Image
+                    src={photoSrc}
+                    alt={image?.alt || name || ""}
+                    width={120}
+                    height={120}
+                    className={`proposal-pullquote-photo ${imagePhoneHiddenClass(image)}`.trim()}
+                    style={image ? imageResponsiveStyle(image) : undefined}
+                    unoptimized={photoSrc.startsWith("/api/media/")}
+                  />
+                ) : null}
+                <div>
+                  {name.trim() ? <p className="proposal-pullquote-name">{name}</p> : null}
+                  {role.trim() ? <p className="proposal-pullquote-role">{role}</p> : null}
+                </div>
+              </figcaption>
+            ) : null}
+          </figure>
+          <ExtraPhotos section={section} />
+        </section>
+      );
+    }
+    case "gallery":
+      if (!section.data.images.length && !section.data.heading.trim()) return null;
+      return (
+        <section key={section.id} className={shell} {...sectionProps}>
+          <Title section={section}>{section.data.heading}</Title>
+          <div
+            className="proposal-gallery"
+            style={{ ["--gallery-columns" as string]: String(section.data.columns) }}
+          >
+            <ProposalProofGrid images={section.data.images} lightbox />
+          </div>
+        </section>
+      );
+    case "timeline": {
+      const items = section.data.items.filter(
+        (item) => item.when.trim() || item.title.trim() || item.body.trim(),
+      );
+      if (!items.length && !section.data.heading.trim() && !(section.images ?? []).some((img) => imageSrc(img))) {
+        return null;
+      }
+      return (
+        <section key={section.id} className={shell} {...sectionProps}>
+          <Title section={section}>{section.data.heading}</Title>
+          {items.length ? (
+            <ol className="proposal-timeline">
+              {items.map((item) => (
+                <li key={item.id}>
+                  {item.when.trim() ? <p className="proposal-timeline-when">{item.when}</p> : null}
+                  {item.title.trim() ? <p className="proposal-timeline-title">{item.title}</p> : null}
+                  {item.body.trim() ? <Paragraphs text={item.body} /> : null}
+                </li>
+              ))}
+            </ol>
+          ) : null}
+          <ExtraPhotos section={section} />
+        </section>
+      );
+    }
+    case "cta": {
+      const position = section.design?.buttonPosition || options.design.buttonPosition;
+      const buttons = section.data.buttons.filter((b) => b.label.trim()).slice(0, 2);
+      const hasBody = section.data.body.trim() || section.data.heading.trim() || buttons.length;
+      if (!hasBody && !(section.images ?? []).some((img) => imageSrc(img))) return null;
+      return (
+        <section key={section.id} className={shell} {...sectionProps}>
+          <Title section={section}>{section.data.heading}</Title>
+          {section.data.body.trim() ? (
+            <div className="proposal-intro">
+              <Paragraphs text={section.data.body} />
+            </div>
+          ) : null}
+          {buttons.length ? (
+            <div className={`proposal-cta-row ${alignClass(position, "left")}`}>
+              {buttons.map((button) => (
+                <a
+                  key={button.id}
+                  className="proposal-cta"
+                  href={button.href.trim() || "mailto:agota@oracleoffreedom.com"}
+                >
+                  {button.label}
+                </a>
+              ))}
+            </div>
+          ) : null}
+          <ExtraPhotos section={section} />
+        </section>
+      );
+    }
+    case "columns": {
+      const { columnCount, columns } = section.data;
+      const hasColumnContent = columns.some(
+        (col) => col.heading.trim() || col.body.trim() || imageSrc(col.image),
+      );
+      if (!hasColumnContent && !section.data.heading.trim() && !(section.images ?? []).some((img) => imageSrc(img))) {
+        return null;
+      }
+      return (
+        <section key={section.id} className={shell} {...sectionProps}>
+          <Title section={section}>{section.data.heading}</Title>
+          <div className="proposal-columns" data-count={columnCount}>
+            {columns.map((col) => {
+              const colSrc = imageSrc(col.image);
+              return (
+                <div key={col.id} className="proposal-column">
+                  {colSrc ? (
+                    <Image
+                      src={colSrc}
+                      alt={col.image?.alt || ""}
+                      width={800}
+                      height={500}
+                      className={`proposal-column-photo proposal-cropped ${col.image ? imagePhoneHiddenClass(col.image) : ""}`.trim()}
+                      style={col.image ? imageResponsiveStyle(col.image) : undefined}
+                      unoptimized={colSrc.startsWith("/api/media/")}
+                    />
+                  ) : null}
+                  {col.heading.trim() ? <h3>{col.heading}</h3> : null}
+                  {col.body.trim() ? <Paragraphs text={col.body} /> : null}
+                </div>
+              );
+            })}
+          </div>
+          <ExtraPhotos section={section} />
+        </section>
+      );
+    }
     default:
       return null;
   }

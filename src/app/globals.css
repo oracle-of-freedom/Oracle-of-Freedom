@@ -545,7 +545,14 @@ dialog.fx-dialog[open]::backdrop {
 .proposal-section-signOff { margin-top: var(--signoff-gap, 7.5mm); padding-bottom: 12mm; }
 .proposal-section-text,
 .proposal-section-howIWork,
-.proposal-section-photos { padding-top: 6mm; padding-bottom: 6mm; }
+.proposal-section-photos,
+.proposal-section-faq,
+.proposal-section-video,
+.proposal-section-quote,
+.proposal-section-gallery,
+.proposal-section-timeline,
+.proposal-section-cta,
+.proposal-section-columns { padding-top: 6mm; padding-bottom: 6mm; }
 
 .proposal-title {
   display: flex;
@@ -1107,6 +1114,95 @@ dialog.fx-dialog[open]::backdrop {
   box-shadow: 0 1px 2px rgba(42, 33, 28, 0.12);
 }
 
+.proposal-cta-row .proposal-cta + .proposal-cta {
+  margin-left: 4mm;
+}
+
+.proposal-faq { display: grid; gap: 2mm; }
+.proposal-faq-item { border-bottom: 1px solid rgba(42, 24, 16, 0.12); padding: 2mm 0; }
+.proposal-faq-item summary {
+  cursor: pointer;
+  font-family: var(--font-serif), "DM Serif Display", serif;
+  font-size: 13.5pt;
+  color: var(--rust);
+  list-style: none;
+}
+.proposal-faq-item summary::-webkit-details-marker { display: none; }
+.proposal-faq-item[open] summary { margin-bottom: 1.5mm; }
+
+.proposal-pullquote { margin: 0; }
+.proposal-pullquote blockquote {
+  margin: 0;
+  font-family: var(--font-serif), "DM Serif Display", serif;
+  font-size: 20pt;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.proposal-pullquote-meta {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  margin-top: 4mm;
+}
+.proposal-pullquote-photo {
+  width: 14mm;
+  height: 14mm;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.proposal-pullquote-name { margin: 0; font-weight: 600; }
+.proposal-pullquote-role { margin: 0; font-size: 11pt; opacity: 0.7; }
+
+.proposal-gallery { --gallery-columns: 3; }
+.proposal-gallery .proposal-proof-grid {
+  grid-template-columns: repeat(var(--gallery-columns), minmax(0, 1fr));
+}
+
+.proposal-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 2px solid var(--peach);
+}
+.proposal-timeline li {
+  position: relative;
+  padding: 0 0 5mm 5mm;
+}
+.proposal-timeline li::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--terra);
+}
+.proposal-timeline-when {
+  margin: 0;
+  font-size: 10.5pt;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ember, #d9913a);
+}
+.proposal-timeline-title {
+  margin: 1mm 0;
+  font-family: var(--font-serif), "DM Serif Display", serif;
+  font-size: 14pt;
+}
+
+.proposal-columns {
+  display: grid;
+  gap: 5mm;
+  grid-template-columns: repeat(var(--col-count, 2), minmax(0, 1fr));
+}
+.proposal-columns[data-count="3"] { --col-count: 3; }
+.proposal-column-photo {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 2mm;
+}
+
 .proposal-sign { text-align: left; }
 .proposal-sign.is-center { text-align: center; }
 .proposal-sign.is-right { text-align: right; }
@@ -1180,6 +1276,12 @@ dialog.fx-dialog[open]::backdrop {
 
 /* Phone overrides: container query so the Studio 390px preview matches real phones. */
 @container proposal (max-width: 767px) {
+  .proposal-columns {
+    grid-template-columns: 1fr;
+  }
+  .proposal-gallery .proposal-proof-grid {
+    grid-template-columns: repeat(min(2, var(--gallery-columns)), minmax(0, 1fr));
+  }
   .proposal-why,
   .proposal-team,
   .proposal-del,
@@ -1522,5 +1624,18 @@ dialog.fx-dialog[open]::backdrop {
   .proposal-cta {
     color: #fff !important;
     text-decoration: none !important;
+  }
+
+  details.proposal-faq-item[open] summary ~ *,
+  details.proposal-faq-item:not([open]) summary ~ * {
+    display: block !important;
+  }
+  .proposal-faq-item {
+    border: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .proposal-faq-item summary {
+    pointer-events: none;
   }
 }
