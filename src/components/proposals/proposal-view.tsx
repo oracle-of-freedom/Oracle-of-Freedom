@@ -2,6 +2,7 @@ import type { CSSProperties, MouseEvent, ReactNode } from "react";
 import Image from "next/image";
 import { OmMark } from "@/components/om-mark";
 import { ProposalPdfButton } from "@/components/proposals/proposal-pdf-button";
+import { ProposalProofGrid } from "@/components/proposals/proposal-proof-grid";
 import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
 import {
   cardLayoutVars,
@@ -17,7 +18,6 @@ import {
 import {
   designMobileVars,
   hasMobileImageCrop,
-  imageFrameMobileStyle,
   imagePhoneHiddenClass,
   imageResponsiveStyle,
   sectionMobileStyle,
@@ -60,12 +60,6 @@ function formatDisplayDate(iso: string) {
     month: "long",
     year: "numeric",
   }).format(d);
-}
-
-function photoSlotLabel(alt: string) {
-  const trimmed = alt.trim();
-  if (!trimmed || /EXAMPLE PHOTOS|Agota to supply/i.test(trimmed)) return "Your photo here";
-  return trimmed;
 }
 
 function alignClass(align: DesignAlign | undefined, fallback: DesignAlign) {
@@ -343,45 +337,6 @@ function ExtraPhotos({ section }: { section: ProposalSection }) {
   );
 }
 
-function ProofGrid({ images }: { images: ProposalImage[] }) {
-  const cells = images.length ? [...images] : [{ alt: "Your photo here" }];
-  if (cells.every((image) => !imageSrc(image)) && cells.length < 4) {
-    while (cells.length < 4) cells.push({ alt: "Your photo here" });
-  }
-  return (
-    <div className="proposal-proof-grid">
-      {cells.map((image, index) => {
-        const src = imageSrc(image);
-        const phoneHidden = imagePhoneHiddenClass(image);
-        if (!src) {
-          return (
-            <div key={`ph-${index}`} className={`proposal-ph proposal-proof-cell ${phoneHidden}`.trim()}>
-              <span>{photoSlotLabel(image.alt)}</span>
-            </div>
-          );
-        }
-        return (
-          <figure
-            key={`${src}-${index}`}
-            className={`proposal-proof-cell has-photo ${phoneHidden}`.trim()}
-            style={imageFrameMobileStyle(image)}
-          >
-            <Image
-              src={src}
-              alt={image.alt || ""}
-              fill
-              className="object-cover proposal-cropped"
-              style={imageResponsiveStyle(image)}
-              sizes="(max-width: 767px) 100vw, 90mm"
-              unoptimized={src.startsWith("/api/media/")}
-            />
-          </figure>
-        );
-      })}
-    </div>
-  );
-}
-
 function PortfolioLine({ line }: { line: string }) {
   const url = "https://oracleoffreedom.com/portfolio";
   if (!line.trim()) return null;
@@ -555,7 +510,7 @@ function renderSection(
       return (
         <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
-          <ProofGrid images={section.data.images} />
+          <ProposalProofGrid images={section.data.images} />
           <PortfolioLine line={section.data.portfolioLine} />
           {video ? (
             <ProposalVideoBlock
@@ -797,7 +752,7 @@ function renderSection(
       return (
         <section key={section.id} className={shell} {...sectionProps}>
           <Title section={section}>{section.data.heading}</Title>
-          <ProofGrid images={section.data.images} />
+          <ProposalProofGrid images={section.data.images} lightbox={false} />
         </section>
       );
     default:
