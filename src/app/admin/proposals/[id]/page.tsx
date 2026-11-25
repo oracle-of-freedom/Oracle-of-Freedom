@@ -7,7 +7,8 @@ import { settings, siteUrl } from "@/lib/content";
 import { readLiveContent } from "@/lib/live-content-store";
 import { bundledReviews, getFilms } from "@/lib/live-public";
 import { listProposalStudioReviews } from "@/lib/proposal-reviews";
-import { getProposal } from "@/lib/proposal-store";
+import { getProposal, readProposals } from "@/lib/proposal-store";
+import { collectedProposalSlugs } from "@/lib/proposals";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
 
@@ -24,6 +25,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ i
   const live = await readLiveContent().catch(() => null);
   const reviews = listProposalStudioReviews(live, bundledReviews(), lang);
   const films = await getFilms("portfolio").catch(() => []);
+  const takenSlugs = [...collectedProposalSlugs(await readProposals(), proposal.id)];
 
   const h = await headers();
   const host = h.get("x-forwarded-host") || h.get("host");
@@ -36,7 +38,13 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ i
         <AdminHeader current="proposals" title={t.proposals.editTitle} />
       </div>
       <div className="mx-auto mt-3 w-full max-w-[1600px]">
-        <ProposalEditor initial={proposal} origin={origin} reviews={reviews} films={films} />
+        <ProposalEditor
+          initial={proposal}
+          origin={origin}
+          reviews={reviews}
+          films={films}
+          takenSlugs={takenSlugs}
+        />
       </div>
     </main>
   );
