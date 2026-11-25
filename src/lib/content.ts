@@ -168,16 +168,21 @@ export function whatsappHref(text: string) {
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
 }
 
+/**
+ * Canonical public site origin for client-facing links (emails, bookings, OG, etc.).
+ * Never returns a *.vercel.app host — those are deployment aliases, not the brand domain.
+ */
 export function siteUrl() {
-  const configured = (process.env.NEXT_PUBLIC_SITE_URL || settings.siteUrl).replace(/\/$/, "");
+  const fallback = (settings.siteUrl || `https://${settings.domain}`).replace(/\/$/, "");
+  const configured = (process.env.NEXT_PUBLIC_SITE_URL || fallback).replace(/\/$/, "");
   try {
-    if (new URL(configured).hostname === "oracle-of-freedom.vercel.app") {
-      return settings.siteUrl.replace(/\/$/, "");
+    if (new URL(configured).hostname.endsWith(".vercel.app")) {
+      return fallback;
     }
   } catch {
-    return settings.siteUrl.replace(/\/$/, "");
+    return fallback;
   }
-  return configured;
+  return configured || fallback;
 }
 
 export function htmlLang(locale: string) {

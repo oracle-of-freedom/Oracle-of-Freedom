@@ -29,8 +29,27 @@ function withLocaleCookie(response: NextResponse, locale: string) {
   return response;
 }
 
+/** Production Vercel alias only — not preview/branch *.vercel.app hosts. */
+export const PRODUCTION_VERCEL_HOST = "oracle-of-freedom.vercel.app";
+export const CANONICAL_SITE_ORIGIN = "https://oracleoffreedom.com";
+
+/** True when a production vercel.app /p/… hit should 308 to oracleoffreedom.com. */
+export function shouldRedirectVercelProposalPath(hostname: string, pathname: string) {
+  const host = hostname.split(",")[0]?.trim().split(":")[0]?.toLowerCase() || "";
+  return host === PRODUCTION_VERCEL_HOST && (pathname === "/p" || pathname.startsWith("/p/"));
+}
+
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
+  const hostHeader = request.headers.get("x-forwarded-host") || request.headers.get("host") || "";
+  const hostname = hostHeader.split(",")[0]?.trim().split(":")[0]?.toLowerCase() || "";
+
+  // Old proposal links on the production vercel.app alias land on the real domain.
+  // Skip preview/branch deployments and leave /admin on whatever host it was opened on.
+  if (shouldRedirectVercelProposalPath(hostname, pathname)) {
+    return NextResponse.redirect(new URL(`${CANONICAL_SITE_ORIGIN}${pathname}${search}`), 308);
+  }
+
   if (pathname === "/p" || pathname.startsWith("/p/")) {
     return NextResponse.next();
   }
