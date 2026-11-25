@@ -235,17 +235,27 @@ function Cover({
 }) {
   const { data } = section;
   const src = imageSrc(data.heroImage);
-  const useCroppedPhoto = Boolean(
-    src && (hasImageCrop(data.heroImage) || hasMobileImageCrop(data.heroImage)),
-  );
+  const hasDesktopCrop = hasImageCrop(data.heroImage);
+  const hasMobileCrop = hasMobileImageCrop(data.heroImage);
+  // Keep Awake desktop look (background-size: auto 100%) until a desktop crop
+  // is saved. Phone-only crops must not force the desktop onto object-fit:cover.
+  const useDesktopBackground = Boolean(src && !hasDesktopCrop);
+  const showCroppedMedia = Boolean(src && (hasDesktopCrop || hasMobileCrop));
   const style: CSSProperties = {
-    ...(src && !useCroppedPhoto ? { backgroundImage: `url("${src}")` } : {}),
+    ...(useDesktopBackground ? { backgroundImage: `url("${src}")` } : {}),
     ...sectionStyle(section, index),
     cursor: onSelect ? "pointer" : undefined,
   };
   const phoneClass = sectionPhoneClass(section);
   const topClass = imageSide === "top" ? "is-phone-top" : "";
   const imageHidden = imagePhoneHiddenClass(data.heroImage);
+  const mediaClass = [
+    "proposal-hero-media",
+    !hasDesktopCrop && hasMobileCrop ? "is-phone-crop-only" : "",
+    imageHidden,
+  ]
+    .filter(Boolean)
+    .join(" ");
   return (
     <header
       id={`proposal-section-${section.id}`}
@@ -254,15 +264,18 @@ function Cover({
       style={style}
       onClick={onSelect ? () => onSelect(section.id) : undefined}
     >
-      {useCroppedPhoto && src ? (
-        <div className={`proposal-hero-media ${imageHidden}`.trim()} aria-hidden="true">
+      {showCroppedMedia && src ? (
+        <div className={mediaClass} aria-hidden="true">
           <Image
             src={src}
             alt=""
             fill
             priority
             className="proposal-hero-photo proposal-cropped"
-            style={imageResponsiveStyle(data.heroImage, HERO_CROP_FALLBACK)}
+            style={imageResponsiveStyle(
+              data.heroImage,
+              hasDesktopCrop ? HERO_CROP_FALLBACK : undefined,
+            )}
             sizes="100vw"
             unoptimized={src.startsWith("/api/media/")}
           />

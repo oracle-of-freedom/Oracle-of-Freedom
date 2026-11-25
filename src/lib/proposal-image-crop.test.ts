@@ -13,9 +13,9 @@ import {
 import { parseProposal } from "./proposals";
 
 test("missing crop fields resolve to centre with zoom 1", () => {
-  const crop = resolveImageCrop({ alt: "Still" });
+  const crop = resolveImageCrop({});
   assert.deepEqual(crop, { focusX: 50, focusY: 50, zoom: 1 });
-  assert.equal(hasImageCrop({ alt: "Still" }), false);
+  assert.equal(hasImageCrop({}), false);
 });
 
 test("clamp keeps focus and zoom in range", () => {
@@ -26,12 +26,12 @@ test("clamp keeps focus and zoom in range", () => {
 });
 
 test("imageCropStyle uses object-position and optional scale", () => {
-  const plain = imageCropStyle({ alt: "", focusX: 20, focusY: 80 });
+  const plain = imageCropStyle({ focusX: 20, focusY: 80 });
   assert.equal(plain.objectFit, "cover");
   assert.equal(plain.objectPosition, "20% 80%");
   assert.equal(plain.transform, undefined);
 
-  const zoomed = imageCropStyle({ alt: "", focusX: 10, focusY: 90, zoom: 1.5 });
+  const zoomed = imageCropStyle({ focusX: 10, focusY: 90, zoom: 1.5 });
   assert.equal(zoomed.transform, "scale(1.5)");
   assert.equal(zoomed.transformOrigin, "10% 90%");
 });
