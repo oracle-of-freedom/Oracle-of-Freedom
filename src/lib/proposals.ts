@@ -1,4 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
+import { siteUrl } from "@/lib/content";
 import {
   parseProposalDesign,
   parseSectionDesign,
@@ -535,9 +536,37 @@ export function effectiveStatus(proposal: Proposal, now = new Date()): Effective
   return proposal.status;
 }
 
+const FALLBACK_PUBLIC_ORIGIN = "https://oracleoffreedom.com";
+
+/**
+ * Canonical origin for proposal links shown or copied for clients.
+ * Always the real domain — never the request host or a *.vercel.app alias.
+ */
+export function proposalBaseUrl() {
+  try {
+    const base = siteUrl().replace(/\/$/, "");
+    if (!base) return FALLBACK_PUBLIC_ORIGIN;
+    if (new URL(base).hostname.endsWith(".vercel.app")) return FALLBACK_PUBLIC_ORIGIN;
+    return base;
+  } catch {
+    return FALLBACK_PUBLIC_ORIGIN;
+  }
+}
+
+function canonicalProposalOrigin(origin?: string) {
+  const candidate = (origin || proposalBaseUrl()).replace(/\/$/, "");
+  try {
+    if (!candidate || new URL(candidate).hostname.endsWith(".vercel.app")) {
+      return proposalBaseUrl();
+    }
+    return candidate;
+  } catch {
+    return proposalBaseUrl();
+  }
+}
+
 export function publicUrl(slug: string, origin?: string) {
-  const base = (origin || "").replace(/\/$/, "");
-  return `${base}/p/${slug}`;
+  return `${canonicalProposalOrigin(origin)}/p/${slug}`;
 }
 
 export function previewUrl(slug: string, previewToken: string, origin?: string) {

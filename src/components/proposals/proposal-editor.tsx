@@ -36,6 +36,7 @@ import {
   effectiveStatus,
   findSection,
   previewUrl,
+  proposalBaseUrl,
   proposalWarnings,
   publicUrl,
   sectionLabel,
@@ -53,13 +54,14 @@ const hints = [
 
 export function ProposalEditor({
   initial,
-  origin,
+  origin = proposalBaseUrl(),
   reviews,
   films = [],
   takenSlugs = [],
 }: {
   initial: Proposal;
-  origin: string;
+  /** Ignored when it is a vercel.app host — links always use the canonical domain. */
+  origin?: string;
   reviews: ProposalStudioReview[];
   films?: Film[];
   /** Other proposals' current and previous slugs, for Suggest uniqueness. */
@@ -80,13 +82,13 @@ export function ProposalEditor({
 
 function ProposalEditorInner({
   initial,
-  origin,
+  origin = proposalBaseUrl(),
   reviews,
   films = [],
   takenSlugs = [],
 }: {
   initial: Proposal;
-  origin: string;
+  origin?: string;
   reviews: ProposalStudioReview[];
   films?: Film[];
   takenSlugs?: string[];
