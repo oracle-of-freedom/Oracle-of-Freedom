@@ -8,11 +8,20 @@
  */
 
 import {
+  parseProposalBackground,
+  type ProposalBackground,
+} from "@/lib/proposal-backgrounds";
+import {
+  parseColourScheme,
+  type ProposalColourScheme,
+} from "@/lib/proposal-colours";
+import {
   parseProposalDesignMobile,
   type ProposalDesignMobile,
 } from "@/lib/proposal-mobile";
 
 export type DesignAlign = "left" | "center" | "right";
+export type { ProposalBackground, ProposalColourScheme };
 
 /** Card grid height behaviour. Auto fits content; equal stretches a row; fixed uses cardHeightValue. */
 export type CardHeightMode = "auto" | "equal" | "fixed";
@@ -59,6 +68,10 @@ export type ProposalDesign = {
   buttonPosition?: DesignAlign;
   /** Sign-off alignment. Default `left`. */
   signOffAlign?: DesignAlign;
+  /** Optional colour scheme. Missing keys keep the Awake sheet palette. */
+  colours?: ProposalColourScheme;
+  /** Optional page background (solid / gradient / mesh / image / texture). */
+  background?: ProposalBackground;
   /** Phone-only overrides. Missing keys fall back to the desktop values above. */
   mobile?: ProposalDesignMobile;
 };
@@ -97,6 +110,8 @@ export type SectionDesign = {
   cardPadding?: CardPaddingPreset | string;
   /** Text size inside cards: small / normal / large or a CSS size. */
   cardTextSize?: string;
+  /** Optional section background override. */
+  background?: ProposalBackground;
 };
 
 export type ResolvedCoverDesign = {
@@ -211,6 +226,8 @@ export function parseProposalDesign(value: unknown): ProposalDesign | undefined 
   const signOffGap = asCss(record.signOffGap);
   const buttonPosition = asAlign(record.buttonPosition);
   const signOffAlign = asAlign(record.signOffAlign);
+  const colours = parseColourScheme(record.colours);
+  const background = parseProposalBackground(record.background);
   const mobile = parseProposalDesignMobile(record.mobile);
   if (cover) design.cover = cover;
   if (planColumns) design.planColumns = planColumns;
@@ -224,6 +241,8 @@ export function parseProposalDesign(value: unknown): ProposalDesign | undefined 
   if (signOffGap) design.signOffGap = signOffGap;
   if (buttonPosition) design.buttonPosition = buttonPosition;
   if (signOffAlign) design.signOffAlign = signOffAlign;
+  if (colours) design.colours = colours;
+  if (background) design.background = background;
   if (mobile) design.mobile = mobile;
   return Object.keys(design).length ? design : undefined;
 }
@@ -324,6 +343,8 @@ export function parseSectionDesign(value: unknown): SectionDesign | undefined {
   if (cardHeightValue) design.cardHeightValue = cardHeightValue;
   if (cardPadding) design.cardPadding = cardPadding;
   if (cardTextSize && !/[{};<>]/.test(cardTextSize)) design.cardTextSize = cardTextSize;
+  const background = parseProposalBackground(record.background);
+  if (background) design.background = background;
   return Object.keys(design).length ? design : undefined;
 }
 

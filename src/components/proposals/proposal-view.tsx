@@ -5,6 +5,14 @@ import { ProposalPdfButton } from "@/components/proposals/proposal-pdf-button";
 import { ProposalProofGrid } from "@/components/proposals/proposal-proof-grid";
 import { ProposalVideoBlock } from "@/components/proposals/proposal-video";
 import {
+  backgroundStyleVars,
+  resolveBackground,
+} from "@/lib/proposal-backgrounds";
+import {
+  colourSchemeVars,
+  resolveColourSchemeWithPhone,
+} from "@/lib/proposal-colours";
+import {
   cardLayoutVars,
   resolveProposalDesign,
   sectionTitleVisible,
@@ -71,9 +79,16 @@ function alignClass(align: DesignAlign | undefined, fallback: DesignAlign) {
 
 function designVars(
   design: ResolvedProposalDesign,
-  mobile?: import("@/lib/proposal-mobile").ProposalDesignMobile,
+  raw?: import("@/lib/proposal-design").ProposalDesign | null,
 ): CSSProperties {
   const [stop1, stop2, stop3] = design.cover.gradientStops;
+  const mobile = raw?.mobile;
+  const { desktop: colours, phone: phoneColours } = resolveColourSchemeWithPhone(
+    raw?.colours,
+    mobile?.colours,
+  );
+  const pageBg = resolveBackground(raw?.background, colours.pageBg);
+  const pageBgPhone = resolveBackground(mobile?.background || raw?.background, phoneColours.pageBg);
   return {
     ["--hero-height" as string]: design.cover.heroHeight,
     ["--logo-size" as string]: design.cover.logoSize,
@@ -93,6 +108,10 @@ function designVars(
     ["--next-step-gap" as string]: design.nextStepGap,
     ["--cta-gap" as string]: design.ctaGap,
     ["--signoff-gap" as string]: design.signOffGap,
+    ...colourSchemeVars(colours),
+    ...colourSchemeVars(phoneColours, { phone: true }),
+    ...backgroundStyleVars(pageBg),
+    ...backgroundStyleVars(pageBgPhone, { phone: true, pageFallback: phoneColours.pageBg }),
     ...designMobileVars(mobile),
   };
 }
@@ -127,6 +146,24 @@ function sectionStyle(section: ProposalSection, index: number): CSSProperties {
   if (design?.marginTop) style.marginTop = design.marginTop;
   if (design?.offsetX && design.offsetX !== "0") style.marginLeft = design.offsetX;
   if (design?.align) style.textAlign = design.align;
+  if (design?.background) {
+    Object.assign(
+      style,
+      backgroundStyleVars(resolveBackground(design.background), { pageFallback: "transparent" }),
+    );
+    style.background = "var(--p-bg-layer)";
+    style.backgroundSize = "cover";
+    style.backgroundPosition = "center";
+  }
+  if (mobile?.background) {
+    Object.assign(
+      style,
+      backgroundStyleVars(resolveBackground(mobile.background), {
+        phone: true,
+        pageFallback: "transparent",
+      }),
+    );
+  }
   if (design?.columns) {
     style["--block-columns"] = design.columns;
     if (section.type === "plan") style["--plan-columns"] = design.columns;
@@ -971,10 +1008,17 @@ export function ProposalView({
 }) {
   const hidePrices = mode === "preview";
   const design = resolveProposalDesign(proposal.design);
+  const pageBg = resolveBackground(
+    proposal.design?.background,
+    resolveColourSchemeWithPhone(proposal.design?.colours, proposal.design?.mobile?.colours).desktop
+      .pageBg,
+  );
+  const animateBg =
+    pageBg.animate && (pageBg.kind === "gradient" || pageBg.kind === "mesh");
   return (
     <article
-      className={`proposal-doc ${className || ""}`.trim()}
-      style={designVars(design, proposal.design?.mobile)}
+      className={`proposal-doc ${animateBg ? "proposal-bg-animate" : ""} ${className || ""}`.trim()}
+      style={designVars(design, proposal.design)}
     >
       {showPdfButton ? (
         <div className="proposal-no-print proposal-toolbar">

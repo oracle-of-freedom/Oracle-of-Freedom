@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  ColourSchemeFields,
+  SectionBackgroundFields,
+} from "@/components/proposals/colour-fields";
 import { PhoneBadge, useEditorViewport } from "@/components/proposals/editor-viewport";
 import { ImageCropControl } from "@/components/proposals/image-crop-control";
 import {
@@ -13,6 +17,7 @@ import {
   ToggleControl,
 } from "@/components/proposals/visual-controls";
 import { Input } from "@/components/ui/input";
+import { resolveColourScheme } from "@/lib/proposal-colours";
 import {
   resolveProposalDesign,
   type CardHeightMode,
@@ -100,6 +105,7 @@ function PhoneDesignFields({
           }
         />
       </div>
+      <ColourSchemeFields design={design} onChange={onChange} />
       <div className="grid gap-3 sm:grid-cols-2">
         <SizeSlider
           label="Header height"
@@ -369,13 +375,21 @@ export function ProposalDesignFields({
   }
 
   function patch(partial: Partial<ResolvedProposalDesign>) {
-    onChange({ ...value, ...partial, mobile: design?.mobile });
+    onChange({
+      ...value,
+      ...partial,
+      colours: design?.colours,
+      background: design?.background,
+      mobile: design?.mobile,
+    });
   }
 
   function patchCover(partial: Partial<ResolvedCoverDesign>) {
     onChange({
       ...value,
       cover: { ...value.cover, ...partial },
+      colours: design?.colours,
+      background: design?.background,
       mobile: design?.mobile,
     });
   }
@@ -390,6 +404,7 @@ export function ProposalDesignFields({
       <p className="text-xs text-ink/55">
         Drag the sliders or tap the buttons. The live preview updates as you go. Reset restores the Awake default for that field.
       </p>
+      <ColourSchemeFields design={design} onChange={onChange} />
       <div className="grid gap-3 sm:grid-cols-2">
         <SizeSlider
           label="Header height"
@@ -839,6 +854,19 @@ export function SectionDesignFields({
           onChange={(signOffAlign) => patch({ signOffAlign })}
         />
       ) : null}
+      <SectionBackgroundFields
+        background={design.background}
+        pageFallback={resolveColourScheme().pageBg}
+        onChange={(background) => {
+          const next = { ...design };
+          if (background) next.background = background;
+          else delete next.background;
+          onChange({
+            ...section,
+            design: Object.keys(next).length ? next : undefined,
+          } as ProposalSection);
+        }}
+      />
       <AdvancedCssDetails>
         <ControlField label="Columns (raw)">
           <Input
