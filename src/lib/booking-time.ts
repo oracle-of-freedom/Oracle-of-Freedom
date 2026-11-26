@@ -1,7 +1,7 @@
 import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
 import { lisbonDateTimeToUtc } from "@/lib/availability";
-import type { Booking } from "@/lib/bookings";
+import { acceptanceUrl, type Booking } from "@/lib/bookings";
 import { CALENDAR_TIME_ZONE, studioTimeZone } from "@/lib/calendar-config";
 import { zonedZoneName } from "@/lib/visitor-time";
 
@@ -153,10 +153,21 @@ export function guestScheduleLines(booking: Booking, locale: Locale, studioZone 
   return lines;
 }
 
-export function guestHoldText(booking: Booking, locale: Locale, studioZone = CALENDAR_TIME_ZONE) {
+export function guestHoldText(
+  booking: Booking,
+  locale: Locale,
+  studioZone = CALENDAR_TIME_ZONE,
+  meetingUrl = "",
+  acceptUrl = "",
+) {
   const resolved = bookingLocale(locale);
   const copy = bookingCopy[resolved];
-  return [copy.successBody, "", ...guestScheduleLines(booking, resolved, studioZone), "", copy.signOff].join("\n");
+  const link = acceptUrl || (booking.publicToken ? acceptanceUrl(resolved, booking.publicToken) : "");
+  const lines = [copy.successBody, "", ...guestScheduleLines(booking, resolved, studioZone)];
+  if (link) lines.push("", `${copy.acceptButton}: ${link}`);
+  if (meetingUrl) lines.push("", `${copy.joinMeeting}: ${meetingUrl}`);
+  lines.push("", copy.signOff);
+  return lines.join("\n");
 }
 
 export function guestConfirmedText(booking: Booking, meetingUrl: string, studioZone = CALENDAR_TIME_ZONE) {

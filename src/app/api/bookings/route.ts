@@ -37,6 +37,7 @@ async function sendConfirmation(
   typeLabel: string,
   locale: Locale,
   studioZone: string,
+  meetingUrl = "",
 ) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return false;
@@ -65,7 +66,7 @@ async function sendConfirmation(
       to: booking.contact,
       replyTo: to,
       subject: copy.successTitle,
-      text: guestHoldText(booking, locale, studioZone),
+      text: guestHoldText(booking, locale, studioZone, meetingUrl, acceptUrl),
     }),
   ]);
   if (admin.error || attendee.error) {
@@ -146,7 +147,7 @@ export async function POST(request: Request) {
 
   let emailed = false;
   try {
-    emailed = await sendConfirmation(booking, label, data.locale, zone);
+    emailed = await sendConfirmation(booking, label, data.locale, zone, available.config.meetingUrl || "");
   } catch (error) {
     console.error("[booking] email failed", error);
   }
