@@ -12,7 +12,7 @@ import {
   studioWhenLines,
   zonedDateTimeToUtc,
 } from "@/lib/booking-time";
-import { isBooking, type Booking } from "@/lib/bookings";
+import { acceptanceUrl, isBooking, type Booking } from "@/lib/bookings";
 import { CALENDAR_TIME_ZONE } from "@/lib/calendar-config";
 import { bookingsIcal } from "@/lib/ical";
 
@@ -69,42 +69,55 @@ test("guest wall time is the same instant as the studio Lisbon time", () => {
 });
 
 test("guest emails use the booked zone, language, and sign-off", () => {
-  const held = guestHoldText(booking(), "en");
+  const meetUrl = "https://us05web.zoom.us/j/example";
+  const held = guestHoldText(booking(), "en", undefined, meetUrl);
   assert.equal(
     held,
     [
-      "That time is held for you. Agota will send a link so you can accept it.",
+      "That time is held for you. The email has a link so you can accept it, and the call link when one is saved.",
       "",
       "When: Wednesday, 15 July 2026, 10:00 to 11:00 (Eastern Time)",
       "[Studio time: Wednesday, 15 July 2026, 15:00 to 16:00 (Western European Time)]",
+      "",
+      `Accept this appointment: ${acceptanceUrl("en", "abcdefghijklmnopqrstuvwx")}`,
+      "",
+      "Join the call: https://us05web.zoom.us/j/example",
       "",
       "With love,",
       "Agota",
     ].join("\n"),
   );
 
-  const spanish = guestHoldText(booking({ locale: "es" }), "es");
+  const spanish = guestHoldText(booking({ locale: "es" }), "es", undefined, meetUrl);
   assert.equal(
     spanish,
     [
-      "Esa hora queda reservada para ti. Agota te enviará un enlace para aceptarla.",
+      "Esa hora queda reservada para ti. El email incluye un enlace para aceptarla, y el enlace de la llamada cuando hay uno guardado.",
       "",
       "Cuándo: miércoles, 15 de julio de 2026, 10:00 a 11:00 (hora oriental)",
       "[Hora del estudio: miércoles, 15 de julio de 2026, 15:00 a 16:00 (hora de Europa occidental)]",
+      "",
+      `Aceptar esta cita: ${acceptanceUrl("es", "abcdefghijklmnopqrstuvwx")}`,
+      "",
+      "Unirse a la llamada: https://us05web.zoom.us/j/example",
       "",
       "Con amor,",
       "Agota",
     ].join("\n"),
   );
 
-  const portuguese = guestHoldText(booking({ locale: "pt" }), "pt");
+  const portuguese = guestHoldText(booking({ locale: "pt" }), "pt", undefined, meetUrl);
   assert.equal(
     portuguese,
     [
-      "Essa hora fica reservada para ti. A Agota envia um link para a aceitares.",
+      "Essa hora fica reservada para ti. O email inclui um link para a aceitares, e o link da chamada quando há um guardado.",
       "",
       "Quando: quarta-feira, 15 de julho de 2026, 10:00 às 11:00 (Hora oriental norte-americana)",
       "[Hora do estúdio: quarta-feira, 15 de julho de 2026, 15:00 às 16:00 (Hora da Europa Ocidental)]",
+      "",
+      `Aceitar esta marcação: ${acceptanceUrl("pt", "abcdefghijklmnopqrstuvwx")}`,
+      "",
+      "Entrar na chamada: https://us05web.zoom.us/j/example",
       "",
       "Com amor,",
       "Agota",
@@ -133,6 +146,8 @@ test("guest emails use the booked zone, language, and sign-off", () => {
   assert.equal(sameZone.includes("Studio time"), false);
   assert.match(sameZone, /15:00 to 16:00 \(Western European Time\)/);
   assert.match(sameZone, /With love,\nAgota$/);
+  assert.match(sameZone, /Accept this appointment: /);
+  assert.equal(sameZone.includes("Join the call"), false);
 
   for (const text of [held, spanish, portuguese, confirmed, sameZone]) {
     assert.equal(DASH.test(text), false);
