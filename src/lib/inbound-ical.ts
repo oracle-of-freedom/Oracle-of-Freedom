@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { lookup } from "node:dns/promises";
-import { lisbonDateTimeToUtc, utcToLisbonDateTime } from "@/lib/availability";
+import { studioDateTimeToUtc, utcToStudioDateTime } from "@/lib/availability";
 import type { Booking } from "@/lib/bookings";
 import {
   CALENDAR_TIME_ZONE,
@@ -234,10 +234,10 @@ function timedSlices(
   const slices: Booking[] = [];
   let cursor = startUtc;
   for (let guard = 0; guard < 8 && cursor < endUtc; guard += 1) {
-    const local = utcToLisbonDateTime(cursor, timeZone);
-    const midnight = lisbonDateTimeToUtc(addDays(local.date, 1), "00:00", timeZone);
+    const local = utcToStudioDateTime(cursor, timeZone);
+    const midnight = studioDateTimeToUtc(addDays(local.date, 1), "00:00", timeZone);
     const sliceEnd = new Date(Math.min(midnight.getTime(), endUtc.getTime()));
-    const endLocal = utcToLisbonDateTime(sliceEnd, timeZone);
+    const endLocal = utcToStudioDateTime(sliceEnd, timeZone);
     const end = endLocal.date === local.date && endLocal.time > local.time ? endLocal.time : "23:59";
     if (local.date >= from && local.date <= to && end > local.time) {
       slices.push(booking(uid, title, place, local.date, false, local.time, end));
@@ -291,10 +291,10 @@ function eventBookings(block: string, from: string, to: string, timeZone: string
 
   const endUtc = end?.kind === "time" ? end.utc : new Date(start.utc.getTime() + 60 * 60_000);
   const duration = Math.max(60_000, endUtc.getTime() - start.utc.getTime());
-  const origin = utcToLisbonDateTime(start.utc, timeZone);
+  const origin = utcToStudioDateTime(start.utc, timeZone);
   const dates = occurrenceDates(origin.date, rule, from, to, skipped);
   return dates.flatMap((date) => {
-    const begins = lisbonDateTimeToUtc(date, origin.time, timeZone);
+    const begins = studioDateTimeToUtc(date, origin.time, timeZone);
     return timedSlices(uid, title, place, begins, new Date(begins.getTime() + duration), from, to, timeZone);
   });
 }

@@ -1,7 +1,7 @@
 import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
-import { lisbonDateTimeToUtc } from "@/lib/availability";
-import { acceptanceUrl, type Booking } from "@/lib/bookings";
+import { studioDateTimeToUtc } from "@/lib/availability";
+import type { Booking } from "@/lib/bookings";
 import { CALENDAR_TIME_ZONE, studioTimeZone } from "@/lib/calendar-config";
 import { zonedZoneName } from "@/lib/visitor-time";
 
@@ -127,11 +127,11 @@ export function formatWhen(
   const wallZone = studioTimeZone({ timeZone: studioZone });
   const copy = bookingCopy[locale] || bookingCopy.en;
   if (booking.allDay) {
-    const noon = lisbonDateTimeToUtc(booking.date, "12:00", wallZone);
+    const noon = studioDateTimeToUtc(booking.date, "12:00", wallZone);
     return `${longDate(noon, locale, zone)} (${zonedZoneName(dateLocale(locale), zone, noon)})`;
   }
-  const start = lisbonDateTimeToUtc(booking.date, booking.start, wallZone);
-  const end = lisbonDateTimeToUtc(booking.date, booking.end, wallZone);
+  const start = studioDateTimeToUtc(booking.date, booking.start, wallZone);
+  const end = studioDateTimeToUtc(booking.date, booking.end, wallZone);
   const startDate = longDate(start, locale, zone);
   const endDate = longDate(end, locale, zone);
   const range =
@@ -158,13 +158,11 @@ export function guestHoldText(
   locale: Locale,
   studioZone = CALENDAR_TIME_ZONE,
   meetingUrl = "",
-  acceptUrl = "",
 ) {
   const resolved = bookingLocale(locale);
   const copy = bookingCopy[resolved];
-  const link = acceptUrl || (booking.publicToken ? acceptanceUrl(resolved, booking.publicToken) : "");
   const lines = [copy.successBody, "", ...guestScheduleLines(booking, resolved, studioZone)];
-  if (link) lines.push("", `${copy.acceptButton}: ${link}`);
+  if (booking.place) lines.push("", booking.place);
   if (meetingUrl) lines.push("", `${copy.joinMeeting}: ${meetingUrl}`);
   lines.push("", copy.signOff);
   return lines.join("\n");
@@ -174,6 +172,7 @@ export function guestConfirmedText(booking: Booking, meetingUrl: string, studioZ
   const resolved = bookingLocale(booking.locale);
   const copy = bookingCopy[resolved];
   const lines = [copy.acceptedBody, "", ...guestScheduleLines(booking, resolved, studioZone), "", booking.title];
+  if (booking.place) lines.push(booking.place);
   if (meetingUrl) lines.push("", `${copy.joinMeeting}: ${meetingUrl}`);
   lines.push("", copy.signOff);
   return lines.join("\n");
@@ -189,7 +188,7 @@ export function studioWhenLines(booking: Booking, studioZone = CALENDAR_TIME_ZON
 
 export function googleTimedBound(date: string, time: string, timeZone?: string, studioZone = CALENDAR_TIME_ZONE) {
   const wallZone = studioTimeZone({ timeZone: studioZone });
-  const instant = lisbonDateTimeToUtc(date, time, wallZone);
+  const instant = studioDateTimeToUtc(date, time, wallZone);
   const guestZone = canonicalTimeZone(timeZone);
   if (guestZone && guestZone !== wallZone) {
     const wall = wallClock(instant, guestZone);
@@ -238,8 +237,8 @@ export function icalGuestSpan(
 ) {
   const wallZone = studioTimeZone({ timeZone: studioZone });
   const zone = bookingTimeZone(booking, wallZone);
-  const start = lisbonDateTimeToUtc(booking.date, booking.start, wallZone);
-  const end = lisbonDateTimeToUtc(booking.date, booking.end, wallZone);
+  const start = studioDateTimeToUtc(booking.date, booking.start, wallZone);
+  const end = studioDateTimeToUtc(booking.date, booking.end, wallZone);
   return {
     zone,
     start: localStamp(start, zone),

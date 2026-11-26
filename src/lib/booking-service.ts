@@ -1,6 +1,6 @@
 import {
   buildAvailability,
-  lisbonDateTimeToUtc,
+  studioDateTimeToUtc,
   type BusyInterval,
 } from "@/lib/availability";
 import { readBookings, writeBookings } from "@/lib/booking-store";
@@ -47,8 +47,8 @@ export async function publicAvailability(typeId: string) {
   try {
     externalBusy = await googleBusy(
       config,
-      lisbonDateTimeToUtc(today, "00:00", zone),
-      lisbonDateTimeToUtc(addDays(to, 1), "00:00", zone),
+      studioDateTimeToUtc(today, "00:00", zone),
+      studioDateTimeToUtc(addDays(to, 1), "00:00", zone),
     );
   } catch (error) {
     console.error("[calendar] Google availability failed", error);

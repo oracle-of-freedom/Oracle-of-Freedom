@@ -3,12 +3,17 @@ import { isAdmin } from "@/lib/admin-auth";
 import { readBookings } from "@/lib/booking-store";
 import { readInquiries } from "@/lib/inquiry-store";
 import { notifyStudio } from "@/lib/push";
-import { lisbonToday } from "@/lib/pricing";
+import { calendarToday, studioTimeZone } from "@/lib/calendar-config";
+import { readCalendarConfig } from "@/lib/calendar-config-store";
 
 export async function GET() {
   if (!(await isAdmin())) return NextResponse.json({ ok: false }, { status: 401 });
-  const today = lisbonToday();
-  const [inquiries, bookings] = await Promise.all([readInquiries(), readBookings()]);
+  const [inquiries, bookings, config] = await Promise.all([
+    readInquiries(),
+    readBookings(),
+    readCalendarConfig(),
+  ]);
+  const today = calendarToday(studioTimeZone(config));
   const items: {
     id: string;
     kind: "inquiry" | "consultation" | "appointment";

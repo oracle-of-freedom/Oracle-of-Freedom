@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import { AdminHeader } from "@/components/admin-header";
 import { PresenceEditor } from "@/components/presence-editor";
 import { isAdmin } from "@/lib/admin-auth";
-import { lisbonToday } from "@/lib/pricing";
+import { calendarToday, studioTimeZone } from "@/lib/calendar-config";
+import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
 import { readStored, storageMode } from "@/lib/store";
@@ -13,8 +14,9 @@ export default async function PresencePage() {
   if (!(await isAdmin())) redirect("/admin/login");
   const lang = await studioLang();
   const t = studioCopy(lang);
-  const settings = await readStored();
+  const [settings, config] = await Promise.all([readStored(), readCalendarConfig()]);
   const mode = storageMode();
+  const today = calendarToday(studioTimeZone(config));
 
   return (
     <main className="studio-page mx-auto max-w-3xl px-4 py-4 md:py-12">
@@ -23,7 +25,7 @@ export default async function PresencePage() {
       <p className="mt-2 max-w-xl text-sm text-ink/60">{t.presence.storage[mode]}</p>
       <PresenceEditor
         initial={settings.stays ?? []}
-        today={lisbonToday()}
+        today={today}
         copy={t.presence}
         homeHref={lang === "en" ? "/" : "/es"}
         lang={lang}

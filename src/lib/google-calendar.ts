@@ -1,6 +1,6 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
 import type { BusyInterval } from "@/lib/availability";
-import { lisbonDateTimeToUtc, utcToLisbonDateTime } from "@/lib/availability";
+import { studioDateTimeToUtc, utcToStudioDateTime } from "@/lib/availability";
 import { canonicalTimeZone, googleTimedBound, parseGoogleDateTime, studioWhenLines } from "@/lib/booking-time";
 import { isBooking, type Booking } from "@/lib/bookings";
 import type { CalendarConfig, GoogleConnection } from "@/lib/calendar-config";
@@ -333,13 +333,13 @@ export async function deleteGoogleEvent(config: CalendarConfig, booking: Booking
 
 function scheduleFromEvent(event: GoogleEvent, timeZone: string) {
   if (event.start?.dateTime) {
-    const start = utcToLisbonDateTime(
+    const start = utcToStudioDateTime(
       parseGoogleDateTime(event.start.dateTime, event.start.timeZone),
       timeZone,
     );
     let end = "23:59";
     if (event.end?.dateTime) {
-      const finish = utcToLisbonDateTime(
+      const finish = utcToStudioDateTime(
         parseGoogleDateTime(event.end.dateTime, event.end.timeZone),
         timeZone,
       );
@@ -460,10 +460,10 @@ async function listGoogleWindow(
   to: string,
   timeZone: string,
 ) {
-  const timeMin = lisbonDateTimeToUtc(from, "00:00", timeZone).toISOString();
+  const timeMin = studioDateTimeToUtc(from, "00:00", timeZone).toISOString();
   const endDay = new Date(`${to}T00:00:00Z`);
   endDay.setUTCDate(endDay.getUTCDate() + 1);
-  const timeMax = lisbonDateTimeToUtc(endDay.toISOString().slice(0, 10), "00:00", timeZone).toISOString();
+  const timeMax = studioDateTimeToUtc(endDay.toISOString().slice(0, 10), "00:00", timeZone).toISOString();
   const items: GoogleEvent[] = [];
   let pageToken = "";
   for (let page = 0; page < 4; page += 1) {

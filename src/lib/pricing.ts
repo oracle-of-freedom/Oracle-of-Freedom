@@ -1,4 +1,5 @@
 import packagesJson from "../../content/packages.json";
+import { calendarToday, CALENDAR_TIME_ZONE } from "@/lib/calendar-config";
 import type { PresenceStay } from "@/lib/presence";
 
 export type CatalogItem = {
@@ -60,23 +61,19 @@ export type PricedPackage = CatalogItem & {
 
 export const catalog = packagesJson.items as CatalogItem[];
 
-export function lisbonToday(now = new Date()) {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Europe/Lisbon",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(now);
+/** Today's date (YYYY-MM-DD) in the studio timezone (defaults to CALENDAR_TIME_ZONE). */
+export function studioToday(now = new Date(), timeZone = CALENDAR_TIME_ZONE) {
+  return calendarToday(timeZone, now);
 }
 
-export function promoStatus(promo: Promo, today = lisbonToday()): "live" | "scheduled" | "ended" | "off" {
+export function promoStatus(promo: Promo, today = studioToday()): "live" | "scheduled" | "ended" | "off" {
   if (!promo.active) return "off";
   if (promo.starts && today < promo.starts) return "scheduled";
   if (promo.ends && today > promo.ends) return "ended";
   return "live";
 }
 
-export function isLive(promo: Promo, today = lisbonToday()) {
+export function isLive(promo: Promo, today = studioToday()) {
   return promoStatus(promo, today) === "live";
 }
 
@@ -101,7 +98,7 @@ export function priceMap(settings: LiveSettings) {
   return map;
 }
 
-export function mergeCatalog(settings: LiveSettings, today = lisbonToday()): PricedPackage[] {
+export function mergeCatalog(settings: LiveSettings, today = studioToday()): PricedPackage[] {
   const lists = priceMap(settings);
   const live = settings.promos.filter((promo) => isLive(promo, today));
   return catalog.map((item) => {
@@ -138,11 +135,11 @@ export function openingPrice(items: PricedPackage[], group: string) {
   return item.promoFrom ?? item.listFrom;
 }
 
-export function hasPromoCode(settings: LiveSettings, today = lisbonToday()) {
+export function hasPromoCode(settings: LiveSettings, today = studioToday()) {
   return settings.promos.some((promo) => isLive(promo, today) && promo.code.trim());
 }
 
-export function liveBanners(settings: LiveSettings, today = lisbonToday()) {
+export function liveBanners(settings: LiveSettings, today = studioToday()) {
   return settings.promos.filter((promo) => isLive(promo, today) && (promo.banner.en || promo.banner.es || promo.banner.pt));
 }
 

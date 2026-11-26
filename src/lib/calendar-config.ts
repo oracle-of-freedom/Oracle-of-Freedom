@@ -2,7 +2,8 @@ import { randomBytes, timingSafeEqual } from "node:crypto";
 import type { BookingKind } from "@/lib/bookings";
 import type { Locale } from "@/i18n/routing";
 
-export const CALENDAR_TIME_ZONE = "Europe/Lisbon";
+/** Fallback studio zone when nothing is saved on the calendar config. */
+export const CALENDAR_TIME_ZONE = "Europe/Madrid";
 
 const ZONE_ID = /^[A-Za-z0-9_+/-]{1,80}$/;
 
@@ -18,9 +19,19 @@ function resolveTimeZone(value: unknown): string | undefined {
   }
 }
 
-/** Resolve a calendar config's studio timezone, falling back to Lisbon. */
+/** Resolve a calendar config's studio timezone, falling back to CALENDAR_TIME_ZONE. */
 export function studioTimeZone(config?: { timeZone?: string } | null) {
   return resolveTimeZone(config?.timeZone) || CALENDAR_TIME_ZONE;
+}
+
+/** Wall-clock time (HH:MM, 24h) in the studio timezone. */
+export function studioClock(timeZone = CALENDAR_TIME_ZONE, now = new Date()) {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: studioTimeZone({ timeZone }),
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(now);
 }
 
 /** Today's calendar date (YYYY-MM-DD) in the given IANA timezone. */

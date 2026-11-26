@@ -38,7 +38,8 @@ function partsInZone(date: Date, timeZone: string) {
   };
 }
 
-export function lisbonDateTimeToUtc(date: string, time: string, timeZone = CALENDAR_TIME_ZONE) {
+/** Convert a studio wall date+time in `timeZone` to a UTC Date. */
+export function studioDateTimeToUtc(date: string, time: string, timeZone = CALENDAR_TIME_ZONE) {
   const zone = studioTimeZone({ timeZone });
   const [year, month, day] = date.split("-").map(Number);
   const [hour, minute] = time.split(":").map(Number);
@@ -59,7 +60,8 @@ export function lisbonDateTimeToUtc(date: string, time: string, timeZone = CALEN
   return candidate;
 }
 
-export function utcToLisbonDateTime(value: string | Date, timeZone = CALENDAR_TIME_ZONE) {
+/** Convert a UTC instant to a studio wall date+time in `timeZone`. */
+export function utcToStudioDateTime(value: string | Date, timeZone = CALENDAR_TIME_ZONE) {
   const date = typeof value === "string" ? new Date(value) : value;
   const local = partsInZone(date, studioTimeZone({ timeZone }));
   return {
@@ -132,13 +134,13 @@ export function buildAvailability({
     .map((item) => {
       if (item.allDay) {
         return interval(
-          lisbonDateTimeToUtc(item.date, "00:00", zone),
-          lisbonDateTimeToUtc(addDays(item.date, 1), "00:00", zone),
+          studioDateTimeToUtc(item.date, "00:00", zone),
+          studioDateTimeToUtc(addDays(item.date, 1), "00:00", zone),
         );
       }
       return interval(
-        lisbonDateTimeToUtc(item.date, item.start, zone),
-        lisbonDateTimeToUtc(item.date, item.end, zone),
+        studioDateTimeToUtc(item.date, item.start, zone),
+        studioDateTimeToUtc(item.date, item.end, zone),
       );
     });
   const googleBusy = externalBusy
@@ -161,8 +163,8 @@ export function buildAvailability({
     ) {
       const start = asTime(cursor);
       const end = asTime(cursor + bookingType.durationMinutes);
-      const startsAt = lisbonDateTimeToUtc(date, start, zone);
-      const endsAt = lisbonDateTimeToUtc(date, end, zone);
+      const startsAt = studioDateTimeToUtc(date, start, zone);
+      const endsAt = studioDateTimeToUtc(date, end, zone);
       if (startsAt.getTime() < earliest) continue;
       if (collides(interval(startsAt, endsAt), busy, config.bufferMinutes)) continue;
       slots.push({

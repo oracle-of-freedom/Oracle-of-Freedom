@@ -1,6 +1,6 @@
 import type { Booking } from "@/lib/bookings";
 import { guestScheduleLines, icalGuestSpan } from "@/lib/booking-time";
-import { lisbonDateTimeToUtc } from "@/lib/availability";
+import { studioDateTimeToUtc } from "@/lib/availability";
 import { CALENDAR_TIME_ZONE, studioTimeZone } from "@/lib/calendar-config";
 import { siteUrl } from "@/lib/content";
 
@@ -64,8 +64,8 @@ function event(booking: Booking, meetingUrl: string | undefined, forGuest: boole
     : guestSpan
       ? [`DTSTART;TZID="${guestSpan.zone}":${guestSpan.start}`, `DTEND;TZID="${guestSpan.zone}":${guestSpan.end}`]
       : [
-          `DTSTART:${utc(lisbonDateTimeToUtc(booking.date, booking.start, studioZone))}`,
-          `DTEND:${utc(lisbonDateTimeToUtc(booking.date, booking.end, studioZone))}`,
+          `DTSTART:${utc(studioDateTimeToUtc(booking.date, booking.start, studioZone))}`,
+          `DTEND:${utc(studioDateTimeToUtc(booking.date, booking.end, studioZone))}`,
         ];
   return [
     "BEGIN:VEVENT",
