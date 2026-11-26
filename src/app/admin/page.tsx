@@ -6,23 +6,15 @@ import { AdminHeader } from "@/components/admin-header";
 import { isAdmin } from "@/lib/admin-auth";
 import { dayLabel, type Booking } from "@/lib/bookings";
 import { readBookings } from "@/lib/booking-store";
+import { calendarToday, studioClock, studioTimeZone } from "@/lib/calendar-config";
+import { readCalendarConfig } from "@/lib/calendar-config-store";
 import { readInquiries } from "@/lib/inquiry-store";
-import { lisbonToday } from "@/lib/pricing";
 import { staySummary, visibleStays } from "@/lib/presence";
 import { inquiryWhen, studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
 import { readStored } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
-
-function lisbonClock(now = new Date()) {
-  return new Intl.DateTimeFormat("en-GB", {
-    timeZone: "Europe/Lisbon",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
-  }).format(now);
-}
 
 function nextBooking(items: Booking[], now: string) {
   const upcoming = items
@@ -37,14 +29,17 @@ export default async function AdminPage() {
   const lang = await studioLang();
   const t = studioCopy(lang);
   const services = (lang === "en" ? en : es).form.services;
-  const today = lisbonToday();
+  const config = await readCalendarConfig();
+  const zone = studioTimeZone(config);
+  const today = calendarToday(zone);
+  const clock = studioClock(zone);
   const [bookings, inquiries, settings] = await Promise.all([readBookings(), readInquiries(), readStored()]);
   const nextStay = visibleStays(settings.stays, today)[0];
   const todayBookings = bookings.filter(
     (item) => item.date === today && item.status !== "cancelled",
   );
   const fresh = inquiries.filter((item) => item.status === "new");
-  const featuredBooking = todayBookings.length > 0 ? nextBooking(todayBookings, lisbonClock()) : undefined;
+  const featuredBooking = todayBookings.length > 0 ? nextBooking(todayBookings, clock) : undefined;
   const featuredInquiry = featuredBooking ? undefined : fresh[0];
   const later = featuredBooking ? todayBookings.filter((item) => item.id !== featuredBooking.id) : [];
   const moreInquiries = fresh.length - (featuredInquiry ? 1 : 0);

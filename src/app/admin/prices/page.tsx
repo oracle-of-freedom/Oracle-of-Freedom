@@ -4,7 +4,9 @@ import { AdminPanel } from "@/components/admin-panel";
 import { isAdmin } from "@/lib/admin-auth";
 import { defaultTiming, TIMING_FIELDS } from "@/lib/delivery";
 import { deliveryDefaults } from "@/lib/delivery-copy";
-import { catalog, lisbonToday } from "@/lib/pricing";
+import { calendarToday, studioTimeZone } from "@/lib/calendar-config";
+import { readCalendarConfig } from "@/lib/calendar-config-store";
+import { catalog } from "@/lib/pricing";
 import { readStored, storageMode } from "@/lib/store";
 import { studioCopy } from "@/lib/studio-copy";
 import { studioLang } from "@/lib/studio-locale.server";
@@ -14,7 +16,8 @@ export const dynamic = "force-dynamic";
 export default async function PricesPage() {
   if (!(await isAdmin())) redirect("/admin/login");
   const t = studioCopy(await studioLang());
-  const settings = await readStored();
+  const [settings, config] = await Promise.all([readStored(), readCalendarConfig()]);
+  const today = calendarToday(studioTimeZone(config));
   const defaults = deliveryDefaults();
   for (const [id, row] of Object.entries(settings.deliveries ?? {})) {
     const current = defaults[id] ?? { en: "", es: "", pt: "" };
@@ -31,7 +34,7 @@ export default async function PricesPage() {
         <AdminPanel
           catalog={catalog}
           settings={settings}
-          today={lisbonToday()}
+          today={today}
           mode={storageMode()}
           timingFields={TIMING_FIELDS.map((field) => ({
             key: field.key,

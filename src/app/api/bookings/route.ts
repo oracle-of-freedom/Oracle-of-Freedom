@@ -6,14 +6,15 @@ import { z } from "zod";
 import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
 import { slotIsAvailable } from "@/lib/availability";
-import { canonicalTimeZone, guestHoldText, studioWhenLines } from "@/lib/booking-time";
+import { canonicalTimeZone, guestConfirmedText, studioWhenLines } from "@/lib/booking-time";
 import { publicAvailability } from "@/lib/booking-service";
 import { writeBookings } from "@/lib/booking-store";
-import { acceptanceUrl, type Booking } from "@/lib/bookings";
+import type { Booking } from "@/lib/bookings";
 import { studioTimeZone } from "@/lib/calendar-config";
 import { notifyStudio } from "@/lib/push";
 import { settings } from "@/lib/content";
 import { inviteAllowsBooking } from "@/lib/booking-invite";
+import { upsertGoogleEvent } from "@/lib/google-calendar";
 import { isBookingInvite } from "@/lib/inquiries";
 import { rateLimited } from "@/lib/rate-limit";
 
@@ -32,7 +33,7 @@ const schema = z.object({
   timeZone: z.string().max(80).optional(),
 });
 
-async function sendConfirmation(
+async function sendBookingEmails(
   booking: Booking,
   typeLabel: string,
   locale: Locale,
@@ -44,7 +45,6 @@ async function sendConfirmation(
   const from = process.env.RESEND_FROM_EMAIL || "Oracle of Freedom <onboarding@resend.dev>";
   const to = process.env.INQUIRY_TO_EMAIL || settings.email;
   const copy = bookingCopy[locale];
-  const acceptUrl = acceptanceUrl(locale, booking.publicToken || "");
   const resend = new Resend(apiKey);
   const [admin, attendee] = await Promise.all([
     resend.emails.send({
@@ -53,20 +53,25 @@ async function sendConfirmation(
       replyTo: booking.contact,
       subject: `New booking · ${typeLabel} · ${booking.client}`,
       text: [
+        "A call was booked.",
+        "",
         `Name: ${booking.client}`,
         `Email: ${booking.contact}`,
         ...studioWhenLines(booking, studioZone),
         `Type: ${typeLabel}`,
+        booking.place ? `Place: ${booking.place}` : "",
+        meetingUrl ? `Meeting: ${meetingUrl}` : "",
         `Notes: ${booking.notes || "not given"}`,
-        `Acceptance link: ${acceptUrl}`,
-      ].join("\n"),
+      ]
+        .filter(Boolean)
+        .join("\n"),
     }),
     resend.emails.send({
       from,
       to: booking.contact,
       replyTo: to,
-      subject: copy.successTitle,
-      text: guestHoldText(booking, locale, studioZone, meetingUrl, acceptUrl),
+      subject: copy.acceptedTitle,
+      text: guestConfirmedText(booking, meetingUrl, studioZone),
     }),
   ]);
   if (admin.error || attendee.error) {
@@ -107,12 +112,13 @@ export async function POST(request: Request) {
   }
 
   const zone = studioTimeZone(available.config);
+  const meetingUrl = available.config.meetingUrl || "";
   const label = available.bookingType.label[data.locale];
-  const booking: Booking = {
+  let booking: Booking = {
     id: randomUUID(),
     title: `${label} · ${data.name}`,
     kind: available.bookingType.kind,
-    status: "hold",
+    status: "confirmed",
     date: data.date,
     allDay: false,
     start: data.start,
@@ -134,6 +140,17 @@ export async function POST(request: Request) {
     console.error("[booking] storage failed", error);
     return NextResponse.json({ ok: false, error: "storage" }, { status: 503 });
   }
+
+  try {
+    const synced = await upsertGoogleEvent(available.config, booking);
+    if (synced.googleEventId && synced.googleEventId !== booking.googleEventId) {
+      booking = synced;
+      await writeBookings([...available.bookings, booking]);
+    }
+  } catch (error) {
+    console.error("[booking] calendar sync failed", error);
+  }
+
   await notifyStudio({
     kind: booking.kind === "meeting" ? "consultation" : "appointment",
     name: data.name,
@@ -147,7 +164,7 @@ export async function POST(request: Request) {
 
   let emailed = false;
   try {
-    emailed = await sendConfirmation(booking, label, data.locale, zone, available.config.meetingUrl || "");
+    emailed = await sendBookingEmails(booking, label, data.locale, zone, meetingUrl);
   } catch (error) {
     console.error("[booking] email failed", error);
   }

@@ -4,7 +4,7 @@ import { AppointmentAccept } from "@/components/appointment-accept";
 import { VisitorWhen } from "@/components/visitor-when";
 import { bookingCopy } from "@/content/booking";
 import type { Locale } from "@/i18n/routing";
-import { lisbonDateTimeToUtc } from "@/lib/availability";
+import { studioDateTimeToUtc } from "@/lib/availability";
 import { canonicalTimeZone } from "@/lib/booking-time";
 import { readBookings } from "@/lib/booking-store";
 import { studioTimeZone } from "@/lib/calendar-config";
@@ -38,8 +38,8 @@ export default async function AppointmentPage({
   const when =
     booking && !booking.allDay
       ? {
-          startsAt: lisbonDateTimeToUtc(booking.date, booking.start, zone).toISOString(),
-          endsAt: lisbonDateTimeToUtc(booking.date, booking.end, zone).toISOString(),
+          startsAt: studioDateTimeToUtc(booking.date, booking.start, zone).toISOString(),
+          endsAt: studioDateTimeToUtc(booking.date, booking.end, zone).toISOString(),
           locale: booking.locale || locale,
         }
       : null;

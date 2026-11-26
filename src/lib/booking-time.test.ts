@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { lisbonDateTimeToUtc } from "@/lib/availability";
+import { studioDateTimeToUtc } from "@/lib/availability";
 import {
   bookingTimeZone,
   canonicalTimeZone,
@@ -12,7 +12,7 @@ import {
   studioWhenLines,
   zonedDateTimeToUtc,
 } from "@/lib/booking-time";
-import { acceptanceUrl, isBooking, type Booking } from "@/lib/bookings";
+import { isBooking, type Booking } from "@/lib/bookings";
 import { CALENDAR_TIME_ZONE } from "@/lib/calendar-config";
 import { bookingsIcal } from "@/lib/ical";
 
@@ -47,7 +47,8 @@ function unfold(value: string) {
 test("accepts a real IANA zone and falls back when it is missing or invalid", () => {
   assert.equal(canonicalTimeZone(" America/New_York "), "America/New_York");
   assert.equal(canonicalTimeZone("US/Eastern"), "America/New_York");
-  assert.equal(canonicalTimeZone("Europe/Lisbon"), CALENDAR_TIME_ZONE);
+  assert.equal(canonicalTimeZone("Europe/Lisbon"), "Europe/Lisbon");
+  assert.equal(canonicalTimeZone("Europe/Madrid"), CALENDAR_TIME_ZONE);
   assert.equal(canonicalTimeZone("Not/AZone"), undefined);
   assert.equal(canonicalTimeZone("America/New York"), undefined);
   assert.equal(canonicalTimeZone(""), undefined);
@@ -58,14 +59,14 @@ test("accepts a real IANA zone and falls back when it is missing or invalid", ()
   assert.equal(isBooking({ ...booking(), timeZone: 4 }), false);
 });
 
-test("guest wall time is the same instant as the studio Lisbon time", () => {
-  const summer = lisbonDateTimeToUtc("2026-07-15", "15:00");
-  const winter = lisbonDateTimeToUtc("2026-01-15", "15:00");
-  assert.equal(zonedDateTimeToUtc("2026-07-15", "15:00", "Europe/Lisbon").toISOString(), summer.toISOString());
-  assert.equal(zonedDateTimeToUtc("2026-01-15", "15:00", "Europe/Lisbon").toISOString(), winter.toISOString());
-  assert.equal(zonedDateTimeToUtc("2026-07-15", "10:00", "America/New_York").toISOString(), summer.toISOString());
-  assert.equal(zonedDateTimeToUtc("2026-07-15", "19:30", "Asia/Kolkata").toISOString(), summer.toISOString());
-  assert.equal(zonedDateTimeToUtc("2026-01-16", "04:00", "Pacific/Auckland").toISOString(), winter.toISOString());
+test("guest wall time is the same instant as the studio Madrid time", () => {
+  const summer = studioDateTimeToUtc("2026-07-15", "15:00");
+  const winter = studioDateTimeToUtc("2026-01-15", "15:00");
+  assert.equal(zonedDateTimeToUtc("2026-07-15", "15:00", "Europe/Madrid").toISOString(), summer.toISOString());
+  assert.equal(zonedDateTimeToUtc("2026-01-15", "15:00", "Europe/Madrid").toISOString(), winter.toISOString());
+  assert.equal(zonedDateTimeToUtc("2026-07-15", "09:00", "America/New_York").toISOString(), summer.toISOString());
+  assert.equal(zonedDateTimeToUtc("2026-07-15", "18:30", "Asia/Kolkata").toISOString(), summer.toISOString());
+  assert.equal(zonedDateTimeToUtc("2026-01-16", "03:00", "Pacific/Auckland").toISOString(), winter.toISOString());
 });
 
 test("guest emails use the booked zone, language, and sign-off", () => {
@@ -74,12 +75,12 @@ test("guest emails use the booked zone, language, and sign-off", () => {
   assert.equal(
     held,
     [
-      "That time is held for you. The email has a link so you can accept it, and the call link when one is saved.",
+      "Your call is confirmed. The details and the call link are in your email.",
       "",
-      "When: Wednesday, 15 July 2026, 10:00 to 11:00 (Eastern Time)",
-      "[Studio time: Wednesday, 15 July 2026, 15:00 to 16:00 (Western European Time)]",
+      "When: Wednesday, 15 July 2026, 09:00 to 10:00 (Eastern Time)",
+      "[Studio time: Wednesday, 15 July 2026, 15:00 to 16:00 (Central European Time)]",
       "",
-      `Accept this appointment: ${acceptanceUrl("en", "abcdefghijklmnopqrstuvwx")}`,
+      "Online",
       "",
       "Join the call: https://us05web.zoom.us/j/example",
       "",
@@ -92,12 +93,12 @@ test("guest emails use the booked zone, language, and sign-off", () => {
   assert.equal(
     spanish,
     [
-      "Esa hora queda reservada para ti. El email incluye un enlace para aceptarla, y el enlace de la llamada cuando hay uno guardado.",
+      "Tu llamada está confirmada. Los detalles y el enlace de la llamada están en tu email.",
       "",
-      "Cuándo: miércoles, 15 de julio de 2026, 10:00 a 11:00 (hora oriental)",
-      "[Hora del estudio: miércoles, 15 de julio de 2026, 15:00 a 16:00 (hora de Europa occidental)]",
+      "Cuándo: miércoles, 15 de julio de 2026, 09:00 a 10:00 (hora oriental)",
+      "[Hora del estudio: miércoles, 15 de julio de 2026, 15:00 a 16:00 (hora de Europa central)]",
       "",
-      `Aceptar esta cita: ${acceptanceUrl("es", "abcdefghijklmnopqrstuvwx")}`,
+      "Online",
       "",
       "Unirse a la llamada: https://us05web.zoom.us/j/example",
       "",
@@ -110,12 +111,12 @@ test("guest emails use the booked zone, language, and sign-off", () => {
   assert.equal(
     portuguese,
     [
-      "Essa hora fica reservada para ti. O email inclui um link para a aceitares, e o link da chamada quando há um guardado.",
+      "A tua chamada está confirmada. Os detalhes e o link da chamada estão no teu email.",
       "",
-      "Quando: quarta-feira, 15 de julho de 2026, 10:00 às 11:00 (Hora oriental norte-americana)",
-      "[Hora do estúdio: quarta-feira, 15 de julho de 2026, 15:00 às 16:00 (Hora da Europa Ocidental)]",
+      "Quando: quarta-feira, 15 de julho de 2026, 09:00 às 10:00 (Hora oriental norte-americana)",
+      "[Hora do estúdio: quarta-feira, 15 de julho de 2026, 15:00 às 16:00 (Hora da Europa Central)]",
       "",
-      `Aceitar esta marcação: ${acceptanceUrl("pt", "abcdefghijklmnopqrstuvwx")}`,
+      "Online",
       "",
       "Entrar na chamada: https://us05web.zoom.us/j/example",
       "",
@@ -130,10 +131,11 @@ test("guest emails use the booked zone, language, and sign-off", () => {
     [
       "This appointment is confirmed. You can add it to your calendar.",
       "",
-      "When: Wednesday, 15 July 2026, 10:00 to 11:00 (Eastern Time)",
-      "[Studio time: Wednesday, 15 July 2026, 15:00 to 16:00 (Western European Time)]",
+      "When: Wednesday, 15 July 2026, 09:00 to 10:00 (Eastern Time)",
+      "[Studio time: Wednesday, 15 July 2026, 15:00 to 16:00 (Central European Time)]",
       "",
       "Intro call · Ana",
+      "Online",
       "",
       "Join the call: https://meet.example/abc",
       "",
@@ -142,75 +144,80 @@ test("guest emails use the booked zone, language, and sign-off", () => {
     ].join("\n"),
   );
 
-  const sameZone = guestHoldText(booking({ timeZone: "Europe/Lisbon" }), "en");
+  const sameZone = guestHoldText(booking({ timeZone: "Europe/Madrid" }), "en");
   assert.equal(sameZone.includes("Studio time"), false);
-  assert.match(sameZone, /15:00 to 16:00 \(Western European Time\)/);
+  assert.match(sameZone, /15:00 to 16:00 \(Central European Time\)/);
   assert.match(sameZone, /With love,\nAgota$/);
-  assert.match(sameZone, /Accept this appointment: /);
+  assert.equal(sameZone.includes("Accept this appointment"), false);
   assert.equal(sameZone.includes("Join the call"), false);
 
   for (const text of [held, spanish, portuguese, confirmed, sameZone]) {
     assert.equal(DASH.test(text), false);
     assert.equal(/instagram/i.test(text), false);
+    assert.equal(/Accept this appointment|Aceptar esta cita|Aceitar esta marcação/i.test(text), false);
   }
 });
 
 test("studio notice lists the guest time and the studio time", () => {
   assert.deepEqual(studioWhenLines(booking()), [
-    "Guest time: Wednesday, 15 July 2026, 10:00 to 11:00 (Eastern Time)",
-    "Studio time: Wednesday, 15 July 2026, 15:00 to 16:00 (Western European Time)",
+    "Guest time: Wednesday, 15 July 2026, 09:00 to 10:00 (Eastern Time)",
+    "Studio time: Wednesday, 15 July 2026, 15:00 to 16:00 (Central European Time)",
   ]);
   const shifted = booking({ date: "2026-01-15", timeZone: "Pacific/Auckland" });
   assert.deepEqual(studioWhenLines(shifted), [
-    "Guest time: Friday, 16 January 2026, 04:00 to 05:00 (New Zealand Time)",
-    "Studio time: Thursday, 15 January 2026, 15:00 to 16:00 (Western European Time)",
+    "Guest time: Friday, 16 January 2026, 03:00 to 04:00 (New Zealand Time)",
+    "Studio time: Thursday, 15 January 2026, 15:00 to 16:00 (Central European Time)",
   ]);
 });
 
-test("calendar payloads keep the Lisbon instant and name the guest zone", () => {
-  const instant = lisbonDateTimeToUtc("2026-07-15", "15:00").toISOString();
+test("calendar payloads keep the Madrid instant and name the guest zone", () => {
+  const instant = studioDateTimeToUtc("2026-07-15", "15:00").toISOString();
   const bound = googleTimedBound("2026-07-15", "15:00", "America/New_York");
-  assert.deepEqual(bound, { dateTime: "2026-07-15T10:00:00", timeZone: "America/New_York" });
+  assert.deepEqual(bound, { dateTime: "2026-07-15T09:00:00", timeZone: "America/New_York" });
   assert.equal(parseGoogleDateTime(bound.dateTime, bound.timeZone).toISOString(), instant);
-  assert.deepEqual(googleTimedBound("2026-07-15", "15:00", "Europe/Lisbon"), {
+  assert.deepEqual(googleTimedBound("2026-07-15", "15:00", "Europe/Madrid"), {
     dateTime: instant,
-    timeZone: "Europe/Lisbon",
+    timeZone: "Europe/Madrid",
   });
   assert.deepEqual(googleTimedBound("2026-07-15", "15:00"), {
     dateTime: instant,
+    timeZone: "Europe/Madrid",
+  });
+  assert.deepEqual(googleTimedBound("2026-07-15", "15:00", "Europe/Lisbon"), {
+    dateTime: "2026-07-15T14:00:00",
     timeZone: "Europe/Lisbon",
   });
   assert.equal(parseGoogleDateTime(instant).toISOString(), instant);
 
   const india = googleTimedBound("2026-07-15", "15:00", "Asia/Kolkata");
-  assert.equal(india.dateTime, "2026-07-15T19:30:00");
+  assert.equal(india.dateTime, "2026-07-15T18:30:00");
   assert.equal(parseGoogleDateTime(india.dateTime, india.timeZone).toISOString(), instant);
 
   const span = icalGuestSpan(booking());
   assert.equal(span.zone, "America/New_York");
-  assert.equal(span.start, "20260715T100000");
-  assert.equal(span.end, "20260715T110000");
+  assert.equal(span.start, "20260715T090000");
+  assert.equal(span.end, "20260715T100000");
   assert.match(span.vtimezone, /TZID:America\/New_York/);
   assert.match(span.vtimezone, /TZOFFSETTO:-0400/);
 
   const guest = unfold(bookingsIcal([booking()], "Intro call · Ana", "https://meet.example/abc", { forGuest: true }));
-  assert.match(guest, /DTSTART;TZID="America\/New_York":20260715T100000/);
-  assert.match(guest, /DTEND;TZID="America\/New_York":20260715T110000/);
+  assert.match(guest, /DTSTART;TZID="America\/New_York":20260715T090000/);
+  assert.match(guest, /DTEND;TZID="America\/New_York":20260715T100000/);
   assert.match(guest, /X-WR-TIMEZONE:America\/New_York/);
   assert.match(guest, /Eastern Time/);
   assert.doesNotMatch(guest, /DTSTART:\d{8}T\d{6}Z/);
 
   const studio = bookingsIcal([booking()]);
-  assert.match(studio, /DTSTART:20260715T140000Z/);
-  assert.match(studio, /DTEND:20260715T150000Z/);
-  assert.match(studio, /X-WR-TIMEZONE:Europe\/Lisbon/);
+  assert.match(studio, /DTSTART:20260715T130000Z/);
+  assert.match(studio, /DTEND:20260715T140000Z/);
+  assert.match(studio, /X-WR-TIMEZONE:Europe\/Madrid/);
   assert.doesNotMatch(studio, /TZID=/);
 
   const kolkata = icalGuestSpan(booking({ timeZone: "Asia/Kolkata" }));
-  assert.equal(kolkata.start, "20260715T193000");
+  assert.equal(kolkata.start, "20260715T183000");
   assert.match(kolkata.vtimezone, /TZOFFSETTO:\+0530/);
 
   const auckland = icalGuestSpan(booking({ date: "2026-01-15", timeZone: "Pacific/Auckland" }));
-  assert.equal(auckland.start, "20260116T040000");
+  assert.equal(auckland.start, "20260116T030000");
   assert.match(auckland.vtimezone, /TZOFFSETTO:\+1300/);
 });

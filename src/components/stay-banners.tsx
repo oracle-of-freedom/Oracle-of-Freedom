@@ -6,7 +6,8 @@ import { getSettings } from "@/lib/offers";
 import { absoluteUrl } from "@/lib/seo";
 import { getPathname } from "@/i18n/navigation";
 import { settings } from "@/lib/content";
-import { lisbonToday } from "@/lib/pricing";
+import { calendarToday, studioTimeZone } from "@/lib/calendar-config";
+import { readCalendarConfig } from "@/lib/calendar-config-store";
 import {
   placeDetail,
   placeTitle,
@@ -26,8 +27,8 @@ export async function StayBanners({
   showElsewhere?: boolean;
 }) {
   const copy = getCopy(locale).home;
-  const stored = await getSettings();
-  const stays = visibleStays(stored.stays, lisbonToday());
+  const [stored, config] = await Promise.all([getSettings(), readCalendarConfig()]);
+  const stays = visibleStays(stored.stays, calendarToday(studioTimeZone(config)));
   if (stays.length === 0) return null;
   const [featured, ...later] = stays;
   const onPhoto = tone === "photo";
